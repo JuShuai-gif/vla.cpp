@@ -165,6 +165,11 @@ supported (released and benchmarked), `~` = in progress, `-` = planned.
 | [TurboVLA](https://hf.co/vrfai/turbovla-libero-gguf)           | Y | Y | Y | Y | Y | Y | 
 | [ACT](https://hf.co/ravediamond/act-aloha-sim-transfer-cube-gguf) | Y | Y | - | Y | - | - | 
 
+Adding a model? Use [ggml-compiler](https://github.com/khanhnd61-vr/ggml-compiler)
+to generate and verify ggml C++ from its PyTorch implementation, then integrate
+the graph with `vla.cpp`'s model interface. See
+[Adding an architecture](docs/ARCHITECTURE.md#adding-an-architecture).
+
 ---
 
 ## Rollout on a real robot
@@ -241,6 +246,25 @@ Wiring, recording, training and queue sizing are in the
 
 ---
 
+## Citation
+
+```bibtex
+@misc{nguyen2026vlacpp,
+  title         = {{vla.cpp}: A Unified Inference Runtime for Vision-Language-Action Models},
+  author        = {Khanh D. Nguyen and Hung T. Ho and Chinh T. Nguyen and
+                   Thanh Q. Duong and Linh D. Le and Duy M. H. Nguyen and
+                   Vien A. Ngo and An T. Le},
+  year          = {2026},
+  eprint        = {2606.08094},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.RO},
+  doi           = {10.48550/arXiv.2606.08094},
+  url           = {https://arxiv.org/abs/2606.08094}
+}
+```
+
+---
+
 ## License
 
 Licensed under the [Apache License, Version 2.0](LICENSE.md).
@@ -251,6 +275,7 @@ Licensed under the [Apache License, Version 2.0](LICENSE.md).
 
 Supported VLA models:
 
+- [ACT](https://arxiv.org/abs/2304.13705) - Zhao et al.
 - [SmolVLA](https://huggingface.co/lerobot/smolvla_base) - Hugging Face LeRobot team.
 - [π0,π0.5](https://github.com/Physical-Intelligence/openpi) - Physical Intelligence.
 - [BitVLA](https://github.com/ustcwhy/BitVLA) - Hongyu Wang et al.

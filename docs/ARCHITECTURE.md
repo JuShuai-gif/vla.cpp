@@ -86,7 +86,40 @@ the GPU backends run the towers and the transformer on the device.
 
 ## Adding an architecture
 
-Extend the `Arch` enum, declare a `*_create` factory in `arch.h`, implement it under
+[ggml-compiler](https://github.com/khanhnd61-vr/ggml-compiler) makes the graph
+implementation easier: compile the model's PyTorch inference path into ggml C++
+source, with one graph builder per stage and a GGUF containing weights and the
+compiled computation. Its
+[export guide](https://github.com/khanhnd61-vr/ggml-compiler/blob/main/docs/EXPORT.md)
+and [examples](https://github.com/khanhnd61-vr/ggml-compiler/tree/main/examples)
+cover ACT, SmolVLA, pi0/pi0.5, GR00T N1.7 and Diffusion Policy.
+
+1. Wrap the reference model in an `export.py:program` function returning a
+   `ggml_compiler.Program`. Define tensor inputs and outputs, fix deployment
+   shapes, and split iterative policies into an encoder/prefix stage and a
+   reusable denoising step. Record preprocessing, normalization, noise inputs,
+   and any prompt or embodiment specialization.
+2. Generate the ggml C++ source and GGUF:
+
+   ```bash
+   ggml-compiler compile export.py:program --out out/new_model \
+     --emit gguf,cpp --name new_model
+   ggml-compiler verify out/new_model/model.gguf --backend cpu
+   ggml-compiler verify out/new_model/model.gguf --backend cuda
+   ```
+
+   Also compare the staged PyTorch inference with the original policy. The
+   compiler's `verify` checks against the staged reference saved at compile
+   time; build the emitted C++ checker to compare its graph builders with the
+   compiler runtime.
+3. Integrate the validated computation into a vla.cpp architecture. Adapt the
+   generated graph builders to vla.cpp's weight loader, graph lifecycle, and
+   prediction interface, including the policy's preprocessing and action units.
+   The generated C++ uses ggml-compiler's runtime/build API; its GGUF is not
+   automatically loadable by `vla-cli`. Check ggml version compatibility and
+   validate each target backend before marking it supported.
+
+For registration, extend the `Arch` enum, declare a `*_create` factory in `arch.h`, implement it under
 `src/models/`, wire detection and dispatch in `src/model.cpp`, and add a converter in
 `scripts/`. Reuse `gguf_reader.h`, `loader.h`, `layers/` and `modules/` rather than
 copying them. [CONTRIBUTING.md](../CONTRIBUTING.md) lists the exact sites.
