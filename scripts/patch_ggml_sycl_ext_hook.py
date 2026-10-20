@@ -53,15 +53,42 @@ What it changes
 With the pointers left null this is a no-op, so a hooked ggml behaves
 identically to a stock one.
 
+Re-running it over a patched tree changes nothing, and a tree patched by an older
+version of this script (FoldQuant only) is brought up to date hunk by hunk.
+
 Usage: scripts/patch_ggml_sycl_ext_hook.py [<llama-src-dir>]
 """
 
 import pathlib
 import sys
 
-MARKER = "vla.cpp: SYCL extension hook"
+# The hunks an older version of this script wrote (FoldQuant only, before the BF16
+# ops). A tree it patched still carries them; each is swapped for the current one.
+OLD_FORWARD = """// vla.cpp: SYCL extension hook. Null unless vla::sycl_register_foldquant_ops()
+// ran; see src/sycl/vla_sycl_foldquant.cpp, which holds every kernel behind it.
+extern "C" {
+typedef bool (*ggml_sycl_ext_forward_t)(struct ggml_tensor * dst, void * queue);
+__attribute__((visibility("default"))) ggml_sycl_ext_forward_t ggml_sycl_ext_forward = nullptr;
+typedef bool (*ggml_sycl_ext_supports_t)(const struct ggml_tensor * op);
+__attribute__((visibility("default"))) ggml_sycl_ext_supports_t ggml_sycl_ext_supports = nullptr;
+}
 
-# (relative path, [(anchor, replacement, expected anchor count)])
+static bool ggml_sycl_compute_forward(ggml_backend_sycl_context & ctx, struct ggml_tensor * dst) try {
+    GGML_SYCL_DEBUG("[SYCL] ggml_sycl_compute_forward: dst=%s, op=%s\\n", dst->name, ggml_op_name(dst->op));
+    if (!g_sycl_loaded) return false;
+    if (ggml_sycl_ext_forward && ggml_sycl_ext_forward(dst, (void *) ctx.stream())) {
+        return true;
+    }
+"""
+
+OLD_SUPPORTS = """static bool do_ggml_backend_sycl_device_supports_op(ggml_backend_dev_t dev, const ggml_tensor * op) {
+    // vla.cpp: SYCL extension hook - the custom nodes the extension claims.
+    if (op->op == GGML_OP_CUSTOM) {
+        return ggml_sycl_ext_supports && ggml_sycl_ext_supports(op);
+    }
+"""
+
+# (relative path, [(anchor, replacement, expected anchor count, older replacements)])
 EDITS = [
     (
         "ggml/src/ggml-sycl/ggml-sycl.cpp",
@@ -89,6 +116,7 @@ static bool ggml_sycl_compute_forward(ggml_backend_sycl_context & ctx, struct gg
     }
 """,
                 1,
+                (OLD_FORWARD,),
             ),
             (
                 """static bool do_ggml_backend_sycl_device_supports_op(ggml_backend_dev_t dev, const ggml_tensor * op) {
@@ -106,6 +134,7 @@ static bool ggml_sycl_compute_forward(ggml_backend_sycl_context & ctx, struct gg
     }
 """,
                 1,
+                (OLD_SUPPORTS,),
             ),
         ],
     ),
@@ -123,6 +152,7 @@ static bool ggml_sycl_compute_forward(ggml_backend_sycl_context & ctx, struct gg
         }
 """,
                 2,
+                (),
             ),
         ],
     ),
@@ -134,20 +164,36 @@ def main():
     if not (src / "ggml/src/ggml-sycl/ggml-sycl.cpp").exists():
         raise SystemExit(f"not a llama.cpp source tree: {src}")
 
+    pending = []
     for rel, edits in EDITS:
         path = src / rel
-        text = path.read_text()
-        if MARKER in text:
-            continue  # idempotent: re-configure over an already-patched tree
-        for old, new, want in edits:
+        original = path.read_text()
+        text = original
+        for old, new, want, older in edits:
+            # Per hunk, not per file: the hunk list grows between commits, and a
+            # file-wide marker would leave a tree patched by an older checkout
+            # without the newer hunks, a build that runs and is quietly wrong.
+            if new in text:
+                continue
+            prev = [o for o in older if o in text]
+            if prev:
+                text = text.replace(prev[0], new)
+                continue
             n = text.count(old)
             if n != want:
                 raise SystemExit(
                     f"{path}: anchor found {n} times, expected {want}. The pinned llama.cpp "
-                    f"probably moved; re-check this anchor against the new tag.\n"
+                    f"probably moved; re-check this anchor against the new tag. A tree patched "
+                    f"by some other version of this script reads like this too: delete the "
+                    f"fetched llama.cpp (rm -rf <build>/_deps) and reconfigure.\n"
                     f"---\n{old[:400]}\n---"
                 )
             text = text.replace(old, new)
+        if text != original:
+            pending.append((path, text))
+
+    # Every anchor matched, so nothing is half-written on the way here.
+    for path, text in pending:
         path.write_text(text)
 
 
