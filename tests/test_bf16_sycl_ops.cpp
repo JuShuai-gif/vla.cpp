@@ -28,6 +28,8 @@
 #include "sycl/vla_sycl_ops.h"
 #include "act_dtype.h"
 
+#include <sycl/sycl.hpp>
+
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -112,6 +114,14 @@ int main() {
     // dnnl::matmul. Mirrors src/backend.h; must be set before the first SYCL call.
     if (!std::getenv("GGML_SYCL_ENABLE_VMM")) {
         setenv("GGML_SYCL_ENABLE_VMM", "0", /*overwrite=*/0);
+    }
+
+    // ggml-sycl needs a GPU. Without one (CI runs ctest on the OpenCL CPU device)
+    // its device manager throws "can not find preferred GPU platform" from the
+    // first ggml_backend_sycl_* call instead of reporting zero devices.
+    if (sycl::device::get_devices(sycl::info::device_type::gpu).empty()) {
+        std::printf("bf16_sycl_ops: no SYCL GPU, skipping\n");
+        return 0;
     }
 
     // ggml_backend_sycl_init() guards the device index with assert(), which a
