@@ -103,6 +103,8 @@ struct Backend {
     /// Same, for a live SYCL backend. The BF16 activation path is served there
     /// by src/sycl/vla_sycl_bf16.cpp plus ggml-sycl's own BF16 add/mul/unary.
     bool           is_sycl = false;
+    /// Same, for a live OpenVINO backend.
+    bool           is_openvino = false;
 };
 
 /**
@@ -396,6 +398,7 @@ inline Backend backend_init(const char * tag, int n_threads) {
         // so this line is the request. ggml logs what actually ran.
         const char * want = std::getenv("GGML_OPENVINO_DEVICE");
         b.handle = ggml_backend_openvino_init(0);
+        b.is_openvino = b.handle != nullptr;
         if (b.handle) {
             std::printf("%s: backend = OPENVINO (asked for %s, see ggml's \"using device\" line)\n",
                         tag, (want && *want) ? want : "CPU");

@@ -60,7 +60,7 @@ struct Pi05ModelArch : public ModelArchBase {
     ggml_backend_buffer_t const_buf   = nullptr;
     scratch_ctx           vision_scratch;
     // Language segment padded up to a multiple of this (0 = exact length), with
-    // the padding masked out as attention keys (VLA_PI05_LANG_BUCKET).
+    // the padding masked out as attention keys. Set in create (16 on OpenVINO).
     int64_t               lang_bucket = 0;
     // Activation dtype of the GEMMs (--act-dtype bf16 on CUDA/SYCL). The expert's
     // residual stream, its adaRMS gating and the flow-matching state stay F32.
@@ -332,8 +332,14 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         // changes every step. A backend that compiles one model per graph shape
         // can pad the segment to a multiple of VLA_PI05_LANG_BUCKET tokens, with
         // the pad masked out as keys; suffix positions still count from the real
-        // prefix length, so the result is the same. 0 (default) keeps it exact.
-        m->lang_bucket = 0;
+        // prefix length, so the result is the same. 0 keeps it exact. OpenVINO
+        // compiles and keeps one model per shape, so it defaults to 16.
+        m->lang_bucket = b.is_openvino ? 16 : 0;
+        // ggml-openvino compiles graphs that do not start with a MUL_MAT in
+        // ACCURACY mode, which pins them to f32; pi0.5 holds at f16, so use the
+        // precision the GPU is configured with. An explicit setting wins.
+        if (b.is_openvino)
+            setenv_default("GGML_OPENVINO_EXEC_MODE", "performance");
         // Fused elementwise nodes on SYCL, the backend that claims them.
         // VLA_PI05_NO_FUSE=1 keeps the per-op graph.
         if (b.is_sycl && !fq.present && !env_flag("VLA_PI05_NO_FUSE")) {
