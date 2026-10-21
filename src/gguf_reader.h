@@ -152,6 +152,12 @@ struct gguf_reader {
         if (t->type == GGML_TYPE_F32) { if (!read_raw(name, out.data(), out.size()*sizeof(float))) return {}; }
         else if (t->type == GGML_TYPE_BF16) { std::vector<ggml_bf16_t> tmp(n); if (!read_raw(name, tmp.data(), tmp.size()*sizeof(ggml_bf16_t))) return {}; ggml_bf16_to_fp32_row(tmp.data(), out.data(), n); }
         else if (t->type == GGML_TYPE_F16)  { std::vector<ggml_fp16_t> tmp(n); if (!read_raw(name, tmp.data(), tmp.size()*sizeof(ggml_fp16_t))) return {}; ggml_fp16_to_fp32_row(tmp.data(), out.data(), n); }
+        // A packed weight read as floats, e.g. to requantize it at load (VLA_PI05_W8A8 on a Q8_0 GGUF).
+        else if (ggml_is_quantized(t->type) && ggml_get_type_traits(t->type)->to_float) {
+            std::vector<uint8_t> tmp(ggml_nbytes(t));
+            if (!read_raw(name, tmp.data(), tmp.size())) return {};
+            ggml_get_type_traits(t->type)->to_float(tmp.data(), out.data(), n);
+        }
         else { std::fprintf(stderr, "vla(%s): tensor %s unsupported type %d\n", arch, name, (int) t->type); return {}; }
         return out;
     }
