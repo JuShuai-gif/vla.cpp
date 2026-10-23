@@ -42,7 +42,8 @@ bool sycl_s8_gemm_f32(void * queue, const int8_t * blob, int64_t M, int64_t K, i
 
 // The fused gate/up site: W rows [gate (Nh) | up (Nh)], ws/bias over 2*Nh;
 // out [M][Nh] BF16 bits = gelu_tanh(g) * u with g = (acc * xs_row) * ws (+ bias),
-// xs_row the float at byte xs_off of each blob row. K % 128 == 0, Nh % 256 == 0.
+// xs_row the float at byte xs_off of each blob row. K % 128 == 0, Nh % 256 == 0
+// (Nh % 64 == 0 on small Xe parts).
 bool sycl_s4_gemm_glu(void * queue, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, int64_t xs_off,
                       const int8_t * w, const float * ws, const float * bias, int64_t Nh, uint16_t * out_bf16);
 
