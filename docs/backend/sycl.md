@@ -178,8 +178,22 @@ The FoldQuant rows run vision as the fused bf16 SigLIP blocks, as
 `--act-dtype bf16` does; plain bf16 keeps it F32. W4A4 is 2.9x faster than bf16
 and 1.7x faster than bf16 activations, at half the file size. The two bf16 opt-ins
 quantize the weights at load time instead (W8A8 GEMMs in SigLIP, the VLM and the
-expert; `VLA_PI05_W4=expert` makes the expert's weights INT4) and match the FoldQuant files' speed without one; their LIBERO success rate is
-not measured yet.
+expert; `VLA_PI05_W4=expert` makes the expert's weights INT4) and match the FoldQuant files' speed without one.
+
+LIBERO success rate of the two opt-ins on the same machine: the bf16 π0.5 LIBERO
+GGUF with `--act-dtype bf16`, served by `vla-server` (`eval/run_libero.sh`), 10 tasks x 50
+episodes per suite, `n_action_steps` 10:
+
+| Suite | `VLA_PI05_W8A8=all` | `+ VLA_PI05_W4=expert` |
+|---|--:|--:|
+| libero_object | 99.2% (496/500) | 99.4% (497/500) |
+| libero_spatial | 99.0% (495/500) | 98.4% (492/500) |
+| libero_goal | 98.4% (492/500) | 99.2% (496/500) |
+| libero_10 | 92.4% (462/500) | 93.4% (467/500) |
+| **Average** | **97.3%** | **97.6%** |
+
+The two are within the noise of 500 episodes on every suite; one step of
+inference took 35-43 ms in both.
 
 The FoldQuant files are FoldQuantVLA quantized checkpoints converted with
 `scripts/convert_quantized_model_to_gguf.py`: W4A4 and W4A4 with INT8 o/down are
