@@ -59,7 +59,7 @@ struct Pi05ModelArch : public ModelArchBase {
 
     /// Runs the vision tower + projector on every view in one graph; returns its
     /// F32 [hidden, n_images*n_tokens] output, valid until the next call, or null.
-    ggml_tensor * vision_forward(const ImageView* images, int n_images);
+    const std::vector<ggml_tensor *> * vision_forward(const ImageView* images, int n_images);
 
     ggml_backend_t        backend     = nullptr;
     ggml_backend_buffer_t weight_buf  = nullptr;
@@ -68,7 +68,13 @@ struct Pi05ModelArch : public ModelArchBase {
     ggml_backend_buffer_t const_buf   = nullptr;
     // Vision tower for all views at once, kept while the view count holds.
     struct VisIO {
-        ggml_tensor *t_px=nullptr,*emb=nullptr;
+        // Pixels, views in order: one [S, S, 3, nv] input when the tower runs
+        // batched, else one [S, S, 3, 1] input per view.
+        std::vector<ggml_tensor *> t_px;
+        // F32 [hidden, nv*K] embeddings, views in order: one output when the
+        // tower runs batched, else one per view. Real tensors, not views or rows
+        // of a shared output: OpenVINO writes back neither.
+        std::vector<ggml_tensor *> emb;
     };
     graph_cache<int64_t, VisIO> vis_graph;
     // Language segment padded up to a multiple of this (0 = exact length), with
@@ -99,8 +105,10 @@ struct Pi05ModelArch : public ModelArchBase {
     };
     struct MainIO {
         // One prefix input, image rows then language rows: no CONCAT node.
-        // t_img_rows views its image rows (filled from the vision graph).
+        // t_img_rows views its image rows (filled from the vision graph),
+        // t_view_rows each view's share of them.
         ggml_tensor *t_prefix=nullptr,*t_img_rows=nullptr,*t_prefix_pos=nullptr;
+        std::vector<ggml_tensor *> t_view_rows;
         ggml_tensor *t_x0=nullptr,*t_suffix_pos=nullptr,*x_final=nullptr;
         ggml_tensor *t_prefix_mask=nullptr,*t_suffix_mask=nullptr;  // lang_bucket only
     };
@@ -608,12 +616,11 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
     return m;
 }
 
-ggml_tensor * Pi05ModelArch::vision_forward(const ImageView* images, int n_images) {
+const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView* images, int n_images) {
     const int64_t K = vis.n_tokens, grid = vis.image_size/vis.patch_size, S = vis.image_size;
     const ggml_type vt = vis.vit.enc.cfg.act;
     const bool built = vis_graph.ensure(backend, (int64_t) n_images, (size_t) 128*1024*1024,
                                         [&](ggml_context * VC, VisIO & vio) -> ggml_cgraph * {
-        vio.t_px = ggml_new_tensor_4d(VC, GGML_TYPE_F32, S, S, 3, n_images); ggml_set_input(vio.t_px);
         // Tower + PaliGemma projector (linear, optional bias) over nv views of
         // pixels: F32 [hidden, nv*K]. The patch embed (conv_2d) runs in F32, the
         // tower in vt.
@@ -624,26 +631,32 @@ ggml_tensor * Pi05ModelArch::vision_forward(const ImageView* images, int n_image
             ggml_tensor * proj = mm_act(VC, vis.proj_w, vis.vit.build(VC, as_type(VC, x, vt), K, nv), vt);
             if (vis.proj_b)
                 proj = ggml_add(VC, proj, vis.proj_b);
-            return ggml_reshape_2d(VC, as_type(VC, proj, GGML_TYPE_F32), proj->ne[0], K * nv);
+            proj = as_type(VC, proj, GGML_TYPE_F32);
+            if (proj->op == GGML_OP_VIEW || proj->op == GGML_OP_RESHAPE)
+                proj = ggml_cont(VC, proj);
+            ggml_set_output(proj);
+            vio.emb.push_back(proj);
+            return proj;
         };
         ggml_cgraph * vg = ggml_new_graph_custom(VC, 8192, false);
+        auto new_px = [&](int64_t nv) {
+            ggml_tensor * t = ggml_new_tensor_4d(VC, GGML_TYPE_F32, S, S, 3, nv);
+            ggml_set_input(t);
+            vio.t_px.push_back(t);
+            return t;
+        };
+        vio.t_px.clear();
+        vio.emb.clear();
         if (vis.vit.enc.cfg.fused || n_images == 1) {
             // The fused blocks take every view in one pass (nv * K rows per GEMM).
-            vio.emb = tower(vio.t_px, n_images);
-            ggml_set_output(vio.emb);
-            ggml_build_forward_expand(vg, vio.emb);
+            ggml_build_forward_expand(vg, tower(new_px(n_images), n_images));
         } else {
             // The per-op tower one view at a time (oneDNN's SDPA batches only
-            // BF16), each writing its rows of one output: no CONCAT.
-            vio.emb = ggml_new_tensor_2d(VC, GGML_TYPE_F32, vis.proj_w->ne[1], K * n_images);
-            ggml_set_output(vio.emb);
-            for (int v=0; v<n_images; ++v) {
-                ggml_tensor * px = ggml_view_4d(VC, vio.t_px, S, S, 3, 1, vio.t_px->nb[1], vio.t_px->nb[2],
-                                                vio.t_px->nb[3], (size_t) v * vio.t_px->nb[3]);
-                ggml_tensor * rows = ggml_view_2d(VC, vio.emb, vio.emb->ne[0], K, vio.emb->nb[1],
-                                                  (size_t) v * K * vio.emb->nb[1]);
-                ggml_build_forward_expand(vg, ggml_cpy(VC, tower(px, 1), rows));
-            }
+            // BF16), an input and an output per view: no CONCAT. Not views of
+            // one input: OpenVINO translates a view of a graph input as the
+            // whole input.
+            for (int v=0; v<n_images; ++v)
+                ggml_build_forward_expand(vg, tower(new_px(1), 1));
         }
         return vg;
     });
@@ -657,24 +670,34 @@ ggml_tensor * Pi05ModelArch::vision_forward(const ImageView* images, int n_image
         if (!preprocess_image_chw("pi05", images[v], vis.image_size, chw)) return nullptr;
         std::copy(chw.begin(), chw.begin() + per_view, px.begin() + per_view * v);
     }
-    ggml_backend_tensor_set(vio.t_px, px.data(), 0, ggml_nbytes(vio.t_px));
+    size_t off = 0;
+    for (ggml_tensor * t : vio.t_px) {
+        ggml_backend_tensor_set(t, px.data() + off, 0, ggml_nbytes(t));
+        off += (size_t) ggml_nelements(t);
+    }
     graph_unique_names(vg);
     if (ggml_backend_graph_compute(backend, vg) != GGML_STATUS_SUCCESS) {
         std::fprintf(stderr, "vla(pi05): vision compute failed\n");
         return nullptr;
     }
-    return vio.emb;
+    return &vio.emb;
 }
 
 bool Pi05ModelArch::encode_images(const ImageView* images, int n_images, std::vector<float>& out) {
     using clk = std::chrono::high_resolution_clock;
     const auto t0 = clk::now();
     stats = Stats{};
-    ggml_tensor * emb = vision_forward(images, n_images);
-    const bool ok = emb != nullptr;
+    const std::vector<ggml_tensor *> * embs = vision_forward(images, n_images);
+    const bool ok = embs != nullptr;
     if (ok) {
-        out.resize(ggml_nelements(emb));
-        ggml_backend_tensor_get(emb, out.data(), 0, ggml_nbytes(emb));
+        size_t n = 0;
+        for (ggml_tensor * e : *embs) n += (size_t) ggml_nelements(e);
+        out.resize(n);
+        n = 0;
+        for (ggml_tensor * e : *embs) {
+            ggml_backend_tensor_get(e, out.data() + n, 0, ggml_nbytes(e));
+            n += (size_t) ggml_nelements(e);
+        }
     }
     stats.ms_vision = stats.ms_total = std::chrono::duration<float, std::milli>(clk::now()-t0).count();
     if (!ok) out.clear();
@@ -815,6 +838,10 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     gio.t_prefix=t_prefix; gio.t_prefix_pos=t_prefix_pos;
     // Not a graph node: initialized as a view once the graph is allocated.
     gio.t_img_rows=ggml_view_2d(C, t_prefix, hidden_pl, n_img_tokens, t_prefix->nb[1], 0);
+    gio.t_view_rows.clear();
+    for (int64_t r = 0; r + vis.n_tokens <= n_img_tokens; r += vis.n_tokens)
+        gio.t_view_rows.push_back(ggml_view_2d(C, t_prefix, hidden_pl, vis.n_tokens, t_prefix->nb[1],
+                                               (size_t) r * t_prefix->nb[1]));
     gio.t_x0=t_x0; gio.t_suffix_pos=t_suffix_pos; gio.x_final=x_final;
     gio.t_prefix_mask=t_prefix_mask; gio.t_suffix_mask=t_suffix_mask;
 
@@ -838,9 +865,20 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         ggml_backend_tensor_set(t_image_emb, in.precomputed_img_emb, 0, ggml_nbytes(t_image_emb));
     } else {
         const auto tv0 = clk::now();
-        ggml_tensor * emb = vision_forward(in.images, in.n_images);
-        if (!emb) return {};
-        ggml_backend_tensor_copy(emb, t_image_emb);
+        const std::vector<ggml_tensor *> * embs = vision_forward(in.images, in.n_images);
+        if (!embs) return {};
+        if (embs->size() == 1) {
+            ggml_backend_tensor_copy(embs->front(), t_image_emb);
+        } else {
+            for (size_t v = 0; v < embs->size(); ++v) {
+                ggml_tensor * rows = gio.t_view_rows[v];
+                if (!rows->buffer && ggml_backend_view_init(rows) != GGML_STATUS_SUCCESS) {
+                    std::fprintf(stderr, "vla(pi05): image rows view failed\n");
+                    return {};
+                }
+                ggml_backend_tensor_copy((*embs)[v], rows);
+            }
+        }
         stats.ms_vision = std::chrono::duration<float, std::milli>(clk::now()-tv0).count();
     }
     {   // Gemma scales the token embeddings by sqrt(hidden): x * s in F32, as ggml_scale did on device.
