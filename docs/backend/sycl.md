@@ -136,19 +136,50 @@ matmul, bit-identical to the CPU reference. `VLA_FQ_DEQUANT=1` reads the sites b
 as float weights instead. See [QUANTIZATION.md](../QUANTIZATION.md#sycl) for the
 arithmetic and accuracy.
 
+### The fast path: sycl-tla
+
+π0.5's FoldQuant path has faster kernels built from
+[sycl-tla](https://github.com/intel/sycl-tla) (tested at v0.9.3). They use Xe 2D
+block loads and DPAS, and have only been run on the Arc B390 below. Point
+`VLA_SYCL_TLA_DIR` at a checkout when configuring:
+
+```bash
+git clone --depth 1 --branch v0.9.3 https://github.com/intel/sycl-tla.git
+cmake -B build-sycl -G Ninja -DCMAKE_BUILD_TYPE=Release -DGGML_SYCL=ON \
+    -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx \
+    -DVLA_SYCL_TLA_DIR=$PWD/sycl-tla
+```
+
+That adds INT4 x INT4 DPAS GEMMs for the W4A4 sites
+(`src/sycl/vla_sycl_s4gemm.cpp`) and flash attention over the cached prefix
+K/V, with q/k/v + RoPE fused into one node (`src/sycl/vla_sycl_fmha.cpp`); the
+expert's adaRMS rides in FoldQuant's activation nodes. Configure runs
+`scripts/patch_sycl_tla_fmha.py` on the checkout, in place: sycl-tla's FMHA drops
+or mis-masks a partial last key tile without it. The templates add a minute or
+two to the build. Without `VLA_SYCL_TLA_DIR`, π0.5 runs the plain FoldQuant path
+above.
+
 π0.5 LIBERO, 2 views at 224 px, 48 tokens, Intel Core Ultra X7 358H with an Arc
-B390 iGPU, oneAPI 2026.1, `vla-bench` p50 over 10 calls after 3 warmups:
+B390 iGPU (Level Zero, compute runtime 26.35), oneAPI 2026.1, built with
+`VLA_SYCL_TLA_DIR`, `vla-bench` p50 over 10 calls after 3 warmups:
 
-| Checkpoint | GGUF | p50 ms |
-|---|--:|--:|
-| bf16 | 6.71 GB | 326 |
-| FoldQuant W4A4, `VLA_FQ_DEQUANT=1` | 3.27 GB | 327 |
-| FoldQuant W4A4 | 3.27 GB | **291** |
-| FoldQuant W4A4, o/down INT8 | 3.61 GB | **290** |
-| FoldQuant W8A8 | 4.42 GB | **305** |
+| Checkpoint | GGUF | p50 ms | vision ms |
+|---|--:|--:|--:|
+| bf16 | 6.71 GB | 263 | 56 |
+| bf16, `--act-dtype bf16` | 6.71 GB | 159 | 16 |
+| bf16, `--act-dtype bf16`, `VLA_PI05_W8A8=all` | 6.71 GB | 97 | 12 |
+| bf16, `--act-dtype bf16`, `VLA_PI05_W8A8=all VLA_PI05_W4=expert` | 6.71 GB | **85** | 12 |
+| FoldQuant W4A4, `VLA_FQ_DEQUANT=1` | 3.27 GB | 206 | 16 |
+| FoldQuant W4A4 | 3.27 GB | **92** | 15 |
+| FoldQuant W4A4, o/down INT8 | 3.61 GB | 100 | 15 |
+| FoldQuant W8A8 | 4.42 GB | 123 | 15 |
 
-Vision (79 ms) stays bf16 in every row. W4A4 halves the weights and is 11% faster
-than bf16, W8A8 6%.
+The FoldQuant rows run vision as the fused bf16 SigLIP blocks, as
+`--act-dtype bf16` does; plain bf16 keeps it F32. W4A4 is 2.9x faster than bf16
+and 1.7x faster than bf16 activations, at half the file size. The two bf16 opt-ins
+quantize the weights at load time instead (W8A8 GEMMs in SigLIP, the VLM and the
+expert; `VLA_PI05_W4=expert` makes the expert's weights INT4) and match the FoldQuant files' speed without one; their LIBERO success rate is
+not measured yet.
 
 The FoldQuant files are FoldQuantVLA quantized checkpoints converted with
 `scripts/convert_quantized_model_to_gguf.py`: W4A4 and W4A4 with INT8 o/down are
@@ -160,9 +191,10 @@ calibrated on the same 128 LIBERO frames, seed 0.
 ## Known issue: the Level Zero loader on Ubuntu 24.04
 
 oneAPI 2026.1's Level Zero adapters crashed (`sycl-ls` segfaults) against Ubuntu
-24.04's `libze1` 1.16 on the machine above, most likely a loader too old for them
-(a newer loader from Intel's GPU packages is untested). Pointing the runtime at
-the OpenCL adapter works, and the numbers above were measured that way:
+24.04's `libze1` 1.16 on the machine above with an older GPU compute runtime.
+With the runtime at 26.35 (`libze-intel-gpu1`, `intel-opencl-icd`) Level Zero
+works against the same `libze1`, and the FoldQuant table above uses it. On an
+older runtime, pointing the runtime at the OpenCL adapter works:
 
 ```bash
 export UR_ADAPTERS_FORCE_LOAD=/opt/intel/oneapi/compiler/2026.1/lib/libur_adapter_opencl.so.0
