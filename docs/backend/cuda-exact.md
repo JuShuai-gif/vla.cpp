@@ -45,7 +45,10 @@ weight summed in int32, which is exact in any order.
   every candidate runs next to ggml's own call and is kept only if the outputs
   are identical, on two operand sets. Among the identical ones the fastest is
   timed and kept. Without an identical candidate the node issues ggml's call
-  itself. The choice happens once per shape, outside CUDA graph capture.
+  itself. The choice happens once per shape, outside CUDA graph capture. A
+  GEMM whose row count is within 64 of an already chosen one with the same
+  weight (π0.5's prompt length follows the state) first tries that choice,
+  and keeps it untimed if it is identical on both operand sets.
 - **Extra memory** is per shape and kept for the process: the attention
   scratch for path B, a BF16 staging buffer where an F32 operand feeds a BF16
   GEMM, and the cuBLASLt workspace when the chosen algorithm needs one.
@@ -80,6 +83,7 @@ The defaults are the verified configuration. The switches exist for A/B checks.
 | `VLA_FUSED_OPS` | on | `0` runs the plain ggml graph. Evo-1 also takes `vit`, `lm` or `dit`, GR00T N1.7 `vit` or `dit`, to limit the fused paths to one part. |
 | `VLA_GEMM_EXACT` | on | `0`: BF16 GEMMs stay `ggml_mul_mat`. |
 | `VLA_GEMM_LT`, `VLA_GEMM_SKINNY` | on | `0` drops the cuBLASLt or the `gemm_skinny` candidates. |
+| `VLA_GEMM_REUSE` | on | `0` times the candidates again for every new row count. |
 | `VLA_ATTN_EXACT` | on | `0` keeps ggml's attention chain. `VLA_ATTN_EXACT_FUSED=0` and `VLA_ATTN_TF32=0` drop paths A and C. |
 | `VLA_GR00T_FUSED_VIT` | on with the vision fused ops | GR00T N1.7: `0` runs the vision tower as its own graph. |
 | `VLA_BITVLA_MMA` | on | `0` runs BitVLA's original kernels. |

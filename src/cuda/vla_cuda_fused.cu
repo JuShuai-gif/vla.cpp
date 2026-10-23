@@ -769,6 +769,26 @@ std::vector<LtConfig> lt_enumerate(const LtPlan & p) {
     return v;
 }
 
+// Random BF16 test operands: draw skip+i+1 of the LCG x -> 1664525 x + 1013904223
+// from `seed`, as ((x >> 8) / 2^24) * 2 - 1 times `scale`. Each thread jumps
+// ahead in log2 steps, so the values are those of the sequential host loop.
+__global__ void k_lcg_bf16(__nv_bfloat16 * __restrict__ out, int64_t n, uint32_t seed, int64_t skip, float scale) {
+    const int64_t i = (int64_t) blockIdx.x*blockDim.x+threadIdx.x;
+    if (i >= n) return;
+    uint32_t A = 1u, C = 0u, a = 1664525u, c = 1013904223u;
+    for (uint64_t k = (uint64_t) (skip+i+1); k; k >>= 1) {
+        if (k & 1) { A = a*A; C = a*C+c; }
+        c = a*c+c; a = a*a;
+    }
+    const uint32_t x = A*seed+C;
+    const float v = __fadd_rn(__fmul_rn(__fmul_rn((float) (x >> 8), 1.0f/16777216.0f), 2.0f), -1.0f);
+    out[i] = __float2bfloat16(__fmul_rn(scale, v));
+}
+
+void lcg_bf16(void * out, size_t n, size_t skip, float scale, cudaStream_t st) {
+    k_lcg_bf16<<<(unsigned) ((n+255)/256), 256, 0, st>>>((__nv_bfloat16 *) out, (int64_t) n, 12345u, (int64_t) skip, scale);
+}
+
 LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st) {
     static std::mutex mu;
     static std::map<std::tuple<int, int, int, int>, LtPlan *> plans;
@@ -781,20 +801,34 @@ LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st)
     plans[{N, S, K, nv}] = p;
     if (cap != cudaStreamCaptureStatusNone || !vla::env_flag("VLA_GEMM_LT", true) || !lt_handle()) return p;
 
-    // Random BF16 operands and the per-view reference.
+    // A prompt that changes length every call (pi0.5 writes the state into it)
+    // brings a new S each time. A cuBLASLt pick made for the same N, K and views
+    // within 64 rows is tried first: if it is bit-exact here too it is kept
+    // without timing the candidates again, which is slow on large shapes.
+    const LtPlan * near = nullptr;
+    int near_s = 0;
+    if (vla::env_flag("VLA_GEMM_REUSE", true) && !vla::env_flag("VLA_GEMM_SEARCH"))
+        for (const auto & [key, q] : plans) {
+            const int s_ = std::get<1>(key);
+            if (q->ok && std::get<0>(key) == N && std::get<2>(key) == K && std::get<3>(key) == nv &&
+                std::abs(s_-S) <= 64 && (!near || std::abs(s_-S) < std::abs(near_s-S))) {
+                near = q;
+                near_s = s_;
+            }
+        }
+    int reused_s = -1;
+
+    // Random BF16 operands (W, then X, from one LCG stream) and the per-view reference.
     const size_t nw = (size_t) K*N, nx = (size_t) K*S*nv, no = (size_t) N*S*nv;
-    std::vector<__nv_bfloat16> hw(nw), hx(nx);
-    uint32_t seed = 12345u;
-    auto rnd = [&] { seed = seed*1664525u+1013904223u; return ((seed >> 8)*(1.0f/16777216.0f))*2.0f-1.0f; };
-    for (auto & v : hw) v = __float2bfloat16(rnd());
-    for (auto & v : hx) v = __float2bfloat16(rnd());
     void * dw = nullptr, * dx = nullptr; float * dref = nullptr, * dout = nullptr;
     p->ws_size = 4u*1024*1024;
     bool good = cudaMalloc(&dw, nw*2) == cudaSuccess && cudaMalloc(&dx, nx*2) == cudaSuccess &&
                 cudaMalloc(&dref, no*4) == cudaSuccess && cudaMalloc(&dout, no*4) == cudaSuccess &&
                 cudaMalloc(&p->ws, p->ws_size) == cudaSuccess;
-    good = good && cudaMemcpyAsync(dw, hw.data(), nw*2, cudaMemcpyHostToDevice, st) == cudaSuccess &&
-                   cudaMemcpyAsync(dx, hx.data(), nx*2, cudaMemcpyHostToDevice, st) == cudaSuccess;
+    if (good) {
+        lcg_bf16(dw, nw, 0, 1.0f, st);
+        lcg_bf16(dx, nx, nw, 1.0f, st);
+    }
     for (int v = 0; good && v < nv; ++v)
         good = gemm_one(h, dw, (const __nv_bfloat16 *) dx+(size_t) v*S*K, dref+(size_t) v*S*N, N, S, K) == CUBLAS_STATUS_SUCCESS;
     std::vector<float> ref(no), got(no);
@@ -805,124 +839,134 @@ LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st)
     one.ws = p->ws; one.ws_size = p->ws_size;
     good = good && lt_layouts(one, N, S, K, 1) && lt_layouts(*p, N, S, K, nv);
     if (good) {
-        cublasLtMatmulPreference_t pref = nullptr;
-        cublasLtMatmulPreferenceCreate(&pref);
-        cublasLtMatmulPreferenceSetAttribute(pref, CUBLASLT_MATMUL_PREF_MAX_WORKSPACE_BYTES, &p->ws_size, sizeof(p->ws_size));
-        cublasLtMatmulHeuristicResult_t res[32];
-        int n_res = 0;
-        cublasLtMatmulAlgoGetHeuristic(lt_handle(), one.op, one.a, one.b, one.c, one.c, pref, 32, res, &n_res);
-        cublasLtMatmulPreferenceDestroy(pref);
-        // Candidates: the heuristic's split-K-free picks, cached configurations,
-        // and with VLA_GEMM_SEARCH=1 every configuration (cfg.id < 0: heuristic).
-        std::vector<cublasLtMatmulAlgo_t> algos;
-        std::vector<LtConfig> cfgs;
-        for (int i = 0; i < n_res; ++i) {
-            uint32_t splitk = 1, red = 0; size_t sz = 0;
-            cublasLtMatmulAlgoConfigGetAttribute(&res[i].algo, CUBLASLT_ALGO_CONFIG_SPLITK_NUM, &splitk, sizeof(splitk), &sz);
-            cublasLtMatmulAlgoConfigGetAttribute(&res[i].algo, CUBLASLT_ALGO_CONFIG_REDUCTION_SCHEME, &red, sizeof(red), &sz);
-            if (splitk > 1 || red != CUBLASLT_REDUCTION_SCHEME_NONE) continue;
-            algos.push_back(res[i].algo);
-            cfgs.push_back({-1, 0, 0, 0, 0});
-        }
-        const bool search = vla::env_flag("VLA_GEMM_SEARCH");
-        for (const LtConfig & c : search ? lt_enumerate(one) : lt_cache_read(N, K)) {
-            cublasLtMatmulAlgo_t a;
-            if (lt_algo(c, a)) { algos.push_back(a); cfgs.push_back(c); }
-        }
-        std::vector<cublasLtMatmulAlgo_t> exact;
-        std::vector<LtConfig> exact_cfg;
-        // Second operand set (wider range) for the re-check below.
-        std::vector<__nv_bfloat16> hx2(nx);
-        for (auto & v : hx2) v = __float2bfloat16(8.0f*rnd());
+        // Second operand set (wider range, the stream's next draws) for the checks below.
         void * dx2 = nullptr; float * dref2 = nullptr;
-        bool good2 = cudaMalloc(&dx2, nx*2) == cudaSuccess && cudaMalloc(&dref2, no*4) == cudaSuccess &&
-                     cudaMemcpyAsync(dx2, hx2.data(), nx*2, cudaMemcpyHostToDevice, st) == cudaSuccess;
+        bool good2 = cudaMalloc(&dx2, nx*2) == cudaSuccess && cudaMalloc(&dref2, no*4) == cudaSuccess;
+        if (good2) lcg_bf16(dx2, nx, nw+nx, 8.0f, st);
         for (int v = 0; good2 && v < nv; ++v)
             good2 = gemm_one(h, dw, (const __nv_bfloat16 *) dx2+(size_t) v*S*K, dref2+(size_t) v*S*N, N, S, K) == CUBLAS_STATUS_SUCCESS;
         std::vector<float> ref2(no);
         good2 = good2 && cudaMemcpyAsync(ref2.data(), dref2, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
                          cudaStreamSynchronize(st) == cudaSuccess;
-        for (size_t i = 0; i < algos.size() && good2; ++i) {
-            if (!lt_run(one, algos[i], dw, dx, dout, st) ||
-                cudaMemcpyAsync(got.data(), dout, (size_t) N*S*4, cudaMemcpyDeviceToHost, st) != cudaSuccess ||
-                cudaStreamSynchronize(st) != cudaSuccess ||
-                std::memcmp(got.data(), ref.data(), (size_t) N*S*4) != 0)
-                continue;
-            if (!lt_run(*p, algos[i], dw, dx2, dout, st) ||
-                cudaMemcpyAsync(got.data(), dout, no*4, cudaMemcpyDeviceToHost, st) != cudaSuccess ||
-                cudaStreamSynchronize(st) != cudaSuccess ||
-                std::memcmp(got.data(), ref2.data(), no*4) != 0)
-                continue;
-            if (!lt_run(*p, algos[i], dw, dx, dout, st) ||
-                cudaMemcpyAsync(got.data(), dout, no*4, cudaMemcpyDeviceToHost, st) != cudaSuccess ||
-                cudaStreamSynchronize(st) != cudaSuccess ||
-                std::memcmp(got.data(), ref.data(), no*4) != 0)
-                continue;
-            exact.push_back(algos[i]);
-            exact_cfg.push_back(cfgs[i]);
+        // Bit-exact against cublasGemmEx: one view on the first set, all views on both.
+        auto is_exact = [&](const cublasLtMatmulAlgo_t & algo) {
+            return good2 &&
+                   lt_run(one, algo, dw, dx, dout, st) &&
+                   cudaMemcpyAsync(got.data(), dout, (size_t) N*S*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
+                   cudaStreamSynchronize(st) == cudaSuccess &&
+                   std::memcmp(got.data(), ref.data(), (size_t) N*S*4) == 0 &&
+                   lt_run(*p, algo, dw, dx2, dout, st) &&
+                   cudaMemcpyAsync(got.data(), dout, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
+                   cudaStreamSynchronize(st) == cudaSuccess &&
+                   std::memcmp(got.data(), ref2.data(), no*4) == 0 &&
+                   lt_run(*p, algo, dw, dx, dout, st) &&
+                   cudaMemcpyAsync(got.data(), dout, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
+                   cudaStreamSynchronize(st) == cudaSuccess &&
+                   std::memcmp(got.data(), ref.data(), no*4) == 0;
+        };
+        if (near && is_exact(near->algo)) {
+            p->algo = near->algo;
+            p->ok = true;
+            reused_s = near_s;
+        } else {
+            cublasLtMatmulPreference_t pref = nullptr;
+            cublasLtMatmulPreferenceCreate(&pref);
+            cublasLtMatmulPreferenceSetAttribute(pref, CUBLASLT_MATMUL_PREF_MAX_WORKSPACE_BYTES, &p->ws_size, sizeof(p->ws_size));
+            cublasLtMatmulHeuristicResult_t res[32];
+            int n_res = 0;
+            cublasLtMatmulAlgoGetHeuristic(lt_handle(), one.op, one.a, one.b, one.c, one.c, pref, 32, res, &n_res);
+            cublasLtMatmulPreferenceDestroy(pref);
+            // Candidates: the heuristic's split-K-free picks, cached configurations,
+            // and with VLA_GEMM_SEARCH=1 every configuration (cfg.id < 0: heuristic).
+            std::vector<cublasLtMatmulAlgo_t> algos;
+            std::vector<LtConfig> cfgs;
+            for (int i = 0; i < n_res; ++i) {
+                uint32_t splitk = 1, red = 0; size_t sz = 0;
+                cublasLtMatmulAlgoConfigGetAttribute(&res[i].algo, CUBLASLT_ALGO_CONFIG_SPLITK_NUM, &splitk, sizeof(splitk), &sz);
+                cublasLtMatmulAlgoConfigGetAttribute(&res[i].algo, CUBLASLT_ALGO_CONFIG_REDUCTION_SCHEME, &red, sizeof(red), &sz);
+                if (splitk > 1 || red != CUBLASLT_REDUCTION_SCHEME_NONE) continue;
+                algos.push_back(res[i].algo);
+                cfgs.push_back({-1, 0, 0, 0, 0});
+            }
+            const bool search = vla::env_flag("VLA_GEMM_SEARCH");
+            for (const LtConfig & c : search ? lt_enumerate(one) : lt_cache_read(N, K)) {
+                cublasLtMatmulAlgo_t a;
+                if (lt_algo(c, a)) { algos.push_back(a); cfgs.push_back(c); }
+            }
+            std::vector<cublasLtMatmulAlgo_t> exact;
+            std::vector<LtConfig> exact_cfg;
+            for (size_t i = 0; i < algos.size(); ++i)
+                if (is_exact(algos[i])) {
+                    exact.push_back(algos[i]);
+                    exact_cfg.push_back(cfgs[i]);
+                }
+            cudaGetLastError();
+            // gemm_skinny configurations that reproduce cublasGemmEx on both operand sets.
+            std::vector<skinny::Cand> sk_exact;
+            if (vla::env_flag("VLA_GEMM_SKINNY", true))
+                for (const skinny::Cand & c : skinny::cands(S)) {
+                    bool same = good2;
+                    for (int set = 0; set < 2 && same; ++set) {
+                        same = c.fn((const __nv_bfloat16 *) dw, (const __nv_bfloat16 *) (set ? dx2 : dx), dout, N, S, K, nv, st) &&
+                               cudaMemcpyAsync(got.data(), dout, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
+                               cudaStreamSynchronize(st) == cudaSuccess &&
+                               std::memcmp(got.data(), (set ? ref2 : ref).data(), no*4) == 0;
+                    }
+                    cudaGetLastError();
+                    if (same) sk_exact.push_back(c);
+                    if (trace_level() >= 2)
+                        std::fprintf(stderr, "vla(gemm_exact):   N=%d S=%d K=%d gemm_skinny %s: %s\n", N, S, K, c.name,
+                                     same ? "bit-exact" : "differs");
+                }
+            // Fastest of the bit-exact algorithms, against cublasGemmEx itself:
+            // interleaved rounds, minimum per candidate (clocks drift under DVFS).
+            auto ref_call = [&] {
+                for (int v = 0; v < nv; ++v)
+                    gemm_one(h, dw, (const __nv_bfloat16 *) dx+(size_t) v*S*K, dout+(size_t) v*S*N, N, S, K);
+            };
+            const size_t n_cand = exact.size()+sk_exact.size();
+            if (n_cand > 0) warm_clocks(st, ref_call);
+            std::vector<float> best(n_cand+1, 1e30f);
+            for (int round = 0; round < 4 && n_cand > 0; ++round) {
+                best[0] = std::min(best[0], time_us(st, ref_call));
+                for (size_t i = 0; i < exact.size(); ++i)
+                    best[i+1] = std::min(best[i+1], time_us(st, [&] { lt_run(*p, exact[i], dw, dx, dout, st); }));
+                for (size_t i = 0; i < sk_exact.size(); ++i)
+                    best[exact.size()+i+1] = std::min(best[exact.size()+i+1], time_us(st, [&] {
+                        sk_exact[i].fn((const __nv_bfloat16 *) dw, (const __nv_bfloat16 *) dx, dout, N, S, K, nv, st); }));
+            }
+            size_t pick = 0;
+            for (size_t i = 1; i < best.size(); ++i)
+                if (best[i] < best[pick]) pick = i;
+            if (trace_level() >= 2)
+                for (size_t i = 0; i < best.size(); ++i)
+                    std::fprintf(stderr, "vla(gemm_exact):   N=%d S=%d K=%d %s: %.1f us\n", N, S, K,
+                                 i == 0 ? "cublasGemmEx" : i <= exact.size() ? "cuBLASLt" : sk_exact[i-exact.size()-1].name, best[i]);
+            if (search) {   // the three fastest enumerated configurations go to the cache
+                std::vector<size_t> idx;
+                for (size_t i = 0; i < exact.size(); ++i)
+                    if (exact_cfg[i].id >= 0) idx.push_back(i);
+                std::sort(idx.begin(), idx.end(), [&](size_t a, size_t b) { return best[a+1] < best[b+1]; });
+                std::vector<LtConfig> keep;
+                for (size_t i = 0; i < idx.size() && i < 3; ++i) keep.push_back(exact_cfg[idx[i]]);
+                lt_cache_append(N, S, K, keep);
+            }
+            if (pick > exact.size()) {
+                p->sk = sk_exact[pick-exact.size()-1].fn;
+                p->sk_name = sk_exact[pick-exact.size()-1].name;
+            } else if (pick > 0) {
+                p->algo = exact[pick-1];
+                p->ok = true;
+            }
+            p->t_ref = n_cand == 0 ? 0.0f : best[0]; p->t_pick = n_cand == 0 ? 0.0f : best[pick];
         }
         cudaGetLastError();
-        // gemm_skinny configurations that reproduce cublasGemmEx on both operand sets.
-        std::vector<skinny::Cand> sk_exact;
-        if (vla::env_flag("VLA_GEMM_SKINNY", true))
-            for (const skinny::Cand & c : skinny::cands(S)) {
-                bool same = good2;
-                for (int set = 0; set < 2 && same; ++set) {
-                    same = c.fn((const __nv_bfloat16 *) dw, (const __nv_bfloat16 *) (set ? dx2 : dx), dout, N, S, K, nv, st) &&
-                           cudaMemcpyAsync(got.data(), dout, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
-                           cudaStreamSynchronize(st) == cudaSuccess &&
-                           std::memcmp(got.data(), (set ? ref2 : ref).data(), no*4) == 0;
-                }
-                cudaGetLastError();
-                if (same) sk_exact.push_back(c);
-                if (trace_level() >= 2)
-                    std::fprintf(stderr, "vla(gemm_exact):   N=%d S=%d K=%d gemm_skinny %s: %s\n", N, S, K, c.name,
-                                 same ? "bit-exact" : "differs");
-            }
-        // Fastest of the bit-exact algorithms, against cublasGemmEx itself:
-        // interleaved rounds, minimum per candidate (clocks drift under DVFS).
-        auto ref_call = [&] {
-            for (int v = 0; v < nv; ++v)
-                gemm_one(h, dw, (const __nv_bfloat16 *) dx+(size_t) v*S*K, dout+(size_t) v*S*N, N, S, K);
-        };
-        const size_t n_cand = exact.size()+sk_exact.size();
-        if (n_cand > 0) warm_clocks(st, ref_call);
-        std::vector<float> best(n_cand+1, 1e30f);
-        for (int round = 0; round < 4 && n_cand > 0; ++round) {
-            best[0] = std::min(best[0], time_us(st, ref_call));
-            for (size_t i = 0; i < exact.size(); ++i)
-                best[i+1] = std::min(best[i+1], time_us(st, [&] { lt_run(*p, exact[i], dw, dx, dout, st); }));
-            for (size_t i = 0; i < sk_exact.size(); ++i)
-                best[exact.size()+i+1] = std::min(best[exact.size()+i+1], time_us(st, [&] {
-                    sk_exact[i].fn((const __nv_bfloat16 *) dw, (const __nv_bfloat16 *) dx, dout, N, S, K, nv, st); }));
-        }
-        size_t pick = 0;
-        for (size_t i = 1; i < best.size(); ++i)
-            if (best[i] < best[pick]) pick = i;
-        if (trace_level() >= 2)
-            for (size_t i = 0; i < best.size(); ++i)
-                std::fprintf(stderr, "vla(gemm_exact):   N=%d S=%d K=%d %s: %.1f us\n", N, S, K,
-                             i == 0 ? "cublasGemmEx" : i <= exact.size() ? "cuBLASLt" : sk_exact[i-exact.size()-1].name, best[i]);
-        if (search) {   // the three fastest enumerated configurations go to the cache
-            std::vector<size_t> idx;
-            for (size_t i = 0; i < exact.size(); ++i)
-                if (exact_cfg[i].id >= 0) idx.push_back(i);
-            std::sort(idx.begin(), idx.end(), [&](size_t a, size_t b) { return best[a+1] < best[b+1]; });
-            std::vector<LtConfig> keep;
-            for (size_t i = 0; i < idx.size() && i < 3; ++i) keep.push_back(exact_cfg[idx[i]]);
-            lt_cache_append(N, S, K, keep);
-        }
-        if (pick > exact.size()) {
-            p->sk = sk_exact[pick-exact.size()-1].fn;
-            p->sk_name = sk_exact[pick-exact.size()-1].name;
-        } else if (pick > 0) {
-            p->algo = exact[pick-1];
-            p->ok = true;
-        }
-        p->t_ref = n_cand == 0 ? 0.0f : best[0]; p->t_pick = n_cand == 0 ? 0.0f : best[pick];
         cudaFree(dx2); cudaFree(dref2);
     }
-    if (trace_level() >= 1)
+    if (trace_level() >= 1 && reused_s >= 0)
+        std::fprintf(stderr, "vla(gemm_exact): N=%d S=%d K=%d views=%d -> cuBLASLt, bit-exact (pick of S=%d)\n",
+                     N, S, K, nv, reused_s);
+    else if (trace_level() >= 1)
         std::fprintf(stderr, "vla(gemm_exact): N=%d S=%d K=%d views=%d -> %s%s (%.1f -> %.1f us)\n", N, S, K, nv,
                      p->sk ? "gemm_skinny, bit-exact: " : p->ok ? "cuBLASLt, bit-exact" : "cublasGemmEx",
                      p->sk ? p->sk_name : "", p->t_ref, p->t_pick);
