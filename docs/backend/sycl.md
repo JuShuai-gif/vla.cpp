@@ -151,34 +151,92 @@ cmake -B build-sycl -G Ninja -DCMAKE_BUILD_TYPE=Release -DGGML_SYCL=ON \
 ```
 
 That adds INT4 x INT4 DPAS GEMMs for the W4A4 sites
-(`src/sycl/vla_sycl_s4gemm.cpp`) and flash attention over the cached prefix
-K/V, with q/k/v + RoPE fused into one node (`src/sycl/vla_sycl_fmha.cpp`); the
-expert's adaRMS rides in FoldQuant's activation nodes. Configure runs
-`scripts/patch_sycl_tla_fmha.py` on the checkout, in place: sycl-tla's FMHA drops
-or mis-masks a partial last key tile without it. The templates add a minute or
-two to the build. Without `VLA_SYCL_TLA_DIR`, π0.5 runs the plain FoldQuant path
-above.
+(`src/sycl/vla_sycl_s4gemm.cpp`) and the attention nodes of
+`src/sycl/vla_sycl_fmha.cpp`: q/k/v + RoPE fused into one node that packs the
+prefix's K/V in F16, which oneDNN's SDPA reads in place (`VLA_FQ_TLA_PREFIX=1`:
+sycl-tla's FMHA instead). The action expert writes its own K/V into spare rows
+of that pack and runs the same SDPA over all of it (`VLA_FQ_NO_KV_SDPA=1`:
+sycl-tla's cached-KV FMHA). The expert's adaRMS rides in FoldQuant's activation
+nodes. Configure runs `scripts/patch_sycl_tla_fmha.py` on the checkout, in
+place: sycl-tla's FMHA drops or mis-masks a partial last key tile without it.
+The templates add a minute or two to the build. Without `VLA_SYCL_TLA_DIR`, π0.5
+runs the plain FoldQuant path above.
+
+oneDNN fuses the SDPA only when its output is F16 like its inputs (an F32 output
+silently becomes GEMM + softmax + GEMM), so the attention output, which is the o
+projection's input, is rounded to F16 before FoldQuant quantizes it, where the
+CPU reference keeps it F32. That moves the odd activation code across a rounding
+tie, as the float layers between the sites do, and the reference check below
+includes it.
+
+The INT4 GEMMs apply the reference's epilogue to their accumulators in
+registers, so a site is one kernel, with 16-row tiles for the action expert's
+10 rows. The expert's INT8 sites (W8A8, and o/down in the INT8 o/down file) run
+the same DPAS loop on `s8` at up to 16 rows; larger INT8 sites stay on oneDNN,
+which beat CuTe tiles on the prefix. All of it is bit-identical to the oneDNN
+path, and each step has an opt-out: `VLA_FQ_NO_S4EPI=1`,
+`VLA_FQ_S4_NO_SMALL_M=1`, `VLA_FQ_NO_S8DPAS=1`, `VLA_FQ_NO_KV_SDPA=1`. The INT8
+sites are bound by weight bandwidth: VTune traces their GPU time at 18.8 ms per
+call on DPAS (13.06 + 5.73) against 20.9 ms for oneDNN's matmul plus the
+epilogue (12.46 + 2.00 + 5.39 + 1.08), but the wall clock barely moves (W8A8
+110.2 -> 110.0 ms in an earlier sitting).
+
+Small Xe parts (up to 64 compute units, such as the 4 Xe cores of a Core Ultra
+7 356H) take INT4 tiles sized for them: 192 x 128 for the long-K down
+projection, whose epilogue then runs as its own kernel because it would spill
+registers there, and 48 x 64 for the fused gate/up. `VLA_S4_TILES=small|large`
+forces either set, with the same output. The Arc B390 reports 96 compute units
+and takes the large set; forced small, it measured 79.4 ms for W4A4 and 89.1 ms
+for W4A4 with INT8 o/down in the sitting of the table below, not yet attributed
+to a site.
 
 π0.5 LIBERO, 2 views at 224 px, 48 tokens, Intel Core Ultra X7 358H with an Arc
 B390 iGPU (Level Zero, compute runtime 26.35), oneAPI 2026.1, built with
-`VLA_SYCL_TLA_DIR`, `vla-bench` p50 over 10 calls after 3 warmups:
+`VLA_SYCL_TLA_DIR`, `vla-bench` p50 over 10 calls after 3 warmups, median of 3
+interleaved rounds:
 
 | Checkpoint | GGUF | p50 ms | vision ms |
 |---|--:|--:|--:|
-| bf16 | 6.71 GB | 263 | 56 |
-| bf16, `--act-dtype bf16` | 6.71 GB | 159 | 16 |
-| bf16, `--act-dtype bf16`, `VLA_PI05_W8A8=all` | 6.71 GB | 97 | 12 |
-| bf16, `--act-dtype bf16`, `VLA_PI05_W8A8=all VLA_PI05_W4=expert` | 6.71 GB | **85** | 12 |
-| FoldQuant W4A4, `VLA_FQ_DEQUANT=1` | 3.27 GB | 206 | 16 |
-| FoldQuant W4A4 | 3.27 GB | **92** | 15 |
-| FoldQuant W4A4, o/down INT8 | 3.61 GB | 100 | 15 |
-| FoldQuant W8A8 | 4.42 GB | 123 | 15 |
+| bf16 | 6.71 GB | 269 | 57 |
+| bf16, `--act-dtype bf16` | 6.71 GB | 160 | 16 |
+| bf16, `--act-dtype bf16`, `VLA_PI05_W8A8=all` | 6.71 GB | 99 | 12 |
+| bf16, `--act-dtype bf16`, `VLA_PI05_W8A8=all VLA_PI05_W4=expert` | 6.71 GB | 87 | 12 |
+| FoldQuant W4A4, `VLA_FQ_DEQUANT=1` | 3.27 GB | 210 | 16 |
+| FoldQuant W4A4 | 3.27 GB | **82** | 16 |
+| FoldQuant W4A4, `VLA_PI05_W8A8=vit` | 3.27 GB | 76 | 12 |
+| FoldQuant W4A4, o/down INT8 | 3.61 GB | 92 | 16 |
+| FoldQuant W4A4, o/down INT8, `VLA_PI05_W8A8=vit` | 3.61 GB | 86 | 12 |
+| FoldQuant W8A8 | 4.42 GB | 115 | 16 |
+| FoldQuant W8A8, `VLA_PI05_W8A8=vit` | 4.42 GB | 106 | 12 |
 
 The FoldQuant rows run vision as the fused bf16 SigLIP blocks, as
-`--act-dtype bf16` does; plain bf16 keeps it F32. W4A4 is 2.9x faster than bf16
-and 1.7x faster than bf16 activations, at half the file size. The two bf16 opt-ins
+`--act-dtype bf16` does; plain bf16 keeps it F32. W4A4 is 3.3x faster than bf16
+and 1.9x faster than bf16 activations, at half the file size. The two bf16 opt-ins
 quantize the weights at load time instead (W8A8 GEMMs in SigLIP, the VLM and the
-expert; `VLA_PI05_W4=expert` makes the expert's weights INT4) and match the FoldQuant files' speed without one.
+expert; `VLA_PI05_W4=expert` makes the expert's weights INT4): W4A8 comes within
+5 ms of FoldQuant W4A4 without a quantized file, and W8A8 beats FoldQuant W8A8,
+whose rotated per-row activation quantization costs more than the opt-in's
+per-token scales.
+
+`VLA_PI05_W8A8=vit` on a FoldQuant file runs SigLIP, which the file carries in
+BF16, on the same W8A8 GEMMs: its weights are quantized at load to symmetric
+per-output-channel INT8 by round-to-nearest, with no calibration, and its
+activations per token (`src/layers/qlinear.h`). That is not FoldQuant's
+arithmetic, so it stays an opt-in; it takes 6-9 ms off a call.
+
+LIBERO success rate of FoldQuant W4A4 with and without it, same server and
+client as below, 10 tasks x 20 episodes per suite:
+
+| Suite | W4A4 | W4A4, `VLA_PI05_W8A8=vit` |
+|---|--:|--:|
+| libero_object | 99.5% (199/200) | 99.0% (198/200) |
+| libero_spatial | 99.0% (198/200) | 97.0% (194/200) |
+
+Most of the libero_spatial gap is task 4 (16/20 with `vit`, 20/20 without); 50
+more episodes of that task scored 50/50 for both, so it does not reproduce, but
+the combined 66/70 against 70/70 is not level either, and SigLIP's INT8 is not
+calibrated. These ran at an earlier commit whose actions match the table's
+build bit for bit.
 
 LIBERO success rate of the two opt-ins on the same machine: the bf16 π0.5 LIBERO
 GGUF with `--act-dtype bf16`, served by `vla-server` (`eval/run_libero.sh`), 10 tasks x 50
@@ -201,6 +259,24 @@ The FoldQuant files are FoldQuantVLA quantized checkpoints converted with
 [vrfai/pi05-libero-w4a4-res8](https://huggingface.co/vrfai/pi05-libero-w4a4-res8);
 W8A8 is FoldQuantVLA's W8A8 arm (`--llm-scheme w8a8_sr --expert-scheme w8a8_sh`)
 calibrated on the same 128 LIBERO frames, seed 0.
+
+Against FoldQuantVLA's own fake-quant π0.5 (openpi PyTorch, `vrfai/pi05_libero_pytorch`
+with the W4A4 and INT8 o/down states) on 8 real LIBERO frames, with the same
+images, tokens and noise, 10 steps: worst-frame cosine of the 10 x 7 action chunk,
+after the output transforms and in the model's normalized output space:
+
+| Checkpoint | actions | normalized |
+|---|--:|--:|
+| bf16 (against the reference's bf16) | 0.99999 | 0.99999 |
+| FoldQuant W4A4 | 0.99916 | 0.99844 |
+| FoldQuant W4A4, `VLA_PI05_W8A8=vit` | 0.99921 | 0.99876 |
+| FoldQuant W4A4, o/down INT8 | 0.99965 | 0.99923 |
+| FoldQuant W4A4, o/down INT8, `VLA_PI05_W8A8=vit` | 0.99958 | 0.99914 |
+
+The quantized rows are not bit-exact to the reference by construction: its
+attention runs in bf16 and the F16 rounding above sits before the o projection,
+so a few activation codes land on the other side of a rounding tie. Without the
+gripper dimension the worst normalized cosine is 0.9955 (W4A4).
 
 ## Known issue: the Level Zero loader on Ubuntu 24.04
 
