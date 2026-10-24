@@ -432,11 +432,13 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
             setenv_default("GGML_OPENVINO_EXEC_MODE", "performance");
         // Fused elementwise nodes on SYCL, the backend that claims them.
         // VLA_PI05_NO_FUSE=1 keeps the per-op graph.
+        // Off when the backend declines them (VLA_SYCL_NO_FUSED=1).
         if (b.is_sycl && !fq.present && !env_flag("VLA_PI05_NO_FUSE")) {
-            m->fused_ew        = true;
-            m->adarms_spec.eps = cfg.rms_eps;
             sycl_register_fused_ops();
-            std::printf("vla(pi05): fused expert elementwise ops on (VLA_PI05_NO_FUSE=1 to disable)\n");
+            m->fused_ew        = fused_ew_registered();
+            m->adarms_spec.eps = cfg.rms_eps;
+            if (m->fused_ew)
+                std::printf("vla(pi05): fused expert elementwise ops on (VLA_PI05_NO_FUSE=1 to disable)\n");
         }
         if (const char * e = std::getenv("VLA_PI05_LANG_BUCKET"); e && *e)
             m->lang_bucket = std::max(0L, std::strtol(e, nullptr, 10));
@@ -528,8 +530,10 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
     const bool vit_bf16 = m->act_type == GGML_TYPE_BF16 ||
                           (fq.present && is_sycl && m->matmul_type == GGML_TYPE_BF16 && !env_flag("VLA_PI05_NO_FUSE"));
     m->vis.vit.enc.cfg.fused = is_sycl && vit_bf16 && use_fused_attention() && !env_flag("VLA_PI05_NO_VIT_FUSE");
-    if (m->vis.vit.enc.cfg.fused && !m->fused_ew)
+    if (m->vis.vit.enc.cfg.fused && !m->fused_ew) {
         sycl_register_fused_ops();
+        m->vis.vit.enc.cfg.fused = fused_ew_registered();
+    }
     // The fused blocks run in BF16; the per-op tower in F32, which takes every
     // view in one graph (its BF16 form is single-view).
     m->vis.vit.enc.cfg.act  = m->vis.vit.enc.cfg.fused ? GGML_TYPE_BF16 : GGML_TYPE_F32;
@@ -607,9 +611,11 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         for (int64_t i=0; i<cfg.n_layers && all; ++i)
             all = m->pl.blk[i].rope_pack.magic == FQ_ROPE_PACK_MAGIC && m->ex_layers[i].fq_qkv &&
                   (!big || m->ex_layers[i].rope_attn.magic == FQ_ROPE_ATTN_MAGIC);
+        if (all && !big) {
+            sycl_register_fused_ops();
+            all = fused_ew_registered();   // fused_rope_kv declined (VLA_SYCL_NO_FUSED=1): fmha_kv
+        }
         if (all) {
-            if (!big)
-                sycl_register_fused_ops();
             for (int64_t i=0; i<cfg.n_layers; ++i) {
                 m->pl.blk[i].rope_pack.extra    = (int) cfg.n_suffix;
                 m->ex_layers[i].rope_attn.extra = (int) cfg.n_suffix;
