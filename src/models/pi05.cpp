@@ -587,18 +587,29 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
             }
         }
     }
-    // Expert attention over contiguous keys (fq_rope_attn, two oneDNN GEMMs): the
-    // prefix pack leaves chunk free K/V rows per layer, the expert writes its own
-    // there. Only when every layer takes both fused nodes. VLA_FQ_NO_KV_TAIL=1: off.
+    // Expert attention over contiguous keys: the prefix pack leaves chunk free K/V
+    // rows per layer, the expert writes its own there. Above 192 query rows,
+    // fq_rope_attn (two oneDNN GEMMs); below, where those lose to the split
+    // fmha_kv, fused_rope_kv and the oneDNN SDPA (fq_kv_sdpa; VLA_FQ_NO_KV_SDPA=1
+    // keeps fmha_kv). Only when every layer takes the fused nodes.
+    // VLA_FQ_NO_KV_TAIL=1: off.
     {
-        bool all = m->fq_fast && cfg.n_suffix * cfg.n_q_heads > 192 && !env_flag("VLA_FQ_NO_KV_TAIL");
+        const bool big = cfg.n_suffix * cfg.n_q_heads > 192;
+        bool all = m->fq_fast && !env_flag("VLA_FQ_NO_KV_TAIL") && (big || !env_flag("VLA_FQ_NO_KV_SDPA"));
         for (int64_t i=0; i<cfg.n_layers && all; ++i)
-            all = m->pl.blk[i].rope_pack.magic == FQ_ROPE_PACK_MAGIC && m->ex_layers[i].rope_attn.magic == FQ_ROPE_ATTN_MAGIC;
-        if (all)
+            all = m->pl.blk[i].rope_pack.magic == FQ_ROPE_PACK_MAGIC && m->ex_layers[i].fq_qkv &&
+                  (!big || m->ex_layers[i].rope_attn.magic == FQ_ROPE_ATTN_MAGIC);
+        if (all) {
+            if (!big)
+                sycl_register_fused_ops();
             for (int64_t i=0; i<cfg.n_layers; ++i) {
                 m->pl.blk[i].rope_pack.extra    = (int) cfg.n_suffix;
                 m->ex_layers[i].rope_attn.extra = (int) cfg.n_suffix;
+                m->ex_layers[i].fq_kv_sdpa      = !big;
             }
+            if (!big)
+                std::printf("vla(pi05): expert K/V in the prefix pack, fused attention (VLA_FQ_NO_KV_SDPA=1 to disable)\n");
+        }
     }
 
     m->W_ain  = L.f32("action_in_proj.weight");   m->b_ain  = L.f32("action_in_proj.bias");

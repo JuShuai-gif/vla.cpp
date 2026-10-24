@@ -681,10 +681,12 @@ namespace {
 // The hook entry. main's oneDNN SDPA (vla_sycl_attn.cpp) owns FLASH_ATTN_EXT;
 // this one sits ahead of it but takes only the attention over a FoldQuant
 // prefix pack (fq_rope_pack's packed F16 rows, read in place), plus its own
-// custom nodes.
+// custom nodes. The expert's attention over the pack's tail rows (Q from
+// fused_rope_kv, GemmaLayerW::fq_kv_sdpa) stays with oneDNN.
 bool fmha_dispatch(ggml_tensor * dst, void * queue) {
     if (dst->op == GGML_OP_FLASH_ATTN_EXT)
-        return dst->src[1] && custom_magic(dst->src[1]->view_src) == FQ_ROPE_PACK_MAGIC && sycl_fmha_forward(dst, queue);
+        return dst->src[0] && dst->src[1] && custom_magic(dst->src[0]->view_src) == FQ_ROPE_PACK_MAGIC &&
+               custom_magic(dst->src[1]->view_src) == FQ_ROPE_PACK_MAGIC && sycl_fmha_forward(dst, queue);
     return sycl_fmha_kv_forward(dst, queue) || sycl_fq_rope_attn_forward(dst, queue) ||
            sycl_fq_rope_pack_forward(dst, queue);
 }

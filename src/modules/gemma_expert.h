@@ -77,6 +77,10 @@ struct GemmaLayerW {
     // q/k/v GEMM + RoPE + F16 packing in one node (pi0.5's prefix, SYCL); the
     // attention reads it in place and k_out / v_out are F16 [hd, seq, 1] views.
     FqRopeAttnSpec rope_pack{};
+    // pi0.5's expert on SYCL when rope_attn is too small to pay off: the prefix
+    // pack's K/V carry seq free rows, which fused_rope_kv fills with this step's
+    // K/V before the backend's fused attention reads every row in place.
+    bool fq_kv_sdpa = false;
 };
 
 // The float GEMM weights of one layer, under GGUF prefix `b` (e.g. "vlm.blk.3"):
@@ -346,6 +350,24 @@ inline ggml_tensor * gemma_attn(
         // One node for q/k/v, RoPE and the attention (src/layers/fq_rope_attn.h).
         ggml_tensor * fa = fq_rope_attn(ctx, &w.rope_attn, w.fq_qkv, fq_xq ? fq_xq : fq_act(ctx, w.fq_qkv, fq_x),
                                         positions, cached_K16, cached_V16);
+        return fq_linear(ctx, w.fq_o, ggml_reshape_2d(ctx, fa, qf, seq), fq_res, fq_gate);
+    }
+    if (w.fq_kv_sdpa && w.fq_qkv && w.fq_o && flash && cached_K16 && cached_V16 && !mask && !k_out && !v_out &&
+        (fq_xq || fq_x) && nkv == 1 && fused_ew_registered() && cached_K16->ne[1] > seq) {
+        // The q/k/v GEMM, then one node for RoPE on q and k with k and v written
+        // into the pack's free rows, then the fused attention over all rows.
+        ggml_tensor * qkv  = fq_gemm(ctx, w.fq_qkv, fq_xq ? fq_xq : fq_act(ctx, w.fq_qkv, fq_x));
+        const int64_t n_all = cached_K16->ne[1], row0 = n_all - seq;
+        auto slot = [&](ggml_tensor * t) {   // [hd, n_all, 1] -> [hd, 1, n_all]
+            return ggml_view_3d(ctx, t, hd, 1, n_all, t->nb[1], t->nb[1], 0);
+        };
+        ggml_tensor * kb  = slot(cached_K16), * vb = slot(cached_V16);
+        ggml_tensor * q16 = fused_rope_kv(ctx, qkv, positions, kb, vb, (int) nq, 1, (int) hd, row0, cfg.rope_freq_base);
+        ggml_tensor * fa  = ggml_flash_attn_ext(ctx, ggml_permute(ctx, q16, 0, 2, 1, 3),
+                                                ggml_permute(ctx, kb, 0, 2, 1, 3), ggml_permute(ctx, vb, 0, 2, 1, 3),
+                                                nullptr, 1.f / std::sqrt((float) hd), 0.0f, 0.0f);
+        ggml_prec_set_acc(fa, GGML_PREC_F32);
+        add_dep(fa, q16);   // K/V are read through views of the pack: after this step's writes
         return fq_linear(ctx, w.fq_o, ggml_reshape_2d(ctx, fa, qf, seq), fq_res, fq_gate);
     }
     if (w.rope_pack.magic == FQ_ROPE_PACK_MAGIC && w.fq_qkv && flash && !mask && !cached_K && !cached_V && nkv == 1 &&
