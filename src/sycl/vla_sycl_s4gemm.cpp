@@ -27,6 +27,7 @@
 #include <sycl/ext/intel/experimental/grf_size_properties.hpp>
 #include <cute/tensor.hpp>
 
+#include <cstdlib>
 #include <cstring>
 
 namespace vla {
@@ -47,6 +48,16 @@ using MmaShortK = typename TiledMMAHelper<MMA_Atom<MmaOp>, Layout<Shape<_64, _25
 using SGL2x8  = Layout<Shape<_2, _8, _1>, Stride<_8, _1, _0>>;
 using MmaHalf = typename TiledMMAHelper<MMA_Atom<MmaOp>, Layout<Shape<_64, _256, _128>>, SGL2x8>::TiledMMA;
 constexpr int GLU_M = 64, GLU_N = 256;
+// Small parts (4 Xe cores, e.g. Core Ultra 7 356H, 528 rows): the tiles above leave
+// the INT4 DPAS at ~38 TOPS there. These reach 54-55 TOPS: 192 x 128 for the long-K
+// down site (0.93 -> 0.66 ms), and for the GEGLU 48 x 64 tiles (48 divides the
+// prefix's 528 rows) at GRF 128, whose 8 threads per vector engine hide the load
+// latency better than the larger tile at GRF 256 (1.84 -> 1.29 ms). Prefetch
+// distance 2 on both.
+using SGL2x4      = Layout<Shape<_2, _4, _1>, Stride<_4, _1, _0>>;
+using MmaLongKXe4 = typename TiledMMAHelper<MMA_Atom<MmaOp>, Layout<Shape<_192, _128, _128>>, SGL4x4>::TiledMMA;
+using MmaHalfXe4  = typename TiledMMAHelper<MMA_Atom<MmaOp>, Layout<Shape<_48, _64, _128>>, SGL2x4>::TiledMMA;
+constexpr int GLU_M_XE4 = 48, GLU_N_XE4 = 64;
 
 template <class T>
 auto row_major(T * p, int rows, int cols, int pitch) {
@@ -61,8 +72,8 @@ inline float gelu_tanh_dev(float x) {
     return 0.5f * x * (2.0f - 2.0f / (sycl::native::exp(2.0f * z) + 1.0f));
 }
 
-// C (M,N) s32 = A (M,K) s4 x B (N,K)^T s4.
-template <class Mma, class AT, class BT, class CT>
+// C (M,N) s32 = A (M,K) s4 x B (N,K)^T s4. PF: prefetch distance in K tiles.
+template <class Mma, int PF, class AT, class BT, class CT>
 void gemm_s32_device(AT const & A, BT const & B, CT & C) {
     Mma mma{};
     auto item = sycl::ext::oneapi::this_work_item::get_nd_item<2>();
@@ -96,7 +107,7 @@ void gemm_s32_device(AT const & A, BT const & B, CT & C) {
     int kp = 0;
     clear(tCrC);
     CUTE_UNROLL
-    for (; kp < 3; kp++) { prefetch(pf_a, tpa(_, _, _, kp)); prefetch(pf_b, tpb(_, _, _, kp)); }
+    for (; kp < PF; kp++) { prefetch(pf_a, tpa(_, _, _, kp)); prefetch(pf_b, tpb(_, _, _, kp)); }
     for (int kt = 0; kt < k_tiles; kt++, kp++) {
         barrier_arrive(ScopeWorkgroup);
         copy(copy_a, tAgA(_, _, _, kt), tArA);
@@ -113,10 +124,10 @@ void gemm_s32_device(AT const & A, BT const & B, CT & C) {
 
 // O (M,Nh) bf16 = gelu_tanh(g) * u, g = (acc_gate * xs[m]) * ws[n] (+ b), u likewise
 // with the up rows n + Nh: both tiles of a column block in one work-group.
-template <class AT, class BT, class OT>
+template <class Mma, int PF, class AT, class BT, class OT>
 void gemm_glu_device(AT const & A, BT const & Bg, BT const & Bu, OT & O, const int8_t * blob, int row_bytes, int xs_off,
                      const float * ws, const float * bias, int M, int Nh) {
-    MmaHalf mma{};
+    Mma mma{};
     auto item = sycl::ext::oneapi::this_work_item::get_nd_item<2>();
     const int wg_m = int(item.get_group(1)), wg_n = int(item.get_group(0)), lid = int(item.get_local_id(0));
     Tensor cA = make_identity_tensor(A.shape());
@@ -157,7 +168,7 @@ void gemm_glu_device(AT const & A, BT const & Bg, BT const & Bu, OT & O, const i
     clear(accG);
     clear(accU);
     CUTE_UNROLL
-    for (; kp < 3; kp++) {
+    for (; kp < PF; kp++) {
         prefetch(pf_a, tpa(_, _, _, kp));
         prefetch(pf_bg, tpbg(_, _, _, kp));
         prefetch(pf_bu, tpbu(_, _, _, kp));
@@ -193,7 +204,7 @@ void gemm_glu_device(AT const & A, BT const & Bg, BT const & Bu, OT & O, const i
 
 template <class> class S4Gemm32Name;
 
-template <class Mma, int TM, int TN>
+template <class Mma, int TM, int TN, int GRF, int PF>
 void launch_s32(sycl::queue & q, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, const int8_t * w,
                 int64_t N, int32_t * out);
 template <class> class S4GemmGluName;
@@ -204,7 +215,19 @@ namespace intelex = sycl::ext::intel::experimental;
 }  // namespace
 
 namespace {
-template <class Mma, int TM, int TN>
+// Whether the device is a small Xe part (<= 64 vector engines, i.e. up to 8 Xe
+// cores), which takes the *Xe4 tilings. VLA_S4_TILES=small|large overrides.
+bool small_xe(sycl::queue & q) {
+    static const int forced = [] {
+        const char * e = std::getenv("VLA_S4_TILES");
+        if (!e || !*e) return -1;
+        return std::strcmp(e, "small") == 0 ? 1 : std::strcmp(e, "large") == 0 ? 0 : -1;
+    }();
+    if (forced >= 0) return forced == 1;
+    return q.get_device().get_info<sycl::info::device::max_compute_units>() <= 64;
+}
+
+template <class Mma, int TM, int TN, int GRF, int PF>
 void launch_s32(sycl::queue & q, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, const int8_t * w,
                 int64_t N, int32_t * out) {
     auto A = row_major(reinterpret_cast<int4_t *>(const_cast<int8_t *>(blob)), (int) M, (int) K, (int) (row_bytes * 2));
@@ -213,10 +236,28 @@ void launch_s32(sycl::queue & q, const int8_t * blob, int64_t M, int64_t K, int6
     Mma mma{};
     const sycl::range<2> local = { (size_t) size(mma), 1 };
     const sycl::range<2> global = { local[0] * (size_t) ceil_div((int) N, TN), (size_t) ceil_div((int) M, TM) };
-    syclex::properties props{ syclex::sub_group_size<16>, intelex::grf_size<256> };
+    syclex::properties props{ syclex::sub_group_size<16>, intelex::grf_size<GRF> };
     q.parallel_for<S4Gemm32Name<Mma>>(sycl::nd_range<2>(global, local), props, [=](auto) {
         auto Cm = C;
-        gemm_s32_device<Mma>(A, B, Cm);
+        gemm_s32_device<Mma, PF>(A, B, Cm);
+    });
+}
+
+template <class Mma, int TM, int TN, int GRF, int PF>
+void launch_glu(sycl::queue & q, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, int64_t xs_off,
+                const int8_t * w, const float * ws, const float * bias, int64_t Nh, uint16_t * out_bf16) {
+    auto A  = row_major(reinterpret_cast<int4_t *>(const_cast<int8_t *>(blob)), (int) M, (int) K, (int) (row_bytes * 2));
+    auto Bg = row_major(reinterpret_cast<int4_t *>(const_cast<int8_t *>(w)), (int) Nh, (int) K, (int) K);
+    auto Bu = row_major(reinterpret_cast<int4_t *>(const_cast<int8_t *>(w) + Nh * K / 2), (int) Nh, (int) K, (int) K);
+    auto O  = row_major(reinterpret_cast<bfloat16_t *>(out_bf16), (int) M, (int) Nh, (int) Nh);
+    Mma mma{};
+    const sycl::range<2> local = { (size_t) size(mma), 1 };
+    const sycl::range<2> global = { local[0] * (size_t) ceil_div((int) Nh, TN), (size_t) ceil_div((int) M, TM) };
+    syclex::properties props{ syclex::sub_group_size<16>, intelex::grf_size<GRF> };
+    const int iM = (int) M, iNh = (int) Nh, rb = (int) row_bytes, xo = (int) xs_off;
+    q.parallel_for<S4GemmGluName<Mma>>(sycl::nd_range<2>(global, local), props, [=](auto) {
+        auto Om = O;
+        gemm_glu_device<Mma, PF>(A, Bg, Bu, Om, blob, rb, xo, ws, bias, iM, iNh);
     });
 }
 }  // namespace
@@ -225,28 +266,25 @@ bool sycl_s4_gemm_s32(void * queue, const int8_t * blob, int64_t M, int64_t K, i
                       int64_t N, int32_t * out) {
     if (K % 128 != 0 || N % 256 != 0 || (row_bytes % 16) != 0 || M <= 0) return false;
     sycl::queue & q = *static_cast<sycl::queue *>(queue);
-    if (K >= 8192) launch_s32<MmaLongK, 128, 128>(q, blob, M, K, row_bytes, w, N, out);
-    else           launch_s32<MmaShortK, 64, 256>(q, blob, M, K, row_bytes, w, N, out);
+    if (K >= 8192) {
+        if (small_xe(q)) launch_s32<MmaLongKXe4, 192, 128, 256, 2>(q, blob, M, K, row_bytes, w, N, out);
+        else             launch_s32<MmaLongK, 128, 128, 256, 3>(q, blob, M, K, row_bytes, w, N, out);
+    } else {
+        launch_s32<MmaShortK, 64, 256, 256, 3>(q, blob, M, K, row_bytes, w, N, out);
+    }
     return true;
 }
 
 bool sycl_s4_gemm_glu(void * queue, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, int64_t xs_off,
                       const int8_t * w, const float * ws, const float * bias, int64_t Nh, uint16_t * out_bf16) {
-    if (K % 128 != 0 || Nh % GLU_N != 0 || (row_bytes % 16) != 0 || (xs_off % 4) != 0 || M <= 0) return false;
+    if (K % 128 != 0 || (row_bytes % 16) != 0 || (xs_off % 4) != 0 || M <= 0) return false;
     sycl::queue & q = *static_cast<sycl::queue *>(queue);
-    auto A  = row_major(reinterpret_cast<int4_t *>(const_cast<int8_t *>(blob)), (int) M, (int) K, (int) (row_bytes * 2));
-    auto Bg = row_major(reinterpret_cast<int4_t *>(const_cast<int8_t *>(w)), (int) Nh, (int) K, (int) K);
-    auto Bu = row_major(reinterpret_cast<int4_t *>(const_cast<int8_t *>(w) + Nh * K / 2), (int) Nh, (int) K, (int) K);
-    auto O  = row_major(reinterpret_cast<bfloat16_t *>(out_bf16), (int) M, (int) Nh, (int) Nh);
-    MmaHalf mma{};
-    const sycl::range<2> local = { (size_t) size(mma), 1 };
-    const sycl::range<2> global = { local[0] * (size_t) ceil_div((int) Nh, GLU_N), (size_t) ceil_div((int) M, GLU_M) };
-    syclex::properties props{ syclex::sub_group_size<16>, intelex::grf_size<256> };
-    const int iM = (int) M, iNh = (int) Nh, rb = (int) row_bytes, xo = (int) xs_off;
-    q.parallel_for<S4GemmGluName<void>>(sycl::nd_range<2>(global, local), props, [=](auto) {
-        auto Om = O;
-        gemm_glu_device(A, Bg, Bu, Om, blob, rb, xo, ws, bias, iM, iNh);
-    });
+    if (small_xe(q) && Nh % GLU_N_XE4 == 0) {
+        launch_glu<MmaHalfXe4, GLU_M_XE4, GLU_N_XE4, 128, 2>(q, blob, M, K, row_bytes, xs_off, w, ws, bias, Nh, out_bf16);
+    } else {
+        if (Nh % GLU_N != 0) return false;
+        launch_glu<MmaHalf, GLU_M, GLU_N, 256, 3>(q, blob, M, K, row_bytes, xs_off, w, ws, bias, Nh, out_bf16);
+    }
     return true;
 }
 
