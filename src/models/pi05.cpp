@@ -494,7 +494,15 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         q8_vlm = has("vlm");
         q8_aex = has("expert");
         q8_vit = has("vit");
-        if (!m->kv_inplace || !m->fused_ew) {
+        if (fq.present && is_sycl) {
+            // A FoldQuant checkpoint brings its own LM and expert sites; only
+            // SigLIP, BF16 in the file, can take the W8A8 GEMMs (fused blocks).
+            if (q8_vlm || q8_aex)
+                std::fprintf(stderr, "vla(pi05): VLA_PI05_W8A8 vlm/expert ignored - the FoldQuant sites are used\n");
+            q8_vlm = q8_aex = false;
+            if (q8_vit)
+                std::printf("vla(pi05): W8A8 GEMMs (per-token INT8 activations): SigLIP\n");
+        } else if (!m->kv_inplace || !m->fused_ew) {
             std::fprintf(stderr, "vla(pi05): VLA_PI05_W8A8 ignored - needs SYCL with fused attention, no FoldQuant\n");
             q8_vlm = q8_aex = q8_vit = false;
         } else {
