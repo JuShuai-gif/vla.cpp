@@ -380,11 +380,12 @@ __device__ __forceinline__ float p_min(float a, float b) { float r; asm("min.f32
 __device__ __forceinline__ float p_abs(float a) { float r; asm("abs.f32 %0, %1;" : "=f"(r) : "f"(a)); return r; }
 __device__ __forceinline__ float p_rint(float a) { float r; asm("cvt.rni.f32.f32 %0, %1;" : "=f"(r) : "f"(a)); return r; }
 
-// gelu(g) * u as k_gelu_mul, then fq_prologue.cu's act_row_kernel on the
-// product (no RMSNorm): one CTA of NW warps per row, lane pairs (2l, 2l+1) of
-// each 64-wide chunk, the same butterfly pairs and the same amax and rounding.
-template <int ABITS, int ROT, int NW>
-__global__ void __launch_bounds__(NW * 32) k_gelu_mul_act(const float * __restrict__ g, const float * __restrict__ u,
+// The activation as k_gelu_mul / k_silu_mul / ggml_gelu compute it (GLU: a
+// FusedGlu), then fq_prologue.cu's act_row_kernel on it (no RMSNorm): one CTA
+// of NW warps per row, lane pairs (2l, 2l+1) of each 64-wide chunk, the same
+// butterfly pairs and the same amax and rounding.
+template <int GLU, int ABITS, int ROT, int NW>
+__global__ void __launch_bounds__(NW * 32) k_glu_act(const float * __restrict__ g, const float * __restrict__ u,
                                                           const float * __restrict__ ascale, int8_t * __restrict__ blob,
                                                           int K, int64_t row_bytes, bool fold_before, float clip,
                                                           float inv_sqrt_bs) {
@@ -400,8 +401,17 @@ __global__ void __launch_bounds__(NW * 32) k_gelu_mul_act(const float * __restri
         const int c = warp + i * NW;
         if (c < nchunks) {
             const int64_t k0 = (int64_t) c * 64 + 2 * lane;
-            const float2  gg = *(const float2 *) (g + m * K + k0), uu = *(const float2 *) (u + m * K + k0);
-            float e0 = __fmul_rn(gelu_ggml(gg.x), uu.x), e1 = __fmul_rn(gelu_ggml(gg.y), uu.y);
+            const float2  gg = *(const float2 *) (g + m * K + k0);
+            float e0, e1;
+            if (GLU == (int) vla::FusedGlu::Gelu) {
+                e0 = gelu_ggml(gg.x);
+                e1 = gelu_ggml(gg.y);
+            } else {
+                const float2 uu = *(const float2 *) (u + m * K + k0);
+                const bool   si = GLU == (int) vla::FusedGlu::SiluMul;
+                e0 = __fmul_rn(si ? silu_ggml(gg.x) : gelu_ggml(gg.x), uu.x);
+                e1 = __fmul_rn(si ? silu_ggml(gg.y) : gelu_ggml(gg.y), uu.y);
+            }
             float2 s = make_float2(1.0f, 1.0f);
             if (ascale) s = *(const float2 *) (ascale + k0);
             if (ascale && fold_before) { e0 = p_div(e0, s.x); e1 = p_div(e1, s.y); }
@@ -454,41 +464,52 @@ __global__ void __launch_bounds__(NW * 32) k_gelu_mul_act(const float * __restri
     if (threadIdx.x == 0) *(float *) (row + (ABITS == 8 ? K : K / 2)) = scale;
 }
 
-template <int ABITS, int NW>
-bool launch_gelu_mul_act_nw(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
+template <int GLU, int ABITS, int NW>
+bool launch_glu_act_nw(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
     const ggml_tensor * g = dst->src[0];
+    const float * u  = dst->src[1] ? (const float *) dst->src[1]->data : nullptr;
     const float * as = dst->src[2] ? (const float *) dst->src[2]->data : nullptr;
     const int K = (int) g->ne[0];
     const unsigned rows = (unsigned) dst->ne[1];
     auto go = [&](auto kern) {
-        kern<<<rows, NW * 32, 0, st>>>((const float *) g->data, (const float *) dst->src[1]->data, as,
+        kern<<<rows, NW * 32, 0, st>>>((const float *) g->data, u, as,
                                       (int8_t *) dst->data, K, (int64_t) dst->ne[0], s.fold_before != 0, s.clip,
                                       s.inv_sqrt_bs);
         return true;
     };
     switch (s.rot_block) {
-        case 64: return go(k_gelu_mul_act<ABITS, 64, NW>);
-        case 32: return go(k_gelu_mul_act<ABITS, 32, NW>);
-        case 16: return go(k_gelu_mul_act<ABITS, 16, NW>);
-        case 8:  return go(k_gelu_mul_act<ABITS, 8,  NW>);
-        case 4:  return go(k_gelu_mul_act<ABITS, 4,  NW>);
-        case 2:  return go(k_gelu_mul_act<ABITS, 2,  NW>);
+        case 64: return go(k_glu_act<GLU, ABITS, 64, NW>);
+        case 32: return go(k_glu_act<GLU, ABITS, 32, NW>);
+        case 16: return go(k_glu_act<GLU, ABITS, 16, NW>);
+        case 8:  return go(k_glu_act<GLU, ABITS, 8,  NW>);
+        case 4:  return go(k_glu_act<GLU, ABITS, 4,  NW>);
+        case 2:  return go(k_glu_act<GLU, ABITS, 2,  NW>);
         case 1:
-        case 0:  return go(k_gelu_mul_act<ABITS, 1,  NW>);
+        case 0:  return go(k_glu_act<GLU, ABITS, 1,  NW>);
         default: return false;
     }
 }
 
-bool launch_gelu_mul_act(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
-    const ggml_tensor * g = dst->src[0];
+template <int GLU>
+bool launch_glu_act_g(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
+    const bool wide = dst->src[0]->ne[0] > 8 * 16 * 64;
+    if (s.abits == 8) return wide ? launch_glu_act_nw<GLU, 8, 16>(s, dst, st) : launch_glu_act_nw<GLU, 8, 8>(s, dst, st);
+    return wide ? launch_glu_act_nw<GLU, 4, 16>(s, dst, st) : launch_glu_act_nw<GLU, 4, 8>(s, dst, st);
+}
+
+bool launch_glu_act(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
+    const ggml_tensor * g = dst->src[0], * u = dst->src[1];
     const int64_t K = g->ne[0];
     if (dst->type != GGML_TYPE_I8 || K % 64 != 0 || K > 16 * 16 * 64 || (s.abits != 8 && s.abits != 4) ||
-        !ggml_are_same_shape(g, dst->src[1]) || ggml_nrows(g) != dst->ne[1] ||
+        (s.glu == vla::FusedGlu::Gelu) != !u || (u && !ggml_are_same_shape(g, u)) || ggml_nrows(g) != dst->ne[1] ||
         (dst->src[2] && ggml_nelements(dst->src[2]) != K))
         return false;
-    const bool wide = K > 8 * 16 * 64;
-    if (s.abits == 8) return wide ? launch_gelu_mul_act_nw<8, 16>(s, dst, st) : launch_gelu_mul_act_nw<8, 8>(s, dst, st);
-    return wide ? launch_gelu_mul_act_nw<4, 16>(s, dst, st) : launch_gelu_mul_act_nw<4, 8>(s, dst, st);
+    switch (s.glu) {
+        case vla::FusedGlu::GeluMul: return launch_glu_act_g<(int) vla::FusedGlu::GeluMul>(s, dst, st);
+        case vla::FusedGlu::SiluMul: return launch_glu_act_g<(int) vla::FusedGlu::SiluMul>(s, dst, st);
+        case vla::FusedGlu::Gelu:    return launch_glu_act_g<(int) vla::FusedGlu::Gelu>(s, dst, st);
+    }
+    return false;
 }
 
 __device__ __forceinline__ float gelu_erf_ggml(float x) {
@@ -1924,8 +1945,8 @@ extern "C" bool vla_cuda_fused_forward(ggml_tensor * dst, void * stream_v) {
             else                             k_gelu_mul<<<g, B, 0, st>>>(fptr(a), fptr(dst->src[1]), out, n);
             break;
         }
-        case vla::FusedKind::GeluMulAct:
-            if (!launch_gelu_mul_act(*s, dst, st)) return false;
+        case vla::FusedKind::GluAct:
+            if (!launch_glu_act(*s, dst, st)) return false;
             break;
         case vla::FusedKind::BiasGeluErf: {
             const int64_t n = ggml_nelements(a);

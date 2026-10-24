@@ -87,10 +87,12 @@ ggml_tensor * Qwen3LM::block(ggml_context * C, const Qwen3LayerW & w, ggml_tenso
     const bool v_heads = w.fq_v && w.fq_v.gemm.heads;   // epilogue wrote the attention layout
     ggml_tensor * vh = v_heads ? nullptr : ggml_reshape_3d(C, vp, hd, n_kv, seq);
 
-    // Fused q/k norm + IMROPE + attention layout (plain RoPE scaling only).
+    // Fused q/k norm + IMROPE + attention layout (plain RoPE scaling only); on
+    // FoldQuant layers too, ahead of the ggml attention.
     const RopeSpec & rs = cfg.rope;
-    const bool fqk = fz && rs.type == GGML_ROPE_TYPE_IMROPE && rs.n_dims == hd && rs.ext_factor == 0.0f &&
-                     rs.freq_scale == 1.0f && rs.attn_factor == 1.0f && hd%64 == 0;
+    const bool fqk = (fz || (cfg.fused_ops && w.fq_q && !cfg.flash_attn)) && rs.type == GGML_ROPE_TYPE_IMROPE &&
+                     rs.n_dims == hd && rs.ext_factor == 0.0f && rs.freq_scale == 1.0f && rs.attn_factor == 1.0f &&
+                     hd%64 == 0;
     ggml_tensor * qr = nullptr, * kr = nullptr, * Q;
     if (fqk) {
         Q = fused_qk_norm_rope(C, qh, w.q_norm, pos, cfg.rms_eps, rs.sections, rs.freq_base, false);
@@ -119,7 +121,8 @@ ggml_tensor * Qwen3LM::block(ggml_context * C, const Qwen3LayerW & w, ggml_tenso
                               : ggml_cont(C, ggml_permute(C, kr, 0, 2, 1, 3));
         att = attention_rows(C, Q, K, ggml_cont(C, ggml_permute(C, vh, 1, 2, 0, 3)), scale, hq, seq, 1, bf16_operand(w.Wo), mask);
     } else {
-        ggml_tensor * K = ggml_cont(C, ggml_permute(C, kr, 0, 2, 1, 3));
+        ggml_tensor * K = fqk ? fused_qk_norm_rope(C, kh, w.k_norm, pos, cfg.rms_eps, rs.sections, rs.freq_base, false)
+                              : ggml_cont(C, ggml_permute(C, kr, 0, 2, 1, 3));
         ggml_tensor * V = v_heads ? fq_head_view(C, vp, w.fq_v, 0, seq) : ggml_cont(C, ggml_permute(C, vh, 1, 2, 0, 3));
         att = attention(C, Q, K, V, mask, scale, hq, seq);
     }
@@ -132,8 +135,12 @@ ggml_tensor * Qwen3LM::block(ggml_context * C, const Qwen3LayerW & w, ggml_tenso
     ggml_tensor * gate, * up;
     if (w.fq_gate) {
         ggml_tensor * xq2 = fq_act(C, w.fq_gate, h_attn);
-        gate = ggml_silu(C, fq_gemm(C, w.fq_gate, xq2));
-        up   = fq_gemm(C, w.fq_up, xq2);
+        ggml_tensor * g   = fq_gemm(C, w.fq_gate, xq2);
+        up = fq_gemm(C, w.fq_up, xq2);
+        if (w.fq_down)
+            if (ggml_tensor * dq = fq_act_glu(C, w.fq_down, g, up, FusedGlu::SiluMul))
+                return fq_gemm(C, w.fq_down, dq, h_attn);
+        gate = ggml_silu(C, g);
     } else if (fz) {
         ggml_tensor * hn2 = fused_rms_mul(C, h_attn, w.ffn_norm, cfg.rms_eps, bf16_operand(w.Wgate) && bf16_operand(w.Wup));
         ggml_tensor * mid = fused_silu_mul(C, mm_exact(C, w.Wgate, hn2), mm_exact(C, w.Wup, hn2), bf16_operand(w.Wdown));

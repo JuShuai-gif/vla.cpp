@@ -90,8 +90,8 @@ inline ggml_tensor * fq_head_view(ggml_context * C, ggml_tensor * y, const FqLin
     return v;
 }
 
-// CPU body of fq_act_geglu's node; on CUDA, vla_cuda_fused.cu runs it.
-inline void fq_act_geglu_cpu(ggml_tensor * dst, int ith, int nth, void * ud) {
+// CPU body of fq_act_glu's node; on CUDA, vla_cuda_fused.cu runs it.
+inline void fq_act_glu_cpu(ggml_tensor * dst, int ith, int nth, void * ud) {
     const FusedSpec & f = *(const FusedSpec *) ud;
     const ggml_tensor * g = dst->src[0], * u = dst->src[1], * as = dst->src[2];
     FqActSpec a;
@@ -102,31 +102,35 @@ inline void fq_act_geglu_cpu(ggml_tensor * dst, int ith, int nth, void * ud) {
     std::vector<float> x((size_t) a.K), tmp((size_t) a.K);
     float partial[fqref::NT];
     for (int64_t t = t0; t < t1; ++t) {
-        const float * gr = (const float *) g->data + t * a.K, * ur = (const float *) u->data + t * a.K;
-        for (int64_t k = 0; k < a.K; ++k) x[k] = fused_cpu::gelu(gr[k]) * ur[k];
+        const float * gr = (const float *) g->data + t * a.K, * ur = u ? (const float *) u->data + t * a.K : nullptr;
+        for (int64_t k = 0; k < a.K; ++k)
+            x[k] = f.glu == FusedGlu::Gelu    ? fused_cpu::gelu(gr[k])
+                 : f.glu == FusedGlu::SiluMul ? fused_cpu::silu(gr[k]) * ur[k] : fused_cpu::gelu(gr[k]) * ur[k];
         uint8_t * row = (uint8_t *) dst->data + t * rb;
         fqref::act_row(x.data(), as ? (const float *) as->data : nullptr, nullptr, a, tmp.data(), partial,
                        (int8_t *) row, (float *) (row + kp));
     }
 }
 
-// The GEGLU feeding site s (gelu(g) * u, ggml's geglu_split) and s's act node
-// as one CUDA node, so the product is never written out. Null where the node
-// does not apply (no fused CUDA ops, a fused RMSNorm, rows past 16384); the
-// caller then builds the two nodes. VLA_FQ_NO_ACT_FUSE=1 keeps them for A/B.
-inline ggml_tensor * fq_act_geglu(ggml_context * C, const FqLinear & s, ggml_tensor * g, ggml_tensor * u) {
+// The activation feeding site s (glu: gelu(g) * u, silu(g) * u or gelu(g); u
+// null for the last) and s's act node as one CUDA node, so the activation is
+// never written out. Null where the node does not apply (no fused CUDA ops, a
+// fused RMSNorm, rows past 16384); the caller then builds the separate nodes.
+// VLA_FQ_NO_ACT_FUSE=1 keeps them for A/B.
+inline ggml_tensor * fq_act_glu(ggml_context * C, const FqLinear & s, ggml_tensor * g, ggml_tensor * u, FusedGlu glu) {
     const int64_t K = s.act.K;
     if (!fused_ops_active() || env_flag("VLA_FQ_NO_ACT_FUSE") || s.act.has_gamma || K % 64 != 0 || K > 16384 ||
-        s.act.rot_block > 64 || g->type != GGML_TYPE_F32 || u->type != GGML_TYPE_F32 || g->ne[0] != K ||
-        !ggml_is_contiguous(g) || !ggml_is_contiguous(u) || !ggml_are_same_shape(g, u))
+        s.act.rot_block > 64 || g->type != GGML_TYPE_F32 || g->ne[0] != K || !ggml_is_contiguous(g) ||
+        (glu == FusedGlu::Gelu) != !u || (u && (u->type != GGML_TYPE_F32 || !ggml_is_contiguous(u) || !ggml_are_same_shape(g, u))))
         return nullptr;
     FusedSpec f;
-    f.kind = FusedKind::GeluMulAct;
+    f.kind = FusedKind::GluAct;
+    f.glu = glu;
     f.abits = s.act.abits; f.rot_block = s.act.rot_block; f.fold_before = s.act.fold_before; f.clip = s.act.clip;
     f.inv_sqrt_bs = fqref::inv_sqrt_block(s.act.rot_block > 1 ? s.act.rot_block : 1);
     ggml_tensor * args[3] = { g, u, s.ascale };
     ggml_tensor * t = ggml_custom_4d(C, GGML_TYPE_I8, fq_act_row_bytes(K, s.act.abits), ggml_nelements(g) / K, 1, 1,
-                                     args, s.ascale ? 3 : 2, fq_act_geglu_cpu, GGML_N_TASKS_MAX, (void *) fused_intern(f));
+                                     args, s.ascale ? 3 : 2, fq_act_glu_cpu, GGML_N_TASKS_MAX, (void *) fused_intern(f));
     ggml_format_name(t, "%s.fq_act", ggml_get_name(s.w));
     return t;
 }

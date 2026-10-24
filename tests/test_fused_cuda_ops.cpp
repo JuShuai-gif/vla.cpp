@@ -15,7 +15,7 @@
 // The fused CUDA nodes of layers/fused_ops.h against the ggml chains they
 // replace, on the same inputs: the outputs must be bit-identical. Covers the
 // epilogues, the head layouts with RoPE, gemm_exact (mm_exact) and attn_exact
-// (with K/V broadcast and a mask), and gelu_mul_act against geglu + the
+// (with K/V broadcast and a mask), and glu_act against the activation + the
 // FoldQuant act node, at the widths the models use. Skips (exit 0) without a
 // CUDA device.
 
@@ -237,31 +237,40 @@ std::vector<Case> cases() {
             }});
     }
 
-    // GEGLU into a FoldQuant site: gelu_mul_act against geglu + fq_act, on
-    // the blob bytes (codes and scale), for both widths, the rotation sizes,
-    // and an ascale divided before or after the butterfly.
-    struct Act { int64_t K, T; int abits, rot; bool ascale, before; float clip; };
+    // An activation into a FoldQuant site: glu_act against the ggml activation
+    // + fq_act, on the blob bytes (codes and scale), for both widths, the
+    // rotation sizes, and an ascale divided before or after the butterfly.
+    struct Act { vla::FusedGlu glu; int64_t K, T; int abits, rot; bool ascale, before; float clip; };
     static std::deque<vla::FqLinear> sites;
-    for (const Act a : {Act{16384, 37, 8, 64, false, false, 1.0f}, Act{16384, 37, 4, 64, false, false, 0.9f},
-                        Act{4096, 50, 8, 64, true, true, 1.0f},    Act{4096, 50, 4, 64, true, false, 0.95f},
-                        Act{1024, 50, 8, 32, true, true, 1.0f},    Act{2048, 9, 8, 1, false, false, 1.0f}}) {
-        std::vector<In> ins = {{F, {a.K, a.T, 1, 1}}, {F, {a.K, a.T, 1, 1}}};
+    using G = vla::FusedGlu;
+    for (const Act a : {Act{G::GeluMul, 16384, 37, 8, 64, false, false, 1.0f}, Act{G::GeluMul, 16384, 37, 4, 64, false, false, 0.9f},
+                        Act{G::GeluMul, 4096, 50, 8, 64, true, true, 1.0f},    Act{G::GeluMul, 4096, 50, 4, 64, true, false, 0.95f},
+                        Act{G::GeluMul, 1024, 50, 8, 32, true, true, 1.0f},    Act{G::GeluMul, 2048, 9, 8, 1, false, false, 1.0f},
+                        Act{G::SiluMul, 6144, 144, 8, 64, false, false, 1.0f}, Act{G::SiluMul, 6144, 80, 4, 64, false, false, 1.0f},
+                        Act{G::Gelu, 6144, 41, 8, 64, true, true, 1.0f},       Act{G::Gelu, 6144, 41, 4, 64, true, true, 1.0f}}) {
+        const bool mul = a.glu != G::Gelu;
+        std::vector<In> ins = {{F, {a.K, a.T, 1, 1}}};
+        if (mul) ins.push_back({F, {a.K, a.T, 1, 1}});
         if (a.ascale) ins.push_back({F, {a.K, 1, 1, 1}, Fill::Scale});
-        v.push_back({"gelu_mul_act/A" + std::to_string(a.abits) + "_K" + std::to_string(a.K) + "_rot" + std::to_string(a.rot) +
-                         (a.ascale ? (a.before ? "_pre" : "_post") : ""), ins,
-            [a](ggml_context * C, const T & t, bool f) {
+        const char * gn = a.glu == G::GeluMul ? "gelu_mul" : a.glu == G::SiluMul ? "silu_mul" : "gelu";
+        v.push_back({std::string("glu_act/") + gn + "_A" + std::to_string(a.abits) + "_K" + std::to_string(a.K) +
+                         "_rot" + std::to_string(a.rot) + (a.ascale ? (a.before ? "_pre" : "_post") : ""), ins,
+            [a, mul](ggml_context * C, const T & t, bool f) {
                 vla::FqLinear & s = sites.emplace_back();
                 s.w = ggml_new_tensor_2d(C, GGML_TYPE_I8, a.K, 64);
                 ggml_set_name(s.w, "site");
-                s.ascale = a.ascale ? t[2] : nullptr;
+                s.ascale = a.ascale ? t[mul ? 2 : 1] : nullptr;
                 s.act.K = a.K; s.act.abits = a.abits; s.act.rot_block = a.rot; s.act.fold_before = a.before;
                 s.act.has_ascale = a.ascale; s.act.clip = a.clip;
+                ggml_tensor * u = mul ? t[1] : nullptr;
                 if (f) {
-                    ggml_tensor * q = vla::fq_act_geglu(C, s, t[0], t[1]);
+                    ggml_tensor * q = vla::fq_act_glu(C, s, t[0], u, a.glu);
                     GGML_ASSERT(q);
                     return q;
                 }
-                return vla::fq_act(C, s, vla::geglu(C, t[0], t[1]));
+                ggml_tensor * x = a.glu == G::GeluMul ? vla::geglu(C, t[0], u)
+                                : a.glu == G::SiluMul ? ggml_mul(C, ggml_silu(C, t[0]), u) : ggml_gelu(C, t[0]);
+                return vla::fq_act(C, s, x);
             }, vla::fq_act_row_bytes(a.K, a.abits), vla::fq_act_kpack(a.K, a.abits) + 4});
     }
     return v;

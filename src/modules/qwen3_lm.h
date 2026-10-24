@@ -48,7 +48,7 @@ struct Qwen3Cfg {
     float    rms_eps  = 1e-6f;
     RopeSpec rope;
     bool     flash_attn = false;
-    bool     fused_ops  = false;   // layers/fused_ops.h nodes (CUDA only, float weights)
+    bool     fused_ops  = false;   // layers/fused_ops.h nodes (CUDA only)
 };
 
 struct Qwen3LM {

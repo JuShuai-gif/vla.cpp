@@ -251,9 +251,13 @@ ggml_tensor * DitHead::block(ggml_context * C, const DitLayerW & w, ggml_tensor 
                               : attention(C, Q, K, V, nullptr, scale, dim, Tk);
     // FoldQuant: both residual adds ride in the GEMM epilogues.
     ggml_tensor * h1  = w.fq_o ? fq_linear(C, w.fq_o, att, h) : ggml_add(C, h, linear(C, w.Wo, w.bo, att));
-    ggml_tensor * n3  = ggml_norm(C, h1, cfg.ln_eps);
-    if (w.fq_ff0)
-        return fq_linear(C, w.fq_ff2, ggml_gelu(C, fq_linear(C, w.fq_ff0, n3)), h1);
+    ggml_tensor * n3  = cfg.fused_ops ? fused_ln(C, h1, nullptr, nullptr, cfg.ln_eps, false) : ggml_norm(C, h1, cfg.ln_eps);
+    if (w.fq_ff0) {
+        ggml_tensor * f0 = fq_linear(C, w.fq_ff0, n3);
+        if (ggml_tensor * dq = fq_act_glu(C, w.fq_ff2, f0, nullptr, FusedGlu::Gelu))
+            return fq_gemm(C, w.fq_ff2, dq, h1);
+        return fq_linear(C, w.fq_ff2, ggml_gelu(C, f0), h1);
+    }
     return ggml_add(C, h1, ffn_gelu(C, w.Wff0, w.bff0, w.Wff2, w.bff2, n3));
 }
 
