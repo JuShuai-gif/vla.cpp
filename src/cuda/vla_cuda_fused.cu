@@ -368,6 +368,129 @@ __global__ void k_gelu_mul(const float * __restrict__ g, const float * __restric
     if (i < n) st_out(out, i, __fmul_rn(gelu_ggml(g[i]), u[i]));
 }
 
+// IEEE single ops without flush-to-zero. This file builds with -use_fast_math
+// (ftz) to match ggml, while the FoldQuant act chain rounds like
+// src/kernels/foldquant (-fmad=false, no ftz), so its ops are spelled out.
+__device__ __forceinline__ float p_add(float a, float b) { float r; asm("add.rn.f32 %0, %1, %2;" : "=f"(r) : "f"(a), "f"(b)); return r; }
+__device__ __forceinline__ float p_sub(float a, float b) { float r; asm("sub.rn.f32 %0, %1, %2;" : "=f"(r) : "f"(a), "f"(b)); return r; }
+__device__ __forceinline__ float p_mul(float a, float b) { float r; asm("mul.rn.f32 %0, %1, %2;" : "=f"(r) : "f"(a), "f"(b)); return r; }
+__device__ __forceinline__ float p_div(float a, float b) { float r; asm("div.rn.f32 %0, %1, %2;" : "=f"(r) : "f"(a), "f"(b)); return r; }
+__device__ __forceinline__ float p_max(float a, float b) { float r; asm("max.f32 %0, %1, %2;" : "=f"(r) : "f"(a), "f"(b)); return r; }
+__device__ __forceinline__ float p_min(float a, float b) { float r; asm("min.f32 %0, %1, %2;" : "=f"(r) : "f"(a), "f"(b)); return r; }
+__device__ __forceinline__ float p_abs(float a) { float r; asm("abs.f32 %0, %1;" : "=f"(r) : "f"(a)); return r; }
+__device__ __forceinline__ float p_rint(float a) { float r; asm("cvt.rni.f32.f32 %0, %1;" : "=f"(r) : "f"(a)); return r; }
+
+// gelu(g) * u as k_gelu_mul, then fq_prologue.cu's act_row_kernel on the
+// product (no RMSNorm): one CTA of NW warps per row, lane pairs (2l, 2l+1) of
+// each 64-wide chunk, the same butterfly pairs and the same amax and rounding.
+template <int ABITS, int ROT, int NW>
+__global__ void __launch_bounds__(NW * 32) k_gelu_mul_act(const float * __restrict__ g, const float * __restrict__ u,
+                                                          const float * __restrict__ ascale, int8_t * __restrict__ blob,
+                                                          int K, int64_t row_bytes, bool fold_before, float clip,
+                                                          float inv_sqrt_bs) {
+    constexpr int MAXC = 16;
+    __shared__ float red[NW];
+    const int     warp = threadIdx.x >> 5, lane = threadIdx.x & 31;
+    const int64_t m    = blockIdx.x;
+    const int     nchunks = K / 64;
+    float v0[MAXC], v1[MAXC];
+    float mx = 0.0f;
+    #pragma unroll
+    for (int i = 0; i < MAXC; ++i) {
+        const int c = warp + i * NW;
+        if (c < nchunks) {
+            const int64_t k0 = (int64_t) c * 64 + 2 * lane;
+            const float2  gg = *(const float2 *) (g + m * K + k0), uu = *(const float2 *) (u + m * K + k0);
+            float e0 = __fmul_rn(gelu_ggml(gg.x), uu.x), e1 = __fmul_rn(gelu_ggml(gg.y), uu.y);
+            float2 s = make_float2(1.0f, 1.0f);
+            if (ascale) s = *(const float2 *) (ascale + k0);
+            if (ascale && fold_before) { e0 = p_div(e0, s.x); e1 = p_div(e1, s.y); }
+            if (ROT > 1) {
+                { const float a = e0, b = e1; e0 = p_add(a, b); e1 = p_sub(a, b); }
+                #pragma unroll
+                for (int h = 2; h < ROT; h <<= 1) {
+                    const int   half  = h >> 1;
+                    const float o0    = __shfl_xor_sync(0xffffffffu, e0, half);
+                    const float o1    = __shfl_xor_sync(0xffffffffu, e1, half);
+                    const bool  upper = (lane & half) != 0;
+                    e0 = upper ? p_sub(o0, e0) : p_add(e0, o0);
+                    e1 = upper ? p_sub(o1, e1) : p_add(e1, o1);
+                }
+                e0 = p_mul(e0, inv_sqrt_bs);
+                e1 = p_mul(e1, inv_sqrt_bs);
+            }
+            if (ascale && !fold_before) { e0 = p_div(e0, s.x); e1 = p_div(e1, s.y); }
+            v0[i] = e0; v1[i] = e1;
+            mx = p_max(mx, p_max(p_abs(e0), p_abs(e1)));
+        }
+    }
+    #pragma unroll
+    for (int off = 16; off > 0; off >>= 1) mx = p_max(mx, __shfl_xor_sync(0xffffffffu, mx, off));
+    if (lane == 0) red[warp] = mx;
+    __syncthreads();
+    mx = red[0];
+    #pragma unroll
+    for (int w = 1; w < NW; ++w) mx = p_max(mx, red[w]);
+
+    const float qmax  = ABITS == 4 ? 7.0f : 127.0f;
+    float       scale = p_div(p_mul(clip, mx), qmax);
+    if (scale < 1e-12f) scale = 1e-12f;
+    const float inv = p_div(1.0f, scale);
+    int8_t * row = blob + m * row_bytes;
+    #pragma unroll
+    for (int i = 0; i < MAXC; ++i) {
+        const int c = warp + i * NW;
+        if (c < nchunks) {
+            const float q0 = p_min(qmax, p_max(-qmax, p_rint(p_mul(v0[i], inv))));
+            const float q1 = p_min(qmax, p_max(-qmax, p_rint(p_mul(v1[i], inv))));
+            if (ABITS == 8) {
+                const uint16_t packed = (uint16_t) (((uint32_t) (int) q0 & 0xFFu) | (((uint32_t) (int) q1 & 0xFFu) << 8));
+                *(uint16_t *) (row + (int64_t) c * 64 + 2 * lane) = packed;
+            } else {
+                row[(int64_t) c * 32 + lane] = (int8_t) (((uint32_t) (int) q0 & 0xFu) | (((uint32_t) (int) q1 & 0xFu) << 4));
+            }
+        }
+    }
+    if (threadIdx.x == 0) *(float *) (row + (ABITS == 8 ? K : K / 2)) = scale;
+}
+
+template <int ABITS, int NW>
+bool launch_gelu_mul_act_nw(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
+    const ggml_tensor * g = dst->src[0];
+    const float * as = dst->src[2] ? (const float *) dst->src[2]->data : nullptr;
+    const int K = (int) g->ne[0];
+    const unsigned rows = (unsigned) dst->ne[1];
+    auto go = [&](auto kern) {
+        kern<<<rows, NW * 32, 0, st>>>((const float *) g->data, (const float *) dst->src[1]->data, as,
+                                      (int8_t *) dst->data, K, (int64_t) dst->ne[0], s.fold_before != 0, s.clip,
+                                      s.inv_sqrt_bs);
+        return true;
+    };
+    switch (s.rot_block) {
+        case 64: return go(k_gelu_mul_act<ABITS, 64, NW>);
+        case 32: return go(k_gelu_mul_act<ABITS, 32, NW>);
+        case 16: return go(k_gelu_mul_act<ABITS, 16, NW>);
+        case 8:  return go(k_gelu_mul_act<ABITS, 8,  NW>);
+        case 4:  return go(k_gelu_mul_act<ABITS, 4,  NW>);
+        case 2:  return go(k_gelu_mul_act<ABITS, 2,  NW>);
+        case 1:
+        case 0:  return go(k_gelu_mul_act<ABITS, 1,  NW>);
+        default: return false;
+    }
+}
+
+bool launch_gelu_mul_act(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
+    const ggml_tensor * g = dst->src[0];
+    const int64_t K = g->ne[0];
+    if (dst->type != GGML_TYPE_I8 || K % 64 != 0 || K > 16 * 16 * 64 || (s.abits != 8 && s.abits != 4) ||
+        !ggml_are_same_shape(g, dst->src[1]) || ggml_nrows(g) != dst->ne[1] ||
+        (dst->src[2] && ggml_nelements(dst->src[2]) != K))
+        return false;
+    const bool wide = K > 8 * 16 * 64;
+    if (s.abits == 8) return wide ? launch_gelu_mul_act_nw<8, 16>(s, dst, st) : launch_gelu_mul_act_nw<8, 8>(s, dst, st);
+    return wide ? launch_gelu_mul_act_nw<4, 16>(s, dst, st) : launch_gelu_mul_act_nw<4, 8>(s, dst, st);
+}
+
 __device__ __forceinline__ float gelu_erf_ggml(float x) {
     const float SQRT_2_INV = 0.70710678118654752440084436210484f;
     return 0.5f*x*(1.0f + erff(x*SQRT_2_INV));
@@ -1801,6 +1924,9 @@ extern "C" bool vla_cuda_fused_forward(ggml_tensor * dst, void * stream_v) {
             else                             k_gelu_mul<<<g, B, 0, st>>>(fptr(a), fptr(dst->src[1]), out, n);
             break;
         }
+        case vla::FusedKind::GeluMulAct:
+            if (!launch_gelu_mul_act(*s, dst, st)) return false;
+            break;
         case vla::FusedKind::BiasGeluErf: {
             const int64_t n = ggml_nelements(a);
             const unsigned g = (unsigned) ((n+B-1)/B);

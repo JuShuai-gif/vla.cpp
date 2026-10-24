@@ -15,8 +15,9 @@
 // The fused CUDA nodes of layers/fused_ops.h against the ggml chains they
 // replace, on the same inputs: the outputs must be bit-identical. Covers the
 // epilogues, the head layouts with RoPE, gemm_exact (mm_exact) and attn_exact
-// (with K/V broadcast and a mask), at the widths the models use. Skips
-// (exit 0) without a CUDA device.
+// (with K/V broadcast and a mask), and gelu_mul_act against geglu + the
+// FoldQuant act node, at the widths the models use. Skips (exit 0) without a
+// CUDA device.
 
 #include "ggml.h"
 #include "ggml-alloc.h"
@@ -26,6 +27,7 @@
 #include "backend.h"
 #include "cuda/vla_cuda_ops.h"
 #include "layers/attn.h"
+#include "layers/fq_linear.h"
 #include "layers/fused_ops.h"
 #include "layers/linear.h"
 #include "layers/norm.h"
@@ -33,13 +35,14 @@
 #include <cmath>
 #include <cstdio>
 #include <cstring>
+#include <deque>
 #include <functional>
 #include <string>
 #include <vector>
 
 namespace {
 
-enum class Fill { Rand, Pos, Mask };
+enum class Fill { Rand, Pos, Mask, Scale };
 
 struct In {
     ggml_type type;
@@ -53,6 +56,9 @@ struct Case {
     std::string     name;
     std::vector<In> ins;
     Build           build;
+    // Blob outputs: rows of `row` bytes of which the first `used` are written
+    // (codes, then the float scale); the rest is padding. 0: compare all.
+    int64_t         row = 0, used = 0;
 };
 
 void fill(ggml_tensor * t, Fill f, uint32_t seed) {
@@ -71,6 +77,7 @@ void fill(ggml_tensor * t, Fill f, uint32_t seed) {
         for (auto & x : v) {
             seed = seed*1664525u+1013904223u;
             x = ((float) (seed >> 8)/16777216.0f)*4.0f-2.0f;
+            if (f == Fill::Scale) x = 1.5f+0.5f*x;   // a SmoothQuant vector: positive, in [0.5, 2.5)
         }
     }
     if (t->type == GGML_TYPE_BF16) {
@@ -92,7 +99,7 @@ std::vector<uint8_t> run(ggml_backend_t backend, const Case & c, bool fused) {
         ins.push_back(t);
     }
     ggml_tensor * out = c.build(C, ins, fused);
-    if (out->type != GGML_TYPE_F32)
+    if (out->type != GGML_TYPE_F32 && out->type != GGML_TYPE_I8)
         out = ggml_cast(C, out, GGML_TYPE_F32);
     ggml_set_output(out);
     ggml_cgraph * gf = ggml_new_graph_custom(C, 4096, false);
@@ -229,6 +236,34 @@ std::vector<Case> cases() {
                 return vla::attention(C, Q, K, V, t[7], scale, hd*Hq, S);
             }});
     }
+
+    // GEGLU into a FoldQuant site: gelu_mul_act against geglu + fq_act, on
+    // the blob bytes (codes and scale), for both widths, the rotation sizes,
+    // and an ascale divided before or after the butterfly.
+    struct Act { int64_t K, T; int abits, rot; bool ascale, before; float clip; };
+    static std::deque<vla::FqLinear> sites;
+    for (const Act a : {Act{16384, 37, 8, 64, false, false, 1.0f}, Act{16384, 37, 4, 64, false, false, 0.9f},
+                        Act{4096, 50, 8, 64, true, true, 1.0f},    Act{4096, 50, 4, 64, true, false, 0.95f},
+                        Act{1024, 50, 8, 32, true, true, 1.0f},    Act{2048, 9, 8, 1, false, false, 1.0f}}) {
+        std::vector<In> ins = {{F, {a.K, a.T, 1, 1}}, {F, {a.K, a.T, 1, 1}}};
+        if (a.ascale) ins.push_back({F, {a.K, 1, 1, 1}, Fill::Scale});
+        v.push_back({"gelu_mul_act/A" + std::to_string(a.abits) + "_K" + std::to_string(a.K) + "_rot" + std::to_string(a.rot) +
+                         (a.ascale ? (a.before ? "_pre" : "_post") : ""), ins,
+            [a](ggml_context * C, const T & t, bool f) {
+                vla::FqLinear & s = sites.emplace_back();
+                s.w = ggml_new_tensor_2d(C, GGML_TYPE_I8, a.K, 64);
+                ggml_set_name(s.w, "site");
+                s.ascale = a.ascale ? t[2] : nullptr;
+                s.act.K = a.K; s.act.abits = a.abits; s.act.rot_block = a.rot; s.act.fold_before = a.before;
+                s.act.has_ascale = a.ascale; s.act.clip = a.clip;
+                if (f) {
+                    ggml_tensor * q = vla::fq_act_geglu(C, s, t[0], t[1]);
+                    GGML_ASSERT(q);
+                    return q;
+                }
+                return vla::fq_act(C, s, vla::geglu(C, t[0], t[1]));
+            }, vla::fq_act_row_bytes(a.K, a.abits), vla::fq_act_kpack(a.K, a.abits) + 4});
+    }
     return v;
 }
 
@@ -240,6 +275,7 @@ int main() {
         std::printf("fused_cuda_ops: no CUDA device, skipping\n");
         return 0;
     }
+    vla::cuda_register_foldquant_ops();
     if (!vla::enable_fused_ops("test", true)) {
         std::printf("fused_cuda_ops: fused ops disabled (VLA_FUSED_OPS=0), skipping\n");
         ggml_backend_free(backend);
@@ -247,7 +283,10 @@ int main() {
     }
     int failed = 0;
     for (const Case & c : cases()) {
-        const std::vector<uint8_t> ref = run(backend, c, false), got = run(backend, c, true);
+        std::vector<uint8_t> ref = run(backend, c, false), got = run(backend, c, true);
+        if (c.row && ref.size() == got.size())
+            for (size_t r = 0; r < ref.size(); r += (size_t) c.row)
+                for (size_t k = (size_t) c.used; k < (size_t) c.row; ++k) ref[r+k] = got[r+k] = 0;
         const bool ok = !ref.empty() && ref.size() == got.size() && std::memcmp(ref.data(), got.data(), ref.size()) == 0;
         size_t n_diff = 0;
         if (!ok && ref.size() == got.size())

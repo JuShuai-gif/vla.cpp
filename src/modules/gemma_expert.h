@@ -311,9 +311,12 @@ inline ggml_tensor * gemma_attn_fused(
 inline ggml_tensor * gemma_mlp_fused(ggml_context * ctx, const GemmaLayerW & w, ggml_tensor * x_norm,
                                      ggml_tensor * fq_res = nullptr) {
     if (w.fq_gate) {
-        ggml_tensor * xq = fq_act(ctx, w.fq_gate, x_norm);
-        return fq_linear(ctx, w.fq_down,
-                         fused_gelu_mul(ctx, fq_gemm(ctx, w.fq_gate, xq), fq_gemm(ctx, w.fq_up, xq), false), fq_res);
+        ggml_tensor * xq   = fq_act(ctx, w.fq_gate, x_norm);
+        ggml_tensor * gate = fq_gemm(ctx, w.fq_gate, xq);
+        ggml_tensor * up   = fq_gemm(ctx, w.fq_up,   xq);
+        if (ggml_tensor * dq = fq_act_geglu(ctx, w.fq_down, gate, up))
+            return fq_gemm(ctx, w.fq_down, dq, fq_res);
+        return fq_linear(ctx, w.fq_down, fused_gelu_mul(ctx, gate, up, false), fq_res);
     }
     ggml_tensor * gate = mm_exact(ctx, w.Wgate, x_norm);
     ggml_tensor * up   = mm_exact(ctx, w.Wup,   x_norm);

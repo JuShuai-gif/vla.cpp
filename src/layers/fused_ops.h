@@ -31,6 +31,7 @@
 //   gate_res       r + y*g
 //   silu_mul       silu(g) * u
 //   gelu_mul       gelu(g) * u
+//   gelu_mul_act   gelu(g) * u quantized as a FoldQuant act node (layers/fq_linear.h)
 //   patchify       HWC images -> normalized Conv3d patches in merge order
 //   gemm_views     BF16 W x, one GEMM per view, as ggml-cuda issues it
 //   attn_exact     softmax(scale * Q K^T + mask) V
@@ -67,7 +68,7 @@ inline bool & fused_ops_active() {
 
 enum class FusedKind : int32_t { QkvHeads = 1, BiasRes, BiasGelu, LnAffine, LnModulate, LnPlain, RmsMul, SiluMul,
                                  Patchify, QkNormRope, GemmViews, AttnExact, GeluMul, RmsModulate, GateRes,
-                                 HeadsRope, BiasGeluErf, BiasGateRes };
+                                 HeadsRope, BiasGeluErf, BiasGateRes, GeluMulAct };
 
 // Lives as node userdata, so it must outlive every graph: specs are interned
 // for the life of the process (a model emits a handful of distinct ones).
@@ -90,6 +91,9 @@ struct FusedSpec {
     // and frequency base; ext_factor 0, freq_scale 1, attn_factor 1 only.
     int32_t sect[4] = {0, 0, 0, 0};
     float   freq_base = 0.0f;
+    // gelu_mul_act: the FqActSpec of the site it feeds (no gamma; ascale in src[2]).
+    int32_t abits = 0, rot_block = 0, fold_before = 0;
+    float   clip = 0.0f, inv_sqrt_bs = 0.0f;
 };
 
 inline const FusedSpec * fused_intern(const FusedSpec & s) {
@@ -288,6 +292,8 @@ inline void run(ggml_tensor * dst, int ith, int nth, void * ud) {
             for (int64_t i=0; i<n; ++i) out[i] = r[i]+(x[i]+b[i%N])*g[i%N];
             return;
         }
+        case FusedKind::GeluMulAct:   // built with its own CPU function (fq_act_geglu_cpu)
+            return;
         case FusedKind::GeluMul: {
             const float * u = (const float *) dst->src[1]->data;
             for (int64_t i=0; i<ggml_nelements(a); ++i) store(dst, i, gelu(x[i])*u[i]);
