@@ -28,7 +28,8 @@ bool sycl_s4_gemm_s32(void * queue, const int8_t * blob, int64_t M, int64_t K, i
 // The same GEMM with launch_epilogue's F32 epilogue in its registers: out [M][N] =
 // ((acc * xs_row) * ws (+ bias)) (+ res, or res + v * gate), xs_row the float at
 // byte xs_off of each blob row; res [M][N] and gate [N] optional. Bit-identical
-// to the s32 sums followed by that epilogue.
+// to the s32 sums followed by that epilogue. Returns false for K >= 8192 above
+// 16 rows on small Xe parts (that tile spills with the epilogue).
 bool sycl_s4_gemm_f32(void * queue, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, int64_t xs_off,
                       const int8_t * w, int64_t N, const float * ws, const float * bias, const float * res,
                       const float * gate, float * out);

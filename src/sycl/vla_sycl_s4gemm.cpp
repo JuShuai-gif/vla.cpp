@@ -307,7 +307,12 @@ bool launch_by_k(void * queue, const int8_t * blob, int64_t M, int64_t K, int64_
     if (K % 128 != 0 || N % 256 != 0 || (row_bytes % 16) != 0 || M <= 0) return false;
     sycl::queue & q = *static_cast<sycl::queue *>(queue);
     if (M <= 16 && !no_small_m()) launch_s32<MmaSmallM, 16, 64, 256, 3>(q, blob, M, K, row_bytes, w, N, out, e);
-    else if (K >= 8192 && small_xe(q)) launch_s32<MmaLongKXe4, 192, 128, 256, 2>(q, blob, M, K, row_bytes, w, N, out, e);
+    else if (K >= 8192 && small_xe(q)) {
+        // With the epilogue this tile spills ~44 registers (GRF 256): decline,
+        // and the caller runs the s32 sums and the separate epilogue, same bits.
+        if constexpr (std::is_same_v<E, NoEpi>) launch_s32<MmaLongKXe4, 192, 128, 256, 2>(q, blob, M, K, row_bytes, w, N, out, e);
+        else return false;
+    }
     else if (K >= 8192) launch_s32<MmaLongK, 128, 128, 256, 3>(q, blob, M, K, row_bytes, w, N, out, e);
     else           launch_s32<MmaShortK, 64, 256, 256, 3>(q, blob, M, K, row_bytes, w, N, out, e);
     return true;
