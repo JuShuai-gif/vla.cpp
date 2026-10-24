@@ -32,6 +32,7 @@
 // VLA_SYCL_FMHA=0 turns both claims off.
 
 #include "sycl/vla_sycl_fmha.h"
+#include "env_flag.h"
 #include "layers/fmha_kv.h"
 #include "layers/fq_rope_attn.h"
 #include "sycl/vla_sycl_ext.h"
@@ -682,10 +683,13 @@ namespace {
 // this one sits ahead of it but takes only the attention over a FoldQuant
 // prefix pack (fq_rope_pack's packed F16 rows, read in place), plus its own
 // custom nodes. The expert's attention over the pack's tail rows (Q from
-// fused_rope_kv, GemmaLayerW::fq_kv_sdpa) stays with oneDNN.
+// fused_rope_kv, GemmaLayerW::fq_kv_sdpa) stays with oneDNN, and so does the
+// prefix's unless VLA_FQ_TLA_PREFIX=1: on Arc B390 oneDNN's SDPA runs pi0.5's
+// 560-token, 8-head prefix faster.
 bool fmha_dispatch(ggml_tensor * dst, void * queue) {
+    static const bool tla_prefix = env_flag("VLA_FQ_TLA_PREFIX");
     if (dst->op == GGML_OP_FLASH_ATTN_EXT)
-        return dst->src[0] && dst->src[1] && custom_magic(dst->src[0]->view_src) == FQ_ROPE_PACK_MAGIC &&
+        return tla_prefix && dst->src[0] && dst->src[1] && custom_magic(dst->src[0]->view_src) == FQ_ROPE_PACK_MAGIC &&
                custom_magic(dst->src[1]->view_src) == FQ_ROPE_PACK_MAGIC && sycl_fmha_forward(dst, queue);
     return sycl_fmha_kv_forward(dst, queue) || sycl_fq_rope_attn_forward(dst, queue) ||
            sycl_fq_rope_pack_forward(dst, queue);
