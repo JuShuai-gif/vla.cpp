@@ -870,6 +870,12 @@ bool run_gemm(sycl::queue & q, ggml_tensor * dst, const FqGemmSpec & s, int abit
     if (g.M == 0) return true;
     if (g.glu_n && (res || s.N % 2)) return false;
 #if defined(VLA_FQ_SYCL_DNNL) && defined(VLA_SYCL_S4GEMM)
+    // The epilogue in the GEMM's registers: one kernel, the same bits as the s32
+    // sums and launch_epilogue. VLA_FQ_NO_S4EPI=1: the two kernels.
+    static const bool split_epi = env_flag("VLA_FQ_NO_S4EPI");
+    if (s4_ok(s, abits, g) && !g.glu_n && !split_epi &&
+        sycl_s4_gemm_f32(&q, g.blob, g.M, g.K, g.row_bytes, g.K / 2, g.w, g.N, g.wscale, g.bias, g.res, g.gate, g.y))
+        return true;
     if (s4_ok(s, abits, g))
         if (int32_t * acc = s4_acc(q, g)) {
             if (g.glu_n) launch_epilogue_glu<4>(q, g, acc, bias != nullptr);
