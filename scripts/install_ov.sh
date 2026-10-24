@@ -23,6 +23,7 @@ need_cmd() {
 # sudo, so a bad download is a root-level problem.
 OPENVINO_SHA256_2204="d327ede0a5dd29ad6e73d156aa7fe43b7d8fc0eac5e789f17bf9d381ab333e7d"
 OPENVINO_SHA256_2404="0bd86d578beb1e8805655f593315c69bf909008e212f801ed76e3a350927736f"
+OPENVINO_SHA256_2604="824354d5a91b903c7e99809f2aa57ddc13a49a1ed3d836f249c92418df569579"
 
 # verify_sha256 <file> <expected-or-empty> <url>. An overridden version has no
 # digest here, so fall back to the one the mirror publishes: that catches a
@@ -266,7 +267,7 @@ install_gpu_2404() {
     "${crt_base_url}/libze-intel-gpu1_26.35.39758.10-0_amd64.deb"
   )
 
-  log "Installing Intel GPU drivers for Ubuntu 24.04..."
+  log "Installing Intel GPU drivers for Ubuntu ${OS_VERSION}..."
   mkdir -p "${download_dir}"
   cd "${download_dir}"
 
@@ -282,7 +283,7 @@ install_gpu_2404() {
   local artifacts=( *.deb *.ddeb )
   shopt -u nullglob
   if [[ ${#artifacts[@]} -eq 0 ]]; then
-    echo "Error: no GPU package files found for Ubuntu 24.04." >&2
+    echo "Error: no GPU package files found for Ubuntu ${OS_VERSION}." >&2
     exit 1
   fi
 
@@ -372,6 +373,88 @@ install_runtime_2404() {
   rm -rf "${download_dir}"
 }
 
+install_npu_2604() {
+  local download_dir="${WORK_DIR}/intel_npu_2604"
+  local npu_release="v1.38.0"
+  local npu_archive="linux-npu-driver-v1.38.0.20260910-34487311128-ubuntu2604.tar.gz"
+  local npu_url="https://github.com/intel/linux-npu-driver/releases/download/${npu_release}/${npu_archive}"
+  local npu_sha256="83685e6d92f4db1ca65e442846d487c7feb1335634b33994292ceb38f933bcc7"
+  # Level Zero loader v1.32.0 per the NPU release notes; pinned PPA snapshot.
+  local libze_deb="libze1_1.32.0-1~26.04~ppa1_amd64.deb"
+  local libze_url="https://snapshot.ppa.launchpadcontent.net/kobuk-team/intel-graphics/ubuntu/20260830T100000Z/pool/main/l/level-zero-loader/${libze_deb}"
+  local libze_sha256="ddd80bf4c5cef21716bc1d7370cc055dc8803451c6e644a98d3dd534d91bc1b2"
+  local npu_packages=(
+    intel-driver-compiler-npu
+    intel-fw-npu
+    intel-level-zero-npu
+    intel-level-zero-npu-dbgsym
+  )
+
+  log "Installing Intel NPU drivers for Ubuntu 26.04..."
+  mkdir -p "${download_dir}"
+  cd "${download_dir}"
+
+  # Download before purging, so a failed fetch does not leave the machine with
+  # no NPU driver at all.
+  wget --no-continue "${npu_url}"
+  wget --no-continue "${libze_url}"
+  verify_sha256 "${npu_archive}" "${npu_sha256}" "${npu_url}"
+  verify_sha256 "${libze_deb}" "${libze_sha256}" "${libze_url}"
+  tar -xf "${npu_archive}"
+
+  mapfile -t npu_debs < <(find . -maxdepth 1 -type f -name 'intel-*.deb' | sort)
+  if [[ ${#npu_debs[@]} -eq 0 ]]; then
+    echo "Error: no Intel NPU .deb packages found for Ubuntu 26.04." >&2
+    exit 1
+  fi
+
+  sudo dpkg --purge --force-remove-reinstreq "${npu_packages[@]}" || true
+  sudo dpkg -i "${npu_debs[@]}" || sudo apt-get install -f -y
+  sudo dpkg -i "${libze_deb}" || sudo apt-get install -f -y
+
+  add_render_group
+
+  cd "${SCRIPT_DIR}"
+  rm -rf "${download_dir}"
+}
+
+install_runtime_2604() {
+  local download_dir="${WORK_DIR}/openvino_runtime_2604"
+  local openvino_version="${OPENVINO_VERSION:-2026.4}"
+  local openvino_build="${OPENVINO_BUILD:-0.22959.99c81491cc3}"
+  local openvino_archive="openvino_toolkit_ubuntu26_${openvino_version}.${openvino_build}_x86_64.tgz"
+  local openvino_dirname="openvino_toolkit_ubuntu26_${openvino_version}.${openvino_build}_x86_64"
+  local openvino_url="https://storage.openvinotoolkit.org/repositories/openvino/packages/${openvino_version}/linux/${openvino_archive}"
+  local install_root="${INSTALL_ROOT:-/opt/intel}"
+  local install_dir="${install_root}/openvino_${openvino_version}"
+  local symlink_path="${install_root}/openvino"
+  local archive_path="${download_dir}/openvino_${openvino_version}.tgz"
+  local expected_sha=""
+  if [[ "${openvino_version}" == "2026.4" && "${openvino_build}" == "0.22959.99c81491cc3" ]]; then
+    expected_sha="${OPENVINO_SHA256_2604}"
+  fi
+
+  log "Installing OpenVINO runtime for Ubuntu 26.04..."
+  sudo mkdir -p "${install_root}"
+  mkdir -p "${download_dir}"
+
+  curl -fL "${openvino_url}" --output "${archive_path}"
+  verify_sha256 "${archive_path}" "${expected_sha}" "${openvino_url}"
+  rm -rf "${download_dir:?}/${openvino_dirname}"
+  tar -xf "${archive_path}" -C "${download_dir}"
+
+  sudo rm -rf "${install_dir}"
+  sudo mv "${download_dir}/${openvino_dirname}" "${install_dir}"
+  sudo ln -sfn "openvino_${openvino_version}" "${symlink_path}"
+
+  if [[ ! -f "${symlink_path}/setupvars.sh" ]]; then
+    echo "Error: ${symlink_path}/setupvars.sh was not found after installation." >&2
+    exit 1
+  fi
+
+  rm -rf "${download_dir}"
+}
+
 run_installation() {
   case "${OS_VERSION}" in
     22.04)
@@ -384,8 +467,14 @@ run_installation() {
       install_npu_2404
       install_runtime_2404
       ;;
+    26.04)
+      # compute-runtime 26.35 is the release Intel documents for 26.04 as well.
+      install_gpu_2404
+      install_npu_2604
+      install_runtime_2604
+      ;;
     *)
-      echo "Error: unsupported Ubuntu version '${OS_VERSION:-unknown}'. Supported versions: 22.04, 24.04." >&2
+      echo "Error: unsupported Ubuntu version '${OS_VERSION:-unknown}'. Supported versions: 22.04, 24.04, 26.04." >&2
       exit 1
       ;;
   esac
