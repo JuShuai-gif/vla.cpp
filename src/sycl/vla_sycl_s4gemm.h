@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// INT4 x INT4 GEMMs on Xe DPAS (src/sycl/vla_sycl_s4gemm.cpp).
+// INT4 x INT4 (and few-row INT8 x INT8) GEMMs on Xe DPAS (src/sycl/vla_sycl_s4gemm.cpp).
 
 #pragma once
 
@@ -30,6 +30,13 @@ bool sycl_s4_gemm_s32(void * queue, const int8_t * blob, int64_t M, int64_t K, i
 // byte xs_off of each blob row; res [M][N] and gate [N] optional. Bit-identical
 // to the s32 sums followed by that epilogue.
 bool sycl_s4_gemm_f32(void * queue, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, int64_t xs_off,
+                      const int8_t * w, int64_t N, const float * ws, const float * bias, const float * res,
+                      const float * gate, float * out);
+
+// INT8 x INT8 with the same epilogue, for M <= 16 (the action expert's rows):
+// A rows of K int8 codes (a FoldQuant A8 blob), W [N][K] int8. K % 128 == 0,
+// N % 64 == 0. Returns false outside that shape (the caller uses oneDNN).
+bool sycl_s8_gemm_f32(void * queue, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, int64_t xs_off,
                       const int8_t * w, int64_t N, const float * ws, const float * bias, const float * res,
                       const float * gate, float * out);
 

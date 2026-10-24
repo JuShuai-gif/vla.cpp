@@ -15,7 +15,9 @@
 // INT4 x INT4 GEMMs on Xe DPAS (s4 x s4 -> s32) from sycl-tla's CuTe, for
 // FoldQuant W4A4 sites (pi0.5's prefix). oneDNN has no s4 x s4 matmul, so its
 // path runs INT4 sites at the INT8 rate; DPAS's int4 mode doubles that. Built
-// on sycl-tla's examples/cute/tutorial/xe_gemm.cpp main loop.
+// on sycl-tla's examples/cute/tutorial/xe_gemm.cpp main loop. The same main
+// loop on s8 x s8 serves INT8 sites at the action expert's few rows, where it
+// carries the epilogue that oneDNN's matmul would leave to a second kernel.
 //
 // A: nibble-packed activation blob rows (FoldQuant act layout: K/2 code bytes,
 //    then the float row scale), pitch = blob row bytes.
@@ -48,6 +50,10 @@ using MmaShortK = typename TiledMMAHelper<MMA_Atom<MmaOp>, Layout<Shape<_64, _25
 // work-groups on the Arc B390; 16 x 64 gives 16 (q/k/v 40), W4A4 87.7 -> 83.9 ms.
 using SGL1x4  = Layout<Shape<_1, _4, _1>, Stride<_4, _1, _0>>;
 using MmaSmallM = typename TiledMMAHelper<MMA_Atom<MmaOp>, Layout<Shape<_16, _64, _128>>, SGL1x4>::TiledMMA;
+// INT8 x INT8 (FoldQuant W8A8 sites), the small-M shape only: larger M stays on
+// oneDNN's int8 matmul.
+using MmaOp8     = XE_DPAS_TT<8, int32_t, int8_t, int8_t>;
+using MmaSmallM8 = typename TiledMMAHelper<MMA_Atom<MmaOp8>, Layout<Shape<_16, _64, _128>>, SGL1x4>::TiledMMA;
 // The GEGLU kernel: two accumulators (gate, up) per work-group; 64 x 256 measured
 // best among 5 tilings on the Arc B390 (561 x 2 x 16384 x 2048: 0.84 ms).
 using SGL2x8  = Layout<Shape<_2, _8, _1>, Stride<_8, _1, _0>>;
@@ -255,11 +261,12 @@ namespace intelex = sycl::ext::intel::experimental;
 }  // namespace
 
 namespace {
-template <class Mma, int TM, int TN, class OutT, class E>
+template <class Mma, int TM, int TN, class OutT, class E, class Elt = int4_t>
 void launch_s32(sycl::queue & q, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, const int8_t * w,
                 int64_t N, OutT * out, const E & e) {
-    auto A = row_major(reinterpret_cast<int4_t *>(const_cast<int8_t *>(blob)), (int) M, (int) K, (int) (row_bytes * 2));
-    auto B = row_major(reinterpret_cast<int4_t *>(const_cast<int8_t *>(w)), (int) N, (int) K, (int) K);
+    constexpr int epb = std::is_same_v<Elt, int4_t> ? 2 : 1;   // elements per byte
+    auto A = row_major(reinterpret_cast<Elt *>(const_cast<int8_t *>(blob)), (int) M, (int) K, (int) (row_bytes * epb));
+    auto B = row_major(reinterpret_cast<Elt *>(const_cast<int8_t *>(w)), (int) N, (int) K, (int) K);
     auto C = row_major(out, (int) M, (int) N, (int) N);
     Mma mma{};
     const sycl::range<2> local = { (size_t) size(mma), 1 };
@@ -315,6 +322,16 @@ void launch_glu(sycl::queue & q, const int8_t * blob, int64_t M, int64_t K, int6
     });
 }
 }  // namespace
+
+bool sycl_s8_gemm_f32(void * queue, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, int64_t xs_off,
+                      const int8_t * w, int64_t N, const float * ws, const float * bias, const float * res,
+                      const float * gate, float * out) {
+    if (M <= 0 || M > 16 || K % 128 != 0 || N % 64 != 0 || (row_bytes % 16) != 0 || (xs_off % 4) != 0) return false;
+    sycl::queue & q = *static_cast<sycl::queue *>(queue);
+    const Epi e{ blob, (int) row_bytes, (int) xs_off, (int) M, (int) N, ws, bias, res, gate };
+    launch_s32<MmaSmallM8, 16, 64, float, Epi, int8_t>(q, blob, M, K, row_bytes, w, N, out, e);
+    return true;
+}
 
 bool sycl_s4_gemm_glu(void * queue, const int8_t * blob, int64_t M, int64_t K, int64_t row_bytes, int64_t xs_off,
                       const int8_t * w, const float * ws, const float * bias, int64_t Nh, uint16_t * out_bf16) {

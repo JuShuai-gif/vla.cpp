@@ -876,6 +876,12 @@ bool run_gemm(sycl::queue & q, ggml_tensor * dst, const FqGemmSpec & s, int abit
     if (s4_ok(s, abits, g) && !g.glu_n && !split_epi &&
         sycl_s4_gemm_f32(&q, g.blob, g.M, g.K, g.row_bytes, g.K / 2, g.w, g.N, g.wscale, g.bias, g.res, g.gate, g.y))
         return true;
+    // INT8 sites at the expert's few rows: the same DPAS GEMM and epilogue
+    // (16-row tiles, exact sums). VLA_FQ_NO_S8DPAS=1: oneDNN.
+    static const bool no_s8 = env_flag("VLA_FQ_NO_S8DPAS");
+    if (!no_s8 && !split_epi && s.wbits == 8 && abits == 8 && !g.glu_n &&
+        sycl_s8_gemm_f32(&q, g.blob, g.M, g.K, g.row_bytes, g.K, g.w, g.N, g.wscale, g.bias, g.res, g.gate, g.y))
+        return true;
     if (s4_ok(s, abits, g))
         if (int32_t * acc = s4_acc(q, g)) {
             if (g.glu_n) launch_epilogue_glu<4>(q, g, acc, bias != nullptr);
