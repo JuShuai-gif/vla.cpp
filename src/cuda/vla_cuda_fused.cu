@@ -154,7 +154,6 @@ __device__ __forceinline__ float2 warp_sum2(float2 a) {
     }
     return a;
 }
-__device__ __forceinline__ float2 warp_sum(float2 a) { return warp_sum2(a); }
 __device__ __forceinline__ float  warp_sum(float a) {
 #pragma unroll
     for (int off = WARP/2; off > 0; off >>= 1)
@@ -163,11 +162,8 @@ __device__ __forceinline__ float  warp_sum(float a) {
 }
 
 __device__ __forceinline__ float  shfl_xor(float a, int off)  { return __shfl_xor_sync(0xffffffff, a, off, WARP); }
-__device__ __forceinline__ float2 shfl_xor(float2 a, int off) { return make_float2(shfl_xor(a.x, off), shfl_xor(a.y, off)); }
 __device__ __forceinline__ float  shfl_idx(float a, int src)  { return __shfl_sync(0xffffffff, a, src, WARP); }
-__device__ __forceinline__ float2 shfl_idx(float2 a, int src) { return make_float2(shfl_idx(a.x, src), shfl_idx(a.y, src)); }
 __device__ __forceinline__ float  add_rn(float a, float b)    { return a + b; }
-__device__ __forceinline__ float2 add_rn(float2 a, float2 b)  { return make_float2(a.x + b.x, a.y + b.y); }
 
 // NW xor butterflies warp_sum(p[0..NW-1]) at once (NW a power of two <= 32),
 // with the same pairwise additions: 31 shuffles instead of 5*NW. Returns
