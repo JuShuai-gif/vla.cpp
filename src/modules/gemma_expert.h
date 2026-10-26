@@ -253,15 +253,16 @@ inline ggml_tensor * gemma_attn_kv(
 
 // The CUDA fused path, bit-identical to the ggml graphs below: a float layer
 // (separate BF16 weights) or a layer whose sites are all FoldQuant, with F32
-// activations, no flash attention, over enough tokens for ggml to run its
-// GEMMs on cuBLAS, whose keys fit the emulated softmax (tkv: prefix + new
-// tokens, up to 4096).
+// activations, no flash attention, whose keys fit the emulated softmax (tkv:
+// prefix + new tokens, up to 4096). A float layer also needs enough tokens for
+// ggml to run its GEMMs on cuBLAS; FoldQuant GEMMs are the in-tree kernels at
+// any row count.
 inline bool gemma_fused(const GemmaLayerW & w, ggml_type at, bool flash, int64_t seq, int64_t tkv) {
     const auto bf16 = [](const ggml_tensor * W) { return W && bf16_operand(W); };
     const bool fq = w.fq_q && w.fq_o && w.fq_gate && w.fq_down && !w.fq_q.gemm.heads;
-    const bool fl = !w.fq_q && !w.fq_o && !w.fq_gate && !w.fq_down &&
+    const bool fl = !w.fq_q && !w.fq_o && !w.fq_gate && !w.fq_down && cublas_rows(seq) &&
                     bf16(w.Wq) && bf16(w.Wk) && bf16(w.Wv) && bf16(w.Wo) && bf16(w.Wgate) && bf16(w.Wup) && bf16(w.Wdown);
-    return fused_ops_active() && !flash && at == GGML_TYPE_F32 && cublas_rows(seq) && tkv <= 4096 && (fq || fl);
+    return fused_ops_active() && !flash && at == GGML_TYPE_F32 && tkv <= 4096 && (fq || fl);
 }
 
 // gemma_attn on the fused path. x_norm: the BF16 GEMM operand, or on a
