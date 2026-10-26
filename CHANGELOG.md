@@ -49,6 +49,12 @@ Notable changes to vla.cpp. Format loosely follows [Keep a Changelog](https://ke
   `VLA_FUSED_OPS=0` runs the old path; `tests/test_fused_cuda_ops.cpp` checks
   each node against the ggml chain it replaces. See
   `docs/backend/cuda-exact.md`.
+- **Faster FoldQuant checkpoints on CUDA, same output.** The fused path also
+  covers π0.5 and the GR00T models around their integer sites, and the act
+  node absorbs the gate or norm before it (`glu_act`, `norm_act`). On the Jetson
+  AGX Orin the calibrated LIBERO W4A4 files run 30-35% faster than on
+  `1012c05` (GR00T N1.7 84 -> 56 ms, π0.5 216 -> 143 ms), with the same action
+  bits.
 
 ## [0.4.0] - 2026-09-30
 

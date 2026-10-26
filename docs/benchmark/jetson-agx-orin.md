@@ -173,6 +173,34 @@ run-to-run noise (see above).
 
 </details>
 
+## FoldQuant checkpoints
+
+The calibrated FoldQuant LIBERO models (`vrfai/pi05-libero-w4a4`,
+`vrfai/GR00T-N1.5-LIBERO-4suite-combined-w4a4`, `vrfai/GR00T-N1.6-LIBERO-w4a4`,
+`vrfai/GR00T-N1.7-LIBERO-w4a4` (`libero_object`), and their `-res8` variants),
+converted with `scripts/convert_quantized_model_to_gguf.py`
+([QUANTIZATION.md](../QUANTIZATION.md)). `w4a4-res8` keeps the LLM's o and down
+sites at INT8 (`site_bits = "o:8,down:8"`). Integer sums are exact in any
+order, and the fused nodes keep ggml's rounding, so the actions are the same
+bits as on `1012c05`; the action md5 of every file matched at one and two views.
+
+Measured on 2026-10-26 with `jetson_clocks` on (GPU at 1.3 GHz), at `1d0b925`
+(this branch before the rebase onto `5499b77`, which brought only SYCL and
+OpenVINO changes) and `1012c05`, same build flags. Method as above, with the two
+builds alternating inside each round. GR00T N1.6's quantized files take
+252 px views (81 image tokens), from their config; the BF16 GGUF takes 224.
+
+| Model | Config | Views | Input | `1012c05` ms | this branch ms | change |
+|---|---|--:|--:|--:|--:|--:|
+| GR00T N1.7 | w4a4 | 1 | 256 | 84.3 | 55.5 | -34% |
+| GR00T N1.7 | w4a4-res8 | 1 | 256 | 85.3 | 56.4 | -34% |
+| GR00T N1.5 | w4a4 | 1 | 224 | 96.9 | 67.4 | -30% |
+| GR00T N1.5 | w4a4-res8 | 1 | 224 | 98.7 | 69.2 | -30% |
+| GR00T N1.6 | w4a4 | 1 | 252 | 106.7 | 71.9 | -33% |
+| GR00T N1.6 | w4a4-res8 | 1 | 252 | 108.1 | 72.8 | -33% |
+| π0.5 | w4a4 | 2 | 224 | 216.0 | 142.9 | -34% |
+| π0.5 | w4a4-res8 | 2 | 224 | 234.7 | 152.0 | -35% |
+
 ## Reproducing
 
 ```bash
@@ -181,4 +209,10 @@ cmake --build build-cuda -j
 
 # one row, for example SmolVLA
 ./build-cuda/vla-bench --ckpt smolvla-libero.gguf --images 2 --size 512 --warmup 3 --reps 20
+
+# a FoldQuant row, for example GR00T N1.7 w4a4
+python scripts/convert_quantized_model_to_gguf.py --quantized-model GR00T-N1.7-LIBERO-w4a4/libero_object \
+    --out gr00tn1d7-libero-object-w4a4.gguf
+VLA_GR00T_EMBODIMENT=libero_sim ./build-cuda/vla-bench --ckpt gr00tn1d7-libero-object-w4a4.gguf \
+    --images 1 --size 256 --warmup 3 --reps 20
 ```

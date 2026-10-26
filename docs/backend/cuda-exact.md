@@ -74,6 +74,15 @@ weight summed in int32, which is exact in any order.
 
 ACT has no fused path.
 
+FoldQuant checkpoints ([QUANTIZATION.md](../QUANTIZATION.md)) take the same
+path around their integer sites: π0.5's prefix and expert, and the GR00T LM
+and DiT. The act node that quantizes a site's input also absorbs the op before
+it where it is the only reader: the GELU or SiLU gate (`glu_act`) and the
+LayerNorm or adaRMS (`norm_act`), so that tensor is never written out. The
+integer GEMMs accumulate in int32, exact in any order, so their tiling is
+chosen for speed alone. On the Orin this cuts 30-35% from the calibrated LIBERO
+W4A4 files ([numbers](../benchmark/jetson-agx-orin.md#foldquant-checkpoints)).
+
 ## Switches
 
 The defaults are the verified configuration. The switches exist for A/B checks.
@@ -86,6 +95,7 @@ The defaults are the verified configuration. The switches exist for A/B checks.
 | `VLA_GEMM_REUSE` | on | `0` times the candidates again for every new row count. |
 | `VLA_ATTN_EXACT` | on | `0` keeps ggml's attention chain. `VLA_ATTN_EXACT_FUSED=0` and `VLA_ATTN_TF32=0` drop paths A and C. |
 | `VLA_GR00T_FUSED_VIT` | on with the vision fused ops | GR00T N1.7: `0` runs the vision tower as its own graph. |
+| `VLA_FQ_NO_ACT_FUSE` | off | `1`: FoldQuant act nodes take the gate or norm output from a separate node. |
 | `VLA_BITVLA_MMA` | on | `0` runs BitVLA's original kernels. |
 | `VLA_BITVLA_DEVICE_EMBEDS` | on | BitVLA: `0` copies the image embeddings through the host. |
 | `VLA_GEMM_CACHE=file` | off | Extra cuBLASLt configurations to try, one per line. `VLA_GEMM_SEARCH=1` tries every configuration (slow) and appends the fastest identical ones to the file. Entries carry the cuBLASLt version and are ignored after an upgrade. |
