@@ -512,6 +512,185 @@ bool launch_glu_act(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStrea
     return false;
 }
 
+// k_glu_act's act chain on the values load(k0, e0, e1) gives for columns k0
+// and k0 + 1.
+template <int ABITS, int ROT, int NW, typename Load>
+__device__ __forceinline__ void act_row_pairs(Load load, const float * __restrict__ ascale, int8_t * __restrict__ row,
+                                              int K, bool fold_before, float clip, float inv_sqrt_bs) {
+    constexpr int MAXC = 16;
+    __shared__ float red[NW];
+    const int warp = threadIdx.x >> 5, lane = threadIdx.x & 31;
+    const int nchunks = K / 64;
+    float v0[MAXC], v1[MAXC];
+    float mx = 0.0f;
+    #pragma unroll
+    for (int i = 0; i < MAXC; ++i) {
+        const int c = warp + i * NW;
+        if (c < nchunks) {
+            const int64_t k0 = (int64_t) c * 64 + 2 * lane;
+            float e0, e1;
+            load(k0, e0, e1);
+            float2 s = make_float2(1.0f, 1.0f);
+            if (ascale) s = *(const float2 *) (ascale + k0);
+            if (ascale && fold_before) { e0 = p_div(e0, s.x); e1 = p_div(e1, s.y); }
+            if (ROT > 1) {
+                { const float a = e0, b = e1; e0 = p_add(a, b); e1 = p_sub(a, b); }
+                #pragma unroll
+                for (int h = 2; h < ROT; h <<= 1) {
+                    const int   half  = h >> 1;
+                    const float o0    = __shfl_xor_sync(0xffffffffu, e0, half);
+                    const float o1    = __shfl_xor_sync(0xffffffffu, e1, half);
+                    const bool  upper = (lane & half) != 0;
+                    e0 = upper ? p_sub(o0, e0) : p_add(e0, o0);
+                    e1 = upper ? p_sub(o1, e1) : p_add(e1, o1);
+                }
+                e0 = p_mul(e0, inv_sqrt_bs);
+                e1 = p_mul(e1, inv_sqrt_bs);
+            }
+            if (ascale && !fold_before) { e0 = p_div(e0, s.x); e1 = p_div(e1, s.y); }
+            v0[i] = e0; v1[i] = e1;
+            mx = p_max(mx, p_max(p_abs(e0), p_abs(e1)));
+        }
+    }
+    #pragma unroll
+    for (int off = 16; off > 0; off >>= 1) mx = p_max(mx, __shfl_xor_sync(0xffffffffu, mx, off));
+    if (lane == 0) red[warp] = mx;
+    __syncthreads();
+    mx = red[0];
+    #pragma unroll
+    for (int w = 1; w < NW; ++w) mx = p_max(mx, red[w]);
+
+    const float qmax  = ABITS == 4 ? 7.0f : 127.0f;
+    float       scale = p_div(p_mul(clip, mx), qmax);
+    if (scale < 1e-12f) scale = 1e-12f;
+    const float inv = p_div(1.0f, scale);
+    #pragma unroll
+    for (int i = 0; i < MAXC; ++i) {
+        const int c = warp + i * NW;
+        if (c < nchunks) {
+            const float q0 = p_min(qmax, p_max(-qmax, p_rint(p_mul(v0[i], inv))));
+            const float q1 = p_min(qmax, p_max(-qmax, p_rint(p_mul(v1[i], inv))));
+            if (ABITS == 8) {
+                const uint16_t packed = (uint16_t) (((uint32_t) (int) q0 & 0xFFu) | (((uint32_t) (int) q1 & 0xFFu) << 8));
+                *(uint16_t *) (row + (int64_t) c * 64 + 2 * lane) = packed;
+            } else {
+                row[(int64_t) c * 32 + lane] = (int8_t) (((uint32_t) (int) q0 & 0xFu) | (((uint32_t) (int) q1 & 0xFu) << 4));
+            }
+        }
+    }
+    if (threadIdx.x == 0) *(float *) (row + (ABITS == 8 ? K : K / 2)) = scale;
+}
+
+// A norm as k_ln_reg / k_rms_mul_reg compute it for rows of 1024 columns or
+// more (ggml's 1024-thread block), then act_row_pairs on the normed values.
+// ggml thread t sums columns t, t + 1024, ...; warp w here reduces ggml warps
+// w, w + NW, ... with the same butterfly, and warp 0 runs the second stage
+// over the 32 warp sums.
+template <vla::FusedKind NORM, int ABITS, int ROT, int NW>
+__global__ void __launch_bounds__(NW * 32) k_norm_act(const float * __restrict__ x, const float * __restrict__ p1,
+                                                       const float * __restrict__ p2, const float * __restrict__ ascale,
+                                                       int8_t * __restrict__ blob, int K, int64_t row_bytes, float eps,
+                                                       bool fold_before, float clip, float inv_sqrt_bs) {
+    constexpr bool RMS = NORM == vla::FusedKind::RmsModulate;
+    __shared__ float2 part[WARP];
+    __shared__ float2 stat;
+    const int     warp = threadIdx.x >> 5, lane = threadIdx.x & 31;
+    const int64_t m    = blockIdx.x;
+    x += m * K;
+    for (int w = warp; w < WARP; w += NW) {
+        float2 acc = make_float2(0.0f, 0.0f);
+        for (int col = w*WARP+lane; col < K; col += WARP*WARP) {
+            const float xi = x[col];
+            if (RMS) {
+                acc.x += xi * xi;
+            } else {
+                acc.x += xi;
+                acc.y += xi * xi;
+            }
+        }
+        if (RMS) acc.x = warp_sum(acc.x);
+        else     acc   = warp_sum2(acc);
+        if (lane == 0) part[w] = acc;
+    }
+    __syncthreads();
+    if (warp == 0) {
+        if (RMS) {
+            const float sum  = warp_sum(part[lane].x);
+            const float mean = sum / K;
+            if (lane == 0) stat = make_float2(rsqrtf(mean + eps), 0.0f);
+        } else {
+            const float2 total = warp_sum2(part[lane]);
+            const float  mean  = total.x / K;
+            const float  var   = total.y / K - mean * mean;
+            if (lane == 0) stat = make_float2(mean, rsqrtf(var + eps));
+        }
+    }
+    __syncthreads();
+    const float2 st = stat;
+    act_row_pairs<ABITS, ROT, NW>([&](int64_t k0, float & e0, float & e1) {
+        const float2 xx = *(const float2 *) (x + k0);
+        if (RMS) {
+            e0 = rms_epilogue<1>(st.x, xx.x, p1, p2, (int) k0);
+            e1 = rms_epilogue<1>(st.x, xx.y, p1, p2, (int) k0 + 1);
+            return;
+        }
+        const float n0 = (xx.x - st.x) * st.y, n1 = (xx.y - st.x) * st.y;
+        if (NORM == vla::FusedKind::LnModulate) {
+            e0 = __fadd_rn(__fadd_rn(n0, __fmul_rn(n0, p1[k0])), p2[k0]);
+            e1 = __fadd_rn(__fadd_rn(n1, __fmul_rn(n1, p1[k0+1])), p2[k0+1]);
+        } else {
+            e0 = n0;
+            e1 = n1;
+        }
+    }, ascale, blob + m * row_bytes, K, fold_before, clip, inv_sqrt_bs);
+}
+
+template <vla::FusedKind NORM, int ABITS>
+bool launch_norm_act_n(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
+    constexpr int NW = 8;
+    const ggml_tensor * x = dst->src[0];
+    auto f = [](const ggml_tensor * t) { return t ? (const float *) t->data : nullptr; };
+    auto go = [&](auto kern) {
+        kern<<<(unsigned) dst->ne[1], NW * 32, 0, st>>>((const float *) x->data, f(dst->src[1]), f(dst->src[2]),
+                                                       f(dst->src[3]), (int8_t *) dst->data, (int) x->ne[0],
+                                                       (int64_t) dst->ne[0], s.eps, s.fold_before != 0, s.clip,
+                                                       s.inv_sqrt_bs);
+        return true;
+    };
+    switch (s.rot_block) {
+        case 64: return go(k_norm_act<NORM, ABITS, 64, NW>);
+        case 32: return go(k_norm_act<NORM, ABITS, 32, NW>);
+        case 16: return go(k_norm_act<NORM, ABITS, 16, NW>);
+        case 8:  return go(k_norm_act<NORM, ABITS, 8,  NW>);
+        case 4:  return go(k_norm_act<NORM, ABITS, 4,  NW>);
+        case 2:  return go(k_norm_act<NORM, ABITS, 2,  NW>);
+        case 1:
+        case 0:  return go(k_norm_act<NORM, ABITS, 1,  NW>);
+        default: return false;
+    }
+}
+
+template <vla::FusedKind NORM>
+bool launch_norm_act_k(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
+    return s.abits == 8 ? launch_norm_act_n<NORM, 8>(s, dst, st) : launch_norm_act_n<NORM, 4>(s, dst, st);
+}
+
+bool launch_norm_act(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStream_t st) {
+    const ggml_tensor * x = dst->src[0];
+    const int64_t K = x->ne[0];
+    const bool mod = s.norm != vla::FusedKind::LnPlain;
+    if (dst->type != GGML_TYPE_I8 || K % 64 != 0 || K < 1024 || K > 8 * 16 * 64 || (s.abits != 8 && s.abits != 4) ||
+        ggml_nrows(x) != dst->ne[1] || mod != (dst->src[1] && dst->src[2]) ||
+        (dst->src[3] && ggml_nelements(dst->src[3]) != K))
+        return false;
+    switch (s.norm) {
+        case vla::FusedKind::LnModulate:  return launch_norm_act_k<vla::FusedKind::LnModulate>(s, dst, st);
+        case vla::FusedKind::LnPlain:     return launch_norm_act_k<vla::FusedKind::LnPlain>(s, dst, st);
+        case vla::FusedKind::RmsModulate: return launch_norm_act_k<vla::FusedKind::RmsModulate>(s, dst, st);
+        default:                          return false;
+    }
+}
+
 __device__ __forceinline__ float gelu_erf_ggml(float x) {
     const float SQRT_2_INV = 0.70710678118654752440084436210484f;
     return 0.5f*x*(1.0f + erff(x*SQRT_2_INV));
@@ -1947,6 +2126,9 @@ extern "C" bool vla_cuda_fused_forward(ggml_tensor * dst, void * stream_v) {
         }
         case vla::FusedKind::GluAct:
             if (!launch_glu_act(*s, dst, st)) return false;
+            break;
+        case vla::FusedKind::NormAct:
+            if (!launch_norm_act(*s, dst, st)) return false;
             break;
         case vla::FusedKind::BiasGeluErf: {
             const int64_t n = ggml_nelements(a);

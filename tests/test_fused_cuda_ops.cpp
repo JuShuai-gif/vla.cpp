@@ -15,9 +15,9 @@
 // The fused CUDA nodes of layers/fused_ops.h against the ggml chains they
 // replace, on the same inputs: the outputs must be bit-identical. Covers the
 // epilogues, the head layouts with RoPE, gemm_exact (mm_exact) and attn_exact
-// (with K/V broadcast and a mask), and glu_act against the activation + the
-// FoldQuant act node, at the widths the models use. Skips (exit 0) without a
-// CUDA device.
+// (with K/V broadcast and a mask), and glu_act / norm_act against the
+// activation or norm + the FoldQuant act node, at the widths the models use.
+// Skips (exit 0) without a CUDA device.
 
 #include "ggml.h"
 #include "ggml-alloc.h"
@@ -271,6 +271,38 @@ std::vector<Case> cases() {
                 ggml_tensor * x = a.glu == G::GeluMul ? vla::geglu(C, t[0], u)
                                 : a.glu == G::SiluMul ? ggml_mul(C, ggml_silu(C, t[0]), u) : ggml_gelu(C, t[0]);
                 return vla::fq_act(C, s, x);
+            }, vla::fq_act_row_bytes(a.K, a.abits), vla::fq_act_kpack(a.K, a.abits) + 4});
+    }
+
+    // A norm into a FoldQuant site: norm_act against ggml's norm chain + fq_act.
+    struct Norm { vla::FusedKind norm; int64_t K, T; int abits, rot; bool ascale, before; };
+    using N = vla::FusedKind;
+    for (const Norm a : {Norm{N::LnModulate, 1536, 41, 4, 64, true, true},   Norm{N::LnModulate, 1536, 41, 8, 64, true, false},
+                         Norm{N::LnPlain, 1536, 41, 4, 64, true, true},      Norm{N::LnPlain, 2048, 7, 8, 32, false, false},
+                         Norm{N::RmsModulate, 1024, 10, 4, 64, true, true},  Norm{N::RmsModulate, 1024, 50, 8, 64, true, false},
+                         Norm{N::RmsModulate, 3072, 13, 4, 16, false, false}}) {
+        const bool mod = a.norm != N::LnPlain;
+        std::vector<In> ins = {{F, {a.K, a.T, 1, 1}}};
+        if (mod) { ins.push_back({F, {a.K, 1, 1, 1}}); ins.push_back({F, {a.K, 1, 1, 1}}); }
+        if (a.ascale) ins.push_back({F, {a.K, 1, 1, 1}, Fill::Scale});
+        const char * nn = a.norm == N::LnModulate ? "ln_modulate" : a.norm == N::LnPlain ? "ln" : "rms_modulate";
+        v.push_back({std::string("norm_act/") + nn + "_A" + std::to_string(a.abits) + "_K" + std::to_string(a.K) +
+                         "_rot" + std::to_string(a.rot) + (a.ascale ? (a.before ? "_pre" : "_post") : ""), ins,
+            [a, mod](ggml_context * C, const T & t, bool f) {
+                vla::FqLinear & s = sites.emplace_back();
+                s.w = ggml_new_tensor_2d(C, GGML_TYPE_I8, a.K, 64);
+                ggml_set_name(s.w, "site");
+                s.ascale = a.ascale ? t[mod ? 3 : 1] : nullptr;
+                s.act.K = a.K; s.act.abits = a.abits; s.act.rot_block = a.rot; s.act.fold_before = a.before;
+                s.act.has_ascale = a.ascale; s.act.clip = 1.0f;
+                ggml_tensor * p1 = mod ? t[1] : nullptr, * p2 = mod ? t[2] : nullptr;
+                if (f) {
+                    ggml_tensor * q = vla::fq_act_norm(C, s, t[0], p1, p2, a.norm, EPS);
+                    GGML_ASSERT(q);
+                    return q;
+                }
+                ggml_tensor * n = a.norm == N::RmsModulate ? ggml_rms_norm(C, t[0], EPS) : ggml_norm(C, t[0], EPS);
+                return vla::fq_act(C, s, mod ? ggml_add(C, ggml_add(C, n, ggml_mul(C, n, p1)), p2) : n);
             }, vla::fq_act_row_bytes(a.K, a.abits), vla::fq_act_kpack(a.K, a.abits) + 4});
     }
     return v;

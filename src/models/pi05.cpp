@@ -166,14 +166,16 @@ ggml_tensor * build_expert_layer(
         auto part = [&](ggml_tensor * mod, int j) {
             return ggml_view_1d(ctx, mod, h, (size_t) j*h*sizeof(float));
         };
-        // FoldQuant act nodes read the adaRMS output in F32.
+        // FoldQuant act nodes run the adaRMS themselves, or read its output in F32.
         const bool bf16 = !w.fq_q;
-        ggml_tensor * o_out = gemma_attn_fused(ctx, w,
-            fused_rms_modulate(ctx, x_in, part(mod_attn, 0), part(mod_attn, 1), cfg.rms_eps, bf16),
+        auto adarms = [&](ggml_tensor * x, ggml_tensor * mod, const FqLinear & s) {
+            ggml_tensor * xq = fq_act_norm(ctx, s, x, part(mod, 0), part(mod, 1), FusedKind::RmsModulate, cfg.rms_eps);
+            return xq ? xq : fused_rms_modulate(ctx, x, part(mod, 0), part(mod, 1), cfg.rms_eps, bf16);
+        };
+        ggml_tensor * o_out = gemma_attn_fused(ctx, w, adarms(x_in, mod_attn, w.fq_q),
             positions, cfg, seq, cached_K, cached_V, nullptr, nullptr, nullptr);
         ggml_tensor * h1 = fused_gate_res(ctx, o_out, part(mod_attn, 2), x_in);
-        ggml_tensor * mlp_out = gemma_mlp_fused(ctx, w,
-            fused_rms_modulate(ctx, h1, part(mod_ffn, 0), part(mod_ffn, 1), cfg.rms_eps, bf16));
+        ggml_tensor * mlp_out = gemma_mlp_fused(ctx, w, adarms(h1, mod_ffn, w.fq_gate));
         return fused_gate_res(ctx, mlp_out, part(mod_ffn, 2), h1);
     }
 

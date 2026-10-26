@@ -120,8 +120,10 @@ void DitHead::declare(WeightLoader & L, const char * prefix, bool fuse_qkv, bool
                 w.bqkv = L.fuse_f32(out, {qb, kb, vb});
             }
         } else {
-            if (fq)
+            if (fq) {
                 w.fq_q = fq_declare_linear(L, *fq, "qkv", true, nullptr, 0.0f, "%s.%lld.attn_q", prefix, ii);
+                fq_set_heads(w.fq_q, (int) cfg.head_dim, (int) cfg.heads, 0u);
+            }
             if (!w.fq_q) {
                 w.Wq = L.gemm("%s.%lld.attn_q.weight", prefix, ii);
                 w.bq = L.f32 ("%s.%lld.attn_q.bias",   prefix, ii);
@@ -194,6 +196,10 @@ ggml_tensor * DitHead::block(ggml_context * C, const DitLayerW & w, ggml_tensor 
         ggml_tensor * xn = ggml_norm(C, h, cfg.ln_eps);
         n = ggml_add(C, ggml_add(C, xn, ggml_mul(C, xn, sc)), sh);
     }
+    // FoldQuant: the q (or qkv) act node runs the adaLN itself when its blob is
+    // all that reads n (q/k/v sharing it, or a cross-attention layer).
+    const FqLinear * nq = (w.fq_qkv && !enc) ? &w.fq_qkv : (w.fq_q && (enc || K_pre || w.fq_k)) ? &w.fq_q : nullptr;
+    ggml_tensor * xq_ln = (cfg.fused_ops && nq) ? fq_act_norm(C, *nq, h, sc, sh, FusedKind::LnModulate, cfg.ln_eps) : nullptr;
     ggml_tensor *Q, *K, *V;
     if (fz && !enc && w.Wqkv) {
         // V transposed (bit 2): the non-flash attention takes V^T.
@@ -206,7 +212,7 @@ ggml_tensor * DitHead::block(ggml_context * C, const DitLayerW & w, ggml_tensor 
         K = K_pre;
         V = V_pre;
     } else if (!enc && (w.Wqkv || w.fq_qkv)) {
-        ggml_tensor * qkv = w.fq_qkv ? fq_linear(C, w.fq_qkv, n) : linear(C, w.Wqkv, w.bqkv, n);
+        ggml_tensor * qkv = w.fq_qkv ? fq_gemm(C, w.fq_qkv, xq_ln ? xq_ln : fq_act(C, w.fq_qkv, n)) : linear(C, w.Wqkv, w.bqkv, n);
         if (w.fq_qkv && w.fq_qkv.gemm.heads) {
             Q = fq_head_view(C, qkv, w.fq_qkv, 0, Tk);
             K = fq_head_view(C, qkv, w.fq_qkv, 1, Tk);
@@ -219,7 +225,7 @@ ggml_tensor * DitHead::block(ggml_context * C, const DitLayerW & w, ggml_tensor 
     } else {
         // Self-attention with separate FoldQuant q/k/v: one activation blob of n
         // serves all three projections.
-        ggml_tensor * xq = (w.fq_q && !enc && !K_pre && w.fq_k) ? fq_act(C, w.fq_q, n) : nullptr;
+        ggml_tensor * xq = xq_ln ? xq_ln : (w.fq_q && !enc && !K_pre && w.fq_k) ? fq_act(C, w.fq_q, n) : nullptr;
         if (w.fq_q) {
             ggml_tensor * qp = xq ? fq_gemm(C, w.fq_q, xq) : fq_linear(C, w.fq_q, n);
             Q = w.fq_q.gemm.heads ? fq_head_view(C, qp, w.fq_q, 0, Tk) : to_heads(C, qp, hd, heads, Tk);
@@ -231,7 +237,7 @@ ggml_tensor * DitHead::block(ggml_context * C, const DitLayerW & w, ggml_tensor 
             V = V_pre;
         }
         else       {
-            kv(C, w, enc ? enc : n, &K, &V, xq);
+            kv(C, w, enc ? enc : n, &K, &V, enc ? nullptr : xq);
         }
     }
 
@@ -253,7 +259,8 @@ ggml_tensor * DitHead::block(ggml_context * C, const DitLayerW & w, ggml_tensor 
     ggml_tensor * h1  = w.fq_o ? fq_linear(C, w.fq_o, att, h) : ggml_add(C, h, linear(C, w.Wo, w.bo, att));
     ggml_tensor * n3  = cfg.fused_ops ? fused_ln(C, h1, nullptr, nullptr, cfg.ln_eps, false) : ggml_norm(C, h1, cfg.ln_eps);
     if (w.fq_ff0) {
-        ggml_tensor * f0 = fq_linear(C, w.fq_ff0, n3);
+        ggml_tensor * xq_ff = cfg.fused_ops ? fq_act_norm(C, w.fq_ff0, h1, nullptr, nullptr, FusedKind::LnPlain, cfg.ln_eps) : nullptr;
+        ggml_tensor * f0 = fq_gemm(C, w.fq_ff0, xq_ff ? xq_ff : fq_act(C, w.fq_ff0, n3));
         if (ggml_tensor * dq = fq_act_glu(C, w.fq_ff2, f0, nullptr, FusedGlu::Gelu))
             return fq_gemm(C, w.fq_ff2, dq, h1);
         return fq_linear(C, w.fq_ff2, ggml_gelu(C, f0), h1);

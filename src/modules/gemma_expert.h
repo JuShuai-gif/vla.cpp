@@ -266,9 +266,9 @@ inline bool gemma_fused(const GemmaLayerW & w, ggml_type at, bool flash, int64_t
 }
 
 // gemma_attn on the fused path. x_norm: the BF16 GEMM operand, or on a
-// FoldQuant layer the act node's input (gemma_attn's fq_x); fq_res rides in
-// the o GEMM epilogue. The K/V cache handed out (and read back) keeps
-// gemma_attn's layouts: K after RoPE and V, both [hd, nkv, seq].
+// FoldQuant layer the act node's input (gemma_attn's fq_x) or its I8 blob;
+// fq_res rides in the o GEMM epilogue. The K/V cache handed out (and read
+// back) keeps gemma_attn's layouts: K after RoPE and V, both [hd, nkv, seq].
 inline ggml_tensor * gemma_attn_fused(
         ggml_context * ctx, const GemmaLayerW & w,
         ggml_tensor * x_norm, ggml_tensor * positions,
@@ -282,7 +282,7 @@ inline ggml_tensor * gemma_attn_fused(
 
     ggml_tensor *q, *k, *v;
     if (w.fq_q) {
-        ggml_tensor * xq = fq_act(ctx, w.fq_q, x_norm);
+        ggml_tensor * xq = x_norm->type == GGML_TYPE_I8 ? x_norm : fq_act(ctx, w.fq_q, x_norm);
         q = fq_gemm(ctx, w.fq_q, xq);
         k = fq_gemm(ctx, w.fq_k, xq);
         v = fq_gemm(ctx, w.fq_v, xq);
@@ -312,7 +312,7 @@ inline ggml_tensor * gemma_attn_fused(
 inline ggml_tensor * gemma_mlp_fused(ggml_context * ctx, const GemmaLayerW & w, ggml_tensor * x_norm,
                                      ggml_tensor * fq_res = nullptr) {
     if (w.fq_gate) {
-        ggml_tensor * xq   = fq_act(ctx, w.fq_gate, x_norm);
+        ggml_tensor * xq   = x_norm->type == GGML_TYPE_I8 ? x_norm : fq_act(ctx, w.fq_gate, x_norm);
         ggml_tensor * gate = fq_gemm(ctx, w.fq_gate, xq);
         ggml_tensor * up   = fq_gemm(ctx, w.fq_up,   xq);
         if (ggml_tensor * dq = fq_act_glu(ctx, w.fq_down, gate, up, FusedGlu::GeluMul))

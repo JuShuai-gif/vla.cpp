@@ -135,6 +135,64 @@ inline ggml_tensor * fq_act_glu(ggml_context * C, const FqLinear & s, ggml_tenso
     return t;
 }
 
+// CPU body of fq_act_norm's node; on CUDA, vla_cuda_fused.cu runs it.
+inline void fq_act_norm_cpu(ggml_tensor * dst, int ith, int nth, void * ud) {
+    const FusedSpec & f = *(const FusedSpec *) ud;
+    const ggml_tensor * xt = dst->src[0], * as = dst->src[3];
+    const float * p1 = dst->src[1] ? (const float *) dst->src[1]->data : nullptr;
+    const float * p2 = dst->src[2] ? (const float *) dst->src[2]->data : nullptr;
+    FqActSpec a;
+    a.K = xt->ne[0]; a.abits = f.abits; a.rot_block = f.rot_block; a.fold_before = f.fold_before != 0;
+    a.has_ascale = as != nullptr; a.clip = f.clip;
+    const int64_t T = dst->ne[1], K = a.K, rb = fq_act_row_bytes(K, a.abits), kp = fq_act_kpack(K, a.abits);
+    const int64_t per = (T + nth - 1) / nth, t0 = (int64_t) ith * per, t1 = std::min(T, t0 + per);
+    std::vector<float> x((size_t) K), tmp((size_t) K);
+    float partial[fqref::NT];
+    for (int64_t t = t0; t < t1; ++t) {
+        const float * xr = (const float *) xt->data + t * K;
+        if (f.norm == FusedKind::RmsModulate) {
+            double s2 = 0.0;
+            for (int64_t k = 0; k < K; ++k) s2 += (double) xr[k] * xr[k];
+            const float scale = 1.0f / std::sqrt((float) (s2 / K) + f.eps);
+            for (int64_t k = 0; k < K; ++k) x[k] = scale * xr[k];
+        } else {
+            fused_cpu::norm_row(xr, x.data(), K, f.eps);
+        }
+        if (p1)
+            for (int64_t k = 0; k < K; ++k) x[k] = (x[k] + x[k] * p1[k]) + p2[k];
+        uint8_t * row = (uint8_t *) dst->data + t * rb;
+        fqref::act_row(x.data(), as ? (const float *) as->data : nullptr, nullptr, a, tmp.data(), partial,
+                       (int8_t *) row, (float *) (row + kp));
+    }
+}
+
+// The norm feeding site s (norm: LnModulate or RmsModulate, n + n*p1 + p2;
+// LnPlain, p1 = p2 = null) and s's act node as one CUDA node, so the normed
+// rows are never written out. Null where the node does not apply (no fused
+// CUDA ops, a fused RMSNorm, rows outside 1024..8192); the caller then builds
+// the separate nodes. VLA_FQ_NO_ACT_FUSE=1 keeps them for A/B.
+inline ggml_tensor * fq_act_norm(ggml_context * C, const FqLinear & s, ggml_tensor * x, ggml_tensor * p1, ggml_tensor * p2,
+                                 FusedKind norm, float eps) {
+    const int64_t K = s.act.K;
+    const bool mod = norm != FusedKind::LnPlain;
+    if (!s || !fused_ops_active() || env_flag("VLA_FQ_NO_ACT_FUSE") || s.act.has_gamma || K % 64 != 0 || K < 1024 ||
+        K > 8192 || s.act.rot_block > 64 || x->type != GGML_TYPE_F32 || x->ne[0] != K || !ggml_is_contiguous(x) ||
+        (norm != FusedKind::LnModulate && norm != FusedKind::LnPlain && norm != FusedKind::RmsModulate) ||
+        mod != (p1 && p2) || (mod && (!ggml_is_contiguous(p1) || !ggml_is_contiguous(p2) ||
+                                      ggml_nelements(p1) != K || ggml_nelements(p2) != K)))
+        return nullptr;
+    FusedSpec f;
+    f.kind = FusedKind::NormAct;
+    f.norm = norm; f.eps = eps;
+    f.abits = s.act.abits; f.rot_block = s.act.rot_block; f.fold_before = s.act.fold_before; f.clip = s.act.clip;
+    f.inv_sqrt_bs = fqref::inv_sqrt_block(s.act.rot_block > 1 ? s.act.rot_block : 1);
+    ggml_tensor * args[4] = { x, p1, p2, s.ascale };
+    ggml_tensor * t = ggml_custom_4d(C, GGML_TYPE_I8, fq_act_row_bytes(K, s.act.abits), ggml_nelements(x) / K, 1, 1,
+                                     args, s.ascale ? 4 : 3, fq_act_norm_cpu, GGML_N_TASKS_MAX, (void *) fused_intern(f));
+    ggml_format_name(t, "%s.fq_act", ggml_get_name(s.w));
+    return t;
+}
+
 // y = W x (+ bias) (+ residual)
 inline ggml_tensor * fq_linear(ggml_context * C, const FqLinear & s, ggml_tensor * x, ggml_tensor * residual = nullptr) {
     return fq_gemm(C, s, fq_act(C, s, x), residual);
