@@ -334,16 +334,11 @@ if(GGML_CUDA)
         src/cuda/vla_cuda_ext.cu
         src/cuda/vla_cuda_bf16.cu
         src/cuda/vla_cuda_foldquant.cu
-        src/cuda/vla_cuda_fused.cu
     )
     # The staging shim in vla_cuda_foldquant.cu runs the CPU reference on the
     # host; it must round exactly like vla_core's copy.
     set_source_files_properties(src/cuda/vla_cuda_foldquant.cu PROPERTIES
         COMPILE_OPTIONS "-Xcompiler=-ffp-contract=off")
-    # The fused epilogues must round exactly like the ggml-cuda kernels they
-    # replace, which ggml builds with -use_fast_math (ftz, approximate div/tanh).
-    set_source_files_properties(src/cuda/vla_cuda_fused.cu PROPERTIES
-        COMPILE_OPTIONS "-use_fast_math")
     target_include_directories(vla_cuda_ops PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${llama_SOURCE_DIR}/ggml/include
@@ -359,6 +354,27 @@ if(GGML_CUDA)
     )
     target_link_libraries(vla_cuda_ops PUBLIC CUDA::cublas CUDA::cublasLt CUDA::cudart ggml-cuda vla_fq_kernels)
     target_link_libraries(vla_core PRIVATE vla_cuda_ops)
+
+    # Fused nodes: their own archive, device-linked on its own like bitvla
+    # above. They must round exactly like the ggml-cuda kernels they replace,
+    # which ggml builds with -use_fast_math (ftz, approximate div/tanh), and no
+    # other archive here does.
+    add_library(vla_cuda_fused STATIC src/cuda/vla_cuda_fused.cu)
+    set_target_properties(vla_cuda_fused PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+        CUDA_RESOLVE_DEVICE_SYMBOLS ON
+        POSITION_INDEPENDENT_CODE ON
+    )
+    target_include_directories(vla_cuda_fused PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${llama_SOURCE_DIR}/ggml/include
+    )
+    target_compile_features(vla_cuda_fused PRIVATE cxx_std_17)
+    target_compile_options(vla_cuda_fused PRIVATE
+        $<$<COMPILE_LANGUAGE:CUDA>:-O3 -Xptxas=-O3 -use_fast_math>
+    )
+    target_link_libraries(vla_cuda_fused PUBLIC CUDA::cublas CUDA::cublasLt CUDA::cudart ggml-cuda vla_cuda_ops)
+    target_link_libraries(vla_core PRIVATE vla_cuda_fused)
 endif()
 
 if(GGML_SYCL AND NOT GGML_CUDA)
@@ -587,7 +603,7 @@ if(VLA_BUILD_SERVER)
 endif()
 # The CUDA targets were the only first-party code compiled without warnings.
 if(GGML_CUDA)
-    list(APPEND VLA_FIRST_PARTY_TARGETS bitvla_cuda_kernels vla_cuda_ops vla_fq_kernels)
+    list(APPEND VLA_FIRST_PARTY_TARGETS bitvla_cuda_kernels vla_cuda_ops vla_cuda_fused vla_fq_kernels)
 endif()
 
 option(VLA_WERROR "Treat warnings in first-party code as errors" OFF)
