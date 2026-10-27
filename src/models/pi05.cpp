@@ -14,6 +14,7 @@
 
 #include "arch.h"
 #include "modules/gemma_expert.h"
+#include "cuda/vla_cuda_ops.h"
 #include "options.h"
 #include "model.h"
 
@@ -118,6 +119,7 @@ struct Pi05ModelArch : public ModelArchBase {
     ggml_type             matmul_type = GGML_TYPE_BF16;
 
     PaliVision                  vis;
+    bool                        fused_ops = false;
     GemmaStack                  pl;
     std::vector<GemmaLayerW>    ex_layers;
 
@@ -209,6 +211,23 @@ ggml_tensor * build_expert_layer(
         ggml_tensor * h1 = fused_gateres(ctx, x_in, o, mod_attn, *fg);
         ggml_tensor * xm = fused_adarms(ctx, h1, mod_ffn, at, *fa);
         return fused_gateres(ctx, h1, gemma_mlp(ctx, w, xm, at), mod_ffn, *fg);
+    }
+
+    if (!mask && !kv && gemma_fused(w, at, use_fused_attention(), seq, seq + (cached_K ? cached_K->ne[2] : 0))) {
+        auto part = [&](ggml_tensor * mod, int j) {
+            return ggml_view_1d(ctx, mod, h, (size_t) j*h*sizeof(float));
+        };
+        // FoldQuant act nodes run the adaRMS themselves, or read its output in F32.
+        const bool bf16 = !w.fq_q;
+        auto adarms = [&](ggml_tensor * x, ggml_tensor * mod, const FqLinear & s) {
+            ggml_tensor * xq = fq_act_norm(ctx, s, x, part(mod, 0), part(mod, 1), FusedKind::RmsModulate, cfg.rms_eps);
+            return xq ? xq : fused_rms_modulate(ctx, x, part(mod, 0), part(mod, 1), cfg.rms_eps, bf16);
+        };
+        ggml_tensor * o_out = gemma_attn_fused(ctx, w, adarms(x_in, mod_attn, w.fq_q),
+            positions, cfg, seq, cached_K, cached_V, nullptr, nullptr, nullptr);
+        ggml_tensor * h1 = fused_gate_res(ctx, o_out, part(mod_attn, 2), x_in);
+        ggml_tensor * mlp_out = gemma_mlp_fused(ctx, w, adarms(h1, mod_ffn, w.fq_gate));
+        return fused_gate_res(ctx, mlp_out, part(mod_ffn, 2), h1);
     }
 
     ggml_tensor * gate_attn = nullptr;
@@ -467,6 +486,9 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
                                      "and no FoldQuant\n");
             }
         }
+        // CUDA, F32 activations: the bit-exact fused nodes (layers/fused_ops.h).
+        if (m->act_type == GGML_TYPE_F32)
+            m->fused_ops = enable_fused_ops("pi05", b.is_cuda);
     }
 
     // The SigLIP tower is now bundled in the ckpt GGUF; mmproj_path is ignored.
@@ -541,6 +563,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
     if (m->vis.vit.enc.cfg.fused)
         std::printf("vla(pi05): fused SigLIP blocks (VLA_PI05_NO_VIT_FUSE=1 to disable)\n");
     m->vis.declare(L);
+    m->vis.vit.enc.cfg.fused_ops = m->fused_ops;   // SigLIP blocks are EncStack blocks
 
     m->pl.declare(L, "vlm", cfg.n_layers, false, fq.present ? &fq.llm : nullptr, cfg.rms_eps, m->kv_inplace, q8_vlm);
     // fq_fast: the prefix q/k/v GEMM, RoPE and F16 packing as one node

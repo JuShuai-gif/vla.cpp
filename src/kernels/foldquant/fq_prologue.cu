@@ -186,17 +186,17 @@ __global__ void __launch_bounds__(THREADS) act_kernel(const ActArgs a) {
 
 // CTA-per-row variant for the short rows a VLA quantizes (41 action tokens,
 // a few hundred LLM tokens): one warp per row leaves a 16-SM GPU nearly idle
-// and each launch latency-bound at ~50 us. Here RW warps share a row; a warp
-// takes chunks c = warp, warp + RW, ... and its lanes own the element pair
-// (2*lane, 2*lane + 1) of each chunk, so loads and stores are coalesced and
-// the per-row chain is a handful of shuffles. The 64-wide butterfly runs
+// and each launch latency-bound at ~50 us. Here NW warps share a row (RW, or
+// RW_L for longer rows); a warp takes chunks c = warp, warp + NW, ... and its
+// lanes own the element pair (2*lane, 2*lane + 1) of each chunk, so loads and
+// stores are coalesced and the per-row chain is a handful of shuffles. The 64-wide butterfly runs
 // stage h = 1 inside the lane and the other stages across lanes: every stage
 // forms exactly the (a + b, a - b) pairs fwht_row forms, so the values are
 // bit-identical to the reference. The RMSNorm sum of squares keeps the
 // reference's lane-partial order (warp 0 runs the warp-per-row loop).
 constexpr int RW   = 8;          // warps per row
-constexpr int RT   = RW * 32;
-constexpr int MAXC = 16;         // chunks per warp held in registers: K <= RW * MAXC * 64
+constexpr int RW_L = 16;         // warps per row for K > RW * MAXC * 64 (the 16384-wide down input)
+constexpr int MAXC = 16;         // chunks per warp held in registers: K <= NW * MAXC * 64
 
 template <int ROT>
 __device__ __forceinline__ void rot_pair(float & v0, float & v1, int lane, float inv_sqrt_bs) {
@@ -216,9 +216,9 @@ __device__ __forceinline__ void rot_pair(float & v0, float & v1, int lane, float
     }
 }
 
-template <int ABITS, int ROT>
-__global__ void __launch_bounds__(RT) act_row_kernel(const ActArgs a) {
-    __shared__ float red[RW];
+template <int ABITS, int ROT, int NW>
+__global__ void __launch_bounds__(NW * 32) act_row_kernel(const ActArgs a) {
+    __shared__ float red[NW];
     __shared__ float s_rstd;
     const int     tid     = threadIdx.x;
     const int     warp    = tid >> 5, lane = tid & 31;
@@ -249,7 +249,7 @@ __global__ void __launch_bounds__(RT) act_row_kernel(const ActArgs a) {
     float mx = 0.0f;
     #pragma unroll
     for (int i = 0; i < MAXC; ++i) {
-        const int c = warp + i * RW;
+        const int c = warp + i * NW;
         if (c < nchunks) {
             const int64_t k0 = (int64_t) c * CHUNK + 2 * lane;
             const float2  q  = *(const float2 *) (x + k0);
@@ -277,7 +277,7 @@ __global__ void __launch_bounds__(RT) act_row_kernel(const ActArgs a) {
     __syncthreads();
     mx = red[0];
     #pragma unroll
-    for (int w = 1; w < RW; ++w) mx = fmaxf(mx, red[w]);
+    for (int w = 1; w < NW; ++w) mx = fmaxf(mx, red[w]);
 
     const float qmax  = ABITS == 4 ? 7.0f : 127.0f;
     float       scale = (a.clip * mx) / qmax;
@@ -286,7 +286,7 @@ __global__ void __launch_bounds__(RT) act_row_kernel(const ActArgs a) {
     int8_t * row = a.blob + m * a.row_bytes;
     #pragma unroll
     for (int i = 0; i < MAXC; ++i) {
-        const int c = warp + i * RW;
+        const int c = warp + i * NW;
         if (c < nchunks) {
             float q0 = rintf(v0[i] * inv), q1 = rintf(v1[i] * inv);
             q0 = fminf(qmax, fmaxf(-qmax, q0));
@@ -304,18 +304,18 @@ __global__ void __launch_bounds__(RT) act_row_kernel(const ActArgs a) {
 
 }  // namespace
 
-template <int ABITS>
+template <int ABITS, int NW>
 static cudaError_t launch_rot_row(const ActArgs & a, cudaStream_t stream) {
-    const unsigned grid = (unsigned) a.M;
+    const unsigned grid = (unsigned) a.M, rt = NW * 32;
     switch (a.rot_block) {
-        case 64: act_row_kernel<ABITS, 64><<<grid, RT, 0, stream>>>(a); break;
-        case 32: act_row_kernel<ABITS, 32><<<grid, RT, 0, stream>>>(a); break;
-        case 16: act_row_kernel<ABITS, 16><<<grid, RT, 0, stream>>>(a); break;
-        case 8:  act_row_kernel<ABITS, 8 ><<<grid, RT, 0, stream>>>(a); break;
-        case 4:  act_row_kernel<ABITS, 4 ><<<grid, RT, 0, stream>>>(a); break;
-        case 2:  act_row_kernel<ABITS, 2 ><<<grid, RT, 0, stream>>>(a); break;
+        case 64: act_row_kernel<ABITS, 64, NW><<<grid, rt, 0, stream>>>(a); break;
+        case 32: act_row_kernel<ABITS, 32, NW><<<grid, rt, 0, stream>>>(a); break;
+        case 16: act_row_kernel<ABITS, 16, NW><<<grid, rt, 0, stream>>>(a); break;
+        case 8:  act_row_kernel<ABITS, 8, NW><<<grid, rt, 0, stream>>>(a); break;
+        case 4:  act_row_kernel<ABITS, 4, NW><<<grid, rt, 0, stream>>>(a); break;
+        case 2:  act_row_kernel<ABITS, 2, NW><<<grid, rt, 0, stream>>>(a); break;
         case 1:
-        case 0:  act_row_kernel<ABITS, 1 ><<<grid, RT, 0, stream>>>(a); break;
+        case 0:  act_row_kernel<ABITS, 1, NW><<<grid, rt, 0, stream>>>(a); break;
         default: return cudaErrorNotSupported;
     }
     return cudaGetLastError();
@@ -344,8 +344,12 @@ cudaError_t launch_act(const ActArgs & a, cudaStream_t stream) {
     // VLA_FQ_ACT_WARP=1 keeps the warp-per-row kernel (A/B and fallback).
     static const bool warp_only = [] { const char * e = std::getenv("VLA_FQ_ACT_WARP"); return e && *e && *e != '0'; }();
     if (!warp_only && a.K / CHUNK <= RW * MAXC) {
-        if (a.abits == 8) return launch_rot_row<8>(a, stream);
-        if (a.abits == 4) return launch_rot_row<4>(a, stream);
+        if (a.abits == 8) return launch_rot_row<8, RW>(a, stream);
+        if (a.abits == 4) return launch_rot_row<4, RW>(a, stream);
+    }
+    if (!warp_only && a.K / CHUNK <= RW_L * MAXC) {
+        if (a.abits == 8) return launch_rot_row<8, RW_L>(a, stream);
+        if (a.abits == 4) return launch_rot_row<4, RW_L>(a, stream);
     }
     const unsigned grid = (unsigned) ((a.M + WARPS - 1) / WARPS);
     if (a.abits == 8) return launch_rot<8>(a, grid, stream);

@@ -275,7 +275,11 @@ cudaError_t launch_gemm_mma(const GemmArgs & g, int variant, cudaStream_t stream
         if (g.M > 64) {
             // 128x64x128, 3 stages (72 KB smem, 2 CTAs/SM) for every prefill site: on
             // Orin it beat the 192-row tile end to end (ALOHA shape p50 174 vs 205 ms).
-            variant = 3;
+            // Where N allows, 64x128x128 over 8 warps (variant 17) is as fast or faster
+            // in the models (GR00T N1.7 M = 80/144, pi0.5 M = 304/560: up to 13% less
+            // GEMM time), and W8 past 512 rows takes 128x128x128 with 64x64 warp tiles
+            // (variant 18; pi0.5 2 views: prefill GEMMs 73 -> 54 ms).
+            variant = g.N % 128 != 0 ? 3 : (g.wbits == 8 && g.M >= 512) ? 18 : 17;
         } else {
             variant = g.N <= 3072 ? 0 : 1;
         }
@@ -302,6 +306,8 @@ cudaError_t launch_gemm_mma(const GemmArgs & g, int variant, cudaStream_t stream
             case 14: return launch_mma<32,  32,  128, 3, 1, 2, 1>(g, stream);   // two m-tiles per site
             case 15: return launch_mma<64,  32,  128, 6, 2, 2, 1>(g, stream);
             case 16: return launch_mma<48,  32,  256, 3, 1, 2, 1>(g, stream);
+            case 17: return launch_mma<64,  128, 128, 3, 2, 4, 1>(g, stream);   // 8 warps of 32x32
+            case 18: return launch_mma<128, 128, 128, 2, 2, 2, 1>(g, stream);   // 4 warps of 64x64, 64 KB
             default: return cudaErrorInvalidValue;
         }
     }
@@ -316,6 +322,8 @@ cudaError_t launch_gemm_mma(const GemmArgs & g, int variant, cudaStream_t stream
         case 15: return launch_mma<64,  32,  128, 6, 2, 2, 2>(g, stream);
         case 16: return launch_mma<48,  32,  256, 3, 1, 2, 2>(g, stream);
         case 3: return launch_mma<128, 64,  128, 3, 4, 2, 2>(g, stream);
+        case 17: return launch_mma<64,  128, 128, 3, 2, 4, 2>(g, stream);
+        case 18: return launch_mma<128, 128, 128, 2, 2, 2, 2>(g, stream);
         default: return launch_mma<64,  32,  128, 3, 2, 2, 2>(g, stream);
     }
 }

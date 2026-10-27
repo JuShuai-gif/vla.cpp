@@ -44,6 +44,26 @@ Notable changes to vla.cpp. Format loosely follows [Keep a Changelog](https://ke
   `scripts/inspect_gguf_quant.py` (contract check) and `scripts/foldquant_ref.py`
   (numpy reference).
 
+### Changed
+
+- **Faster CUDA inference with the same output.** At the default precision,
+  every arch except ACT runs fused CUDA nodes, BF16 GEMMs on the fastest
+  cuBLASLt algorithm that matches ggml's call (`gemm_exact`) and fused
+  attention (`attn_exact`). The actions are bit-identical to the plain ggml
+  graph, so success rates at the defaults carry over. BitVLA's ternary GEMM
+  moves to tensor cores. On a Jetson AGX Orin, mean latency drops 23-40% for
+  every arch except Octo-Small, which is host-bound (BitVLA 134 -> 80 ms,
+  GR00T N1.7 134 -> 94 ms, π0 350 -> 269 ms), for 0-207 MiB more device memory.
+  `VLA_FUSED_OPS=0` runs the old path; `tests/test_fused_cuda_ops.cpp` checks
+  each node against the ggml chain it replaces. See
+  `docs/backend/cuda-exact.md`.
+- **Faster FoldQuant checkpoints on CUDA, same output.** The fused path also
+  covers π0.5 and the GR00T models around their integer sites, and the act
+  node absorbs the gate or norm before it (`glu_act`, `norm_act`). On the Jetson
+  AGX Orin the calibrated LIBERO W4A4 files run 30-35% faster than on
+  `1012c05` (GR00T N1.7 84 -> 56 ms, π0.5 216 -> 143 ms), with the same action
+  bits.
+
 ## [0.4.0] - 2026-09-30
 
 ### Added

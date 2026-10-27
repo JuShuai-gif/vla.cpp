@@ -157,6 +157,14 @@ claimed by the extension hook (`src/cuda/vla_cuda_foldquant.cu`, registered by
 userdata; a node that violates the contract is declined, and ggml then aborts
 on the unsupported op rather than computing something else.
 
+With the fused CUDA ops on ([backend/cuda-exact.md](backend/cuda-exact.md)),
+two variants of `fq_act` also run the op before it, so that op's output is
+never written out: `fq_act_glu` takes the gate and up outputs (GELU or SiLU
+gate, or GELU alone) and `fq_act_norm` the norm input (a DiT LayerNorm, with or
+without the adaLN modulation, or π0.5's adaRMS). Each computes the same values
+as the separate node followed by `fq_act`, so the blob is the same bytes;
+`tests/test_fused_cuda_ops.cpp` checks both against the ggml ops and `fq_act`.
+
 ### OpenVINO
 
 On ggml's OpenVINO backend the two nodes are translated into OpenVINO ops
@@ -259,7 +267,8 @@ of every node (a byte-exact A/B against the kernels; it disables ggml's CUDA
 graphs, whose capture cannot contain the host round trip); `VLA_FQ_TRACE=1`
 prints each node's shape once per graph build. A/B switches for the graph-level
 optimisations, all bit-identical either way: `VLA_FQ_NO_FUSE=1` keeps the
-residual add as a separate node, `VLA_FQ_NO_HEADS=1` keeps the permute copies,
+residual add as a separate node, `VLA_FQ_NO_HEADS=1` keeps the permute copies, `VLA_FQ_NO_ACT_FUSE=1` keeps
+the gate and norm before an act node as separate nodes,
 `VLA_FQ_PREFETCH_MB=<mb>` makes each GEMM prefetch that much of the next site's
 weights into L2 (opt-in; measured slower on Orin).
 
