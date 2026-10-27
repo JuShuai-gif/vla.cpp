@@ -39,7 +39,7 @@
 #include "ggml.h"
 #include "ggml-backend.h"
 
-#ifdef GGML_USE_CUDA
+#if defined(GGML_USE_CUDA) && !defined(GGML_USE_HIP)
 #include <cuda_runtime.h>
 #endif
 
@@ -95,7 +95,7 @@ int64_t down2(int64_t n, int64_t k, int64_t pad) {
 // (Turing and newer). Before that, Volta's Jetson Xavier included, it falls back
 // to a naive kernel several times slower than im2col.
 bool cuda_conv_has_mma() {
-#ifdef GGML_USE_CUDA
+#if defined(GGML_USE_CUDA) && !defined(GGML_USE_HIP)
     int major = 0, minor = 0;
     const int dev = backend_device_index();
     return cudaDeviceGetAttribute(&major, cudaDevAttrComputeCapabilityMajor, dev) == cudaSuccess &&
