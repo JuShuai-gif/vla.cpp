@@ -142,7 +142,7 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
     if (cfg.fused_ops && nv == 1) {
         const bool fa = cfg.flash_attn;
         ggml_tensor * n1 = fused_ln(C, x, w.ln1w, w.ln1b, cfg.ln_eps, false,
-                                    bf16_operand(w.Wq) && bf16_operand(w.Wk) && bf16_operand(w.Wv));
+                                    bf16_operand(w.Wq, seq) && bf16_operand(w.Wk, seq) && bf16_operand(w.Wv, seq));
         auto heads_of = [&](ggml_tensor * W, ggml_tensor * b, bool vt, bool f16) {
             return fused_part(C, fused_qkv_heads(C, mm_exact(C, W, n1), b, nullptr, nullptr, 1, hd, heads, seq, nv,
                                                  vt ? 1 : 0, 0, 0, f16), 0, vt);
@@ -150,10 +150,10 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
         // With flash attention K/V are written F16, the type it casts them to.
         ggml_tensor * Q = heads_of(w.Wq, w.bq, false, false), * K = heads_of(w.Wk, w.bk, false, fa);
         ggml_tensor * att = fa ? ggml_reshape_2d(C, flash_attention(C, Q, K, heads_of(w.Wv, w.bv, false, true), nullptr, scale), cfg.hidden, seq*nv)
-                               : attention_rows_exact(C, Q, K, heads_of(w.Wv, w.bv, true, false), scale, cfg.hidden, seq, nv, bf16_operand(w.Wo));
+                               : attention_rows_exact(C, Q, K, heads_of(w.Wv, w.bv, true, false), scale, cfg.hidden, seq, nv, bf16_operand(w.Wo, seq));
         ggml_tensor * h1 = fused_bias_res(C, mm_exact(C, w.Wo, att), w.bo, x);
-        ggml_tensor * n2 = fused_ln(C, h1, w.ln2w, w.ln2b, cfg.ln_eps, false, bf16_operand(w.Wfc1));
-        ggml_tensor * g  = fused_bias_gelu(C, mm_exact(C, w.Wfc1, n2), w.bfc1, bf16_operand(w.Wfc2));
+        ggml_tensor * n2 = fused_ln(C, h1, w.ln2w, w.ln2b, cfg.ln_eps, false, bf16_operand(w.Wfc1, seq));
+        ggml_tensor * g  = fused_bias_gelu(C, mm_exact(C, w.Wfc1, n2), w.bfc1, bf16_operand(w.Wfc2, seq));
         return fused_bias_res(C, mm_exact(C, w.Wfc2, g), w.bfc2, h1);
     }
 

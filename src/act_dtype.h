@@ -88,7 +88,7 @@ inline ggml_tensor * mul_mat_t(ggml_context * C, ggml_tensor * a, ggml_tensor * 
 inline ggml_tensor * mm_act(ggml_context * C, ggml_tensor * w, ggml_tensor * x, ggml_type at) {
     // F32 activations with the CUDA fused ops on: the BF16-weight GEMM runs
     // through gemm_exact (bit-identical to ggml's cuBLAS call, often faster).
-    if (at == GGML_TYPE_F32 && fused_ops_active())
+    if (at == GGML_TYPE_F32 && fused_ops_for(w))
         return mm_exact(C, w, x);
     if (w->type != at) {
         return as_type(C, ggml_mul_mat(C, w, as_type(C, x, GGML_TYPE_F32)), at);

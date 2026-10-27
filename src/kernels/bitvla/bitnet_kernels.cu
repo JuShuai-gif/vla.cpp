@@ -20,6 +20,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <initializer_list>
+#include <mutex>
 #include <set>
 
 [[noreturn]] static void bitlinear_unsupported_shape(const char * which,
@@ -50,16 +51,28 @@ bool bitlinear_mma_enabled() {
 // True once set_layer has repacked the weights into the fragment layout.
 static bool g_frag = false;
 
+// Buffers already in the fragment layout. A model's free removes its own, so a
+// later model whose weights land at the same addresses is repacked again.
+static std::mutex g_repacked_mu;
+static std::set<const void *> g_repacked;
+
 void bitlinear_repack_for_mma(int8_t * w, int N, int K) {
-    static std::set<const void *> done;   // never repack the same buffer twice
-    if (!done.insert(w).second)
-        return;
+    {
+        std::lock_guard<std::mutex> lk(g_repacked_mu);
+        if (!g_repacked.insert(w).second)   // never repack the same buffer twice
+            return;
+    }
     const cudaError_t e = bitmma::repack_frag(w, N, K, 0);
     if (e != cudaSuccess) {
         std::fprintf(stderr, "vla(bitvla): weight repack failed (N=%d K=%d): %s\n", N, K, cudaGetErrorString(e));
         std::abort();
     }
     g_frag = true;
+}
+
+void bitlinear_repack_forget(const void * w) {
+    std::lock_guard<std::mutex> lk(g_repacked_mu);
+    g_repacked.erase(w);
 }
 
 // Index of the tile height that pads M the least (first wins ties).

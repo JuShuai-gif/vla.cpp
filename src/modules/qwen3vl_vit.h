@@ -146,7 +146,7 @@ inline ggml_tensor * build_vit_layer(ggml_context * C, const VitLayerW & w, ggml
     const int64_t T = seq*nv;
     if (fused) {
         const bool fa = vla::flash_attn_enabled();
-        ggml_tensor * n1  = fused_ln(C, x, w.ln1w, w.ln1b, ln_eps, false, bf16_operand(w.Wqkv));
+        ggml_tensor * n1  = fused_ln(C, x, w.ln1w, w.ln1b, ln_eps, false, bf16_operand(w.Wqkv, seq));
         ggml_tensor * mm = vit_mm(C, w.Wqkv, n1, seq, nv, true);
         ggml_tensor * att;
         if (fa) {
@@ -158,11 +158,11 @@ inline ggml_tensor * build_vit_layer(ggml_context * C, const VitLayerW & w, ggml
         } else {
             ggml_tensor * qkv = fused_qkv_heads(C, mm, w.bqkv, cos_t, sin_t, 3, hd, heads, seq, nv, 4, 3);
             att = attention_rows_exact(C, fused_part(C, qkv, 0, false), fused_part(C, qkv, 1, false), fused_part(C, qkv, 2, true),
-                                       scale, hidden, seq, nv, bf16_operand(w.Wo));
+                                       scale, hidden, seq, nv, bf16_operand(w.Wo, seq));
         }
         ggml_tensor * h1 = fused_bias_res(C, vit_mm(C, w.Wo, att, seq, nv, true), w.bo, x);
-        ggml_tensor * n2 = fused_ln(C, h1, w.ln2w, w.ln2b, ln_eps, false, bf16_operand(w.Wfc1));
-        ggml_tensor * g  = fused_bias_gelu(C, vit_mm(C, w.Wfc1, n2, seq, nv, true), w.bfc1, bf16_operand(w.Wfc2));
+        ggml_tensor * n2 = fused_ln(C, h1, w.ln2w, w.ln2b, ln_eps, false, bf16_operand(w.Wfc1, seq));
+        ggml_tensor * g  = fused_bias_gelu(C, vit_mm(C, w.Wfc1, n2, seq, nv, true), w.bfc1, bf16_operand(w.Wfc2, seq));
         return fused_bias_res(C, vit_mm(C, w.Wfc2, g, seq, nv, true), w.bfc2, h1);
     }
     ggml_tensor * n1 = ggml_add(C, ggml_mul(C, ggml_norm(C, x, ln_eps), w.ln1w), w.ln1b);

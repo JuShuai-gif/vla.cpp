@@ -121,6 +121,19 @@ std::vector<uint8_t> run(ggml_backend_t backend, const Case & c, bool fused) {
 
 constexpr float EPS = 1e-6f;
 
+ggml_backend_t g_backend = nullptr;
+
+// A FoldQuant site's weight on the CUDA backend: the fused act nodes are
+// emitted only for weights that live there (fused_ops_for).
+ggml_tensor * cuda_site(int64_t K) {
+    ggml_init_params p = { ggml_tensor_overhead(), nullptr, true };
+    ggml_context * c = ggml_init(p);   // kept for the whole run
+    ggml_tensor * w = ggml_new_tensor_2d(c, GGML_TYPE_I8, K, 64);
+    ggml_set_name(w, "site");
+    ggml_backend_alloc_ctx_tensors(c, g_backend);
+    return w;
+}
+
 std::vector<Case> cases() {
     using T = std::vector<ggml_tensor *>;
     const ggml_type F = GGML_TYPE_F32, B = GGML_TYPE_BF16, I = GGML_TYPE_I32;
@@ -257,8 +270,7 @@ std::vector<Case> cases() {
                          "_rot" + std::to_string(a.rot) + (a.ascale ? (a.before ? "_pre" : "_post") : ""), ins,
             [a, mul](ggml_context * C, const T & t, bool f) {
                 vla::FqLinear & s = sites.emplace_back();
-                s.w = ggml_new_tensor_2d(C, GGML_TYPE_I8, a.K, 64);
-                ggml_set_name(s.w, "site");
+                s.w = cuda_site(a.K);
                 s.ascale = a.ascale ? t[mul ? 2 : 1] : nullptr;
                 s.act.K = a.K; s.act.abits = a.abits; s.act.rot_block = a.rot; s.act.fold_before = a.before;
                 s.act.has_ascale = a.ascale; s.act.clip = a.clip;
@@ -290,8 +302,7 @@ std::vector<Case> cases() {
                          "_rot" + std::to_string(a.rot) + (a.ascale ? (a.before ? "_pre" : "_post") : ""), ins,
             [a, mod](ggml_context * C, const T & t, bool f) {
                 vla::FqLinear & s = sites.emplace_back();
-                s.w = ggml_new_tensor_2d(C, GGML_TYPE_I8, a.K, 64);
-                ggml_set_name(s.w, "site");
+                s.w = cuda_site(a.K);
                 s.ascale = a.ascale ? t[mod ? 3 : 1] : nullptr;
                 s.act.K = a.K; s.act.abits = a.abits; s.act.rot_block = a.rot; s.act.fold_before = a.before;
                 s.act.has_ascale = a.ascale; s.act.clip = 1.0f;
@@ -312,6 +323,7 @@ std::vector<Case> cases() {
 
 int main() {
     ggml_backend_t backend = ggml_backend_cuda_init(0);
+    g_backend = backend;
     if (!backend) {
         std::printf("fused_cuda_ops: no CUDA device, skipping\n");
         return 0;

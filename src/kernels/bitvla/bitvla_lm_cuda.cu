@@ -37,6 +37,7 @@ extern "C" void bitvla_act_quant_cuda(const __nv_bfloat16* in, int8_t* out,
 bool bitlinear_mma_enabled();
 void bitlinear_mma_segs(const int8_t * A, const float * s, bitmma::Segs segs, int M, int K, cudaStream_t stream);
 void bitlinear_repack_for_mma(int8_t * w, int N, int K);
+void bitlinear_repack_forget(const void * w);
 
 extern "C" void gate_up_fused_sqrelu_mul_bf16(const __nv_bfloat16* gu, __nv_bfloat16* out,
                                                int seq, int ffn, cudaStream_t stream);
@@ -363,6 +364,9 @@ extern "C" bitvla_lm_cuda_ctx* bitvla_lm_cuda_init(int hidden, int n_q, int n_kv
 extern "C" void bitvla_lm_cuda_free(bitvla_lm_cuda_ctx* ctx) {
     if (!ctx)
         return;
+    for (const auto & l : ctx->layers)
+        for (const void * w : {l.q_packed, l.k_packed, l.v_packed, l.o_packed, l.gate_up_packed, l.down_packed})
+            bitlinear_repack_forget(w);
     cublasDestroy(ctx->cublas);
     cudaFree(ctx->d_cos);  cudaFree(ctx->d_sin);
     cudaFree(ctx->d_h);    cudaFree(ctx->d_h_norm);

@@ -262,7 +262,7 @@ inline bool gemma_fused(const GemmaLayerW & w, ggml_type at, bool flash, int64_t
     const bool fq = w.fq_q && w.fq_o && w.fq_gate && w.fq_down && !w.fq_q.gemm.heads;
     const bool fl = !w.fq_q && !w.fq_o && !w.fq_gate && !w.fq_down && cublas_rows(seq) &&
                     bf16(w.Wq) && bf16(w.Wk) && bf16(w.Wv) && bf16(w.Wo) && bf16(w.Wgate) && bf16(w.Wup) && bf16(w.Wdown);
-    return fused_ops_active() && !flash && at == GGML_TYPE_F32 && tkv <= 4096 && (fq || fl);
+    return fused_ops_for(fq ? w.fq_q.w : w.Wq) && !flash && at == GGML_TYPE_F32 && tkv <= 4096 && (fq || fl);
 }
 
 // gemma_attn on the fused path. x_norm: the BF16 GEMM operand, or on a
@@ -296,9 +296,11 @@ inline ggml_tensor * gemma_attn_fused(
     ggml_tensor * K  = fused_heads_rope(ctx, k, positions, cached_K, hd, nkv, fb, false);   // [hd, tkv, nkv]
     ggml_tensor * Vt = fused_heads_rope(ctx, v, nullptr,   cached_V, hd, nkv, fb, true);    // [tkv, hd, nkv]
 
-    if (k_out)
-        *k_out = nkv == 1 ? ggml_reshape_3d(ctx, K, hd, 1, K->ne[1])
-                          : ggml_cont(ctx, ggml_permute(ctx, K, 0, 2, 1, 3));
+    if (k_out) {   // the new tokens only, as v_out: with a cache, K also holds the prefix
+        ggml_tensor * Kn = cached_K ? fused_heads_rope(ctx, k, positions, nullptr, hd, nkv, fb, false) : K;
+        *k_out = nkv == 1 ? ggml_reshape_3d(ctx, Kn, hd, 1, Kn->ne[1])
+                          : ggml_cont(ctx, ggml_permute(ctx, Kn, 0, 2, 1, 3));
+    }
     if (v_out)
         *v_out = ggml_reshape_3d(ctx, v, hd, nkv, seq);
 

@@ -415,11 +415,14 @@ std::unique_ptr<ModelArchBase> evo1_create(const std::string& mmproj_path,
         }
         if (m->act_type == GGML_TYPE_F32)
             m->fused_ops = enable_fused_ops("evo1", b.is_cuda);
+        // VLA_FUSED_OPS=vit, lm or dit limits the fused ops to that part; any
+        // other value leaves them all on.
         const char * fo = std::getenv("VLA_FUSED_OPS");
-        const bool all = !fo || !std::strstr("vit lm dit", fo);
-        m->fused_vit = m->fused_ops && (all || std::strcmp(fo, "vit") == 0);
-        m->fused_lm  = m->fused_ops && (all || std::strcmp(fo, "lm") == 0);
-        m->fused_dit = m->fused_ops && (all || std::strcmp(fo, "dit") == 0);
+        auto is = [&](const char * part) { return fo && std::strcmp(fo, part) == 0; };
+        const bool all = !is("vit") && !is("lm") && !is("dit");
+        m->fused_vit = m->fused_ops && (all || is("vit"));
+        m->fused_lm  = m->fused_ops && (all || is("lm"));
+        m->fused_dit = m->fused_ops && (all || is("dit"));
     }
 
     ggml_init_params wp = {  (size_t) 32*1024*1024,

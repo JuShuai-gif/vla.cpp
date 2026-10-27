@@ -76,7 +76,7 @@ ggml_tensor * Qwen3LM::block(ggml_context * C, const Qwen3LayerW & w, ggml_tenso
     const bool fz = cfg.fused_ops && !w.fq_q && !w.fq_o && !w.fq_gate && !w.fq_down;
     ggml_tensor * hn = nullptr, * xq = nullptr;
     if (w.fq_q) xq = fq_act(C, w.fq_q, h);
-    else if (fz) hn = fused_rms_mul(C, h, w.attn_norm, cfg.rms_eps, bf16_operand(w.Wq) && bf16_operand(w.Wk) && bf16_operand(w.Wv));
+    else if (fz) hn = fused_rms_mul(C, h, w.attn_norm, cfg.rms_eps, bf16_operand(w.Wq, seq) && bf16_operand(w.Wk, seq) && bf16_operand(w.Wv, seq));
     else        hn = rms_norm(C, h, w.attn_norm, cfg.rms_eps);
     auto proj = [&](const FqLinear & fq, ggml_tensor * W) {
         return fq ? fq_gemm(C, fq, xq) : fz ? mm_exact(C, W, hn) : ggml_mul_mat(C, W, hn);
@@ -119,7 +119,7 @@ ggml_tensor * Qwen3LM::block(ggml_context * C, const Qwen3LayerW & w, ggml_tenso
     } else if (fz) {
         ggml_tensor * K = fqk ? fused_qk_norm_rope(C, kh, w.k_norm, pos, cfg.rms_eps, rs.sections, rs.freq_base, false)
                               : ggml_cont(C, ggml_permute(C, kr, 0, 2, 1, 3));
-        att = attention_rows(C, Q, K, ggml_cont(C, ggml_permute(C, vh, 1, 2, 0, 3)), scale, hq, seq, 1, bf16_operand(w.Wo), mask);
+        att = attention_rows(C, Q, K, ggml_cont(C, ggml_permute(C, vh, 1, 2, 0, 3)), scale, hq, seq, 1, bf16_operand(w.Wo, seq), mask);
     } else {
         ggml_tensor * K = fqk ? fused_qk_norm_rope(C, kh, w.k_norm, pos, cfg.rms_eps, rs.sections, rs.freq_base, false)
                               : ggml_cont(C, ggml_permute(C, kr, 0, 2, 1, 3));
@@ -138,12 +138,12 @@ ggml_tensor * Qwen3LM::block(ggml_context * C, const Qwen3LayerW & w, ggml_tenso
         ggml_tensor * g   = fq_gemm(C, w.fq_gate, xq2);
         up = fq_gemm(C, w.fq_up, xq2);
         if (w.fq_down)
-            if (ggml_tensor * dq = fq_act_glu(C, w.fq_down, g, up, FusedGlu::SiluMul))
+            if (ggml_tensor * dq = cfg.fused_ops ? fq_act_glu(C, w.fq_down, g, up, FusedGlu::SiluMul) : nullptr)
                 return fq_gemm(C, w.fq_down, dq, h_attn);
         gate = ggml_silu(C, g);
     } else if (fz) {
-        ggml_tensor * hn2 = fused_rms_mul(C, h_attn, w.ffn_norm, cfg.rms_eps, bf16_operand(w.Wgate) && bf16_operand(w.Wup));
-        ggml_tensor * mid = fused_silu_mul(C, mm_exact(C, w.Wgate, hn2), mm_exact(C, w.Wup, hn2), bf16_operand(w.Wdown));
+        ggml_tensor * hn2 = fused_rms_mul(C, h_attn, w.ffn_norm, cfg.rms_eps, bf16_operand(w.Wgate, seq) && bf16_operand(w.Wup, seq));
+        ggml_tensor * mid = fused_silu_mul(C, mm_exact(C, w.Wgate, hn2), mm_exact(C, w.Wup, hn2), bf16_operand(w.Wdown, seq));
         return ggml_add(C, h_attn, mm_exact(C, w.Wdown, mid));
     } else {
         ggml_tensor * hn2 = rms_norm(C, h_attn, w.ffn_norm, cfg.rms_eps);

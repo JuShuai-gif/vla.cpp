@@ -189,7 +189,7 @@ ggml_tensor * DitHead::block(ggml_context * C, const DitLayerW & w, ggml_tensor 
     const bool fz = cfg.fused_ops && !w.fq_o && !w.fq_ff0 && !w.fq_qkv && !w.fq_q;
     ggml_tensor * n;
     if (fz) {
-        n = fused_ln(C, h, sc, sh, cfg.ln_eps, true, bf16_operand(w.Wqkv ? w.Wqkv : w.Wq));
+        n = fused_ln(C, h, sc, sh, cfg.ln_eps, true, bf16_operand(w.Wqkv ? w.Wqkv : w.Wq, Tk));
     } else if (cfg.fused_ops) {
         n = fused_ln(C, h, sc, sh, cfg.ln_eps, true);
     } else {
@@ -246,11 +246,11 @@ ggml_tensor * DitHead::block(ggml_context * C, const DitLayerW & w, ggml_tensor 
                          K->ne[1] <= 1024 && V->ne[0] == K->ne[1] && V->ne[1] == K->ne[0];
     const bool exact = fusable && attn_exact_enabled();
     if (fz) {
-        ggml_tensor * att = exact ? fused_attn_exact(C, Q, K, V, scale, bf16_operand(w.Wo))
-                                  : attention_rows(C, Q, K, V, scale, dim, Tk, 1, bf16_operand(w.Wo));
+        ggml_tensor * att = exact ? fused_attn_exact(C, Q, K, V, scale, bf16_operand(w.Wo, Tk))
+                                  : attention_rows(C, Q, K, V, scale, dim, Tk, 1, bf16_operand(w.Wo, Tk));
         ggml_tensor * h1  = fused_bias_res(C, mm_exact(C, w.Wo, att), w.bo, h);
-        ggml_tensor * n3  = fused_ln(C, h1, nullptr, nullptr, cfg.ln_eps, false, bf16_operand(w.Wff0));
-        ggml_tensor * g   = fused_bias_gelu(C, mm_exact(C, w.Wff0, n3), w.bff0, bf16_operand(w.Wff2));
+        ggml_tensor * n3  = fused_ln(C, h1, nullptr, nullptr, cfg.ln_eps, false, bf16_operand(w.Wff0, Tk));
+        ggml_tensor * g   = fused_bias_gelu(C, mm_exact(C, w.Wff0, n3), w.bff0, bf16_operand(w.Wff2, Tk));
         return fused_bias_res(C, mm_exact(C, w.Wff2, g), w.bff2, h1);
     }
     ggml_tensor * att = exact ? fused_attn_exact(C, Q, K, V, scale, false)
@@ -261,7 +261,7 @@ ggml_tensor * DitHead::block(ggml_context * C, const DitLayerW & w, ggml_tensor 
     if (w.fq_ff0) {
         ggml_tensor * xq_ff = cfg.fused_ops ? fq_act_norm(C, w.fq_ff0, h1, nullptr, nullptr, FusedKind::LnPlain, cfg.ln_eps) : nullptr;
         ggml_tensor * f0 = fq_gemm(C, w.fq_ff0, xq_ff ? xq_ff : fq_act(C, w.fq_ff0, n3));
-        if (ggml_tensor * dq = fq_act_glu(C, w.fq_ff2, f0, nullptr, FusedGlu::Gelu))
+        if (ggml_tensor * dq = cfg.fused_ops ? fq_act_glu(C, w.fq_ff2, f0, nullptr, FusedGlu::Gelu) : nullptr)
             return fq_gemm(C, w.fq_ff2, dq, h1);
         return fq_linear(C, w.fq_ff2, ggml_gelu(C, f0), h1);
     }

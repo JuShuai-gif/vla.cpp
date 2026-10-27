@@ -31,6 +31,7 @@ extern "C" void bitlinear_int8xint2_m(int8_t* A, int8_t* B, __nv_bfloat16* out,
 bool bitlinear_mma_enabled();
 void bitlinear_mma_segs(const int8_t * A, const float * s, bitmma::Segs segs, int M, int K, cudaStream_t stream);
 void bitlinear_repack_for_mma(int8_t * w, int N, int K);
+void bitlinear_repack_forget(const void * w);
 extern "C" void bitvla_act_quant_cuda(const __nv_bfloat16* in, int8_t* out,
                                        float* scales,
                                        int M, int K, int ld_out, cudaStream_t stream);
@@ -141,6 +142,9 @@ bitvla_vit_cuda_ctx* bitvla_vit_cuda_init(int n_layers, int hidden, int n_heads,
 void bitvla_vit_cuda_free(bitvla_vit_cuda_ctx* ctx) {
     if (!ctx)
         return;
+    for (const auto & l : ctx->layers)
+        for (const void * w : {l.q_packed, l.k_packed, l.v_packed, l.o_packed, l.fc1_packed, l.fc2_packed})
+            bitlinear_repack_forget(w);
     cublasDestroy(ctx->cublas);
     cudaFree(ctx->d_h);   cudaFree(ctx->d_h_norm);
     cudaFree(ctx->d_act_int8_h);   cudaFree(ctx->d_act_int8_ffn);   cudaFree(ctx->d_act_s);

@@ -34,6 +34,8 @@
 #include <cublasLt.h>
 
 #include <algorithm>
+#include <array>
+#include <chrono>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -509,7 +511,9 @@ bool launch_glu_act(const vla::FusedSpec & s, const ggml_tensor * dst, cudaStrea
 }
 
 // k_glu_act's act chain on the values load(k0, e0, e1) gives for columns k0
-// and k0 + 1.
+// and k0 + 1. k_glu_act keeps its own copy: built on this function it ran its
+// 528 x 16384 rows 40% slower on Orin. test_fused_cuda_ops checks both
+// against fq_act.
 template <int ABITS, int ROT, int NW, typename Load>
 __device__ __forceinline__ void act_row_pairs(Load load, const float * __restrict__ ascale, int8_t * __restrict__ row,
                                               int K, bool fold_before, float clip, float inv_sqrt_bs) {
@@ -903,29 +907,90 @@ void launch_ln_t(const ggml_tensor * dst, const float * x, const float * p1, con
     else                             launch_ln<mode>(x, p1, p2, (float *) dst->data, ncols, nrows, eps, st);
 }
 
+enum ScratchSlot { SCR_KQ, SCR_KQV, SCR_PTRS, SCR_BF16, SCR_LT_WS, SCR_FLAG, SCR_COUNT };
+
+int trace_level();
+cublasLtHandle_t lt_handle();
+
+// What the GEMM and attention nodes keep per (device, stream): the device, a
+// cuBLAS handle configured like ggml-cuda's, the cuBLASLt handle, and the
+// scratch slots. Found once per thread and stream, so the per-node path takes
+// no lock and no cudaGetDevice.
+struct StreamCtx {
+    struct Slot { void * p = nullptr; size_t size = 0; std::vector<void *> old; };
+    int dev = 0;
+    cublasHandle_t cublas = nullptr;
+    cublasLtHandle_t lt = nullptr;
+    std::array<Slot, SCR_COUNT> slots;
+};
+
+std::mutex & stream_ctx_mu() {
+    static std::mutex mu;
+    return mu;
+}
+
+StreamCtx & stream_ctx(cudaStream_t st) {
+    thread_local cudaStream_t last_st = nullptr;
+    thread_local StreamCtx * last = nullptr;
+    if (last && st == last_st) return *last;
+    static std::map<std::pair<int, cudaStream_t>, StreamCtx> ctxs;
+    int dev = 0;
+    cudaGetDevice(&dev);
+    const cublasLtHandle_t lt = lt_handle();
+    std::lock_guard<std::mutex> lk(stream_ctx_mu());
+    StreamCtx & c = ctxs[{dev, st}];
+    c.dev = dev;
+    c.lt = lt;
+    last_st = st;
+    last = &c;
+    return c;
+}
+
+// The stream's scratch for one slot, grown on a shape's first (eager) use.
+// Nodes on one stream run in order, so they share it. A slot that grows keeps
+// its old block, which a CUDA graph captured earlier may still read; with
+// doubling the total stays under four times the largest request.
+void * scratch(cudaStream_t st, int slot, size_t bytes) {
+    StreamCtx & c = stream_ctx(st);
+    StreamCtx::Slot & s = c.slots[slot];
+    if (bytes <= s.size) return s.p;
+    std::lock_guard<std::mutex> lk(stream_ctx_mu());
+    cudaStreamCaptureStatus cap = cudaStreamCaptureStatusNone;
+    cudaStreamIsCapturing(st, &cap);
+    if (cap != cudaStreamCaptureStatusNone) return nullptr;
+    const size_t want = std::max(bytes, 2*s.size);
+    void * b = nullptr;
+    if (cudaMalloc(&b, want) != cudaSuccess) {
+        cudaGetLastError();
+        return nullptr;
+    }
+    if (s.p) s.old.push_back(s.p);
+    s.p = b;
+    s.size = want;
+    if (trace_level() >= 2)
+        std::fprintf(stderr, "vla(scratch): device %d stream %p slot %d -> %.1f MiB\n", c.dev, (void *) st, slot, want/1048576.0);
+    return b;
+}
+
 // A cuBLAS handle configured like ggml-cuda's (TF32 tensor-op math, an
 // explicit 4 MiB workspace on pre-Hopper parts, same stream), so a GEMM issued
 // here gets the algorithm ggml's own call would get. Created on first use,
 // which ggml runs eagerly before it captures a CUDA graph.
 cublasHandle_t ggml_like_handle(cudaStream_t st) {
-    static std::mutex mu;
-    static std::map<std::pair<int, cudaStream_t>, cublasHandle_t> handles;
-    int dev = 0;
-    cudaGetDevice(&dev);
-    std::lock_guard<std::mutex> lk(mu);
-    cublasHandle_t & h = handles[{dev, st}];
-    if (!h) {
-        cudaDeviceProp prop{};
-        cudaGetDeviceProperties(&prop, dev);
-        const size_t ws_size = prop.major >= 9 ? 32u*1024*1024 : 4u*1024*1024;
-        void * ws = nullptr;
-        if (cublasCreate(&h) != CUBLAS_STATUS_SUCCESS || cublasSetMathMode(h, CUBLAS_TF32_TENSOR_OP_MATH) != CUBLAS_STATUS_SUCCESS ||
-            cublasSetStream(h, st) != CUBLAS_STATUS_SUCCESS || cudaMalloc(&ws, ws_size) != cudaSuccess ||
-            cublasSetWorkspace(h, ws, ws_size) != CUBLAS_STATUS_SUCCESS) {
-            h = nullptr;
-            return nullptr;
-        }
-    }
+    StreamCtx & c = stream_ctx(st);
+    if (c.cublas) return c.cublas;
+    std::lock_guard<std::mutex> lk(stream_ctx_mu());
+    if (c.cublas) return c.cublas;
+    cudaDeviceProp prop{};
+    cudaGetDeviceProperties(&prop, c.dev);
+    const size_t ws_size = prop.major >= 9 ? 32u*1024*1024 : 4u*1024*1024;
+    void * ws = nullptr;
+    cublasHandle_t h = nullptr;
+    if (cublasCreate(&h) != CUBLAS_STATUS_SUCCESS || cublasSetMathMode(h, CUBLAS_TF32_TENSOR_OP_MATH) != CUBLAS_STATUS_SUCCESS ||
+        cublasSetStream(h, st) != CUBLAS_STATUS_SUCCESS || cudaMalloc(&ws, ws_size) != cudaSuccess ||
+        cublasSetWorkspace(h, ws, ws_size) != CUBLAS_STATUS_SUCCESS)
+        return nullptr;
+    c.cublas = h;
     return h;
 }
 
@@ -948,15 +1013,19 @@ struct LtPlan {
     cublasLtMatmulDesc_t op = nullptr;
     cublasLtMatrixLayout_t a = nullptr, b = nullptr, c = nullptr;
     cublasLtMatmulAlgo_t algo{};
-    void * ws = nullptr;
-    size_t ws_size = 0;
+    size_t ws_size = 4u*1024*1024;       // from the stream's scratch
     float t_ref = 0.0f, t_pick = 0.0f;   // us, at selection
     skinny::LaunchFn sk = nullptr;       // a gemm_skinny configuration, when that is the pick
     const char * sk_name = nullptr;
 };
 
 cublasLtHandle_t lt_handle() {
-    static cublasLtHandle_t lt = nullptr;
+    static std::mutex mu;
+    static std::map<int, cublasLtHandle_t> handles;
+    int dev = 0;
+    cudaGetDevice(&dev);
+    std::lock_guard<std::mutex> lk(mu);
+    cublasLtHandle_t & lt = handles[dev];
     if (!lt && cublasLtCreate(&lt) != CUBLAS_STATUS_SUCCESS) lt = nullptr;
     return lt;
 }
@@ -979,8 +1048,9 @@ bool lt_layouts(LtPlan & p, int N, int S, int K, int nv) {
 
 bool lt_run(const LtPlan & p, const cublasLtMatmulAlgo_t & algo, const void * w, const void * x, float * o, cudaStream_t st) {
     const float alpha = 1.0f, beta = 0.0f;
-    return cublasLtMatmul(lt_handle(), p.op, &alpha, w, p.a, x, p.b, &beta, o, p.c, o, p.c, &algo, p.ws, p.ws_size, st)
-           == CUBLAS_STATUS_SUCCESS;
+    void * ws = scratch(st, SCR_LT_WS, p.ws_size);
+    return ws && cublasLtMatmul(stream_ctx(st).lt, p.op, &alpha, w, p.a, x, p.b, &beta, o, p.c, o, p.c, &algo, ws, p.ws_size, st)
+                 == CUBLAS_STATUS_SUCCESS;
 }
 
 // Mean time per call in us, over 10 calls after 3 warmups.
@@ -1108,28 +1178,47 @@ void lcg_bf16(void * out, size_t n, size_t skip, float scale, cudaStream_t st) {
     k_lcg_bf16<<<(unsigned) ((n+255)/256), 256, 0, st>>>((__nv_bfloat16 *) out, (int64_t) n, 12345u, (int64_t) skip, scale);
 }
 
+__global__ void k_bits_differ(const uint32_t * __restrict__ a, const uint32_t * __restrict__ b, int64_t n, int * flag) {
+    for (int64_t i = (int64_t) blockIdx.x*blockDim.x+threadIdx.x; i < n; i += (int64_t) gridDim.x*blockDim.x)
+        if (a[i] != b[i]) *flag = 1;
+}
+
+// The n floats at a and b have the same bits (a memcmp on the device).
+bool same_bits(const float * a, const float * b, size_t n, cudaStream_t st) {
+    int * flag = (int *) scratch(st, SCR_FLAG, sizeof(int));
+    if (!flag || cudaMemsetAsync(flag, 0, sizeof(int), st) != cudaSuccess) return false;
+    k_bits_differ<<<256, 256, 0, st>>>((const uint32_t *) a, (const uint32_t *) b, (int64_t) n, flag);
+    int h = 1;
+    return cudaMemcpyAsync(&h, flag, sizeof(int), cudaMemcpyDeviceToHost, st) == cudaSuccess &&
+           cudaStreamSynchronize(st) == cudaSuccess && h == 0;
+}
+
 LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st) {
     static std::mutex mu;
-    static std::map<std::tuple<int, int, int, int>, LtPlan *> plans;
+    static std::map<std::tuple<int, int, int, int, int>, LtPlan *> plans;
+    const int dev = stream_ctx(st).dev;
     std::lock_guard<std::mutex> lk(mu);
-    auto it = plans.find({N, S, K, nv});
+    auto it = plans.find({dev, N, S, K, nv});
     if (it != plans.end()) return it->second;
     cudaStreamCaptureStatus cap = cudaStreamCaptureStatusNone;
     cudaStreamIsCapturing(st, &cap);
     LtPlan * p = new LtPlan();
-    plans[{N, S, K, nv}] = p;
+    plans[{dev, N, S, K, nv}] = p;
     if (cap != cudaStreamCaptureStatusNone || !vla::env_flag("VLA_GEMM_LT", true) || !lt_handle()) return p;
+    const auto t_start = std::chrono::steady_clock::now();
+    auto ms_since = [&] { return std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now()-t_start).count(); };
 
     // A prompt that changes length every call (pi0.5 writes the state into it)
-    // brings a new S each time. A cuBLASLt pick made for the same N, K and views
-    // within 64 rows is tried first: if it is bit-exact here too it is kept
-    // without timing the candidates again, which is slow on large shapes.
+    // brings a new S each time. A cuBLASLt or gemm_skinny pick made for the
+    // same N, K and views within 64 rows is tried first: kept without timing
+    // the candidates again, which is slow on large shapes, if it is bit-exact
+    // here too.
     const LtPlan * near = nullptr;
     int near_s = 0;
     if (vla::env_flag("VLA_GEMM_REUSE", true) && !vla::env_flag("VLA_GEMM_SEARCH"))
         for (const auto & [key, q] : plans) {
-            const int s_ = std::get<1>(key);
-            if (q->ok && std::get<0>(key) == N && std::get<2>(key) == K && std::get<3>(key) == nv &&
+            const int s_ = std::get<2>(key);
+            if ((q->ok || q->sk) && std::get<0>(key) == dev && std::get<1>(key) == N && std::get<3>(key) == K && std::get<4>(key) == nv &&
                 std::abs(s_-S) <= 64 && (!near || std::abs(s_-S) < std::abs(near_s-S))) {
                 near = q;
                 near_s = s_;
@@ -1140,22 +1229,16 @@ LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st)
     // Random BF16 operands (W, then X, from one LCG stream) and the per-view reference.
     const size_t nw = (size_t) K*N, nx = (size_t) K*S*nv, no = (size_t) N*S*nv;
     void * dw = nullptr, * dx = nullptr; float * dref = nullptr, * dout = nullptr;
-    p->ws_size = 4u*1024*1024;
     bool good = cudaMalloc(&dw, nw*2) == cudaSuccess && cudaMalloc(&dx, nx*2) == cudaSuccess &&
-                cudaMalloc(&dref, no*4) == cudaSuccess && cudaMalloc(&dout, no*4) == cudaSuccess &&
-                cudaMalloc(&p->ws, p->ws_size) == cudaSuccess;
+                cudaMalloc(&dref, no*4) == cudaSuccess && cudaMalloc(&dout, no*4) == cudaSuccess;
     if (good) {
         lcg_bf16(dw, nw, 0, 1.0f, st);
         lcg_bf16(dx, nx, nw, 1.0f, st);
     }
     for (int v = 0; good && v < nv; ++v)
         good = gemm_one(h, dw, (const __nv_bfloat16 *) dx+(size_t) v*S*K, dref+(size_t) v*S*N, N, S, K) == CUBLAS_STATUS_SUCCESS;
-    std::vector<float> ref(no), got(no);
-    good = good && cudaMemcpyAsync(ref.data(), dref, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
-                   cudaStreamSynchronize(st) == cudaSuccess;
 
     LtPlan one;   // single-view layouts to identify cublasGemmEx's algorithm
-    one.ws = p->ws; one.ws_size = p->ws_size;
     good = good && lt_layouts(one, N, S, K, 1) && lt_layouts(*p, N, S, K, nv);
     if (good) {
         // Second operand set (wider range, the stream's next draws) for the checks below.
@@ -1164,28 +1247,28 @@ LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st)
         if (good2) lcg_bf16(dx2, nx, nw+nx, 8.0f, st);
         for (int v = 0; good2 && v < nv; ++v)
             good2 = gemm_one(h, dw, (const __nv_bfloat16 *) dx2+(size_t) v*S*K, dref2+(size_t) v*S*N, N, S, K) == CUBLAS_STATUS_SUCCESS;
-        std::vector<float> ref2(no);
-        good2 = good2 && cudaMemcpyAsync(ref2.data(), dref2, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
-                         cudaStreamSynchronize(st) == cudaSuccess;
         // Bit-exact against cublasGemmEx: one view on the first set, all views on both.
         auto is_exact = [&](const cublasLtMatmulAlgo_t & algo) {
             return good2 &&
-                   lt_run(one, algo, dw, dx, dout, st) &&
-                   cudaMemcpyAsync(got.data(), dout, (size_t) N*S*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
-                   cudaStreamSynchronize(st) == cudaSuccess &&
-                   std::memcmp(got.data(), ref.data(), (size_t) N*S*4) == 0 &&
-                   lt_run(*p, algo, dw, dx2, dout, st) &&
-                   cudaMemcpyAsync(got.data(), dout, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
-                   cudaStreamSynchronize(st) == cudaSuccess &&
-                   std::memcmp(got.data(), ref2.data(), no*4) == 0 &&
-                   lt_run(*p, algo, dw, dx, dout, st) &&
-                   cudaMemcpyAsync(got.data(), dout, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
-                   cudaStreamSynchronize(st) == cudaSuccess &&
-                   std::memcmp(got.data(), ref.data(), no*4) == 0;
+                   lt_run(one, algo, dw, dx, dout, st) && same_bits(dout, dref, (size_t) N*S, st) &&
+                   lt_run(*p, algo, dw, dx2, dout, st) && same_bits(dout, dref2, no, st) &&
+                   lt_run(*p, algo, dw, dx, dout, st) && same_bits(dout, dref, no, st);
         };
-        if (near && is_exact(near->algo)) {
+        auto sk_exact = [&](skinny::LaunchFn fn) {
+            bool same = good2;
+            for (int set = 0; set < 2 && same; ++set)
+                same = fn((const __nv_bfloat16 *) dw, (const __nv_bfloat16 *) (set ? dx2 : dx), dout, N, S, K, nv, st) &&
+                       same_bits(dout, set ? dref2 : dref, no, st);
+            cudaGetLastError();
+            return same;
+        };
+        if (near && near->ok && is_exact(near->algo)) {
             p->algo = near->algo;
             p->ok = true;
+            reused_s = near_s;
+        } else if (near && near->sk && sk_exact(near->sk)) {
+            p->sk = near->sk;
+            p->sk_name = near->sk_name;
             reused_s = near_s;
         } else {
             cublasLtMatmulPreference_t pref = nullptr;
@@ -1221,18 +1304,11 @@ LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st)
                 }
             cudaGetLastError();
             // gemm_skinny configurations that reproduce cublasGemmEx on both operand sets.
-            std::vector<skinny::Cand> sk_exact;
+            std::vector<skinny::Cand> sk_ok;
             if (vla::env_flag("VLA_GEMM_SKINNY", true))
                 for (const skinny::Cand & c : skinny::cands(S)) {
-                    bool same = good2;
-                    for (int set = 0; set < 2 && same; ++set) {
-                        same = c.fn((const __nv_bfloat16 *) dw, (const __nv_bfloat16 *) (set ? dx2 : dx), dout, N, S, K, nv, st) &&
-                               cudaMemcpyAsync(got.data(), dout, no*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
-                               cudaStreamSynchronize(st) == cudaSuccess &&
-                               std::memcmp(got.data(), (set ? ref2 : ref).data(), no*4) == 0;
-                    }
-                    cudaGetLastError();
-                    if (same) sk_exact.push_back(c);
+                    const bool same = sk_exact(c.fn);
+                    if (same) sk_ok.push_back(c);
                     if (trace_level() >= 2)
                         std::fprintf(stderr, "vla(gemm_exact):   N=%d S=%d K=%d gemm_skinny %s: %s\n", N, S, K, c.name,
                                      same ? "bit-exact" : "differs");
@@ -1243,16 +1319,16 @@ LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st)
                 for (int v = 0; v < nv; ++v)
                     gemm_one(h, dw, (const __nv_bfloat16 *) dx+(size_t) v*S*K, dout+(size_t) v*S*N, N, S, K);
             };
-            const size_t n_cand = exact.size()+sk_exact.size();
+            const size_t n_cand = exact.size()+sk_ok.size();
             if (n_cand > 0) warm_clocks(st, ref_call);
             std::vector<float> best(n_cand+1, 1e30f);
             for (int round = 0; round < 4 && n_cand > 0; ++round) {
                 best[0] = std::min(best[0], time_us(st, ref_call));
                 for (size_t i = 0; i < exact.size(); ++i)
                     best[i+1] = std::min(best[i+1], time_us(st, [&] { lt_run(*p, exact[i], dw, dx, dout, st); }));
-                for (size_t i = 0; i < sk_exact.size(); ++i)
+                for (size_t i = 0; i < sk_ok.size(); ++i)
                     best[exact.size()+i+1] = std::min(best[exact.size()+i+1], time_us(st, [&] {
-                        sk_exact[i].fn((const __nv_bfloat16 *) dw, (const __nv_bfloat16 *) dx, dout, N, S, K, nv, st); }));
+                        sk_ok[i].fn((const __nv_bfloat16 *) dw, (const __nv_bfloat16 *) dx, dout, N, S, K, nv, st); }));
             }
             size_t pick = 0;
             for (size_t i = 1; i < best.size(); ++i)
@@ -1260,7 +1336,7 @@ LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st)
             if (trace_level() >= 2)
                 for (size_t i = 0; i < best.size(); ++i)
                     std::fprintf(stderr, "vla(gemm_exact):   N=%d S=%d K=%d %s: %.1f us\n", N, S, K,
-                                 i == 0 ? "cublasGemmEx" : i <= exact.size() ? "cuBLASLt" : sk_exact[i-exact.size()-1].name, best[i]);
+                                 i == 0 ? "cublasGemmEx" : i <= exact.size() ? "cuBLASLt" : sk_ok[i-exact.size()-1].name, best[i]);
             if (search) {   // the three fastest enumerated configurations go to the cache
                 std::vector<size_t> idx;
                 for (size_t i = 0; i < exact.size(); ++i)
@@ -1271,8 +1347,8 @@ LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st)
                 lt_cache_append(N, S, K, keep);
             }
             if (pick > exact.size()) {
-                p->sk = sk_exact[pick-exact.size()-1].fn;
-                p->sk_name = sk_exact[pick-exact.size()-1].name;
+                p->sk = sk_ok[pick-exact.size()-1].fn;
+                p->sk_name = sk_ok[pick-exact.size()-1].name;
             } else if (pick > 0) {
                 p->algo = exact[pick-1];
                 p->ok = true;
@@ -1283,14 +1359,13 @@ LtPlan * lt_plan(cublasHandle_t h, int N, int S, int K, int nv, cudaStream_t st)
         cudaFree(dx2); cudaFree(dref2);
     }
     if (trace_level() >= 1 && reused_s >= 0)
-        std::fprintf(stderr, "vla(gemm_exact): N=%d S=%d K=%d views=%d -> cuBLASLt, bit-exact (pick of S=%d)\n",
-                     N, S, K, nv, reused_s);
+        std::fprintf(stderr, "vla(gemm_exact): N=%d S=%d K=%d views=%d -> %s, bit-exact (choice of S=%d), %.0f ms\n",
+                     N, S, K, nv, p->sk ? "gemm_skinny" : "cuBLASLt", reused_s, ms_since());
     else if (trace_level() >= 1)
-        std::fprintf(stderr, "vla(gemm_exact): N=%d S=%d K=%d views=%d -> %s%s (%.1f -> %.1f us)\n", N, S, K, nv,
+        std::fprintf(stderr, "vla(gemm_exact): N=%d S=%d K=%d views=%d -> %s%s (%.1f -> %.1f us), %.0f ms\n", N, S, K, nv,
                      p->sk ? "gemm_skinny, bit-exact: " : p->ok ? "cuBLASLt, bit-exact" : "cublasGemmEx",
-                     p->sk ? p->sk_name : "", p->t_ref, p->t_pick);
+                     p->sk ? p->sk_name : "", p->t_ref, p->t_pick, ms_since());
     cudaFree(dw); cudaFree(dx); cudaFree(dref); cudaFree(dout);
-    if (!p->ok) { cudaFree(p->ws); p->ws = nullptr; }   // gemm_skinny needs no workspace
     cudaGetLastError();
     return p;
 }
@@ -1506,8 +1581,6 @@ bool dispatch_nth(int nth, F && f) {
 
 struct AttnPlan {
     bool fused = false;          // path A reproduces path B for this shape
-    float * kq = nullptr, * kqv = nullptr;   // path B scratch
-    const void ** ptrs = nullptr;            // path B with K/V broadcast: the batched GEMMs' pointer arrays
     int c_warps = 0;             // path C reproduces path B and is faster, with this many warps per CTA
 };
 
@@ -1524,43 +1597,46 @@ struct AttnExtra {
 // pointer-array batched, as ggml_cuda_mul_mat_cublas picks - then
 // soft_max_f32 and the permute).
 template <typename T>
-bool attn_path_b(cublasHandle_t hd_, const AttnPlan & p, const float * Q, const float * K, const float * Vt, T * out,
+bool attn_path_b(cublasHandle_t hd_, const float * Q, const float * K, const float * Vt, T * out,
                  int hd, int H, int Tq, int Tkv, float scale, cudaStream_t st, int nv = 1, const AttnExtra & x = {}) {
     const float alpha = 1.0f, beta = 0.0f;
     const int Hkv = x.Hkv > 0 ? x.Hkv : H;
+    float * kq  = (float *) scratch(st, SCR_KQ,  (size_t) Tkv*Tq*H*sizeof(float));
+    float * kqv = (float *) scratch(st, SCR_KQV, (size_t) hd*Tq*H*sizeof(float));
+    const void ** ptrs = Hkv != H ? (const void **) scratch(st, SCR_PTRS, (size_t) 6*H*sizeof(void *)) : nullptr;
+    if (!kq || !kqv || (Hkv != H && !ptrs)) return false;
     if (Hkv != H) {
-        if (!p.ptrs) return false;
-        k_attn_ptrs<<<(H+31)/32, 32, 0, st>>>(p.ptrs, Q, K, Vt, p.kq, p.kqv, hd, H, Tq, Tkv, H/Hkv);
+        k_attn_ptrs<<<(H+31)/32, 32, 0, st>>>(ptrs, Q, K, Vt, kq, kqv, hd, H, Tq, Tkv, H/Hkv);
         if (cublasGemmBatchedEx(hd_, CUBLAS_OP_T, CUBLAS_OP_N, Tkv, Tq, hd,
-                &alpha, p.ptrs+0*H, CUDA_R_32F, hd, p.ptrs+1*H, CUDA_R_32F, hd,
-                &beta, (void **) (p.ptrs+2*H), CUDA_R_32F, Tkv, H,
+                &alpha, ptrs+0*H, CUDA_R_32F, hd, ptrs+1*H, CUDA_R_32F, hd,
+                &beta, (void **) (ptrs+2*H), CUDA_R_32F, Tkv, H,
                 CUBLAS_COMPUTE_32F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) != CUBLAS_STATUS_SUCCESS) return false;
     } else if (cublasGemmStridedBatchedEx(hd_, CUBLAS_OP_T, CUBLAS_OP_N, Tkv, Tq, hd,
             &alpha, K, CUDA_R_32F, hd, (long long) hd*Tkv,
                     Q, CUDA_R_32F, hd, (long long) hd*Tq,
-            &beta,  p.kq, CUDA_R_32F, Tkv, (long long) Tkv*Tq, H,
+            &beta,  kq, CUDA_R_32F, Tkv, (long long) Tkv*Tq, H,
             CUBLAS_COMPUTE_32F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) != CUBLAS_STATUS_SUCCESS) return false;
     const int rows = Tq*H;
     if (!dispatch_nth(softmax_nth(Tkv), [&](auto N) {
             constexpr int NT = decltype(N)::value;
             if (x.mask && x.mask_f16)
-                softmax_rows_emul<NT, half>(p.kq, rows, Tkv, scale, (const half *) x.mask, Tq, x.mstride, st);
+                softmax_rows_emul<NT, half>(kq, rows, Tkv, scale, (const half *) x.mask, Tq, x.mstride, st);
             else
-                softmax_rows_emul<NT, float>(p.kq, rows, Tkv, scale, (const float *) x.mask, Tq, x.mstride, st);
+                softmax_rows_emul<NT, float>(kq, rows, Tkv, scale, (const float *) x.mask, Tq, x.mstride, st);
         }))
         return false;
     if (Hkv != H) {
         if (cublasGemmBatchedEx(hd_, CUBLAS_OP_T, CUBLAS_OP_N, hd, Tq, Tkv,
-                &alpha, p.ptrs+3*H, CUDA_R_32F, Tkv, p.ptrs+4*H, CUDA_R_32F, Tkv,
-                &beta, (void **) (p.ptrs+5*H), CUDA_R_32F, hd, H,
+                &alpha, ptrs+3*H, CUDA_R_32F, Tkv, ptrs+4*H, CUDA_R_32F, Tkv,
+                &beta, (void **) (ptrs+5*H), CUDA_R_32F, hd, H,
                 CUBLAS_COMPUTE_32F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) != CUBLAS_STATUS_SUCCESS) return false;
     } else if (cublasGemmStridedBatchedEx(hd_, CUBLAS_OP_T, CUBLAS_OP_N, hd, Tq, Tkv,
             &alpha, Vt, CUDA_R_32F, Tkv, (long long) Tkv*hd,
-                    p.kq, CUDA_R_32F, Tkv, (long long) Tkv*Tq,
-            &beta,  p.kqv, CUDA_R_32F, hd, (long long) hd*Tq, H,
+                    kq, CUDA_R_32F, Tkv, (long long) Tkv*Tq,
+            &beta,  kqv, CUDA_R_32F, hd, (long long) hd*Tq, H,
             CUBLAS_COMPUTE_32F, CUBLAS_GEMM_DEFAULT_TENSOR_OP) != CUBLAS_STATUS_SUCCESS) return false;
     const int64_t n = (int64_t) hd*Tq*H;
-    k_heads_to_rows<<<(unsigned) ((n+255)/256), 256, 0, st>>>(p.kqv, out, hd, Tq, H, nv);
+    k_heads_to_rows<<<(unsigned) ((n+255)/256), 256, 0, st>>>(kqv, out, hd, Tq, H, nv);
     return true;
 }
 
@@ -1850,24 +1926,41 @@ bool attn_path_a(const float * Q, const float * K, const float * Vt, T * out, in
 AttnPlan * attn_plan(cublasHandle_t h, int hd, int H, int Tq, int Tkv, float scale, cudaStream_t st, int Hkv = 0,
                      bool masked = false, bool mask_f16 = false) {
     static std::mutex mu;
-    static std::map<std::tuple<int, int, int, int, float, int, bool, bool>, AttnPlan *> plans;
+    static std::map<std::tuple<int, int, int, int, int, float, int, bool, bool>, AttnPlan *> plans;
+    const int dev = stream_ctx(st).dev;
     std::lock_guard<std::mutex> lk(mu);
     if (Hkv <= 0) Hkv = H;
-    auto it = plans.find({hd, H, Tq, Tkv, scale, Hkv, masked, mask_f16});
+    auto it = plans.find({dev, hd, H, Tq, Tkv, scale, Hkv, masked, mask_f16});
     if (it != plans.end()) return it->second;
     cudaStreamCaptureStatus cap = cudaStreamCaptureStatusNone;
     cudaStreamIsCapturing(st, &cap);
     if (cap != cudaStreamCaptureStatusNone) return nullptr;   // first use must be eager
+    // A prompt that changes length every call brings new Tq / Tkv. A path A or
+    // C choice made for the nearest shape (same heads, scale and mask; Tq and
+    // Tkv each within 64) is checked against path B below and kept without
+    // timing.
+    const AttnPlan * near = nullptr;
+    int near_q = 0, near_kv = 0;
+    if (vla::env_flag("VLA_GEMM_REUSE", true))
+        for (const auto & [key, q] : plans) {
+            const auto [d_, hd_, H_, tq, tkv, sc, hkv, mk, m16] = key;
+            const int dist = std::abs(tq-Tq)+std::abs(tkv-Tkv), best = std::abs(near_q-Tq)+std::abs(near_kv-Tkv);
+            if ((q->fused || q->c_warps) && d_ == dev && hd_ == hd && H_ == H && sc == scale && hkv == Hkv && mk == masked && m16 == mask_f16 &&
+                std::abs(tq-Tq) <= 64 && std::abs(tkv-Tkv) <= 64 && (!near || dist < best)) {
+                near = q;
+                near_q = tq;
+                near_kv = tkv;
+            }
+        }
     AttnPlan * p = new AttnPlan();
-    plans[{hd, H, Tq, Tkv, scale, Hkv, masked, mask_f16}] = p;
-    const size_t nq = (size_t) hd*Tq*H, nk = (size_t) hd*Tkv*Hkv, nkq = (size_t) Tkv*Tq*H, nm = (size_t) Tkv*Tq;
-    cudaMalloc(&p->kq, nkq*4);
-    cudaMalloc(&p->kqv, nq*4);
-    if (Hkv != H) cudaMalloc((void **) &p->ptrs, (size_t) 6*H*sizeof(void *));
+    plans[{dev, hd, H, Tq, Tkv, scale, Hkv, masked, mask_f16}] = p;
+    const auto t_start = std::chrono::steady_clock::now();
+    const size_t nq = (size_t) hd*Tq*H, nk = (size_t) hd*Tkv*Hkv, nm = (size_t) Tkv*Tq;
     auto trace = [&](const char * what) {
         if (trace_level() >= 1)
-            std::fprintf(stderr, "vla(attn_exact): hd=%d H=%d Hkv=%d Tq=%d Tkv=%d%s -> %s\n", hd, H, Hkv, Tq, Tkv,
-                         masked ? " masked" : "", what);
+            std::fprintf(stderr, "vla(attn_exact): hd=%d H=%d Hkv=%d Tq=%d Tkv=%d%s -> %s, %.0f ms\n", hd, H, Hkv, Tq, Tkv,
+                         masked ? " masked" : "", what,
+                         std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now()-t_start).count());
     };
     // Random inputs, path B as the reference, bitwise comparisons.
     std::vector<float> hq(nq), hk(nk), hv(nk), hm(masked ? nm : 0), a(nq), b(nq);
@@ -1890,25 +1983,34 @@ AttnPlan * attn_plan(cublasHandle_t h, int hd, int H, int Tq, int Tkv, float sca
                                          : cudaMemcpyAsync(dm, hm.data(), nm*4, cudaMemcpyHostToDevice, st)) == cudaSuccess);
     AttnExtra x;
     x.Hkv = Hkv; x.mask = masked ? dm : nullptr; x.mask_f16 = mask_f16; x.mstride = Tkv;
-    good = good && attn_path_b(h, *p, dq, dk, dv, db, hd, H, Tq, Tkv, scale, st, 1, x) &&
+    good = good && attn_path_b(h, dq, dk, dv, db, hd, H, Tq, Tkv, scale, st, 1, x) &&
                    cudaMemcpyAsync(b.data(), db, nq*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
                    cudaStreamSynchronize(st) == cudaSuccess;
     auto same_as_b = [&](bool ran) {
         return ran && cudaMemcpyAsync(a.data(), da, nq*4, cudaMemcpyDeviceToHost, st) == cudaSuccess &&
                cudaStreamSynchronize(st) == cudaSuccess && std::memcmp(a.data(), b.data(), nq*4) == 0;
     };
-    if (good && Hkv == H && !masked && vla::env_flag("VLA_ATTN_EXACT_FUSED", true))
+    bool reused = false;
+    if (good && near) {
+        if (near->fused)
+            p->fused = same_as_b(attn_path_a(dq, dk, dv, da, hd, H, Tq, Tkv, scale, st));
+        else if (near->c_warps)
+            p->c_warps = same_as_b(attn_path_c(near->c_warps, dq, dk, dv, da, hd, H, Tq, Tkv, scale, st, 1, x)) ? near->c_warps : 0;
+        reused = p->fused == near->fused && p->c_warps == near->c_warps;
+        cudaGetLastError();
+    }
+    if (good && !reused && Hkv == H && !masked && vla::env_flag("VLA_ATTN_EXACT_FUSED", true))
         p->fused = same_as_b(attn_path_a(dq, dk, dv, da, hd, H, Tq, Tkv, scale, st));
     cudaGetLastError();
     // Path C: bit-exact configurations, then timed against path B.
-    if (good && !p->fused && vla::env_flag("VLA_ATTN_TF32", true)) {
+    if (good && !reused && !p->fused && vla::env_flag("VLA_ATTN_TF32", true)) {
         std::vector<int> exact;
         for (int nw : {8, 16}) {
             if (same_as_b(attn_path_c(nw, dq, dk, dv, da, hd, H, Tq, Tkv, scale, st, 1, x))) exact.push_back(nw);
             cudaGetLastError();
         }
         if (!exact.empty()) {
-            auto run_b = [&] { attn_path_b(h, *p, dq, dk, dv, db, hd, H, Tq, Tkv, scale, st, 1, x); };
+            auto run_b = [&] { attn_path_b(h, dq, dk, dv, db, hd, H, Tq, Tkv, scale, st, 1, x); };
             warm_clocks(st, run_b);
             std::vector<float> best(exact.size()+1, 1e30f);
             for (int round = 0; round < 4; ++round) {
@@ -1926,7 +2028,10 @@ AttnPlan * attn_plan(cublasHandle_t h, int hd, int H, int Tq, int Tkv, float sca
                              best[0], exact.size(), *std::min_element(best.begin()+1, best.end()));
         }
     }
-    trace(p->fused ? "fused kernel (bit-exact)" : p->c_warps ? "TF32 fused kernel (bit-exact)" : "cuBLAS chain");
+    if (reused)
+        trace("the choice of a nearby shape (bit-exact)");
+    else
+        trace(p->fused ? "fused kernel (bit-exact)" : p->c_warps ? "TF32 fused kernel (bit-exact)" : "cuBLAS chain");
     cudaFree(dq); cudaFree(dk); cudaFree(dv); cudaFree(da); cudaFree(db); cudaFree(dm);
     cudaGetLastError();
     return p;
@@ -1945,17 +2050,18 @@ bool attn_exact(const ggml_tensor * dst, const vla::FusedSpec & s, cudaStream_t 
         x.mstride = (int64_t) (Mt->nb[1]/ggml_element_size(Mt));
     }
     const AttnPlan * p = attn_plan(h, hd, H, Tq, Tkv, s.eps, st, x.Hkv, Mt != nullptr, x.mask_f16);
-    if (!p) return false;
     const float * Q = (const float *) Qt->data, * K = (const float *) Kt->data, * V = (const float *) Vtt->data;
     const bool bf = dst->type == GGML_TYPE_BF16;
-    if (p->c_warps)
+    // No plan: this shape's first use is inside graph capture. Path B, ggml's
+    // own chain, still runs if the stream's scratch is large enough.
+    if (p && p->c_warps)
         return bf ? attn_path_c(p->c_warps, Q, K, V, (__nv_bfloat16 *) dst->data, hd, H, Tq, Tkv, s.eps, st, nv, x)
                   : attn_path_c(p->c_warps, Q, K, V, (float *) dst->data, hd, H, Tq, Tkv, s.eps, st, nv, x);
-    if (p->fused)
+    if (p && p->fused)
         return bf ? attn_path_a(Q, K, V, (__nv_bfloat16 *) dst->data, hd, H, Tq, Tkv, s.eps, st, nv)
                   : attn_path_a(Q, K, V, (float *) dst->data, hd, H, Tq, Tkv, s.eps, st, nv);
-    return bf ? attn_path_b(h, *p, Q, K, V, (__nv_bfloat16 *) dst->data, hd, H, Tq, Tkv, s.eps, st, nv, x)
-              : attn_path_b(h, *p, Q, K, V, (float *) dst->data, hd, H, Tq, Tkv, s.eps, st, nv, x);
+    return bf ? attn_path_b(h, Q, K, V, (__nv_bfloat16 *) dst->data, hd, H, Tq, Tkv, s.eps, st, nv, x)
+              : attn_path_b(h, Q, K, V, (float *) dst->data, hd, H, Tq, Tkv, s.eps, st, nv, x);
 }
 
 // ggml's F32 -> BF16 operand conversion (convert_unary_cont_vec4: round to
@@ -1971,17 +2077,6 @@ __global__ void k_f32_to_bf16(const float * __restrict__ x, __nv_bfloat16 * __re
     }
 }
 
-// Per-shape BF16 staging buffer for an F32 operand (allocated on first use,
-// which ggml runs eagerly before graph capture).
-__nv_bfloat16 * bf16_scratch(int64_t n) {
-    static std::mutex mu;
-    static std::map<int64_t, __nv_bfloat16 *> bufs;
-    std::lock_guard<std::mutex> lk(mu);
-    __nv_bfloat16 *& b = bufs[n];
-    if (!b && cudaMalloc(&b, (size_t) n*sizeof(__nv_bfloat16)) != cudaSuccess) b = nullptr;
-    return b;
-}
-
 bool gemm_views(const ggml_tensor * dst, const vla::FusedSpec & s, cudaStream_t st) {
     const ggml_tensor * W = dst->src[0], * X = dst->src[1];
     if (W->type != GGML_TYPE_BF16 || (X->type != GGML_TYPE_BF16 && X->type != GGML_TYPE_F32)) return false;
@@ -1989,10 +2084,9 @@ bool gemm_views(const ggml_tensor * dst, const vla::FusedSpec & s, cudaStream_t 
     if (!h) return false;
     const void * xdata = X->data;
     if (X->type == GGML_TYPE_F32) {
-        // One staging buffer per element count; nodes run in stream order, so
-        // reusing it across nodes of the same size is safe.
+        // The stream's BF16 staging buffer.
         const int64_t n = ggml_nelements(X);
-        __nv_bfloat16 * xb = bf16_scratch(n);
+        __nv_bfloat16 * xb = (__nv_bfloat16 *) scratch(st, SCR_BF16, (size_t) n*sizeof(__nv_bfloat16));
         if (!xb) return false;
         k_f32_to_bf16<<<(unsigned) ((n/4+256)/256), 256, 0, st>>>((const float *) X->data, xb, n);
         xdata = xb;

@@ -119,7 +119,7 @@ inline void fq_act_glu_cpu(ggml_tensor * dst, int ith, int nth, void * ud) {
 // VLA_FQ_NO_ACT_FUSE=1 keeps them for A/B.
 inline ggml_tensor * fq_act_glu(ggml_context * C, const FqLinear & s, ggml_tensor * g, ggml_tensor * u, FusedGlu glu) {
     const int64_t K = s.act.K;
-    if (!fused_ops_active() || env_flag("VLA_FQ_NO_ACT_FUSE") || s.act.has_gamma || K % 64 != 0 || K > 16384 ||
+    if (!fused_ops_for(s.w) || env_flag("VLA_FQ_NO_ACT_FUSE") || s.act.has_gamma || K % 64 != 0 || K > 16384 ||
         s.act.rot_block > 64 || g->type != GGML_TYPE_F32 || g->ne[0] != K || !ggml_is_contiguous(g) ||
         (glu == FusedGlu::Gelu) != !u || (u && (u->type != GGML_TYPE_F32 || !ggml_is_contiguous(u) || !ggml_are_same_shape(g, u))))
         return nullptr;
@@ -175,7 +175,7 @@ inline ggml_tensor * fq_act_norm(ggml_context * C, const FqLinear & s, ggml_tens
                                  FusedKind norm, float eps) {
     const int64_t K = s.act.K;
     const bool mod = norm != FusedKind::LnPlain;
-    if (!s || !fused_ops_active() || env_flag("VLA_FQ_NO_ACT_FUSE") || s.act.has_gamma || K % 64 != 0 || K < 1024 ||
+    if (!s || !fused_ops_for(s.w) || env_flag("VLA_FQ_NO_ACT_FUSE") || s.act.has_gamma || K % 64 != 0 || K < 1024 ||
         K > 8192 || s.act.rot_block > 64 || x->type != GGML_TYPE_F32 || x->ne[0] != K || !ggml_is_contiguous(x) ||
         (norm != FusedKind::LnModulate && norm != FusedKind::LnPlain && norm != FusedKind::RmsModulate) ||
         mod != (p1 && p2) || (mod && (!ggml_is_contiguous(p1) || !ggml_is_contiguous(p2) ||

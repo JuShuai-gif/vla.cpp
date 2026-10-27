@@ -49,6 +49,7 @@
 
 #include "env_flag.h"
 #include "ggml.h"
+#include "ggml-backend.h"
 
 #include <cmath>
 #include <cstdint>
@@ -67,6 +68,14 @@ constexpr uint32_t FUSED_MAGIC = 0x31534656u;  // "VFS1"
 inline bool & fused_ops_active() {
     static bool on = false;
     return on;
+}
+
+// The flag above is set for the process, but one process can also hold models
+// on other backends: a node is fused only where its weight lives on CUDA.
+inline bool fused_ops_for(const ggml_tensor * w) {
+    if (!fused_ops_active() || !w || !w->buffer || ggml_backend_buffer_is_host(w->buffer))
+        return false;
+    return std::strncmp(ggml_backend_buft_name(ggml_backend_buffer_get_type(w->buffer)), "CUDA", 4) == 0;
 }
 
 enum class FusedKind : int32_t { QkvHeads = 1, BiasRes, BiasGelu, LnAffine, LnModulate, LnPlain, RmsMul, SiluMul,
@@ -649,18 +658,18 @@ inline bool cublas_rows(int64_t rows) {
 // A BF16-weight GEMM through fused_gemm_views (one view): cuBLASLt with the
 // fastest algorithm that reproduces ggml's cublasGemmEx bit for bit, or that
 // call itself. Only used on the fused (CUDA) paths, and only where ggml uses
-// cuBLAS (cublas_rows); VLA_GEMM_EXACT=0 keeps ggml_mul_mat.
+// cuBLAS (cublas_rows) on a 2D operand: a batched one is ggml's batched cuBLAS
+// call, which one GEMM over all rows does not reproduce. VLA_GEMM_EXACT=0
+// keeps ggml_mul_mat.
 inline ggml_tensor * mm_exact(ggml_context * C, ggml_tensor * W, ggml_tensor * x) {
     static const bool on = env_flag("VLA_GEMM_EXACT", true);
     if (x->type == GGML_TYPE_BF16)
         GGML_ASSERT(cublas_rows(ggml_nrows(x)) && "a BF16 operand where ggml would not use cuBLAS");
     if (!on || W->type != GGML_TYPE_BF16 || !ggml_is_contiguous(W) || !ggml_is_contiguous(x) ||
         (x->type != GGML_TYPE_BF16 && x->type != GGML_TYPE_F32) || x->ne[0] != W->ne[0] ||
-        (x->ne[2]*x->ne[3] == 1 && !cublas_rows(x->ne[1])))
+        x->ne[2]*x->ne[3] != 1 || !cublas_rows(x->ne[1]))
         return ggml_mul_mat(C, W, x);
-    ggml_tensor * x2 = ggml_reshape_2d(C, x, x->ne[0], ggml_nelements(x)/x->ne[0]);
-    ggml_tensor * y = fused_gemm_views(C, W, x2, x2->ne[1], 1);
-    return x->ne[2] == 1 && x->ne[3] == 1 ? y : ggml_reshape_4d(C, y, W->ne[1], x->ne[1], x->ne[2], x->ne[3]);
+    return fused_gemm_views(C, W, x, x->ne[1], 1);
 }
 
 }  // namespace vla
