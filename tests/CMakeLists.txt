@@ -87,6 +87,13 @@ if(GGML_SYCL)
     # drives the kernels on a SYCL queue of its own.
     target_compile_options(test_foldquant_sycl_op PRIVATE -fsycl -Wall -Wextra -ffp-contract=off)
     add_test(NAME foldquant_sycl_op COMMAND test_foldquant_sycl_op)
+    # sycl-tla flash attention vs a host reference; needs an Intel GPU, so not a ctest.
+    if(VLA_SYCL_TLA_DIR)
+        add_executable(fmha_sycl_check fmha_sycl_check.cpp)
+        target_include_directories(fmha_sycl_check PRIVATE ${CMAKE_SOURCE_DIR}/src)
+        target_link_libraries(fmha_sycl_check PRIVATE vla_core)
+        target_compile_options(fmha_sycl_check PRIVATE -fsycl -Wall -Wextra)
+    endif()
 endif()
 
 # The same site through ggml's OpenVINO backend (src/openvino/foldquant_ov.cpp).
@@ -128,6 +135,16 @@ if(GGML_CUDA)
     set_tests_properties(foldquant_cuda_op_ref PROPERTIES ENVIRONMENT "VLA_FQ_CPU_REF=1;GGML_CUDA_DISABLE_GRAPHS=1")
 endif()
 
+# The fused CUDA nodes (layers/fused_ops.h) against the ggml chains they
+# replace, bit for bit. Skips itself (exit 0) when no CUDA device is present.
+if(GGML_CUDA)
+    add_executable(test_fused_cuda_ops test_fused_cuda_ops.cpp)
+    target_include_directories(test_fused_cuda_ops PRIVATE ${CMAKE_SOURCE_DIR}/src)
+    target_link_libraries(test_fused_cuda_ops PRIVATE vla_core vla_cuda_ops ggml)
+    target_compile_options(test_fused_cuda_ops PRIVATE -Wall -Wextra)
+    add_test(NAME fused_cuda_ops COMMAND test_fused_cuda_ops)
+endif()
+
 # Regression test for the in-tree BF16 CUDA kernels and the ggml hook they ride
 # on. Skips itself (exit 0) when no CUDA device is present.
 if(GGML_CUDA)
@@ -138,4 +155,14 @@ if(GGML_CUDA)
     add_test(NAME bf16_cuda_ops COMMAND test_bf16_cuda_ops)
     add_test(NAME bf16_cuda_ops_flat COMMAND test_bf16_cuda_ops)
     set_tests_properties(bf16_cuda_ops_flat PROPERTIES ENVIRONMENT VLA_BF16_FLAT=1)
+endif()
+
+# The same for the SYCL BF16 ops. Skips when no SYCL device is present.
+if(GGML_SYCL AND NOT GGML_CUDA)
+    add_executable(test_bf16_sycl_ops test_bf16_sycl_ops.cpp)
+    target_include_directories(test_bf16_sycl_ops PRIVATE ${CMAKE_SOURCE_DIR}/src)
+    target_link_libraries(test_bf16_sycl_ops PRIVATE vla_sycl_ops ggml)
+    target_compile_options(test_bf16_sycl_ops PRIVATE -fsycl -Wall -Wextra)
+    target_link_options(test_bf16_sycl_ops PRIVATE -fsycl)
+    add_test(NAME bf16_sycl_ops COMMAND test_bf16_sycl_ops)
 endif()

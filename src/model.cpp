@@ -80,7 +80,8 @@ bool detect_arch_gguf(const std::string& path, Arch* out) {
         try_str("openvla_oft.architecture", arch_str) ||
         try_str("vla_jepa.architecture",   arch_str) ||
         try_str("vla_adapter.architecture", arch_str) ||
-        try_str("turbovla.architecture",  arch_str)) {
+        try_str("turbovla.architecture",  arch_str) ||
+        try_str("act.architecture",       arch_str)) {
         if      (arch_str == "smolvla")    {
             *out = Arch::SMOLVLA;
             ok = true;
@@ -131,6 +132,10 @@ bool detect_arch_gguf(const std::string& path, Arch* out) {
         }
         else if (arch_str == "turbovla")  {
             *out = Arch::TURBOVLA;
+            ok = true;
+        }
+        else if (arch_str == "act")       {
+            *out = Arch::ACT;
             ok = true;
         }
     }
@@ -243,14 +248,15 @@ Model* model_load(const std::string& mmproj_path, const std::string& ckpt_path,
                           : arch == Arch::BITVLA      ? "bitvla"
                           : arch == Arch::VLA_ADAPTER ? "vla_adapter"
                           : arch == Arch::OPENVLA_OFT ? "openvla_oft"
-                          : arch == Arch::TURBOVLA    ? "turbovla" : nullptr;
+                          : arch == Arch::TURBOVLA    ? "turbovla"
+                          : arch == Arch::ACT         ? "act" : nullptr;
         if (name) {
             std::fprintf(stderr, "vla(%s): num_steps is not supported\n", name);
             return nullptr;
         }
     }
-    if (opts.act_dtype == GGML_TYPE_BF16 && arch != Arch::PI0 && arch != Arch::EVO1) {
-        std::fprintf(stderr, "vla: act_dtype bf16 is only supported by pi0 and evo1\n");
+    if (opts.act_dtype == GGML_TYPE_BF16 && arch != Arch::PI0 && arch != Arch::PI05 && arch != Arch::EVO1) {
+        std::fprintf(stderr, "vla: act_dtype bf16 is only supported by pi0, pi0.5 and evo1\n");
         return nullptr;
     }
 
@@ -312,6 +318,10 @@ Model* model_load(const std::string& mmproj_path, const std::string& ckpt_path,
             std::printf("vla: arch = turbovla\n");
             impl = turbovla_create(mmproj_path, ckpt_path, config_path, opts);
             break;
+        case Arch::ACT:
+            std::printf("vla: arch = act\n");
+            impl = act_create(mmproj_path, ckpt_path, config_path, opts);
+            break;
     }
     if (!impl)
         return nullptr;
@@ -322,7 +332,11 @@ Model* model_load(const std::string& mmproj_path, const std::string& ckpt_path,
 
     auto* m = new Model();
     m->impl = std::move(impl);
-    m->fa = fa;
+    // Read back rather than reuse `fa`: an arch may pick its own default during
+    // create when --flash-attn was not given (pi0 and pi0.5 turn it on
+    // on SYCL, where it runs on oneDNN's fused SDPA), and predict() re-applies
+    // this value on every call.
+    m->fa = flash_attn_enabled();
     m->mm = mm;
     return m;
 }
@@ -344,6 +358,13 @@ std::vector<float> predict(Model* m, const Inputs& in) {
     set_flash_attn(m->fa);
     set_mm_prec_f32(m->mm);
     return m->impl->predict(in);
+}
+
+bool encode_images(Model* m, const ImageView* images, int n_images, std::vector<float>& out) {
+    if (!m || !m->impl || !images || n_images < 1) return false;
+    set_flash_attn(m->fa);
+    set_mm_prec_f32(m->mm);
+    return m->impl->encode_images(images, n_images, out);
 }
 
 }

@@ -25,6 +25,9 @@ namespace vla {
 
 namespace {
 
+// f32 and bf16 only, on purpose. A quantised tensor keeps the type the GGUF
+// stores it in (gguf_reader::resident_type); this flag only chooses what the
+// tensors the file stores dense convert to.
 bool parse_dtype(const std::string & v, ggml_type & out) {
     if (v == "f32"  || v == "fp32")  {
         out = GGML_TYPE_F32;
@@ -72,6 +75,10 @@ bool flash_attn_enabled()    {
     return g_flash_attn;
 }
 
+namespace { bool g_fa_views = false; }
+void set_fa_takes_views(bool on) { g_fa_views = on; }
+bool fa_takes_views() { return g_fa_views; }
+
 void set_mm_prec_f32(bool on)  {
     g_mm_prec_f32 = on;
 }
@@ -112,8 +119,8 @@ bool resolve_num_steps(const char * arch, const Options & opts, int & steps) {
 
 const char * Options::usage() {
     return "  --weight-dtype f32|bf16|f16  resident dtype for GEMM weights\n"
-           "  --act-dtype f32|bf16      activation dtype; bf16 is pi0/evo1 only, needs CUDA\n"
-           "                            and bf16 weights\n"
+           "  --act-dtype f32|bf16      activation dtype; bf16 needs bf16 weights: pi0 and\n"
+           "                            pi0.5 on CUDA or SYCL, evo1 on CUDA\n"
            "  --flash-attn [0|1]        flash attention; faster, changes numerics\n"
            "  --mm-prec default|f32     matmul accumulation precision\n"
            "  --num-steps N             flow-matching solver steps, 1-1000 (default: the\n"
@@ -143,7 +150,7 @@ bool Options::parse_arg(int argc, char ** argv, int & i, std::string & err) {
             return false;
         }
         // F16 weights are for backends without BF16 kernels (Hexagon, OpenCL);
-        // the BF16 activation path is CUDA's and has no F16 twin.
+        // the BF16 activation path (CUDA, SYCL) has no F16 twin.
         if (a == "--act-dtype" && t == GGML_TYPE_F16) {
             err = a+": expected f32 or bf16, got '"+v+"'";
             return false;

@@ -179,11 +179,17 @@ supported (released and benchmarked), `~` = in progress, `-` = planned.
 | [VLA-JEPA](https://hf.co/vrfai/vla-jepa-libero)                | Y | Y | - | - | Y | Y | ~ |
 | [Octo-Small](https://hf.co/vrfai/octo-small-libero-gguf)       | Y | Y | - | Y | Y | - | Y |
 | [TurboVLA](https://hf.co/vrfai/turbovla-libero-gguf)           | Y | Y | ~ | Y | Y | Y | Y |
+| [ACT](https://hf.co/ravediamond/act-aloha-sim-transfer-cube-gguf) | Y | Y | ~ | - | Y | - | - |
 
 ROCm `Y` currently means fixed-input inference and synthetic-input benchmark
 coverage on Linux `gfx1151` with ROCm 7.14 and llama.cpp `b11223`. The `~`
 rows await validation on this upstream revision; older results do not establish
 their current status. These engine checks do not establish robot-task success.
+
+Adding a model? Use [ggml-compiler](https://github.com/khanhnd61-vr/ggml-compiler)
+to generate and verify ggml C++ from its PyTorch implementation, then integrate
+the graph with `vla.cpp`'s model interface. See
+[Adding an architecture](docs/ARCHITECTURE.md#adding-an-architecture).
 
 ---
 
@@ -249,7 +255,7 @@ Wiring, recording, training and queue sizing are in the
 | [docs/QUANTIZATION.md](docs/QUANTIZATION.md) | FoldQuant W8A8 / W4A4: the GGUF contract, the integer arithmetic, converting a FoldQuantVLA quantized model |
 | [docs/DOCKER.md](docs/DOCKER.md) | Building and running the eval in containers |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Engine design: layers, the prediction path, backends, adding an architecture |
-| [docs/backend/](docs/backend) | Per-backend build and run notes: [ROCm](docs/backend/rocm.md), [SYCL](docs/backend/sycl.md), [OpenVINO](docs/backend/ov.md), [Metal](docs/backend/metal.md), [Hexagon](docs/backend/hexagon.md), [Hexagon on Windows](docs/backend/hexagon-windows.md), [WSL2](docs/backend/wsl.md) |
+| [docs/backend/](docs/backend) | Per-backend build and run notes: [ROCm](docs/backend/rocm.md), [SYCL](docs/backend/sycl.md), [OpenVINO](docs/backend/ov.md), [Metal](docs/backend/metal.md), [Hexagon](docs/backend/hexagon.md), [Hexagon on Windows](docs/backend/hexagon-windows.md), [WSL2](docs/backend/wsl.md), [CUDA bit-exact path](docs/backend/cuda-exact.md) |
 | [docs/benchmark/](docs/benchmark) | Per-device latency and memory for every model, and the fastest flags per device |
 | [docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md) | Known issues and their resolutions |
 | [docs/ADOPTION.md](docs/ADOPTION.md) | C ABI, Python bindings, release packaging, and what is left |
@@ -258,6 +264,25 @@ Wiring, recording, training and queue sizing are in the
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Proving a change is numerically neutral, adding an architecture |
 | [bindings/python/](bindings/python/README.md) | Python bindings |
 | [Learn vla.cpp](https://fai-modelopt-tech.github.io/learn-vla-cpp/) | Walkthrough of the engine design and each policy on ggml |
+
+---
+
+## Citation
+
+```bibtex
+@misc{nguyen2026vlacpp,
+  title         = {{vla.cpp}: A Unified Inference Runtime for Vision-Language-Action Models},
+  author        = {Khanh D. Nguyen and Hung T. Ho and Chinh T. Nguyen and
+                   Thanh Q. Duong and Linh D. Le and Duy M. H. Nguyen and
+                   Vien A. Ngo and An T. Le},
+  year          = {2026},
+  eprint        = {2606.08094},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.RO},
+  doi           = {10.48550/arXiv.2606.08094},
+  url           = {https://arxiv.org/abs/2606.08094}
+}
+```
 
 ---
 
@@ -271,6 +296,7 @@ Licensed under the [Apache License, Version 2.0](LICENSE.md).
 
 Supported VLA models:
 
+- [ACT](https://arxiv.org/abs/2304.13705) - Zhao et al.
 - [SmolVLA](https://huggingface.co/lerobot/smolvla_base) - Hugging Face LeRobot team.
 - [π0,π0.5](https://github.com/Physical-Intelligence/openpi) - Physical Intelligence.
 - [BitVLA](https://github.com/ustcwhy/BitVLA) - Hongyu Wang et al.

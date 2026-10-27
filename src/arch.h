@@ -72,6 +72,7 @@ enum class Arch {
     OPENVLA_OFT,// DINOv2-L/14-reg4 + SigLIP-so400m/14 +Llama-2-7B + MLPResNet.
     VLA_JEPA,   // LeRobot Qwen3-VL-2B-Instruct+V-JEPÀ+DiT-B FM.
     TURBOVLA,   // TurboVLA (DINOv3 + BERT + VL Fusion + ACT decoder).
+    ACT,        // LeRobot ACT (ResNet + transformer encoder-decoder, no language).
 };
 
 /**
@@ -102,6 +103,22 @@ public:
      *         @c cfg.num_steps*cfg.real_action_dim.
      */
     virtual std::vector<float> predict(const Inputs& in) = 0;
+
+    /**
+     * @brief Run only the vision tower (and projector) on @p n_images views.
+     *
+     * The result is what @ref Inputs::precomputed_img_emb takes, so a second
+     * process (or another device) can run the LM and action head on it.
+     * Archs that do not support it return false.
+     * @param images  Camera views.
+     * @param n_images Number of @p images.
+     * @param out     Receives [n_images * tokens_per_view, hidden] floats.
+     * @return true on success.
+     */
+    virtual bool encode_images(const ImageView* images, int n_images, std::vector<float>& out) {
+        (void) images; (void) n_images; (void) out;
+        return false;
+    }
 };
 
 /**
@@ -224,6 +241,15 @@ std::unique_ptr<ModelArchBase> turbovla_create(const std::string& mmproj_path,
                                                   const std::string& ckpt_path,
                                                   const std::string& config_path,
                                               const Options& opts);
+
+/**
+ * @brief Build an ACT model. The ResNet backbone is baked into @p ckpt_path.
+ * @copydetails smolvla_create
+ */
+std::unique_ptr<ModelArchBase> act_create(const std::string& mmproj_path,
+                                          const std::string& ckpt_path,
+                                          const std::string& config_path,
+                                          const Options& opts);
 
 /**
  * @brief Inspect a GGUF and identify the architecture tag.

@@ -11,6 +11,14 @@ Notable changes to vla.cpp. Format loosely follows [Keep a Changelog](https://ke
   ROCm 7.14 and llama.cpp `b11223` has fixed-input and synthetic benchmark
   coverage for SmolVLA and π0.5. See `docs/backend/rocm.md` for the measured
   numerical differences, build commands and current limits.
+- **New model: ACT** (LeRobot `policies/act`). `scripts/convert_act_to_gguf.py`
+  converts a LeRobot `pretrained_model` directory, folding the ResNet's frozen
+  batch norms and dropping the training-only VAE encoder. No language input, so
+  `vla-server` and `vla-cli` accept requests without tokens for it. The ResNet
+  runs at the cameras' own size, all views in one batch; on CUDA (Turing and
+  newer) it is ggml's direct convolution on F16 kernels, unless
+  `--weight-dtype f32` is given. `vla-bench --height` and `VLA_IMG_H` in
+  `vla_predict_check` give non-square inputs.
 - **FoldQuant W8A8 / W4A4 inference** for GR00T N1.5 / N1.6 / N1.7 and π0.5. A
   FoldQuant GGUF carries the language backbone and the action
   module as INT8 or INT4 codes with per-row scales in a block-Hadamard,
@@ -29,9 +37,37 @@ Notable changes to vla.cpp. Format loosely follows [Keep a Changelog](https://ke
   GGUF with no calibration and nothing re-rounded; `--check-onnx` byte-compares
   every site against the TensorRT plugin graphs. The family converters expose
   `convert(ckpt, out, writer_factory=...)` for it.
+- **Faster π0.5 FoldQuant on Intel GPUs** with `-DVLA_SYCL_TLA_DIR=<sycl-tla>`:
+  INT4 x INT4 DPAS GEMMs for the W4A4 sites, flash attention over the cached
+  prefix K/V with q/k/v + RoPE fused, and the expert's adaRMS folded into the
+  activation nodes. On an Arc B390, W4A4 runs in 92 ms against 263 ms for bf16
+  (2 views, 48 tokens). See `docs/backend/sycl.md`.
+- `vla_encode_images` (C API and Python) runs only the vision tower, so its
+  output can go into `precomputed_img_emb` later or on another device (π0.5).
+  `vla-server --warmup N` runs N dummy predicts before binding (default 1).
 - `scripts/foldquant_fake_export.py` (uncalibrated file for bring-up),
   `scripts/inspect_gguf_quant.py` (contract check) and `scripts/foldquant_ref.py`
   (numpy reference).
+
+### Changed
+
+- **Faster CUDA inference with the same output.** At the default precision,
+  every arch except ACT runs fused CUDA nodes, BF16 GEMMs on the fastest
+  cuBLASLt algorithm that matches ggml's call (`gemm_exact`) and fused
+  attention (`attn_exact`). The actions are bit-identical to the plain ggml
+  graph, so success rates at the defaults carry over. BitVLA's ternary GEMM
+  moves to tensor cores. On a Jetson AGX Orin, mean latency drops 23-40% for
+  every arch except Octo-Small, which is host-bound (BitVLA 134 -> 80 ms,
+  GR00T N1.7 134 -> 94 ms, π0 350 -> 269 ms), for 0-207 MiB more device memory.
+  `VLA_FUSED_OPS=0` runs the old path; `tests/test_fused_cuda_ops.cpp` checks
+  each node against the ggml chain it replaces. See
+  `docs/backend/cuda-exact.md`.
+- **Faster FoldQuant checkpoints on CUDA, same output.** The fused path also
+  covers π0.5 and the GR00T models around their integer sites, and the act
+  node absorbs the gate or norm before it (`glu_act`, `norm_act`). On the Jetson
+  AGX Orin the calibrated LIBERO W4A4 files run 30-35% faster than on
+  `1012c05` (GR00T N1.7 84 -> 56 ms, π0.5 216 -> 143 ms), with the same action
+  bits.
 
 ## [0.4.0] - 2026-09-30
 
