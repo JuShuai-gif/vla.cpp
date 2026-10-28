@@ -100,6 +100,9 @@ struct Backend {
     /// activation path needs the CUDA BF16 GEMM and elementwise kernels, so
     /// archs gate on this rather than on the compiled-in accelerator.
     bool           is_cuda = false;
+    /// Same, for a live ROCm/HIP backend. It runs ggml-cuda's kernels, so graph
+    /// choices made for those hold here too; vla.cpp's own CUDA kernels do not.
+    bool           is_hip = false;
     /// Same, for a live SYCL backend. The BF16 activation path is served there
     /// by src/sycl/vla_sycl_bf16.cpp plus ggml-sycl's own BF16 add/mul/unary.
     bool           is_sycl = false;
@@ -299,6 +302,7 @@ inline Backend backend_init(const char * tag, int n_threads) {
         const int dev = backend_device_index();
         b.handle = ggml_backend_cuda_init(dev);
         if (b.handle) {
+            b.is_hip = true;
             char desc[256] = { 0 };
             ggml_backend_cuda_get_device_description(dev, desc, sizeof(desc));
             std::printf("%s: backend = ROCm/HIP (device %d: %s)\n", tag, dev, desc);
