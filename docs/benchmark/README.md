@@ -8,7 +8,10 @@ synthetic inputs at `c93ca0a` (PR #32), llama.cpp `b11223`. The Core Ultra X7
 SYCL row ran later, at `1adf078` (after PR #33, same llama.cpp pin). The Jetson
 AGX Orin row ran at `e6653e8`, on the bit-exact CUDA path
 ([backend/cuda-exact.md](../backend/cuda-exact.md)); its report also re-measures
-`1012c05`, before that path, for comparison. Each report
+`1012c05`, before that path, for comparison. The Radeon RX 9060 XT ROCm row
+ran at `d0e5d00`, PR #35 merged with main `f464653` (same llama.cpp pin), with
+fixed-input checks against the CPU build in
+[backend/rocm.md](../backend/rocm.md). Each report
 lists the device, the build, each model's configuration, latency and peak memory
 at the defaults, and the fastest runtime flags for that device.
 
@@ -23,6 +26,7 @@ means the model does not fit or fails there; each report says which and why.
 | [RTX 3090 (CUDA)](rtx-3090.md) | 4.3 | 9.0 | 27.3 | 34.2 | 36.6 | 36.3 | 35.3 | 26.9 | 61.0 | 97.5 | 97.8 | 134.2 | 108.6 |
 | [RTX 3060 (CUDA)](rtx-3060.md) | 8.3 | 21.6 | 57.1 | 74.7 | 86.8 | 78.1 | 82.8 | 59.1 | 125.1 | 228.2 | 229.9 | - | 230.8 |
 | [RTX 5070 Laptop (CUDA)](rtx-5070-laptop.md) | 4.7 | 14.1 | 38.0 | 56.3 | 73.0 | 65.5 | 63.3 | 54.4 | 89.3 | 177.1 | 180.5 | - | 184.6 |
+| [Radeon RX 9060 XT (ROCm)](rx-9060-xt.md) | 14.0 | 33.8 | 65.9 | 70.1 | 79.5 | 94.6 | 97.1 | N/A | 207.7 | 217.9 | 220.6 | 182.2 | 233.6 |
 | [Jetson AGX Orin (CUDA)](jetson-agx-orin.md) | 14.3 | 28.0 | 60.6 | 79.1 | 96.7 | 101.2 | 93.0 | 76.8 | 164.3 | 269.0 | 266.6 | 297.4 | 298.5 |
 | [Jetson Orin NX 16 GB (CUDA)](jetson-orin-nx.md) | 27.4 | 79.7 | 176.7 | 270.7 | 260.8 | 252.1 | 251.4 | 269.1 | 411.2 | 739.6 | 742.9 | - | 893.2 |
 | [Jetson Orin Nano Super (CUDA)](jetson-orin-nano.md) | 31.9 | 89.3 | 193.9 | 297.5 | 293.4 | 272.3 | 271.7 | 335.0 | 462.8 | 845.2 | 849.7 | - | 1011.5 |

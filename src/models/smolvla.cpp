@@ -251,7 +251,7 @@ struct SmolVLAModelArch : public ModelArchBase {
 
     ggml_backend_t        backend     = nullptr;
     ggml_backend_buffer_t weight_buf  = nullptr;
-    bool                  is_cuda     = false;
+    bool                  ggml_cuda   = false;   // ggml-cuda kernels: CUDA or ROCm/HIP
     bool                  fused_ops   = false;   // CUDA fused (bit-exact) paths
 
     ggml_type             weight_dtype = GGML_TYPE_BF16;
@@ -815,7 +815,7 @@ std::unique_ptr<SmolVLAModelArch> smolvla_load_impl(ggml_type weight_dtype,
         if (!b.handle)
             return nullptr;
         m->backend = b.handle;
-        m->is_cuda = b.is_cuda;
+        m->ggml_cuda = b.is_cuda || b.is_hip;
         // On SYCL the vision tower's attention runs on oneDNN's fused SDPA, so
         // flash attention is the default there unless --flash-attn was given.
         if (b.is_sycl && !opts.flash_attn.has_value() && vla::fa_takes_views()) {
@@ -1111,7 +1111,7 @@ std::unique_ptr<SmolVLAModelArch> smolvla_load_impl(ggml_type weight_dtype,
     }
 
     std::unordered_set<const ggml_tensor *> widened;
-    if (m->is_cuda && vla::mm_prec_f32_enabled() && !opts.weight_dtype) {
+    if (m->ggml_cuda && vla::mm_prec_f32_enabled() && !opts.weight_dtype) {
         for (const auto * layers : {&m->vlm_layers, &m->expert_layers})
             for (const LayerW & w : *layers)
                 for (ggml_tensor * t : {w.Wq, w.Wk, w.Wv, w.Wo, w.Wgate, w.Wup, w.Wdown})
@@ -1261,7 +1261,7 @@ void build_graph(SmolVLAModelArch * m, ggml_context * ctx, SmolVLAModelArch::Mai
         if (expert_self_attn(cfg, li))
             continue;
         expert_cross_kv(ctx, m->expert_layers[li], K[li], V[li], cfg, &xk_cache[li], &xv_cache[li]);
-        if (m->is_cuda) {
+        if (m->ggml_cuda) {
             xk_cache[li] = ggml_cast(ctx, xk_cache[li], GGML_TYPE_F16);
             xv_cache[li] = ggml_cast(ctx, xv_cache[li], GGML_TYPE_F16);
         }

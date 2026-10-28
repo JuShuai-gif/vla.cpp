@@ -21,12 +21,12 @@
  * instead; the ladder lives here once.
  *
  * Exactly one accelerator is compiled in, picked by the CMake flag that was
- * used (`GGML_CUDA` / `GGML_SYCL` / `GGML_METAL` / `GGML_OPENVINO` /
- * `GGML_HEXAGON` / `GGML_OPENCL`). The core drives a single backend through
- * `gallocr` rather than a scheduler. The first four run every op the archs
- * build, so there is no per-op CPU fallback for them. Hexagon and OpenCL do
- * not, and they are wrapped by @ref fallback_backend_new, which runs the ops
- * they reject on the CPU.
+ * used (`GGML_CUDA` / `GGML_HIP` / `GGML_SYCL` / `GGML_METAL` /
+ * `GGML_OPENVINO` / `GGML_HEXAGON` / `GGML_OPENCL`). The core drives a single
+ * backend through `gallocr` rather than a scheduler. CUDA, HIP, SYCL, Metal and
+ * OpenVINO have no per-op CPU fallback: an unsupported op fails prediction.
+ * Hexagon and OpenCL are wrapped by @ref fallback_backend_new, which runs the
+ * ops they reject on the CPU.
  */
 
 #pragma once
@@ -100,6 +100,9 @@ struct Backend {
     /// activation path needs the CUDA BF16 GEMM and elementwise kernels, so
     /// archs gate on this rather than on the compiled-in accelerator.
     bool           is_cuda = false;
+    /// Same, for a live ROCm/HIP backend. It runs ggml-cuda's kernels, so graph
+    /// choices made for those hold here too; vla.cpp's own CUDA kernels do not.
+    bool           is_hip = false;
     /// Same, for a live SYCL backend. The BF16 activation path is served there
     /// by src/sycl/vla_sycl_bf16.cpp plus ggml-sycl's own BF16 add/mul/unary.
     bool           is_sycl = false;
@@ -257,8 +260,8 @@ constexpr bool default_flash_attn() {
 #endif
 }
 
-/// GPU ordinal for CUDA and SYCL; `VLA_DEVICE` overrides. Junk is rejected, not
-/// silently read as device 0.
+/// GPU ordinal for CUDA, HIP and SYCL; `VLA_DEVICE` overrides. Junk is rejected,
+/// not silently read as device 0.
 inline int backend_device_index() {
     const char * e = std::getenv("VLA_DEVICE");
     if (!e || !*e)
@@ -282,7 +285,7 @@ inline int backend_device_index() {
 inline Backend backend_init(const char * tag, int n_threads) {
     Backend b;
 
-#ifdef GGML_USE_CUDA
+#if defined(GGML_USE_CUDA) && !defined(GGML_USE_HIP)
     {
         const int dev = backend_device_index();
         b.handle = ggml_backend_cuda_init(dev);
@@ -291,6 +294,20 @@ inline Backend backend_init(const char * tag, int n_threads) {
             std::printf("%s: backend = CUDA (device %d)\n", tag, dev);
         } else {
             std::fprintf(stderr, "%s: ggml_backend_cuda_init failed; falling back to CPU\n", tag);
+        }
+    }
+#elif defined(GGML_USE_HIP)
+    {
+        // ggml-hip compiles the ggml-cuda sources and keeps their entry points.
+        const int dev = backend_device_index();
+        b.handle = ggml_backend_cuda_init(dev);
+        if (b.handle) {
+            b.is_hip = true;
+            char desc[256] = { 0 };
+            ggml_backend_cuda_get_device_description(dev, desc, sizeof(desc));
+            std::printf("%s: backend = ROCm/HIP (device %d: %s)\n", tag, dev, desc);
+        } else {
+            std::fprintf(stderr, "%s: ggml_backend_cuda_init failed on ROCm; falling back to CPU\n", tag);
         }
     }
 #elif defined(GGML_USE_SYCL)

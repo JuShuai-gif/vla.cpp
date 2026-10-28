@@ -30,7 +30,7 @@
 
 namespace vla {
 
-#ifdef GGML_USE_CUDA
+#if defined(GGML_USE_CUDA) && !defined(GGML_USE_HIP)
 void cuda_register_bf16_ops();
 void cuda_register_foldquant_ops();
 void cuda_register_fused_ops();
