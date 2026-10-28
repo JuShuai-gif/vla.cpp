@@ -4,8 +4,16 @@ Each [release](https://github.com/VinRobotics/vla.cpp/releases) has a
 `vla.cpp-<tag>-<platform>.tar.gz` that extracts to a `vla.cpp-<tag>-<platform>/`
 directory holding `libvla`, `vla.h` and the binaries side by side. The Linux ones
 ship `vla-cli`, `vla-bench`, `vla-server` and `vlm-server`; macOS ships `vla-cli`
-and `vla-bench`. The platforms and what each needs are in the README's
-[Install](../README.md#prebuilt-binaries) section.
+and `vla-bench`.
+
+| Platform | Needs |
+|---|---|
+| `linux-x86_64-cpu` | AVX2 (Haswell or newer) |
+| `linux-x86_64-cuda-12.8` | AVX2; sm_75/80/86/89/90/120 |
+| `linux-x86_64-cuda-13.4` | AVX2; sm_75/80/86/89/90/120, driver 580 or newer |
+| `linux-aarch64-cpu` | ARMv8.2-A with dotprod and fp16 (Cortex-A76, Neoverse N1 or newer) |
+| `linux-aarch64-cuda-13.4` | sm_87 (Orin), sm_110 (Thor), sm_121 (DGX Spark); a CUDA 13 driver |
+| `macos-arm64-metal` | Apple Silicon |
 
 ```bash
 TAG=<release tag>

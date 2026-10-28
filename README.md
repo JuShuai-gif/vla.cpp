@@ -6,7 +6,6 @@
 [![Built on llama.cpp](https://img.shields.io/badge/built%20on-llama.cpp-lightgrey)](https://github.com/ggml-org/llama.cpp)
 [![Models on HF](https://img.shields.io/badge/%F0%9F%A4%97%20models-Hugging%20Face-yellow)](https://huggingface.co/vrfai)
 [![arXiv](https://img.shields.io/badge/arXiv-2606.08094-b31b1b.svg)](http://arxiv.org/abs/2606.08094)
-[![Docs](https://img.shields.io/badge/docs-Learn%20vla.cpp-brightgreen)](https://fai-modelopt-tech.github.io/learn-vla-cpp/)
 
 A C++ inference engine for **Vision-Language-Action (VLA) models**, built on [`llama.cpp`](https://github.com/ggml-org/llama.cpp).
 It runs the open VLA policies under one runtime, each packaged as a single self-contained GGUF that needs no Python or
@@ -22,17 +21,8 @@ backend.
 
 ### Prebuilt binaries
 
-Each [release](https://github.com/VinRobotics/vla.cpp/releases) has a
-`vla.cpp-<tag>-<platform>.tar.gz` with `libvla`, `vla.h` and the binaries:
-
-| Platform | Needs |
-|---|---|
-| `linux-x86_64-cpu` | AVX2 (Haswell or newer) |
-| `linux-x86_64-cuda-12.8` | AVX2; sm_75/80/86/89/90/120 |
-| `linux-x86_64-cuda-13.4` | AVX2; sm_75/80/86/89/90/120, driver 580 or newer |
-| `linux-aarch64-cpu` | ARMv8.2-A with dotprod and fp16 (Cortex-A76, Neoverse N1 or newer) |
-| `linux-aarch64-cuda-13.4` | sm_87 (Orin), sm_110 (Thor), sm_121 (DGX Spark); a CUDA 13 driver |
-| `macos-arm64-metal` | `vla-cli` and `vla-bench` only |
+Each [release](https://github.com/VinRobotics/vla.cpp/releases) ships tarballs
+for Linux x86-64 and aarch64 (CPU and CUDA) and macOS arm64 (Metal):
 
 ```bash
 TAG=<release tag>
@@ -40,10 +30,7 @@ curl -LO https://github.com/VinRobotics/vla.cpp/releases/download/$TAG/vla.cpp-$
 tar -xzf vla.cpp-$TAG-linux-x86_64-cpu.tar.gz
 ```
 
-The Linux tarballs need Ubuntu 24.04's glibc or newer, `libzmq5` for the
-servers, and a CUDA runtime for the CUDA ones (shipped as a separate `cudart-`
-tarball). Details, and the macOS and Windows notes, are in
-[docs/PREBUILT.md](docs/PREBUILT.md).
+Each platform's requirements are in [docs/PREBUILT.md](docs/PREBUILT.md).
 
 ### Build from source
 
@@ -93,8 +80,10 @@ variables are in [docs/USAGE.md](docs/USAGE.md).
 
 ## Support matrix
 
-Models (rows) against platforms (columns). Legend: `Y` =
-supported (released and benchmarked), `~` = in progress, `-` = planned.
+Models (rows) against platforms (columns).
+Per-device latency and memory are in [docs/benchmark/](docs/benchmark).
+Use [ggml-compiler](https://github.com/khanhnd61-vr/ggml-compiler) and follow [the instruction](docs/ARCHITECTURE.md#adding-an-architecture) to add a new model.
+
 
 | Model | CPU (x86-64 / ARM) | [CUDA (NVIDIA)](docs/backend/cuda.md) | [ROCm (AMD)](docs/backend/rocm.md) | [SYCL (Intel)](docs/backend/sycl.md) | [Metal (Apple)](docs/backend/metal.md) | [OpenVINO (Intel)](docs/backend/ov.md) | [Hexagon (Qualcomm)](docs/backend/hexagon-windows.md) |
 |---|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
@@ -113,68 +102,34 @@ supported (released and benchmarked), `~` = in progress, `-` = planned.
 | [TurboVLA](https://hf.co/vrfai/turbovla-libero-gguf)           | Y | Y | Y | Y | Y | Y | Y |
 | [ACT](https://hf.co/ravediamond/act-aloha-sim-transfer-cube-gguf) | Y | Y | Y | ~ | Y | ~ | ~ |
 
-Use [ggml-compiler](https://github.com/khanhnd61-vr/ggml-compiler) and follow [the instruction](docs/ARCHITECTURE.md#adding-an-architecture) to add a new model.
+Legend: `Y` = supported (released and benchmarked), `~` = in progress, `-` = planned.
 
 ---
 
 ## Rollout on a real robot
 
-Use the [LeRobot fork](https://github.com/khanhnd61-vr/lerobot/tree/vla-simd) with `lerobot-vla-cpp` client drives an SO-101 arm against a
-`vla-server`. The client does the per-arch preprocessing (tokenize, resize,
-normalize), so it covers SmolVLA, π0, π0.5 and GR00T N1.5/1.6/1.7.
+The [LeRobot fork](https://github.com/khanhnd61-vr/lerobot/tree/vla-simd) adds a
+`lerobot-vla-cpp` client that drives an SO-101 arm against `vla-server`. It does
+the preprocessing for SmolVLA, π0, π0.5 and GR00T N1.5/1.6/1.7. Serve the policy
+on a GPU host; on a desktop CPU the action queue stalls:
 
 ```bash
-git clone -b vla-simd https://github.com/khanhnd61-vr/lerobot.git
-cd lerobot && pip install -e ".[vla-cpp]"
+./build/vla-server smolvla-so101.gguf   # binds tcp://*:5555
 ```
 
-Serve the policy, converted to GGUF as in [docs/MODELS.md](docs/MODELS.md), on a
-GPU host. SmolVLA takes 38 ms per query on an RTX 5090 and 218 ms on a Jetson
-AGX Orin, against the 1.67 s of motion a 50-step chunk buys at 30 fps; on a
-desktop CPU it takes ~1.7 s and the action queue stalls.
-
-```bash
-./build/vla-server smolvla-so101.gguf   # binds tcp://*:5555; --bind moves it
-```
-
-Check the round trip with no arm attached, then run the arm. `ROBOT` holds the
-arm's `--robot.*` flags; the fork's README sets it up:
-
-```bash
-# prints round-trip latency next to the recorded actions
-lerobot-vla-cpp --server_address=tcp://127.0.0.1:5555 --arch=smolvla \
-  --replay.repo_id=khanhnd61/so101-multi-task-clean --replay.steps=10
-
-lerobot-vla-cpp --server_address=tcp://127.0.0.1:5555 --arch=smolvla "${ROBOT[@]}" \
-  --task="Put the tape into the box" --n_action_steps=25 --fps=30 --duration=60
-```
-
-- `--arch` selects the preprocessing (`smolvla`, `pi0`, `pi05`, `gr00t_n1_5/6/7`,
-  or `passthrough` for a server that preprocesses itself). The wrong arch loads,
-  runs and returns plausible, wrong actions.
-- `--stats_json` is required for `pi05` and the GR00T archs; GR00T also takes
-  `--embodiment`, and `--rel_stats_json` for an N1.7 checkpoint trained with
-  relative actions.
-- `--task` must match a trained instruction exactly, and the camera keys must
-  stay `front` and `wrist` in that order.
-- `vla-server` answers one request at a time, so the loop is synchronous and
-  `--n_action_steps` is the feedback rate: 25 at 30 fps leaves ~0.83 s between
-  observations.
-
-The GR00T paths of the client have not been tested against real checkpoints yet.
-Wiring, recording, training and queue sizing are in the
-[fork's README](https://github.com/khanhnd61-vr/lerobot/tree/vla-simd#readme).
+Installing, wiring and running the client are in the fork's
+[rollout guide](https://github.com/khanhnd61-vr/lerobot/tree/vla-simd#through-a-vlacpp-server).
 
 ---
 
 ## Companion Repos
 
-- [llama.cpp](https://github.com/ggml-org/llama.cpp) provides ggml and its backends. CMake fetches it at a pinned tag (`b11223`), so there is no submodule.
-- [LeRobot fork](https://github.com/khanhnd61-vr/lerobot/tree/vla-simd) runs a real robot against `vla-server` ([rollout](#rollout-on-a-real-robot)).
-- [ggml-compiler](https://github.com/khanhnd61-vr/ggml-compiler) to generate and verify ggml C++ from its PyTorch implementation, then integrate the graph with `vla.cpp`'s model interface.
-- [Learn vla.cpp](https://fai-modelopt-tech.github.io/learn-vla-cpp/) walks through the engine design and how each policy is implemented on ggml.
-
-
+| Repo | Content |
+|---|---|
+| [llama.cpp](https://github.com/ggml-org/llama.cpp) | ggml and its backends; CMake fetches it at a pinned tag (`b11223`) |
+| [LeRobot fork](https://github.com/khanhnd61-vr/lerobot/tree/vla-simd) | `lerobot-vla-cpp`, the client that runs a real robot against `vla-server` |
+| [ggml-compiler](https://github.com/khanhnd61-vr/ggml-compiler) | Generates ggml C++ from a policy's PyTorch implementation and verifies it, for porting a new model to `vla.cpp` |
+| [Learn vla.cpp](https://fai-modelopt-tech.github.io/learn-vla-cpp/) | Walkthrough of the engine design and how each policy is implemented on ggml |
 
 ---
 
