@@ -7,10 +7,14 @@ Notable changes to vla.cpp. Format loosely follows [Keep a Changelog](https://ke
 ### Added
 
 - **ROCm/HIP backend for VLA inference.** `-DGGML_HIP=ON` selects ggml's HIP
-  backend without compiling vla.cpp's CUDA-only kernels. Linux `gfx1151` with
-  ROCm 7.14 and llama.cpp `b11223` has fixed-input and synthetic benchmark
-  coverage for SmolVLA and π0.5. See `docs/backend/rocm.md` for the measured
-  numerical differences, build commands and current limits.
+  backend without compiling vla.cpp's CUDA-only kernels. On Linux `gfx1200`
+  (Radeon RX 9060 XT) with ROCm 7.14 and llama.cpp `b11223`, every arch except
+  BitVLA (int2, CUDA only) runs and is benchmarked in
+  `docs/benchmark/rx-9060-xt.md`, and all but OpenVLA-OFT were checked against
+  the CPU build on fixed inputs; SmolVLA and π0.5 were also checked on
+  `gfx1151`. SmolVLA takes the same F32 LM weights and F16
+  cross-attention K/V on HIP as on CUDA. See `docs/backend/rocm.md` for the
+  measured numerical differences, build commands and current limits.
 - **New model: ACT** (LeRobot `policies/act`). `scripts/convert_act_to_gguf.py`
   converts a LeRobot `pretrained_model` directory, folding the ResNet's frozen
   batch norms and dropping the training-only VAE encoder. No language input, so

@@ -12,7 +12,7 @@ A C++ inference engine for **Vision-Language-Action (VLA) models**, built on [`l
 It runs the open VLA policies - SmolVLA, π0, BitVLA, Evo-1, GR00T N1.5/1.6/1.7 and more -
 under one runtime, each packaged as a single self-contained GGUF that needs no Python or
 PyTorch at inference time. The binaries drive robots on **CPU**, **Apple Silicon**, **CUDA** -
-from consumer GPUs down to Jetson-class boards - **AMD Radeon 8060S** via ROCm/HIP,
+from consumer GPUs down to Jetson-class boards - **AMD Radeon GPUs** via ROCm/HIP,
 **Intel GPUs and NPUs** via SYCL and OpenVINO, or **Qualcomm Snapdragon CPUs,
 Adreno GPUs and Hexagon NPUs**
 via OpenCL and the Hexagon backend.
@@ -58,8 +58,8 @@ tarball). Details, and the macOS and Windows notes, are in
 - CMake ≥ 3.22
 - A C++17 compiler (GCC 11+ or Clang 14+)
 - CUDA 12.x or 13.x (optional - required only for CUDA GPU builds)
-- ROCm with HIP, hipBLAS and rocBLAS (optional - see
-  [the tested AMD configuration](docs/backend/rocm.md))
+- ROCm with HIP, hipBLAS, rocBLAS, hipBLASLt and their development files
+  (optional - see [the tested AMD configurations](docs/backend/rocm.md))
 - Intel oneAPI 2025.x + GPU compute runtime (optional - only for Intel GPU
   builds, see [docs/backend/sycl.md](docs/backend/sycl.md))
 - OpenVINO 2026.x runtime (optional - only for Intel CPU/GPU/NPU builds via
@@ -101,11 +101,12 @@ cmake --build build -j$(nproc)
 ```
 
 For ROCm/HIP, use a separate build directory and the target reported by
-`rocminfo` (`gfx1151` in the tested example):
+`rocminfo` (`gfx1200` for the tested Radeon RX 9060 XT, `gfx1151` for the
+Radeon 8060S):
 
 ```bash
 HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
-cmake -B build-rocm -G Ninja -DGGML_HIP=ON -DGPU_TARGETS=gfx1151 \
+cmake -B build-rocm -G Ninja -DGGML_HIP=ON -DGPU_TARGETS=gfx1200 \
     -DCMAKE_BUILD_TYPE=Release
 cmake --build build-rocm -j$(nproc)
 ```
@@ -130,7 +131,7 @@ tree. `pip install ./bindings/python` builds the Python bindings, see
 [bindings/python/README.md](bindings/python/README.md).
 
 Check [docs/backend](docs/backend) for compiling `vla.cpp` on other platforms.
-ROCm on Linux `gfx1151`, WSL2, Apple Silicon, and Intel GPU are all tested.
+ROCm on Linux (`gfx1200`, `gfx1151`), WSL2, Apple Silicon, and Intel GPU are all tested.
 To build and run in containers instead, see [docs/DOCKER.md](docs/DOCKER.md).
 
 ---
@@ -167,24 +168,26 @@ supported (released and benchmarked), `~` = in progress, `-` = planned.
 | Model | CPU (x86-64 / ARM) | CUDA | [ROCm (AMD)](docs/backend/rocm.md) | [SYCL (Intel)](docs/backend/sycl.md) | [Metal](docs/backend/metal.md) | [OpenVINO](docs/backend/ov.md) | [Hexagon](docs/backend/hexagon-windows.md) |
 |---|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | [SmolVLA](https://hf.co/vrfai/smolvla-libero-gguf)             | Y | Y | Y | Y | Y | Y | Y |
-| [π0](https://hf.co/vrfai/pi0-libero-finetuned-v044-gguf)       | Y | Y | ~ | - | Y | Y | ~ |
+| [π0](https://hf.co/vrfai/pi0-libero-finetuned-v044-gguf)       | Y | Y | Y | - | Y | Y | ~ |
 | [π0.5](https://hf.co/vrfai/pi05-libero-gguf)                   | Y | Y | Y | - | Y | Y | Y |
-| [GR00T N1.5](https://hf.co/vrfai/gr00tn1d5-libero-object-gguf) | Y | Y | ~ | - | Y | Y | Y |
-| [GR00T N1.6](https://hf.co/vrfai/gr00tn1d6-libero-gguf)        | Y | Y | ~ | - | Y | Y | Y |
-| [GR00T N1.7](https://hf.co/vrfai/gr00tn1d7-libero-gguf)        | Y | Y | ~ | - | Y | Y | Y |
+| [GR00T N1.5](https://hf.co/vrfai/gr00tn1d5-libero-object-gguf) | Y | Y | Y | - | Y | Y | Y |
+| [GR00T N1.6](https://hf.co/vrfai/gr00tn1d6-libero-gguf)        | Y | Y | Y | - | Y | Y | Y |
+| [GR00T N1.7](https://hf.co/vrfai/gr00tn1d7-libero-gguf)        | Y | Y | Y | - | Y | Y | Y |
 | [BitVLA](https://hf.co/vrfai/bitvla-libero-gguf)               | Y | Y | - | - | ~ | - | - |
-| [Evo-1](https://hf.co/vrfai/evo1-libero-gguf)                  | Y | Y | ~ | Y | Y | Y | Y |
-| [VLA-Adapter](https://hf.co/vrfai/vla-adapter-libero-gguf)     | Y | Y | ~ | ~ | Y | Y | Y |
-| [OpenVLA-OFT](https://hf.co/vrfai/openvla-oft-libero-gguf)     | Y | Y | - | - | Y | Y | - |
-| [VLA-JEPA](https://hf.co/vrfai/vla-jepa-libero)                | Y | Y | - | - | Y | Y | ~ |
-| [Octo-Small](https://hf.co/vrfai/octo-small-libero-gguf)       | Y | Y | - | Y | Y | - | Y |
-| [TurboVLA](https://hf.co/vrfai/turbovla-libero-gguf)           | Y | Y | ~ | Y | Y | Y | Y |
-| [ACT](https://hf.co/ravediamond/act-aloha-sim-transfer-cube-gguf) | Y | Y | ~ | - | Y | - | - |
+| [Evo-1](https://hf.co/vrfai/evo1-libero-gguf)                  | Y | Y | Y | Y | Y | Y | Y |
+| [VLA-Adapter](https://hf.co/vrfai/vla-adapter-libero-gguf)     | Y | Y | Y | ~ | Y | Y | Y |
+| [OpenVLA-OFT](https://hf.co/vrfai/openvla-oft-libero-gguf)     | Y | Y | Y | - | Y | Y | - |
+| [VLA-JEPA](https://hf.co/vrfai/vla-jepa-libero)                | Y | Y | Y | - | Y | Y | ~ |
+| [Octo-Small](https://hf.co/vrfai/octo-small-libero-gguf)       | Y | Y | Y | Y | Y | - | Y |
+| [TurboVLA](https://hf.co/vrfai/turbovla-libero-gguf)           | Y | Y | Y | Y | Y | Y | Y |
+| [ACT](https://hf.co/ravediamond/act-aloha-sim-transfer-cube-gguf) | Y | Y | Y | - | Y | - | - |
 
-ROCm `Y` currently means fixed-input inference and synthetic-input benchmark
-coverage on Linux `gfx1151` with ROCm 7.14 and llama.cpp `b11223`. The `~`
-rows await validation on this upstream revision; older results do not establish
-their current status. These engine checks do not establish robot-task success.
+ROCm `Y` means fixed-input agreement with the CPU build and a synthetic-input
+benchmark on Linux `gfx1200` (Radeon RX 9060 XT) with ROCm 7.14 and llama.cpp
+`b11223`; SmolVLA and π0.5 were also checked on `gfx1151`. OpenVLA-OFT, too
+large for the CPU reference host, was checked for finite, repeatable actions
+only. BitVLA's published int2 GGUF needs vla.cpp's CUDA kernels. These engine
+checks do not establish robot-task success.
 
 Adding a model? Use [ggml-compiler](https://github.com/khanhnd61-vr/ggml-compiler)
 to generate and verify ggml C++ from its PyTorch implementation, then integrate
