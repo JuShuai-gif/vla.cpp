@@ -20,7 +20,7 @@ engine only: no transport, no simulator, and no claim about task success.
 | Method | 3 warmups + 20 timed reps per process, 3 processes. The process with the lowest mean is reported. |
 
 The defaults run the bit-exact CUDA path
-([backend/cuda-exact.md](../backend/cuda-exact.md)): the actions are the same
+([backend/cuda.md](../backend/cuda.md#the-bit-exact-fast-path)): the actions are the same
 bits as the plain ggml graph, so success rates measured at the defaults carry
 over. The [comparison below](#against-1012c05) re-measures `1012c05`, the
 commit before it, with the same protocol.

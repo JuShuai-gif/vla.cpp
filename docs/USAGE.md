@@ -90,7 +90,7 @@ These apply to every arch:
 - `VLA_CACHE` - where `-hf` stores checkpoints, default `~/.cache/vla`.
 - `VLA_FUSED_OPS` - CUDA: `0` turns off the fused kernels and runs the plain
   ggml graph. Both give the same output; the other switches are in
-  [backend/cuda-exact.md](backend/cuda-exact.md).
+  [backend/cuda.md](backend/cuda.md#the-bit-exact-fast-path).
 
 Checkpoints that carry stats for several datasets need the one to un-normalize
 with, for example `VLA_OCTO_UNNORM_DATASET=libero_object` for the Octo LIBERO

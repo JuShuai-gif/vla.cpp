@@ -7,7 +7,7 @@ synthetic inputs at `c93ca0a` (PR #32), llama.cpp `b11223`. The Core Ultra X7
 `c93ca0a` only by docs, release tooling and OpenVINO-only scripts. The Arc B390
 SYCL row ran later, at `1adf078` (after PR #33, same llama.cpp pin). The Jetson
 AGX Orin row ran at `e6653e8`, on the bit-exact CUDA path
-([backend/cuda-exact.md](../backend/cuda-exact.md)); its report also re-measures
+([backend/cuda.md](../backend/cuda.md#the-bit-exact-fast-path)); its report also re-measures
 `1012c05`, before that path, for comparison. The Radeon RX 9060 XT ROCm row
 ran at `d0e5d00`, PR #35 merged with main `f464653` (same llama.cpp pin), with
 fixed-input checks against the CPU build in

@@ -1,6 +1,79 @@
-# CUDA: the bit-exact fast path
+# `vla.cpp` on NVIDIA GPUs (CUDA backend)
 
-On CUDA, at the default precision (F32 activations, the checkpoint's BF16 or
+Notes for building `vla.cpp` against CUDA, for desktop and datacenter GPUs and
+Jetson boards alike, and on the bit-exact fast path it runs there. CUDA is not
+auto-detected: it needs the CUDA toolkit and an explicit `-DGGML_CUDA=ON`, in
+its own build directory.
+
+Prebuilt CUDA tarballs for x86-64 and aarch64 (Orin, Thor, DGX Spark) are on
+the releases page; see [PREBUILT.md](../PREBUILT.md). On Windows, build inside
+WSL2 as in [wsl.md](wsl.md).
+
+## Prerequisites
+
+- Everything the CPU build needs (CMake, a C++17 compiler, the apt packages),
+  listed in the main [README](../../README.md#build-from-source).
+- CUDA toolkit 12.x or 13.x, with `nvcc`. Blackwell `sm_100`/`sm_120` need
+  12.8 or newer, DGX Spark `sm_121` needs 12.9, Jetson Thor `sm_110` needs 13.0.
+- Python 3 at configure time: CMake runs
+  `scripts/patch_ggml_cuda_ext_hook.py` on the fetched `llama.cpp`.
+
+## Pick the CUDA architecture
+
+| GPU family | Example cards | `CUDA_ARCHITECTURE` |
+|---|---|---|
+| Ampere (Jetson) | Orin Nano, Orin NX | `87` |
+| Ampere (consumer) | RTX 30-series, A40 | `86` |
+| Ada Lovelace | RTX 40-series, L40 | `89` |
+| Hopper | H100, H200 | `90` |
+| Blackwell (consumer) | RTX 50-series | `120` |
+| Blackwell (datacenter) | B100, B200, GB200 | `100` |
+| Blackwell (Jetson) | Jetson Thor | `110` |
+| Blackwell (DGX Spark) | GB10 | `121` |
+
+Without `CMAKE_CUDA_ARCHITECTURES` (or `CUDAARCHS`), CMake builds every
+architecture above that the toolkit supports, plus `sm_90` PTX so newer cards
+can JIT. That takes much longer than building one.
+
+## Configure and build
+
+```bash
+cmake -B build-cuda \
+    -DGGML_CUDA=ON \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_CUDA_ARCHITECTURES=$CUDA_ARCHITECTURE
+cmake --build build-cuda -j$(nproc)
+```
+
+If CMake cannot find CUDA, point the environment at it explicitly:
+
+```bash
+export PATH=/usr/local/cuda/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+```
+
+The binaries land in `build-cuda/`; use that in place of `./build/` in the
+README's Quickstart.
+
+## Check the device
+
+A model load on the GPU prints:
+
+```
+vla: backend = CUDA (device 0)
+```
+
+If CUDA fails to initialize, it logs `ggml_backend_cuda_init failed; falling
+back to CPU` and runs on the CPU. `VLA_DEVICE=<n>` picks the GPU ordinal
+(default 0); the other CUDA environment variables are in
+[USAGE.md](../USAGE.md) and [Switches](#switches).
+
+Per-device latency is in [docs/benchmark/](../benchmark): RTX 3060, 3090,
+5070 Laptop and 5090, Jetson Orin Nano, Orin NX and AGX Orin.
+
+## The bit-exact fast path
+
+At the default precision (F32 activations, the checkpoint's BF16 or
 F32 weights, no flash attention), every architecture runs a faster path that
 returns **the same bits** as the plain ggml graph. Nothing about the model's
 arithmetic changes: no lower precision, no reordered sums. Success rates
@@ -34,7 +107,7 @@ epilogues, and the row kernels (softmax, norms with their activation
 quantization, RoPE) are rewritten. Its products are int8 times a ternary
 weight summed in int32, which is exact in any order.
 
-## How the output stays the same
+### How the output stays the same
 
 - **Elementwise and norm kernels** round to F32 wherever ggml does, with
   `__fmul_rn` / `__fadd_rn` so the compiler cannot contract two ops into one
@@ -62,7 +135,7 @@ weight summed in int32, which is exact in any order.
   tower), `fused_gemm_views` issues one GEMM per view. A single GEMM over all
   views would pick other kernels and other bits.
 
-## Coverage
+### Coverage
 
 | Architecture | What runs fused |
 |---|---|
@@ -87,7 +160,7 @@ integer GEMMs accumulate in int32, exact in any order, so their tiling is
 chosen for speed alone. On the Orin this cuts 30-35% from the calibrated LIBERO
 W4A4 files ([numbers](../benchmark/jetson-agx-orin.md#foldquant-checkpoints)).
 
-## Switches
+### Switches
 
 The defaults are the verified configuration. The switches exist for A/B checks.
 
@@ -105,7 +178,7 @@ The defaults are the verified configuration. The switches exist for A/B checks.
 | `VLA_GEMM_CACHE=file` | off | Extra cuBLASLt configurations to try, one per line. `VLA_GEMM_SEARCH=1` tries every configuration (slow) and appends the fastest identical ones to the file. Entries carry the cuBLASLt version and are ignored after an upgrade. |
 | `VLA_EXACT_TRACE` | off | `1` prints each shape's GEMM and attention choice, `2` every candidate. |
 
-## Verifying
+### Verifying
 
 - `ctest -R fused_cuda_ops` runs every fused node against the ggml chain it
   replaces and compares the bytes.

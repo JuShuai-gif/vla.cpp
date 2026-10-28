@@ -157,7 +157,7 @@ claimed by the extension hook (`src/cuda/vla_cuda_foldquant.cu`, registered by
 userdata; a node that violates the contract is declined, and ggml then aborts
 on the unsupported op rather than computing something else.
 
-With the fused CUDA ops on ([backend/cuda-exact.md](backend/cuda-exact.md)),
+With the fused CUDA ops on ([backend/cuda.md](backend/cuda.md#the-bit-exact-fast-path)),
 two variants of `fq_act` also run the op before it, so that op's output is
 never written out: `fq_act_glu` takes the gate and up outputs (GELU or SiLU
 gate, or GELU alone) and `fq_act_norm` the norm input (a DiT LayerNorm, with or

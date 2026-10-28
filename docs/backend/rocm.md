@@ -69,7 +69,7 @@ silently running on the CPU.
 vla.cpp's own CUDA kernels are not compiled into a HIP build, and the paths
 that need them stay off:
 
-- the bit-exact fused nodes ([cuda-exact.md](cuda-exact.md)), so
+- the bit-exact fused nodes ([cuda.md](cuda.md#the-bit-exact-fast-path)), so
   `VLA_FUSED_OPS` has no effect;
 - BF16 activations: `--act-dtype bf16` is ignored with a message;
 - FoldQuant's integer GEMMs: a FoldQuant GGUF is read back as float weights;

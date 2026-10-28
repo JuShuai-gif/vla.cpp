@@ -65,8 +65,8 @@ wsl --shutdown   # reopen WSL afterwards so the new PATH is picked up
 ## Configure & build
 
 ```bash
-# CUDA build. Set CMAKE_CUDA_ARCHITECTURES for your GPU (see the table in the
-# top-level README; e.g. RTX 40-series / Ada = 89).
+# CUDA build. Set CMAKE_CUDA_ARCHITECTURES for your GPU (see the table in
+# cuda.md; e.g. RTX 40-series / Ada = 89).
 cmake -B build \
     -DGGML_CUDA=ON \
     -DGGML_CUDA_GRAPHS=ON \
