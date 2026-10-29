@@ -282,6 +282,22 @@ bool broadcast_has_gap(const ggml_tensor * a, const ggml_tensor * b) {
     return false;
 }
 
+// The concat ggml-hexagon runs as a DMA row copy: along dim 1, contiguous,
+// one type, the other dims equal and within its 2D descriptor limits.
+bool concat_is_dma_row_copy(const ggml_tensor * t) {
+    const ggml_tensor * a = t->src[0];
+    const ggml_tensor * b = t->src[1];
+    if (((const int32_t *) t->op_params)[0] != 1 || !a || !b)
+        return false;
+    if (a->type != t->type || b->type != t->type ||
+        !ggml_is_contiguous(a) || !ggml_is_contiguous(b) || !ggml_is_contiguous(t))
+        return false;
+    for (int d : {0, 2, 3})
+        if (a->ne[d] != t->ne[d] || b->ne[d] != t->ne[d])
+            return false;
+    return a->ne[1] <= UINT16_MAX && b->ne[1] <= UINT16_MAX && t->nb[1] <= 0xffffff;
+}
+
 // Whether the accelerator should run t. Normally its own supports_op, but an
 // op it claims and computes differently from the CPU reference is refused here.
 bool accel_runs(FallbackCtx * fc, const ggml_tensor * t, const char ** why) {
@@ -317,6 +333,14 @@ bool accel_runs(FallbackCtx * fc, const ggml_tensor * t, const char ** why) {
             *why = "miscomputes an overlapping or padded";
             return false;
         }
+    }
+    if (fc->hexagon && t->op == GGML_OP_CONCAT && !concat_is_dma_row_copy(t)) {
+        // supports_op claims every concat, but on buffers mapped above 4 GB of
+        // DSP address space the NPU runs only the dim-1 contiguous DMA copy and
+        // answers anything else with NO_SUPPORT, and the host aborts. Seen on
+        // Linux (IQ-10, v81) with SmolVLA's dim-2 KV concat [64,5,177] x [64,5,50].
+        *why = "cannot run (NO_SUPPORT above 4 GB) a non-row";
+        return false;
     }
     return ggml_backend_supports_op(fc->accel, t);
 }
