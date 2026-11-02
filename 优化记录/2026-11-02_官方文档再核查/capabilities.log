@@ -1,0 +1,12 @@
+name=M1000 cc=2.2 MPs=8 warp=128 shared_block=73728 shared_optin=73728 L2=0 persist_L2_max=0 access_window_max=1073741824 integrated=1 map_host=1 async_engines=1
+driver_global_loaded=1 error=none
+libmublasLt.so loaded=1 error=none
+  mublasLtMatmulAlgoGetHeuristic=1
+  mublasLtMatmulAlgoGetIds=1
+  mudnnScaledDotProductAttentionFlashForward=0
+  mudnnCreateScaledDotProductAttentionDescriptor=0
+libmudnn.so loaded=1 error=none
+  mublasLtMatmulAlgoGetHeuristic=0
+  mublasLtMatmulAlgoGetIds=0
+  mudnnScaledDotProductAttentionFlashForward=1
+  mudnnCreateScaledDotProductAttentionDescriptor=1

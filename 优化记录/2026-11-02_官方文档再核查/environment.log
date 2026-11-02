@@ -1,0 +1,30 @@
+$ git rev-parse HEAD
+6543803c4e75f50feba34e57503d8df1b48f0d97
+exit_code=0
+
+$ uname -a
+Linux aibox 6.6.10 #1 SMP PREEMPT Thu Jul  9 05:35:20 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux
+exit_code=0
+
+$ dpkg-query -W musa musa-sdk
+musa	5.1.1-M1000
+musa-sdk	5.1.1
+exit_code=0
+
+$ readlink /usr/local/musa
+musa-5.1.0
+exit_code=0
+
+$ mcu --version
+Moore Perf Compute Version:  1.2.2-3a6f1fcec
+exit_code=0
+
+$ nm -D /lib/aarch64-linux-gnu/libmusa.so.1 | grep muTensorDescriptorEncode
+0000000000350cd0 T muTensorDescriptorEncode
+exit_code=0
+
+Probe build:
+/usr/local/musa/bin/clang++ -std=c++17 优化记录/2026-11-02_官方文档再核查/probe_capabilities.cpp -I/usr/local/musa/include -L/usr/local/musa/lib -Wl,-rpath,/usr/local/musa/lib -lmusart -ldl -o /tmp/vla-review-capabilities
+
+Probe run:
+LD_LIBRARY_PATH=/usr/local/musa/lib /tmp/vla-review-capabilities
