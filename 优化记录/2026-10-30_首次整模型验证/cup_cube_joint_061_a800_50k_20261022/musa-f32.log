@@ -1,0 +1,11 @@
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f32
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): resident weights = 10.09 GiB
+vla(pi05): model loaded (n_threads=4)
+CONFIG OK; load seconds 20.954524609000146
+VISION OK 995.4474487304688
+PREDICT OK {'ms_total': 4560.1767578125, 'ms_vision': 830.9719848632812, 'ms_inference': 3689.878173828125, 'ms_prefill': 0.0, 'ms_denoise': 0.0}
+REPEAT/PRECOMPUTED OK 0.0

@@ -1,0 +1,25 @@
+{
+  "synthetic_inputs": true,
+  "vision_cpu_vs_torch": {
+    "max_abs": 0.059844970703125,
+    "rmse": 0.0015289975563064218,
+    "relative_peak": 0.0004083154781255871
+  },
+  "vision_musa_vs_torch": {
+    "max_abs": 0.0467987060546875,
+    "rmse": 0.0007932580192573369,
+    "relative_peak": 0.0003193022857885808
+  },
+  "vision_musa_vs_cpu": {
+    "max_abs": 0.075653076171875,
+    "rmse": 0.0015948807122185826,
+    "relative_peak": 0.0005161363515071571
+  },
+  "actions_musa_vs_cpu": {
+    "max_abs": 0.038257598876953125,
+    "rmse": 0.012575454078614712,
+    "relative_peak": 0.0003930636739823967
+  },
+  "threshold_relative_peak": 0.005,
+  "passed": true
+}

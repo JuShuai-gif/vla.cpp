@@ -1,0 +1,18 @@
+{
+  "backend": "0",
+  "weight_dtype": "f32",
+  "shape": [
+    50,
+    32
+  ],
+  "real_action_dim": 7,
+  "timing_ms": {
+    "ms_total": 2198.943115234375,
+    "ms_vision": 442.9446105957031,
+    "ms_inference": 1738.5357666015625,
+    "ms_prefill": 0.0,
+    "ms_denoise": 0.0
+  },
+  "direct_vs_precomputed_max_abs": 0.0,
+  "elapsed_s": 16.82652691000112
+}

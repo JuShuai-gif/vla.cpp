@@ -1,0 +1,17 @@
+{
+  "shape": [
+    50,
+    7
+  ],
+  "camera_order": [
+    "observation.images.top",
+    "observation.images.wrist"
+  ],
+  "tokens": 43,
+  "num_steps": 3,
+  "max_abs": 0.01820087432861328,
+  "rmse": 0.005239755865022958,
+  "relative_peak": 0.00021377131261343264,
+  "threshold_relative_peak": 0.005,
+  "passed": true
+}

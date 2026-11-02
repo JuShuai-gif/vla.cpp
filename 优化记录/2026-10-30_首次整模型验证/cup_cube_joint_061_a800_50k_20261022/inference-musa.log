@@ -1,0 +1,8 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+Saved 50 x 7 actions to /home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/inference-musa.json; cameras=['observation.images.wrist', 'observation.images.top']
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f32
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): resident weights = 10.09 GiB
+vla(pi05): model loaded (n_threads=4)

@@ -1,0 +1,10 @@
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f32
+vla(pi05): VLA_DEVICE=cpu, not starting the accelerator
+vla(pi05): backend = CPU (4 threads)
+vla(pi05): resident weights = 10.09 GiB
+vla(pi05): model loaded (n_threads=4)
+CONFIG OK; load seconds 24.054471440998896
+VISION OK 3174.443115234375
+PREDICT OK {'ms_total': 22461.373046875, 'ms_vision': 3120.504150390625, 'ms_inference': 19334.41796875, 'ms_prefill': 0.0, 'ms_denoise': 0.0}
+REPEAT/PRECOMPUTED OK 0.0

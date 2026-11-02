@@ -1,0 +1,142 @@
+[
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/compare.log",
+    "file": "pi05_cube_merge_cksize50_step3_0929/compare.log",
+    "sha256": "bc870fbc65ac321c5c9300a652a9d138bc61ff511632b84779c32b041a9d409c"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/comparison.json",
+    "file": "pi05_cube_merge_cksize50_step3_0929/comparison.json",
+    "sha256": "bc870fbc65ac321c5c9300a652a9d138bc61ff511632b84779c32b041a9d409c"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/cpu-f32-report.json",
+    "file": "pi05_cube_merge_cksize50_step3_0929/cpu-f32-report.json",
+    "sha256": "68ba6d1dc4f941ba58ceb2fcaeaba9b16e59f7b02524a0fb00cc62b91e2249d7"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/cpu-f32-runtime.json",
+    "file": "pi05_cube_merge_cksize50_step3_0929/cpu-f32-runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/cpu-f32.log",
+    "file": "pi05_cube_merge_cksize50_step3_0929/cpu-f32.log",
+    "sha256": "b7182b3a0de0ed5e6437999084befb4496950e2666e2d348e40c8393d52a4777"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/inference-comparison.json",
+    "file": "pi05_cube_merge_cksize50_step3_0929/inference-comparison.json",
+    "sha256": "9077782b9efc830e8626892b92662c2c78f388f517a28cec46d17bf936eeaebd"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/inference-cpu.json",
+    "file": "pi05_cube_merge_cksize50_step3_0929/inference-cpu.json",
+    "sha256": "b5252e785d2f035f8c812e2ddac6c1adab76e9da183614982166f1ada309404a"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/inference-cpu.log",
+    "file": "pi05_cube_merge_cksize50_step3_0929/inference-cpu.log",
+    "sha256": "bffcb947453e7a3b03bf67ca15ac5fe3e438de90e30dfaa459a101b9a9e99d3e"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/inference-musa.json",
+    "file": "pi05_cube_merge_cksize50_step3_0929/inference-musa.json",
+    "sha256": "675b8eeda46db3f1824d58989fa72c3dfed63b69311a194d882ce1bf79e0a565"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/inference-musa.log",
+    "file": "pi05_cube_merge_cksize50_step3_0929/inference-musa.log",
+    "sha256": "6f1d830c688727653b11d25c4641988480dccf11cf1b91dd44a1437c73d70ce9"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/musa-f32-report.json",
+    "file": "pi05_cube_merge_cksize50_step3_0929/musa-f32-report.json",
+    "sha256": "7e419bf0e9b0e82db4b4d56252125d7517370504b3f4ec82d4c7b943e535c85f"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/musa-f32-runtime.json",
+    "file": "pi05_cube_merge_cksize50_step3_0929/musa-f32-runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/musa-f32.log",
+    "file": "pi05_cube_merge_cksize50_step3_0929/musa-f32.log",
+    "sha256": "3520b6eef2aa928f828d40827fdd709c483287cc525d037b1ffd6f96b494f886"
+  },
+  {
+    "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/vision-ref.log",
+    "file": "pi05_cube_merge_cksize50_step3_0929/vision-ref.log",
+    "sha256": "8940e67a49ccb8372a752016a7204e8e769c40740a137b45c29e1001ed1be256"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/compare.log",
+    "file": "cup_cube_joint_061_a800_50k_20261022/compare.log",
+    "sha256": "4c4303ca178a015412508c8fe3ff8545be86c3fb59df1f9f736d5fb7ea535e85"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/comparison.json",
+    "file": "cup_cube_joint_061_a800_50k_20261022/comparison.json",
+    "sha256": "4c4303ca178a015412508c8fe3ff8545be86c3fb59df1f9f736d5fb7ea535e85"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/cpu-f32-report.json",
+    "file": "cup_cube_joint_061_a800_50k_20261022/cpu-f32-report.json",
+    "sha256": "d3f21bb409928a6e981f983f8add7d4d5b87bbcbc7b62ba4b34fe3f0813a4f81"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/cpu-f32-runtime.json",
+    "file": "cup_cube_joint_061_a800_50k_20261022/cpu-f32-runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/cpu-f32.log",
+    "file": "cup_cube_joint_061_a800_50k_20261022/cpu-f32.log",
+    "sha256": "d8108f4cc448542739b3bb068d30e1a8d6db0d257ce74b6aae175ddf9c2c5a06"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/inference-comparison.json",
+    "file": "cup_cube_joint_061_a800_50k_20261022/inference-comparison.json",
+    "sha256": "e9c97b0d24577e4c6e41e7265a86dea8db416fd61429e335d16829e3bd96e50d"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/inference-cpu.json",
+    "file": "cup_cube_joint_061_a800_50k_20261022/inference-cpu.json",
+    "sha256": "3da6c2577f8ab2715ddc7d7df3e311a84276ae7a63a04b86dea10d30c32c6a54"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/inference-cpu.log",
+    "file": "cup_cube_joint_061_a800_50k_20261022/inference-cpu.log",
+    "sha256": "2eb5137a8b0e96f1794f6ed48ecfe984235df9b7e83fd82d4868c30f642d9b28"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/inference-musa.json",
+    "file": "cup_cube_joint_061_a800_50k_20261022/inference-musa.json",
+    "sha256": "dc86f451e1b92c9896da3900afb10e38578c436400f1bf7d6843477a1070d0d5"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/inference-musa.log",
+    "file": "cup_cube_joint_061_a800_50k_20261022/inference-musa.log",
+    "sha256": "4e74a25ea8cdd69214396edb73d49bee00a232258a61439eecd4b2bd6d3eb14d"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/musa-f32-report.json",
+    "file": "cup_cube_joint_061_a800_50k_20261022/musa-f32-report.json",
+    "sha256": "405cb0edb7d1dbff608d76f8879e800ee30a0a5435b62022d23584496788a70a"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/musa-f32-runtime.json",
+    "file": "cup_cube_joint_061_a800_50k_20261022/musa-f32-runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/musa-f32.log",
+    "file": "cup_cube_joint_061_a800_50k_20261022/musa-f32.log",
+    "sha256": "378a84863f43288fb704588ff73be4d246467e641ae92540fdb4f058f23bda15"
+  },
+  {
+    "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/vision-ref.log",
+    "file": "cup_cube_joint_061_a800_50k_20261022/vision-ref.log",
+    "sha256": "43cf236343d28b6dd79abd2d1dd740bbebc593f3a572e00fd8f6bb8e67d5891a"
+  }
+]
