@@ -121,6 +121,9 @@ const char * Options::usage() {
     return "  --weight-dtype f32|bf16|f16  resident dtype for GEMM weights\n"
            "  --act-dtype f32|bf16      activation dtype; bf16 needs bf16 weights: pi0 and\n"
            "                            pi0.5 on CUDA or SYCL, evo1 on CUDA\n"
+#ifdef GGML_USE_MUSA
+           "  --act-dtype f16           pi0.5 on MUSA, requires F16 weights and fusion\n"
+#endif
            "  --flash-attn [0|1]        flash attention; faster, changes numerics\n"
            "  --mm-prec default|f32     matmul accumulation precision\n"
            "  --num-steps N             flow-matching solver steps, 1-1000 (default: the\n"
@@ -151,10 +154,12 @@ bool Options::parse_arg(int argc, char ** argv, int & i, std::string & err) {
         }
         // F16 weights are for backends without BF16 kernels (Hexagon, OpenCL);
         // the BF16 activation path (CUDA, SYCL) has no F16 twin.
+#ifndef GGML_USE_MUSA
         if (a == "--act-dtype" && t == GGML_TYPE_F16) {
             err = a+": expected f32 or bf16, got '"+v+"'";
             return false;
         }
+#endif
         if (a == "--weight-dtype")
             weight_dtype = t;
         else
@@ -269,7 +274,13 @@ bool Options::load_json(const std::string & path, std::string & err) {
                 dst = t;
             return true;
         };
-        if (!dtype("weight_dtype", weight_dtype, true) || !dtype("act_dtype", act_dtype, false))
+        if (!dtype("weight_dtype", weight_dtype, true) || !dtype("act_dtype", act_dtype,
+#ifdef GGML_USE_MUSA
+            true
+#else
+            false
+#endif
+        ))
             return false;
         if (r.contains("flash_attn") && !flash_attn)
             flash_attn = r["flash_attn"].get<bool>();

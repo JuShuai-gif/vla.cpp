@@ -18,6 +18,12 @@ target_include_directories(test_vision_common PRIVATE ${CMAKE_SOURCE_DIR}/src)
 target_compile_options(test_vision_common PRIVATE -Wall -Wextra)
 add_test(NAME vision_common COMMAND test_vision_common)
 
+add_executable(test_vision_prune test_vision_prune.cpp)
+target_include_directories(test_vision_prune PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_link_libraries(test_vision_prune PRIVATE ggml)
+target_compile_options(test_vision_prune PRIVATE -Wall -Wextra)
+add_test(NAME vision_prune COMMAND test_vision_prune)
+
 add_executable(test_rope_conventions test_rope_conventions.cpp)
 target_include_directories(test_rope_conventions PRIVATE ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(test_rope_conventions PRIVATE ggml)
@@ -76,6 +82,19 @@ target_include_directories(test_foldquant_dequant PRIVATE ${CMAKE_SOURCE_DIR}/sr
 target_link_libraries(test_foldquant_dequant PRIVATE vla_core)
 target_compile_options(test_foldquant_dequant PRIVATE -Wall -Wextra)
 add_test(NAME foldquant_dequant COMMAND test_foldquant_dequant)
+
+# Real MUSA execution against CPU references, without a model download.
+if(GGML_MUSA)
+    add_executable(test_musa_ops test_musa_ops.cpp)
+    target_link_libraries(test_musa_ops PRIVATE vla_core)
+    target_compile_options(test_musa_ops PRIVATE -Wall -Wextra)
+    add_test(NAME musa_ops COMMAND test_musa_ops)
+    set_tests_properties(musa_ops PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
+    add_test(NAME musa_cpu_selection COMMAND test_musa_ops --expect-cpu)
+    set_tests_properties(musa_cpu_selection PROPERTIES ENVIRONMENT "VLA_DEVICE=cpu")
+    add_test(NAME musa_invalid_device COMMAND test_musa_ops --expect-cpu)
+    set_tests_properties(musa_invalid_device PROPERTIES ENVIRONMENT "VLA_DEVICE=1024")
+endif()
 
 # The same site through ggml's SYCL backend (src/sycl/vla_sycl_foldquant.cpp),
 # bit-identical to the CPU reference.

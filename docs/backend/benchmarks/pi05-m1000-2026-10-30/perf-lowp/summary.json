@@ -1,0 +1,32 @@
+{
+  "pi05_cube_merge_cksize50_step3_0929": {
+    "previous_f16_weights_f32_activations_ms": 957.337034999,
+    "native_f16_activations_ms": 961.085513999933,
+    "fixed_input_error": {
+      "max_abs": 0.1082000732421875,
+      "rmse": 0.044143278151750565,
+      "relative_peak": 0.0010161175159737468
+    },
+    "full_entry_vs_cpu_f32": {
+      "max_abs": 0.09488201141357422,
+      "rmse": 0.02222902830795477,
+      "relative_peak": 0.0011143998775594985
+    },
+    "passed": true
+  },
+  "cup_cube_joint_061_a800_50k_20261022": {
+    "previous_f16_weights_f32_activations_ms": 2194.015833998492,
+    "native_f16_activations_ms": 2158.336849999614,
+    "fixed_input_error": {
+      "max_abs": 0.1090240478515625,
+      "rmse": 0.03770093992352486,
+      "relative_peak": 0.0011201411252841353
+    },
+    "full_entry_vs_cpu_f32": {
+      "max_abs": 0.03392791748046875,
+      "rmse": 0.010508826958546057,
+      "relative_peak": 0.00036506009577101645
+    },
+    "passed": true
+  }
+}

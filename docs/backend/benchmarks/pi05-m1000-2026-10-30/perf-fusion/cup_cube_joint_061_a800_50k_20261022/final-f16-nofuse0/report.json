@@ -1,0 +1,54 @@
+{
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "dtype": "f16",
+  "steps": 10,
+  "chunk": 50,
+  "vision_tokens_per_camera": 256,
+  "no_fuse": "0",
+  "warmup": 1,
+  "runs": [
+    {
+      "ms_total": 2274.251220703125,
+      "ms_vision": 478.29351806640625,
+      "ms_inference": 1795.428466796875,
+      "wall_ms": 2274.828522999087
+    },
+    {
+      "ms_total": 2277.158447265625,
+      "ms_vision": 476.88385009765625,
+      "ms_inference": 1799.7608642578125,
+      "wall_ms": 2277.7201590015466
+    },
+    {
+      "ms_total": 2274.620849609375,
+      "ms_vision": 478.4271240234375,
+      "ms_inference": 1795.6478271484375,
+      "wall_ms": 2275.167137000608
+    },
+    {
+      "ms_total": 2283.84375,
+      "ms_vision": 479.2320861816406,
+      "ms_inference": 1804.00146484375,
+      "wall_ms": 2284.3750350002665
+    },
+    {
+      "ms_total": 2282.146240234375,
+      "ms_vision": 478.576904296875,
+      "ms_inference": 1803.109619140625,
+      "wall_ms": 2282.647583000653
+    }
+  ],
+  "repeat_max_abs": 0.0,
+  "median_ms": {
+    "ms_total": 2277.158447265625,
+    "ms_vision": 478.4271240234375,
+    "ms_inference": 1799.7608642578125,
+    "wall_ms": 2277.7201590015466
+  },
+  "p95_wall_ms": 2284.029544600344,
+  "error_vs_reference": {
+    "max_abs": 0.01789093017578125,
+    "rmse": 0.007170515600591898,
+    "relative_peak": 0.00018381602421868593
+  }
+}

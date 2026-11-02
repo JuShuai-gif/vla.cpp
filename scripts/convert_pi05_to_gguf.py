@@ -208,6 +208,8 @@ def convert(ckpt: Path, out: Path, *, writer_factory=open_writer, dataset_stats:
     keys = set(sf.keys())
     root = pi_root(keys)
     vlm, head, aex = root + PFX_VLM, root + PFX_VLM_HEAD, root + PFX_AEX
+    # Some fine-tuned checkpoints untie the vocabulary head from input embeddings.
+    embedding = f"{vlm}.embed_tokens.weight" if f"{vlm}.embed_tokens.weight" in keys else head
 
     n_layers_vlm = max_layer(keys, f"{vlm}.layers.")
     n_layers_aex = max_layer(keys, f"{aex}.layers.")
@@ -237,7 +239,7 @@ def convert(ckpt: Path, out: Path, *, writer_factory=open_writer, dataset_stats:
     if aex_o0 != [cfg["expert_h"], cfg["n_q_heads"] * cfg["head_dim"]]:
         raise SystemExit(f"expert o_proj shape {aex_o0} unexpected")
 
-    cfg["vocab_size"] = int(sf.get_slice(head).get_shape()[0])
+    cfg["vocab_size"] = int(sf.get_slice(embedding).get_shape()[0])
 
     print(f"resolved cfg: hidden={cfg['hidden']} n_layers={cfg['n_layers']} "
           f"expert_h={cfg['expert_h']} vocab={cfg['vocab_size']} chunk={cfg['chunk_size']} "
@@ -248,6 +250,14 @@ def convert(ckpt: Path, out: Path, *, writer_factory=open_writer, dataset_stats:
     cfg["vit"] = probe_paligemma_vision(sf, keys, cfg_json, [root + p for p in PFX_VIS_CANDIDATES],
                                         [root + p for p in PFX_MMP_CANDIDATES])
     v = cfg["vit"]
+    vision_keep = int(cfg_json.get("vision_token_prune", 0))
+    if vision_keep:
+        if not 0 < vision_keep <= v["n_img_tokens"]:
+            raise SystemExit("vision_token_prune exceeds the image patch count")
+        if cfg_json.get("vision_token_score", "attention") != "attention" or cfg_json.get("vision_token_sampling", "hard") != "hard":
+            raise SystemExit("only attention/hard visual token pruning is supported")
+    if cfg_json.get("perceiver_tokens", 0) or cfg_json.get("use_visual_memory", False) or cfg_json.get("use_proprioceptive_memory", False):
+        raise SystemExit("perceiver and memory extensions are not supported by this converter")
     print(f"vision: SigLIP hidden={v['vit_hidden']} layers={v['vit_layers']} "
           f"heads={v['vit_heads']} image={v['image_size']} patch={v['patch_size']} "
           f"tokens={v['n_img_tokens']} ln_eps={v['vit_ln_eps']:g}")
@@ -264,8 +274,10 @@ def convert(ckpt: Path, out: Path, *, writer_factory=open_writer, dataset_stats:
 
     writer = writer_factory(out, ARCH)
     write_pi_kv(writer, KV, cfg, adarms=True)
+    if vision_keep:
+        writer.add_uint32(KV("vision_token_prune"), vision_keep)
 
-    add(writer, "token_embd.weight",      sf.get_tensor(head))
+    add(writer, "token_embd.weight",      sf.get_tensor(embedding))
     add(writer, "vlm.output_norm.weight", sf.get_tensor(f"{vlm}.norm.weight"))
     write_decoder_blocks(writer, sf.get_tensor, vlm, "vlm", cfg["n_layers"])
 

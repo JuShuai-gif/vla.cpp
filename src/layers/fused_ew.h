@@ -117,6 +117,7 @@ inline float fused_gelu_tanh(float x) {
 }
 
 inline float fused_load(const ggml_tensor * t, const char * row, int64_t i) {
+    if (t->type == GGML_TYPE_F16) return ggml_fp16_to_fp32(((const ggml_fp16_t *) row)[i]);
     if (t->type == GGML_TYPE_BF16) {
         uint32_t u = (uint32_t) ((const uint16_t *) row)[i] << 16;
         float f;
@@ -127,7 +128,9 @@ inline float fused_load(const ggml_tensor * t, const char * row, int64_t i) {
 }
 
 inline void fused_store(ggml_tensor * t, char * row, int64_t i, float v) {
-    if (t->type == GGML_TYPE_BF16) {
+    if (t->type == GGML_TYPE_F16) {
+        ((ggml_fp16_t *) row)[i] = ggml_fp32_to_fp16(v);
+    } else if (t->type == GGML_TYPE_BF16) {
         ((ggml_bf16_t *) row)[i] = ggml_fp32_to_bf16(v);
     } else {
         ((float *) row)[i] = v;
@@ -353,7 +356,7 @@ inline ggml_tensor * fused_rms_q8(ggml_context * C, ggml_tensor * x, ggml_tensor
 inline ggml_tensor * fused_gateres(ggml_context * C, ggml_tensor * x, ggml_tensor * o, ggml_tensor * mod,
                                    const FusedGateResSpec & spec) {
     GGML_ASSERT(x->type == GGML_TYPE_F32 && ggml_are_same_shape(x, o) && mod->ne[0] == 3 * x->ne[0]);
-    GGML_ASSERT(o->type == GGML_TYPE_F32 || o->type == GGML_TYPE_BF16);
+    GGML_ASSERT(o->type == GGML_TYPE_F32 || o->type == GGML_TYPE_BF16 || o->type == GGML_TYPE_F16);
     ggml_tensor * args[3] = { x, o, mod };
     ggml_tensor * t = ggml_custom_4d(C, GGML_TYPE_F32, x->ne[0], x->ne[1], x->ne[2], x->ne[3], args, 3,
                                      fused_gateres_cpu, GGML_N_TASKS_MAX, (void *) &spec);

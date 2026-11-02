@@ -1,0 +1,282 @@
+[
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-bf16/report.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-bf16/report.json",
+    "sha256": "5d317f6150a0ebffebf419adcbced9062f53155bd6a3c73b7061f4ccacab4651"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-bf16/runtime.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-bf16/runtime.json",
+    "sha256": "9a726332e3ce8d679b5ea222f854dfc04a13ffe061aa1da8ec26ecce8df937e1"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-f16/report.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-f16/report.json",
+    "sha256": "15ea0d56061eb41c6ff7aa0acda586b84a658e8dbf4f6a62874c01baebee2648"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-f16/runtime.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-f16/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-f32/report.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-f32/report.json",
+    "sha256": "29a52b9ff8f48975e697ef9caff7cc00b7db1ea778ca82f694d1d351a5258794"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-f32/runtime.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/baseline-f32/runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f16-nofuse0/report.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f16-nofuse0/report.json",
+    "sha256": "7d6e16a26728242e0e7968f00c74782b3ce1e57a95729e74de74b3cbfff858b4"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f16-nofuse0/runtime.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f16-nofuse0/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f16-nofuse1/report.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f16-nofuse1/report.json",
+    "sha256": "7e6fc53a2592eaf959a219f34bc81f8f83e42b850a0f8b00b470e5e050705492"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f16-nofuse1/runtime.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f16-nofuse1/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f32-nofuse0/report.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f32-nofuse0/report.json",
+    "sha256": "bff9a647e3ca183b8b472d71b3e428c91b1f8dc5fed77b64d84c8de828265f66"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f32-nofuse0/runtime.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/final-f32-nofuse0/runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/merged-f16/report.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/merged-f16/report.json",
+    "sha256": "726d3fc9653a85dfd9aea687a7ac1432bfbef5c330e38d0162b9159f54259ce8"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/merged-f16/runtime.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/merged-f16/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/merged-f32/report.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/merged-f32/report.json",
+    "sha256": "647ab2b64840ff581f243f7c0dab1d56241066a6c112e04298d38158c0378cf5"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/pi05_cube_merge_cksize50_step3_0929/merged-f32/runtime.json",
+    "file": "perf-fusion/pi05_cube_merge_cksize50_step3_0929/merged-f32/runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-bf16/report.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-bf16/report.json",
+    "sha256": "c2e2f609567fa7ea34e4eb276743ea94cbe6acd540e686d471f274d80c2b167b"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-bf16/runtime.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-bf16/runtime.json",
+    "sha256": "9a726332e3ce8d679b5ea222f854dfc04a13ffe061aa1da8ec26ecce8df937e1"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-f16/report.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-f16/report.json",
+    "sha256": "44c710eebd4904be7a17a8bb99d1547cccbf2584864bb889fed6674aef5bc049"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-f16/runtime.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-f16/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-f32/report.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-f32/report.json",
+    "sha256": "6eb9797be52fae5b357e0442f153b9e4163a0bf36e4755b7753b9b54dd48d754"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-f32/runtime.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/baseline-f32/runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f16-nofuse0/report.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f16-nofuse0/report.json",
+    "sha256": "e8dbf78e69fb7332e4fe2ecb452233dc9bbfc208b63a22486a1e6e7445eb8036"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f16-nofuse0/runtime.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f16-nofuse0/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f16-nofuse1/report.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f16-nofuse1/report.json",
+    "sha256": "76ef2a0e80784408768ab62f5c65086698b355948a68ae96572e5110a7de95b6"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f16-nofuse1/runtime.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f16-nofuse1/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f32-nofuse0/report.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f32-nofuse0/report.json",
+    "sha256": "584fbae4d92348f1861647b43e7ae9a5238f7da1203c9980da697d9b186f7d8b"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f32-nofuse0/runtime.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/final-f32-nofuse0/runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/merged-f16/report.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/merged-f16/report.json",
+    "sha256": "9eea4e85e145910c1b2a66307bdbccb60e41bf21a5eb7e1179954c877b810785"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/merged-f16/runtime.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/merged-f16/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/merged-f32/report.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/merged-f32/report.json",
+    "sha256": "bb5d12792ca1597c1cd8723a14386a805df09ef95802f12513feac0d0861d434"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/cup_cube_joint_061_a800_50k_20261022/merged-f32/runtime.json",
+    "file": "perf-fusion/cup_cube_joint_061_a800_50k_20261022/merged-f32/runtime.json",
+    "sha256": "d105f99d3890ce5cf135fc3c41e1b0ec320cbbe369c6dd4e7cbbca1821a898ea"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-fusion/summary.json",
+    "file": "perf-fusion/summary.json",
+    "sha256": "e71b7a75b69d57dd5a4165b841d120498533937d571cc9c19a56092bd9faf52b"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/pi05_cube_merge_cksize50_step3_0929/attention-f16/report.json",
+    "file": "perf-lowp/pi05_cube_merge_cksize50_step3_0929/attention-f16/report.json",
+    "sha256": "17ec7833dffbe6faafd5144a990d35fef534c6d5b9c9c86fee48e8b6c9227dbf"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/pi05_cube_merge_cksize50_step3_0929/attention-f16/runtime.json",
+    "file": "perf-lowp/pi05_cube_merge_cksize50_step3_0929/attention-f16/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/pi05_cube_merge_cksize50_step3_0929/layout-f16/report.json",
+    "file": "perf-lowp/pi05_cube_merge_cksize50_step3_0929/layout-f16/report.json",
+    "sha256": "002a2582e39880b124d8d5e61a1967210303e49499b04c841a86736fe13603a9"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/pi05_cube_merge_cksize50_step3_0929/layout-f16/runtime.json",
+    "file": "perf-lowp/pi05_cube_merge_cksize50_step3_0929/layout-f16/runtime.json",
+    "sha256": "b98078aa0b4c7a3336f3b6c0b12a06702ad91519e16da5e7a13afebc8f5528e8"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/pi05_cube_merge_cksize50_step3_0929/layout-f32/report.json",
+    "file": "perf-lowp/pi05_cube_merge_cksize50_step3_0929/layout-f32/report.json",
+    "sha256": "311abef9388cde782323af241b0b4fb3f80718c62fc1c25846fd1d54f27985e5"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/pi05_cube_merge_cksize50_step3_0929/layout-f32/runtime.json",
+    "file": "perf-lowp/pi05_cube_merge_cksize50_step3_0929/layout-f32/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/pi05_cube_merge_cksize50_step3_0929/native-f16-attn0/report.json",
+    "file": "perf-lowp/pi05_cube_merge_cksize50_step3_0929/native-f16-attn0/report.json",
+    "sha256": "183cb4e71ec6695c9093cc80d01faeb792457363e62a212c9d5281ad885ede4e"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/pi05_cube_merge_cksize50_step3_0929/native-f16-attn0/runtime.json",
+    "file": "perf-lowp/pi05_cube_merge_cksize50_step3_0929/native-f16-attn0/runtime.json",
+    "sha256": "b98078aa0b4c7a3336f3b6c0b12a06702ad91519e16da5e7a13afebc8f5528e8"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/attention-f16/report.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/attention-f16/report.json",
+    "sha256": "b96d5638bd5136d05370f8275926841e08f3b73f1ad1f111d8a35fadd08a717e"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/attention-f16/runtime.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/attention-f16/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/layout-f16/report.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/layout-f16/report.json",
+    "sha256": "66bb9239f6ed146553b836a35cf8a72d522620a1d05e0ceae6e5126b2ebdba0c"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/layout-f16/runtime.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/layout-f16/runtime.json",
+    "sha256": "b98078aa0b4c7a3336f3b6c0b12a06702ad91519e16da5e7a13afebc8f5528e8"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/layout-f32/report.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/layout-f32/report.json",
+    "sha256": "489444eb0c84b712e3e9fed98d36b4ef6614a05dcbc32f05dadc92db2d6935c8"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/layout-f32/runtime.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/layout-f32/runtime.json",
+    "sha256": "f6071e05628221665dc1bf264fb45eeac5f6c3c804bd298fe08e21849275382d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/native-f16-attn0/report.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/native-f16-attn0/report.json",
+    "sha256": "3c197cf75d28003efc5535778fa2fb16081b165dcc53a4d34d8ac46c55a34908"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/native-f16-attn0/runtime.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/native-f16-attn0/runtime.json",
+    "sha256": "b98078aa0b4c7a3336f3b6c0b12a06702ad91519e16da5e7a13afebc8f5528e8"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/native-f16-attn1/report.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/native-f16-attn1/report.json",
+    "sha256": "970d57c8b9b6174dad2d4cae417b67105aa025074070e7a63dc24c08f65f6b2a"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/cup_cube_joint_061_a800_50k_20261022/native-f16-attn1/runtime.json",
+    "file": "perf-lowp/cup_cube_joint_061_a800_50k_20261022/native-f16-attn1/runtime.json",
+    "sha256": "b98078aa0b4c7a3336f3b6c0b12a06702ad91519e16da5e7a13afebc8f5528e8"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/summary-layout.json",
+    "file": "perf-lowp/summary-layout.json",
+    "sha256": "37557d57f6bd2fe8459e690f25d0676bd1692d58f086ae560b3e42fa13bd12c8"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/summary.json",
+    "file": "perf-lowp/summary.json",
+    "sha256": "ecc372ab19be53c6beda743f85db90a52502e88f78564aeeef85bb7c4c28fbb0"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/ctest-layout.log",
+    "file": "validation-2026-10-30/ctest-layout.log",
+    "sha256": "a2ba547a02db86ce111613410c8a49eef03bfaac3ee98c68fc824a701ea5ff7d"
+  },
+  {
+    "source": "/home/skysi/VLA/perf-lowp/end-to-end-layout.log",
+    "file": "validation-2026-10-30/end-to-end-layout.log",
+    "sha256": "f2670e7758adf1cbad61a9d2568b17b0cd1a09e36a9a6c6fbf6ba57914113d5c"
+  },
+  {
+    "source": "/home/skysi/code/vla.cpp/build-musa-m1000/Testing/Temporary/LastTest.log",
+    "file": "validation-2026-11-02/LastTest.log",
+    "sha256": "3f53958246eda75a272f13661eddbfe9badddbb16e7c2347a6d7641449363820"
+  }
+]

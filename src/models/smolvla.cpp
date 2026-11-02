@@ -815,7 +815,7 @@ std::unique_ptr<SmolVLAModelArch> smolvla_load_impl(ggml_type weight_dtype,
         if (!b.handle)
             return nullptr;
         m->backend = b.handle;
-        m->ggml_cuda = b.is_cuda || b.is_hip;
+        m->ggml_cuda = b.is_cuda || b.is_hip || b.is_musa;
         // On SYCL the vision tower's attention runs on oneDNN's fused SDPA, so
         // flash attention is the default there unless --flash-attn was given.
         if (b.is_sycl && !opts.flash_attn.has_value() && vla::fa_takes_views()) {

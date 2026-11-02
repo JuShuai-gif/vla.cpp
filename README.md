@@ -48,6 +48,7 @@ cmake --build build -j$(nproc)
 
 For a GPU or NPU, follow the backend's page in [docs/backend/](docs/backend):
 [CUDA](docs/backend/cuda.md), [ROCm](docs/backend/rocm.md),
+[MUSA](docs/backend/musa.md) (experimental; two pi0.5 variants validated),
 [SYCL](docs/backend/sycl.md), [OpenVINO](docs/backend/ov.md),
 [Metal](docs/backend/metal.md), [Hexagon](docs/backend/hexagon-windows.md).
 For containers, see [docs/DOCKER.md](docs/DOCKER.md).

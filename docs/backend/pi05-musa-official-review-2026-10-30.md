@@ -1,0 +1,214 @@
+# MUSA M1000 / π0.5 推理优化调研
+
+日期：2026-10-30
+
+对象：skysi 上的 vla.cpp、M1000 与两份 π0.5 模型
+
+性质：官方文档与现有源码核查；本文中的优化建议尚不代表新增实测收益。
+
+## 1. 结论
+
+目前已有 F16 权重、原生 F16 激活/GEMM、部分算子融合与布局优化，但仍有值得验证的路径：
+
+1. 统一性能测试条件，使用官方分析工具重新采集时间线。
+2. 验证 MUSA Graph，减少重复推理的主机提交开销。
+3. 优化 Attention 与 KV 数据布局，减少中间矩阵、拼接和连续化复制。
+4. 按实际矩阵形状评估 muBLASLt 算法、工作区与输出阶段融合。
+
+不能仅通过开启 FlashAttention 或升级 SDK 就认定获得加速；必须分别测试两个模型的端到端延迟和数值误差。
+
+## 2. 项目与模型
+
+远程代码目录：`/home/skysi/code/vla.cpp`。
+
+| 项目 | 裁剪模型 | 完整模型 |
+| --- | --- | --- |
+| 模型目录 | `/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929` | `/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022` |
+| checkpoint 位置 | `pretrained_model/` 子目录 | 模型目录本身 |
+| 视觉编码器层数 | 15 | 27 |
+| 每张图像的视觉 token | 256 中保留 136 | 256 |
+| 动作 chunk 长度 | 50 | 50 |
+| 去噪步数 | 3 | 10 |
+| 相机顺序 | top、wrist | wrist、top |
+| tokenizer | SentencePiece | JSON tokenizer |
+
+转换与推理脚本已支持两类 checkpoint。比较性能时必须保留各模型原始去噪步数、视觉裁剪规则和输入顺序，不能通过改变模型配置制造加速。
+
+## 3. 已有性能结果与验证范围
+
+以下是此前完成的测试，不是本轮文档调研产生的新结果。
+
+条件：两张 224×224 合成图像、固定 6 个文本 token、固定 state/noise、chunk=50，分别使用原始 3/10 步去噪；预热 1 次、正式运行 5 次，取 wall time 中位数，不包含模型加载。
+
+| 实现 | 裁剪模型 | 完整模型 |
+| --- | ---: | ---: |
+| 初始 F32 权重 / F32 激活 | 1844.53 ms | 4106.17 ms |
+| 前一版融合，F16 权重 / F32 激活 | 957.337 ms | 2194.016 ms |
+| 最新布局与 GEGLU 优化，F16 权重 / F32 激活 | 907.842 ms | 2073.754 ms |
+| 最新布局与 GEGLU 优化，F16 权重 / F16 激活 | 884.295 ms | 2039.342 ms |
+
+在相同的最新布局下，F16 激活带来的额外收益约为 2.6% / 1.7%，同时增加数值误差。因此，进一步优化需要关注 Attention、复制和调度开销，不能只继续降低数据精度。
+
+此前已通过 14 项 CTest，以及两个模型的相关数值检查。验证包括独立视觉参考、CPU/MUSA 对照与推理入口检查；尚未完成原始 Python 完整策略的动作输出对照，也未完成真实机器人任务验收。
+
+结果记录位置：
+
+- `/home/skysi/VLA/perf-lowp/summary-layout.json`
+- `/home/skysi/VLA/perf-lowp/`
+- `/home/skysi/VLA/perf-fusion/`
+- `/home/skysi/code/vla.cpp/docs/backend/pi05-local.md`
+- `/home/skysi/VLA_MUSA_HANDOFF.md`
+
+## 4. 当前环境核查
+
+| 项目 | 本轮核查结果 |
+| --- | --- |
+| GPU | M1000，compute capability 2.2 |
+| 操作系统 | Ubuntu 22.04.4，aarch64 |
+| 驱动软件包 | `musa 5.1.1-M1000` |
+| SDK 软件包 | `musa-sdk 5.1.1` |
+| 内部工具链版本 | 部分组件显示 5.1.0，带 AIMODULE / M1000 配套构建信息 |
+| 当前电源模式 | `balanced` |
+| 编译架构 | `MUSA_ARCHITECTURES=22` |
+| MUSA Graph | `GGML_MUSA_GRAPHS=OFF` |
+| FlashAttention | `GGML_CUDA_FA=OFF` |
+| muDNN copy | `GGML_MUSA_MUDNN_COPY=OFF` |
+| VMM | 当前基线关闭 |
+| 分析工具 | `msys 1.7.2`、`mcu 1.2.2` 已安装 |
+| muDNN | 已安装 3.3.0.0 相关动态库 |
+
+SDK 包版本和内部工具链版本不是同一个概念。当前软件包版本符合 M1000 专版文档要求，不能仅凭内部显示 5.1.0 就判断安装错误或必须升级。
+
+当前电源模式为 balanced，但旧测试未完整记录该项，不能反推所有历史测试都处于同一模式，也不能预先量化切换模式的收益。
+
+## 5. 官方文档中的可用优化方向
+
+### 5.1 MUSA Graph
+
+M1000 专版文档推荐使用 Graph，并说明默认开启。5.1 编程指南也已包含流捕获、图实例化与重复启动能力，因此无需先假定必须升级到 5.2。
+
+Graph 的主要价值是减少 CPU 和驱动逐个提交 kernel 的开销。对固定结构、大量小算子组成的重复推理值得优先验证；它不会自动消除所有 GPU 计算或中间张量访问。
+
+当前代码需要注意：
+
+- 官方专版关闭 Graph 的变量是 `GGML_MUSA_DISABLE_GRAPHS`，当前上游 GGML 源码检查的是 `GGML_CUDA_DISABLE_GRAPHS`，不能直接照搬配置。
+- 验证自定义融合算子和 muBLAS 调用能否正确参与流捕获。
+- 预热、图缓存和输入/工作区地址要稳定，区分首次捕获与稳态执行时间。
+- 变化的文本长度可能需要不同图缓存，不能错误复用形状不兼容的图。
+- 捕获区间不能包含不支持的同步操作。
+- 裁剪模型目前有 CPU 选 token 和数据读回，需放在捕获区间外，或进一步迁移到 GPU。
+
+来源：[M1000 快速开始](https://docs.mthreads.com/llama.cpp-musa-m1000/Llama.cpp-MUSA-M1000/AIModule/AIModule1.4.1+0.0.9252/quick_start)、[MUSA Graph 指南](https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/features/musa_graphs/)。
+
+### 5.2 FlashAttention 与 Attention 融合
+
+官方手册强调分块执行 QK、online softmax 和 PV，将中间状态尽量保留在片上，避免完整注意力矩阵反复写回全局内存。收益来自数据流优化，不只是把数据改成 FP16。
+
+当前实现仍有显式 Attention 算子和布局转换。按现有源码分派判断，M1000 多 query Attention 会走通用 tile 路径，而不是 NVIDIA/AMD 专用 MMA 路径。因此，编译开启 FA 不等于已经获得 M1000 专用高效内核，也不保证比现有实现快。
+
+建议分别验证：
+
+- 语言前缀 Attention。
+- 动作专家 Attention，特别是 query 长度为 50 的形状。
+- 视觉编码器 Attention。
+
+裁剪模型最后一层视觉 Attention 需要提供 token 重要性统计。替换为只返回 Attention 输出的实现会丢失裁剪依据，必须保留统计语义，或为该层单独保留原路径。
+
+短序列收益应以实测为准。手册的部分配置面向 MP31、192 KB 共享内存，不能直接用于 M1000。
+
+来源：[FlashAttention 优化](https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/flash_attention_optimization/)。
+
+### 5.3 KV 布局、连续化与主机往返
+
+当前代码仍有 K/V 拼接、转置后的连续化，以及裁剪模型 embedding 的读回、CPU 选择和重新上传。
+
+可验证的实现方向：
+
+1. 预分配 KV 空间，直接写入目标区域，减少重复拼接。
+2. 让投影或 RoPE 输出采用 Attention 可直接消费的布局。
+3. 对允许的 stride 使用 view，避免为连续化而复制。
+4. 对确实必须搬运的数据比较现有 kernel 与 muDNN copy。
+5. 在 GPU 完成裁剪统计、选择和 gather，同时保持 top-k 后的空间顺序和原有数值语义。
+
+此前逐算子分析中出现约 426 ms 的 CONT 耗时，但该分析发生在最新布局优化之前，不能将其当作当前剩余开销。需要重新采集数据。
+
+来源：[内存优化](https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/memory_optimization/)。
+
+### 5.4 GEMM、低精度与输出阶段融合
+
+muBLASLt 提供矩阵布局、启发式算法选择、工作区与 epilogue 融合能力。适合按实际矩阵形状比较，而非对整个模型统一套用某个配置。
+
+优先覆盖动作专家的 50-token GEMM，以及不同视觉 token 数带来的语言前缀 GEMM。算法选择应在初始化或预热阶段完成，并按形状缓存，避免每次推理重复搜索。
+
+精度验证需要分别记录：
+
+- 权重和输入类型。
+- 累加类型。
+- 输出类型。
+- 数据布局、对齐、算法与工作区。
+
+此前测试中的 F16 输出配合 FP32 compute 返回不支持，只能证明当时的接口和参数组合不支持，不能推断 M1000 的全部混合精度接口都不支持。
+
+可以进一步研究 GEMM 与激活、偏置或门控的输出阶段融合。普通 Bias/ReLU epilogue 不等价于 GEGLU 或带门控残差，必须确认表达能力和精度语义。
+
+来源：[muBLASLt 开发者指南](https://docs.mthreads.com/musa-sdk/version-5.1.0/libraries/xlib/muBLASLt_developer_guide)、[GEMM/GEMV 优化](https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/gemm_gemv_optimization/)。
+
+### 5.5 小算子、归约与访存
+
+官方建议包括合并访存、向量化加载、减少块内同步、寄存器复用和控制寄存器溢出。占用率需要结合实际吞吐分析，不能单纯追求更高数值。
+
+这些方法适用于剩余的 RMSNorm、softmax、门控和复制 kernel，但应先根据最新 profile 排序。已有小算子融合不能替代 Attention 和 GEMM 的整体数据流优化。
+
+来源：[计算优化](https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/compute_optimization/)、[归约优化](https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/reduction_optimization/)。
+
+## 6. 不能直接照搬的内容
+
+### 6.1 通用 SDK 与 M1000 配套版本
+
+5.2 增强了 Graph、编译器和数学库，但其公开发布验证平台主要是 S5000/x86。该资料不足以证明通用 5.2 安装包适合当前 M1000/aarch64 环境，也不足以证明升级会提高当前模型性能。
+
+M1000 专版文档要求驱动 5.1.1-M1000 和 SDK 包 5.1.1。应优先在当前配套环境验证优化。
+
+来源：[5.2 发布说明](https://docs.mthreads.com/musa-sdk/version-5.2.0/releasenote/)、[M1000 环境准备](https://docs.mthreads.com/llama.cpp-musa-m1000/Llama.cpp-MUSA-M1000/AIModule/AIModule1.4.1+0.0.9252/environment_setup)。
+
+### 6.2 MUTLASS 和硬件专属技巧
+
+MUTLASS 提供混合精度和 epilogue 融合思路，但文档的架构兼容说明列的是 S4000/S5000，不能据此直接确认 M1000 的支持范围。
+
+TME、硬件 swizzle、特定 Tensor Core 指令，以及共享内存容量相关的分块配置，都需要核对实际设备和编译器支持。
+
+来源：[MUTLASS 文档](https://docs.mthreads.com/musa-sdk/version-5.1.0/libraries/openlibs/mutlass)。
+
+### 6.3 官方 LLM 性能表与 π0.5 指标
+
+官方专版重点优化 Q4_K LLM，性能表主要是文本 prefill/decode 指标。π0.5 还包含双图像视觉编码、语言前缀和多步动作去噪，其动作 chunk 不能直接当作自回归文本 token 计算吞吐。
+
+本文不建议据此将模型改为 FP4/Q4，也不使用官方 LLM token/s 推导 π0.5 预期速度。
+
+来源：[M1000 支持模型](https://docs.mthreads.com/llama.cpp-musa-m1000/Llama.cpp-MUSA-M1000/AIModule/AIModule1.4.1+0.0.9252/List_of_supported_models)、[M1000 推理性能](https://docs.mthreads.com/llama.cpp-musa-m1000/Llama.cpp-MUSA-M1000/AIModule/AIModule1.4.1+0.0.9252/performance)。
+
+## 7. 下一轮实施与验收顺序
+
+| 顺序 | 工作 | 验收内容 |
+| --- | --- | --- |
+| 1 | 统一电源模式、输入和预热条件，采集最新 msys 时间线 | 区分 CPU 提交、GPU 执行、同步和复制；记录软件版本与模式 |
+| 2 | 单独验证 Graph | 确认真实捕获/重放，比较稳态延迟，检查两个模型输出 |
+| 3 | 分阶段验证 FlashAttention | 记录实际 kernel、形状与转换成本，保留视觉裁剪语义 |
+| 4 | KV 预分配、RoPE 写入布局与复制优化 | 减少节点或内存流量，并确认端到端收益 |
+| 5 | 按形状评估 muBLASLt 和输出融合 | 缓存算法，记录累加精度、误差和工作区 |
+| 6 | 真实输入回归与任务验收 | 保留两类转换/推理入口，验证动作输出和实际任务表现 |
+
+机器已确认安装 msys 与 mcu；msys 能枚举 renderD128 及 General/Throughput 指标集。工具可用不等于所有指标均适用，应以本机帮助、采集结果和硬件支持为准。mcu 的默认 application replay 可能重复运行整个应用，需控制采样范围。
+
+官方 M1000 文档要求性能测试开启 performance 模式。本轮只读取了当前模式，没有切换电源模式、安装 SDK、替换后端或执行新的性能测试。
+
+## 8. 本次核查范围
+
+已阅读三个官方入口下与当前任务直接相关的章节，并对照当前机器配置和部分后端实现。本文明确区分：
+
+- 官方文档描述的能力。
+- 当前机器或源码已核实的状态。
+- 此前已经完成的性能与数值测试。
+- 尚需实施与测试的优化建议。
+
+本轮没有新增加速结果。后续结果应同时报告两个模型的测试条件、延迟与数值误差，不能只报告单个算子的加速比。

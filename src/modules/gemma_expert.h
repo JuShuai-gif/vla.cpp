@@ -483,9 +483,14 @@ inline ggml_tensor * gemma_attn(
         ggml_tensor * qkv = mm_f32(ctx, w.Wqkv, x_norm);
         const size_t  es  = ggml_element_size(qkv);
         q = ggml_view_2d(ctx, qkv, qf, seq, qkv->nb[1], 0);
+#ifdef GGML_USE_MUSA
+        k = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], qf * es);
+        v = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (qf + cfg.kv_full_dim) * es);
+#else
         k = ggml_cont(ctx, ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], qf * es));
         v = ggml_cont(ctx, ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (qf + cfg.kv_full_dim) * es));
         q = ggml_cont(ctx, q);
+#endif
     } else {
         q = as_type(ctx, mm_act(ctx, w.Wq, x_norm, at), GGML_TYPE_F32);
         k = as_type(ctx, mm_act(ctx, w.Wk, x_norm, at), GGML_TYPE_F32);
@@ -493,9 +498,15 @@ inline ggml_tensor * gemma_attn(
                      : as_type(ctx, mm_act(ctx, w.Wv, x_norm, at), GGML_TYPE_F32);
     }
 
+#ifdef GGML_USE_MUSA
+    ggml_tensor * q_h = ggml_view_3d(ctx, q, hd, nq, seq, hd*ggml_element_size(q), q->nb[1], 0);
+    ggml_tensor * k_h = ggml_view_3d(ctx, k, hd, nkv, seq, hd*ggml_element_size(k), k->nb[1], 0);
+    ggml_tensor * v_h = ggml_view_3d(ctx, v, hd, nkv, seq, hd*ggml_element_size(v), v->nb[1], 0);
+#else
     ggml_tensor * q_h = ggml_reshape_3d(ctx, q, hd, nq,  seq);
     ggml_tensor * k_h = ggml_reshape_3d(ctx, k, hd, nkv, seq);
     ggml_tensor * v_h = ggml_reshape_3d(ctx, v, hd, nkv, seq);
+#endif
 
     auto rope_call = [&](ggml_tensor * t) {
         return ggml_rope_ext(ctx, t, positions, nullptr,
@@ -583,6 +594,13 @@ inline ggml_tensor * gemma_mlp(ggml_context * ctx, const GemmaLayerW & w, ggml_t
         up   = fq_gemm(ctx, w.fq_up,   xq);
     } else if (w.Wgu || w.q_gu) {
         ggml_tensor * gu = w.q_gu ? qlinear(ctx, w.q_gu, x_norm, nullptr, nullptr, at) : mm_act(ctx, w.Wgu, x_norm, at);
+#ifdef GGML_USE_MUSA
+        // Read gate|up directly from the merged GEMM, like FlashRT's merged
+        // gated activation path. Avoid two CONT copies before GEGLU.
+        if (w.Wgu && w.Wdown && !w.fq_down && !w.q_down &&
+            (gu->type == GGML_TYPE_F32 || gu->type == GGML_TYPE_F16))
+            return mm_act(ctx, w.Wdown, ggml_geglu(ctx, gu), at);
+#endif
         const int64_t n  = gu->ne[0] / 2;
         gate = ggml_view_2d(ctx, gu, n, gu->ne[1], gu->nb[1], 0);
         up   = ggml_view_2d(ctx, gu, n, gu->ne[1], gu->nb[1], n * ggml_element_size(gu));

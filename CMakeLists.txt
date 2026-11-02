@@ -19,7 +19,7 @@ elseif(UNIX)
 endif()
 
 set(_vla_accel "")
-foreach(_flag GGML_CUDA GGML_HIP GGML_VULKAN GGML_SYCL GGML_METAL GGML_OPENVINO GGML_HEXAGON GGML_OPENCL)
+foreach(_flag GGML_CUDA GGML_HIP GGML_MUSA GGML_VULKAN GGML_SYCL GGML_METAL GGML_OPENVINO GGML_HEXAGON GGML_OPENCL)
     if(${_flag})
         list(APPEND _vla_accel ${_flag})
     endif()
@@ -39,7 +39,7 @@ if(_vla_accel_n GREATER 0 AND GGML_BACKEND_DL)
         "GGML_BACKEND_DL=ON is not supported with ${_vla_accel}: the backend is "
         "built as a module and src/backend.h links its init directly.")
 endif()
-foreach(_flag GGML_VULKAN GGML_MUSA GGML_CANN GGML_WEBGPU)
+foreach(_flag GGML_VULKAN GGML_CANN GGML_WEBGPU)
     if(${_flag})
         message(WARNING "${_flag}=ON reaches vlm-server through llama only; src/backend.h has no ${_flag} path, so the VLA archs run on CPU.")
     endif()
@@ -130,6 +130,16 @@ FetchContent_Declare(llama
     ${_vla_llama_patch}
 )
 FetchContent_MakeAvailable(llama)
+
+if(GGML_MUSA)
+    find_package(Python3 COMPONENTS Interpreter REQUIRED)
+    execute_process(
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/patch_ggml_musa.py ${llama_SOURCE_DIR}
+        RESULT_VARIABLE _vla_musa_patch)
+    if(NOT _vla_musa_patch EQUAL 0)
+        message(FATAL_ERROR "scripts/patch_ggml_musa.py failed on ${llama_SOURCE_DIR}")
+    endif()
+endif()
 
 # FoldQuant on OpenVINO: the translator for FoldQuant's two custom nodes is
 # in-tree and compiled into ggml's OpenVINO backend, which reaches it through the
@@ -378,6 +388,23 @@ if(GGML_CUDA)
 elseif(GGML_HIP)
     # ggml-hip also exports GGML_USE_CUDA; distinguish HIP from CUDA-only code.
     target_compile_definitions(vla_core PUBLIC GGML_USE_HIP)
+elseif(GGML_MUSA)
+    # ggml-musa reuses ggml-cuda's API and exports GGML_USE_CUDA too. Its
+    # device kernels are built by mcc; vla.cpp's NVIDIA-only hooks are not.
+    target_compile_definitions(vla_core PUBLIC GGML_USE_MUSA)
+    target_sources(ggml-musa PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu)
+    set(_vla_musa_flags "-O3 -x musa -mtgpu -ffp-contract=off")
+    set(_vla_musa_archs "${MUSA_ARCHITECTURES}")
+    if(NOT _vla_musa_archs)
+        set(_vla_musa_archs 21 22 31) # same default as ggml-musa
+    endif()
+    foreach(ARCH ${_vla_musa_archs})
+        string(APPEND _vla_musa_flags " --cuda-gpu-arch=mp_${ARCH}")
+    endforeach()
+    set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu
+        TARGET_DIRECTORY ggml-musa PROPERTIES
+        LANGUAGE CXX COMPILE_FLAGS "${_vla_musa_flags}"
+        INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/src")
 endif()
 
 if(GGML_SYCL AND NOT GGML_CUDA)

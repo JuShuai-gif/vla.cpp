@@ -1,0 +1,1 @@
+{"runtime": {"weight_dtype": "f16", "act_dtype": "f32", "flash_attn": false, "mm_prec": "f32"}}

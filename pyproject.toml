@@ -15,6 +15,10 @@ convert = [
     "gguf>=0.17",
     "transformers>=4.57",
     "numpy>=1.24",
+    # Local pi05 tokenizer embedding and scripts/run_pi05.py preprocessing.
+    "sentencepiece>=0.2",
+    "tokenizers>=0.22",
+    "pillow>=10",
 ]
 # eval/client/* talks to vla-server over ZeroMQ. The simulators (LIBERO, SimplerEnv,
 # ALOHA) keep their own pinned venvs - see eval/sim/*/setup_*.sh - and are not packaged here.

@@ -1,0 +1,278 @@
+Start testing: Nov 02 09:20 CST
+----------------------------------------------------------
+1/14 Testing: vision_common
+1/14 Test: vision_common
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_vision_common"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"vision_common" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+vla(test): image view is 2x2, expected 4x4
+vla(test): image view is 2x2, expected 2x2
+test_vision_common: OK
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"vision_common" end time: Nov 02 09:20 CST
+"vision_common" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/14 Testing: vision_prune
+2/14 Test: vision_prune
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_vision_prune"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"vision_prune" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+test_vision_prune: OK (attention reduction, spatial ordering, invalid input)
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"vision_prune" end time: Nov 02 09:20 CST
+"vision_prune" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/14 Testing: rope_conventions
+3/14 Test: rope_conventions
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_rope_conventions"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"rope_conventions" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+rope conventions: ok
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"rope_conventions" end time: Nov 02 09:20 CST
+"rope_conventions" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/14 Testing: c_api
+4/14 Test: c_api
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_c_api"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"c_api" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+c api: ok (argument checks only; set VLA_TEST_GGUF for a real run)
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"c_api" end time: Nov 02 09:20 CST
+"c_api" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/14 Testing: dit_common
+5/14 Test: dit_common
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_dit_common"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"dit_common" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+dit common: ok
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"dit_common" end time: Nov 02 09:20 CST
+"dit_common" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/14 Testing: graph_names
+6/14 Test: graph_names
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_graph_names"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"graph_names" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+test_graph_names: OK (12 nodes)
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"graph_names" end time: Nov 02 09:20 CST
+"graph_names" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/14 Testing: qwen3vl_vit
+7/14 Test: qwen3vl_vit
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_qwen3vl_vit"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"qwen3vl_vit" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+vla(test): image view is 3x4, expected 4x4
+vla(test): image view is 4x4, expected 4x4
+vla(test): image run length 3 not a multiple of 4 (post-merge grid)
+qwen3vl_vit: all checks passed
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"qwen3vl_vit" end time: Nov 02 09:20 CST
+"qwen3vl_vit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/14 Testing: config_guard
+8/14 Test: config_guard
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_config_guard"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"config_guard" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+vla: real_state_dim 33 exceeds max_state_dim 32
+vla: real_action_dim 33 exceeds max_action_dim 32
+vla: negative state dim (real=-1 max=32)
+vla: negative action dim (real=7 max=-1)
+config guard: ok
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"config_guard" end time: Nov 02 09:20 CST
+"config_guard" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/14 Testing: prompt
+9/14 Test: prompt
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_prompt"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"prompt" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+vla(pi05): --state has 1 values, the stats describe 8
+vla(pi05): state q01/q99 are missing or differ in length
+vla(smolvla): no --text prompt template for this arch
+test_prompt: templates OK; pass paligemma and llama-2 tokenizer.model to check ids
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"prompt" end time: Nov 02 09:20 CST
+"prompt" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/14 Testing: foldquant_cpu_op
+10/14 Test: foldquant_cpu_op
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_foldquant_cpu_op"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"foldquant_cpu_op" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+case w8a8_rot64             W8A8 rot64  gamma=0 ascale=0 before=0 bias=1
+  codes fnv1a = 0xb97c1c173d2d0278
+  ok (0 codes off by one vs double)
+case w8a8_rot64_gamma       W8A8 rot64  gamma=1 ascale=0 before=0 bias=0
+  ok (0 codes off by one vs double)
+case w8a8_rot32_pre         W8A8 rot32  gamma=0 ascale=1 before=1 bias=1
+  ok (0 codes off by one vs double)
+case w8a8_rot64_post        W8A8 rot64  gamma=0 ascale=1 before=0 bias=0
+  ok (0 codes off by one vs double)
+case w8a8_norot             W8A8 rot1   gamma=0 ascale=0 before=0 bias=0
+  ok (0 codes off by one vs double)
+case w4a8_rot64_gamma       W4A8 rot64  gamma=1 ascale=0 before=0 bias=1
+  ok (0 codes off by one vs double)
+case w4a4_rot64_pre         W4A4 rot64  gamma=0 ascale=1 before=1 bias=1
+  ok (0 codes off by one vs double)
+PASS
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"foldquant_cpu_op" end time: Nov 02 09:20 CST
+"foldquant_cpu_op" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/14 Testing: foldquant_dequant
+11/14 Test: foldquant_dequant
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_foldquant_dequant"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"foldquant_dequant" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+ok   K=128 rb=64 W8 fold_before ascale=1: max|err| 7.15e-07 (max|w| 7.24)
+ok   K=128 rb=64 W8 fold_before ascale=0: max|err| 4.97e-07 (max|w| 5.36)
+ok   K=128 rb=64 W8 fold_after ascale=1: max|err| 3.96e-07 (max|w| 4.78)
+ok   K=128 rb=64 W8 fold_after ascale=0: max|err| 4.52e-07 (max|w| 5.26)
+ok   K=128 rb=64 W4 fold_before ascale=1: max|err| 3.37e-08 (max|w| 0.433)
+ok   K=128 rb=64 W4 fold_before ascale=0: max|err| 2.28e-08 (max|w| 0.322)
+ok   K=128 rb=64 W4 fold_after ascale=1: max|err| 2.46e-08 (max|w| 0.233)
+ok   K=128 rb=64 W4 fold_after ascale=0: max|err| 2.28e-08 (max|w| 0.324)
+ok   K=96 rb=32 W8 fold_before ascale=1: max|err| 8.48e-07 (max|w| 7.79)
+ok   K=96 rb=32 W8 fold_before ascale=0: max|err| 5.15e-07 (max|w| 4.96)
+ok   K=96 rb=32 W8 fold_after ascale=1: max|err| 3.66e-07 (max|w| 3.88)
+ok   K=96 rb=32 W8 fold_after ascale=0: max|err| 5.08e-07 (max|w| 4.29)
+ok   K=96 rb=32 W4 fold_before ascale=1: max|err| 3.59e-08 (max|w| 0.447)
+ok   K=96 rb=32 W4 fold_before ascale=0: max|err| 2.44e-08 (max|w| 0.251)
+ok   K=96 rb=32 W4 fold_after ascale=1: max|err| 2.27e-08 (max|w| 0.259)
+ok   K=96 rb=32 W4 fold_after ascale=0: max|err| 2.83e-08 (max|w| 0.261)
+test_foldquant_dequant: all ok
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"foldquant_dequant" end time: Nov 02 09:20 CST
+"foldquant_dequant" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/14 Testing: musa_ops
+12/14 Test: musa_ops
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_musa_ops"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"musa_ops" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+ggml_cuda_init: failed to initialize MUSA: initialization error
+musa_ops: MUSA device 0 out of range (0 visible); falling back to CPU
+CreatePlatform failed!
+musa_ops: backend = CPU (4 threads)
+SKIP: no MUSA device selected
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"musa_ops" end time: Nov 02 09:20 CST
+"musa_ops" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/14 Testing: musa_cpu_selection
+13/14 Test: musa_cpu_selection
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_musa_ops" "--expect-cpu"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"musa_cpu_selection" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+musa_ops: VLA_DEVICE=cpu, not starting the accelerator
+musa_ops: backend = CPU (4 threads)
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"musa_cpu_selection" end time: Nov 02 09:20 CST
+"musa_cpu_selection" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/14 Testing: musa_invalid_device
+14/14 Test: musa_invalid_device
+Command: "/home/skysi/code/vla.cpp/build-musa-m1000/tests/test_musa_ops" "--expect-cpu"
+Directory: /home/skysi/code/vla.cpp/build-musa-m1000/tests
+"musa_invalid_device" start time: Nov 02 09:20 CST
+Output:
+----------------------------------------------------------
+ggml_cuda_init: failed to initialize MUSA: initialization error
+musa_ops: MUSA device 1024 out of range (0 visible); falling back to CPU
+CreatePlatform failed!
+musa_ops: backend = CPU (4 threads)
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"musa_invalid_device" end time: Nov 02 09:20 CST
+"musa_invalid_device" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Nov 02 09:20 CST

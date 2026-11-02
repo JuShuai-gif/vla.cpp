@@ -147,6 +147,10 @@ inline void add_dep(ggml_tensor * node, ggml_tensor * dep, int first_free = 5) {
 // writes F32 directly where a kernel takes that pairing (src/sycl/vla_sycl_bf16.cpp),
 // rather than a BF16 result and a cast. Elsewhere, mm_act and a cast.
 inline ggml_tensor * mm_f32(ggml_context * C, ggml_tensor * w, ggml_tensor * x) {
+#ifdef GGML_USE_MUSA
+    if (w->type == GGML_TYPE_F16 && x->type == GGML_TYPE_F16)
+        return ggml_mul_mat(C, w, x);
+#endif
     if (w->type == GGML_TYPE_BF16 && x->type == GGML_TYPE_BF16)
         return ggml_mul_mat(C, w, x);
     return as_type(C, mm_act(C, w, x, x->type == GGML_TYPE_BF16 ? GGML_TYPE_BF16 : GGML_TYPE_F32), GGML_TYPE_F32);

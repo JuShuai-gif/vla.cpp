@@ -1,0 +1,45 @@
+{
+  "model": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+  "dtype": "f16",
+  "steps": 3,
+  "synthetic_inputs": true,
+  "camera_count": 2,
+  "text_token_count": 6,
+  "chunk": 50,
+  "vision_tokens_per_camera": 136,
+  "no_fuse": "0",
+  "warmup": 1,
+  "runs": [
+    {
+      "ms_total": 1098.68603515625,
+      "ms_vision": 297.0723876953125,
+      "ms_inference": 801.107421875,
+      "wall_ms": 1099.2544359996828
+    },
+    {
+      "ms_total": 1099.5516357421875,
+      "ms_vision": 294.88958740234375,
+      "ms_inference": 804.0977172851562,
+      "wall_ms": 1100.0837859992316
+    },
+    {
+      "ms_total": 1102.973388671875,
+      "ms_vision": 299.8311767578125,
+      "ms_inference": 802.607421875,
+      "wall_ms": 1103.4677410007134
+    }
+  ],
+  "repeat_max_abs": 0.0,
+  "median_ms": {
+    "ms_total": 1099.5516357421875,
+    "ms_vision": 297.0723876953125,
+    "ms_inference": 802.607421875,
+    "wall_ms": 1100.0837859992316
+  },
+  "p95_wall_ms": 1103.1293455005653,
+  "error_vs_reference": {
+    "max_abs": 0.1298675537109375,
+    "rmse": 0.02559763565659523,
+    "relative_peak": 0.0012195989256724715
+  }
+}

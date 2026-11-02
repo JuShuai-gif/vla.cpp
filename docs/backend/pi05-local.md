@@ -1,0 +1,253 @@
+# Local pi0.5 conversion and MUSA inference
+
+Validated on `skysi` / M1000, 2026-10-30. The original checkpoints are unchanged.
+Both variants use the same converter, runtime, and validation scripts.
+
+| Model under `/home/skysi/VLA/models` | Vision layers | Tokens per image | Solver steps | Camera order |
+|---|---:|---:|---:|---|
+| `pi05_cube_merge_cksize50_step3_0929` | 15 | 136 | 3 | top, wrist |
+| `cup_cube_joint_061_a800_50k_20261022` | 27 | 256 | 10 | wrist, top |
+
+Each final artifact is `<model directory>/gguf/model.gguf`. Each contains vision,
+language/action weights, the checkpoint's own normalizer statistics, tokenizer,
+and camera names/order. GGUF tensor dtypes preserve the source F32/BF16 weights;
+conversion is not quantization. The usable action chunk is 50 rows by 7 columns.
+
+## Environment
+
+Repository: `/home/skysi/code/vla.cpp`; build: `build-musa-m1000`.
+The prepared `.venv-converter` uses CPU PyTorch 2.6.0 for conversion/reference
+checks; actual policy inference runs in `libvla.so` on MUSA or CPU.
+
+For a new environment, install CPU PyTorch first, then the remaining dependencies:
+
+```bash
+python3 -m venv .venv-converter
+.venv-converter/bin/python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+.venv-converter/bin/python -m pip install numpy safetensors gguf sentencepiece tokenizers pillow
+```
+
+## Conversion
+
+`scripts/convert_pi05_local.py` accepts either the checkpoint itself or its parent
+containing `pretrained_model`. It calls the project converter, extracts state/action
+mean/std/q01/q99 from the saved processors, checks pre/post consistency, embeds a
+local tokenizer, and verifies every output tensor against the converter input.
+It refuses to overwrite an existing output and publishes the final filename only
+after validation. It writes `.stats.json`, `.conversion.json`, and `.gguf.sha256`.
+
+These examples reproduce the outputs into new filenames:
+
+```bash
+cd /home/skysi/code/vla.cpp
+PY=.venv-converter/bin/python
+MODELS=/home/skysi/VLA/models
+
+$PY scripts/convert_pi05_local.py \
+  --ckpt "$MODELS/pi05_cube_merge_cksize50_step3_0929" \
+  --tokenizer "$MODELS/pi05_cube_merge_cksize50_step3_0929/gguf/tokenizer.model" \
+  --out "$MODELS/pi05_cube_merge_cksize50_step3_0929/gguf/reconverted.gguf"
+
+$PY scripts/convert_pi05_local.py \
+  --ckpt "$MODELS/cup_cube_joint_061_a800_50k_20261022" \
+  --out "$MODELS/cup_cube_joint_061_a800_50k_20261022/gguf/reconverted.gguf"
+```
+
+The first tokenizer is the original training SentencePiece model copied from
+Baidu Cloud. The second uses its own `tokenizer/tokenizer.json`; it is embedded
+without replacing it with another tokenizer. The runtime handles both forms.
+
+## Inference
+
+Use the same command for either model by changing `MODEL_DIR`:
+
+```bash
+cd /home/skysi/code/vla.cpp
+MODEL_DIR=/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022
+.venv-converter/bin/python scripts/run_pi05.py \
+  --model "$MODEL_DIR/gguf/model.gguf" \
+  --image top=/path/to/top.png --image wrist=/path/to/wrist.png \
+  --text 'pick up the cube' \
+  --state '0,0,0,0,0,0,0' \
+  --device 0 --weight-dtype f32 --seed 0 --output actions.json
+```
+
+Supply actual raw state in the training units; the all-zero state above is only
+a command example. Images are named, then ordered according to the GGUF, so
+argument order cannot silently swap cameras. The script applies float32 bilinear
+aspect-preserving resize and centered zero padding, quantile state binning, and
+the saved text tokenizer. The JSON contains denormalized `[50, 7]` actions,
+prompt/token IDs, camera order, solver steps, seed, and per-stage timings.
+`--device cpu` runs the same model on CPU. F32 remains the reference default;
+`--weight-dtype f16` selects the faster MUSA path described below. With the default `--act-dtype f32`, activations,
+GEMM accumulation and GEMM output remain F32. See the native F16 section below
+for the optional mixed-precision path. BF16 activation mode remains
+unsupported on MUSA. `--no-fuse` disables expert fusion and merged projections.
+
+The JSON tokenizer variant uses this Python entry point; the native CLI can also
+run it with externally supplied `--tokens`. Do not use its generic online
+tokenizer fallback for this custom checkpoint.
+
+## Validation
+
+```bash
+cd /home/skysi/code/vla.cpp
+PY=.venv-converter/bin/python
+MODEL_DIR=/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022
+$PY scripts/validate_pi05.py --ckpt "$MODEL_DIR" --model "$MODEL_DIR/gguf/model.gguf" --mode vision-ref
+$PY scripts/validate_pi05.py --ckpt "$MODEL_DIR" --model "$MODEL_DIR/gguf/model.gguf" --mode run --device cpu
+$PY scripts/validate_pi05.py --ckpt "$MODEL_DIR" --model "$MODEL_DIR/gguf/model.gguf" --mode run --device 0
+$PY scripts/validate_pi05.py --ckpt "$MODEL_DIR" --model "$MODEL_DIR/gguf/model.gguf" --mode compare
+ctest --test-dir build-musa-m1000 --output-on-failure
+```
+
+Reports and logs live in each model's `gguf/validation/`. The vision reference is
+an independent PyTorch calculation using the original safetensors. Full inference
+compares CPU and MUSA with fixed synthetic images, token IDs, state, and noise;
+it also checks the cached graph and precomputed-image path. The synthetic comparison
+threshold is max absolute error / reference peak < 0.005, not a robot acceptance criterion.
+
+| Model | Verified GGUF tensors | CPU/MUSA max action error | Error / CPU peak | CPU time | MUSA time |
+|---|---:|---:|---:|---:|---:|
+| 15-layer / 3-step | 627 | 0.02746 | 0.0258% | 10.87 s | 2.20 s |
+| 27-layer / 10-step | 819 | 0.03826 | 0.0393% | 22.46 s | 4.56 s |
+
+Times are one measured prediction after image encoding, with two synthetic views,
+F32 weights/activations and four CPU threads. They exclude loading and are not
+multi-iteration benchmark averages. `inference-comparison.json` separately records
+the end-to-end script check with 480x640 inputs and actual prompt tokenization.
+No real robot task success rate or full original-policy action reference was evaluated.
+
+## Correctness fixes required by these checkpoints
+
+- Preserve input embeddings separately from the language output head when the
+  checkpoint contains untied weights. The diffusion path does not use the LM head.
+- Preserve 15 actual visual layers and attention-based 256-to-136 token selection.
+  Selection averages final-layer attention over heads and queries, selects top
+  scores, then restores spatial order. The initial implementation stages selection
+  on the host; it is not a performance-optimized device gather.
+- M1000 / driver 5.1.1 / SDK 5.1.0 aliases offsets 4 GiB apart in a single large
+  allocation. The configure-time MUSA patch sets a 2 GiB buffer maximum, causing
+  ggml's existing allocator to split resident weights into independent buffers.
+  A 5 GiB allocation regression checks this; the complete CTest suite is 14/14.
+
+## MUSA fusion and resident inference benchmark (2026-10-30)
+
+The MUSA path now uses fused expert adaRMS (RMSNorm, scale, shift), fused gated
+residuals, merged Q/K/V projections, merged Gate/Up projections, and GEGLU that
+reads the merged output directly without two temporary copies. The F16 muBLAS
+path accumulates and outputs F32, avoiding an intermediate F16 result and its
+conversion. This requires no GGUF reconversion and no FP4/FP8 quantization.
+
+The projection grouping and merged activation follow the approach in the local
+FlashRT checkout at commit `86ef457d`, particularly
+`cpp/models/pi05/src/model/semantic_pipeline.cpp`,
+`cpp/models/pi05/src/targets/sm110/operation_driver.cu`, and
+`csrc/kernels/decoder_fused.cu`. Its CUDA/Thor kernels, FP8/FP4 formats,
+in-place KV/RoPE path, delayed residual-to-next-normalization fusion and CUDA
+graph capture were not transplanted into MUSA in this change.
+
+Measured sequentially on M1000, one warmup then five complete predictions;
+table values are median Python-call wall times, excluding model loading.
+Inputs are two synthetic 224x224 cameras, six fixed token IDs, identical state
+and diffusion noise. Both models retain chunk 50 and their original 3/10 steps.
+
+| Model | F32 baseline | F16, fusion off, F32 accumulation | F16 + all fusion | Total speedup | Fusion-only latency reduction |
+|---|---:|---:|---:|---:|---:|
+| 15-layer / 3-step | 1844.53 ms | 991.65 ms | 957.34 ms | 1.93x | 3.46% |
+| 27-layer / 10-step | 4106.17 ms | 2288.61 ms | 2194.02 ms | 1.87x | 4.13% |
+
+The largest gain comes from F16 GEMMs. Elementwise fusion alone saved less than
+1%; grouping projections and removing the Gate/Up copies provided the rest of
+the fusion improvement. P95 wall times of the optimized runs were 964.63 and
+2198.14 ms. Resident weights fell from 9.41/10.09 GiB to about 4.71/5.05 GiB.
+
+Against the previous MUSA F32 actions, optimized F16 max absolute differences
+were 0.08599 and 0.01789 (relative to reference peak: 0.0808% and 0.0184%).
+These are synthetic numerical checks, not real robot task acceptance results.
+The unit tests compare fused adaRMS/gated residuals to independent CPU and
+unfused MUSA graphs, including short/tail widths; merged projections are checked
+with F32/F16/BF16 weights. CTest: 14/14 passed.
+
+Use the existing conversion and inference commands for either model. Add
+`--weight-dtype f16` to `scripts/run_pi05.py` for this faster path; add
+`--no-fuse` for an A/B comparison at the same precision. For a repeated benchmark:
+
+```bash
+.venv-converter/bin/python scripts/bench_pi05.py \
+  --model "$MODEL_DIR/gguf/model.gguf" \
+  --weight-dtype f16 --warmup 1 --runs 5 \
+  --reference "$MODEL_DIR/gguf/validation/musa-f32-actions.npy" \
+  --out-dir "$MODEL_DIR/gguf/benchmark-f16"
+# Prefix the same command with VLA_PI05_NO_FUSE=1 to disable all new fusion.
+```
+
+Detailed runs, actions, logs and the end-to-end tokenizer/camera/preprocessing
+check live in `/home/skysi/VLA/perf-fusion/`; `summary.json` separates total
+speedup, fusion-only improvement and errors against both CPU and MUSA F32.
+`VLA_PI05_NO_PROJ_FUSE=1` disables only merged projections for diagnosis.
+
+## Native F16 activations and layout follow-up (2026-10-30)
+
+`--weight-dtype f16 --act-dtype f16` now selects native F16 GEMM input/output
+and F16 language/MLP activations on MUSA. The expert residual and diffusion
+integrator, norm reductions, attention scores/softmax and vision activations
+remain F32. QKV GEMMs take F16 input and return F32 for RoPE. This is not an
+all-F16 graph. It requires fusion enabled and F16 weights. Both checkpoint
+variants, including visual pruning and their different tokenizers, are supported.
+
+The tested muBLAS 5.1 F16-output/COMPUTE_32F call returned NOT_SUPPORTED; the
+native F16-output path therefore uses COMPUTE_16F. The older F32-activation
+path still uses F32 GEMM accumulation/output. `run_pi05.py` and `bench_pi05.py`
+record this distinction through `--act-dtype`; F32 activations remain default.
+
+Changing activation precision alone had little benefit: about 961/2158 ms
+versus the previous 957/2194 ms. A temporary event profile of the full model's
+hot language/expert graph found 1381 CONT nodes taking about 426 ms and 197 GLU
+nodes taking 151 ms, out of 1764 ms measured inside dispatched ops. These are
+diagnostic event timings with instrumentation overhead, not benchmark latencies.
+
+The follow-up removes three QKV split copies per merged projection by using
+strided head views and adds a row-indexed merged GEGLU kernel. This avoids the
+generic flat-index division/remainder in the hot activation kernel. It is useful
+with F32 as well as F16 activations. Strict GEGLU tests use an independent float
+tanh reference, because the CPU backend may use an F16 lookup approximation.
+
+| Model | Previous F16 weights / F32 act | New layout / F32 act | New layout / F16 act | F16-act max error vs original MUSA F32 |
+|---|---:|---:|---:|---:|
+| 15-layer / 3-step | 957.34 ms | 907.84 ms | 884.29 ms | 0.20353 (0.1911% of peak) |
+| 27-layer / 10-step | 2194.02 ms | 2073.75 ms | 2039.34 ms | 0.10934 (0.1123% of peak) |
+
+These use the same two synthetic images, six text tokens, state/noise, original
+chunk/steps, one warmup and five measured calls. At the same optimized layout,
+F16 activations save only about 2.6%/1.7% and increase action error; the new
+F32-activation max errors are 0.07802/0.03082. Defaults were not changed merely
+to gain this small speed difference. Synthetic numerical tolerances are not
+real-robot acceptance criteria.
+
+Directly converting attention Q/K/V to F16 was also tested: it regressed to
+about 1.10/2.79 seconds. A K/V-only variant also regressed. Those experimental
+branches were removed. MUSA FlashAttention, in-place KV/RoPE and graph replay
+remain unimplemented/disabled in this path; this is still partial optimization.
+
+Reproduce native F16 with either model by adding `--act-dtype f16` to the
+previous F16 inference/benchmark command. Records are in
+`/home/skysi/VLA/perf-lowp/`, including `summary-layout.json`, the actual
+480x640/tokenizer/camera-order entry-point checks, and `profile.log`.
+The temporary profiler restores and rebuilds the production library automatically.
+CTest passes 14/14 with F16 GEMM/norm, mixed residuals, strided QKV and merged
+GEGLU references. No original-policy Python action comparison or robot task
+success-rate evaluation was added.
+
+All changes remain in the existing uncommitted worktree. No commit or push was made.
+
+## Versioned experiment archive (2026-11-02)
+
+See [stage comparisons and raw reports](benchmarks/pi05-m1000-2026-10-30/README.md)
+for measured intermediate stages, rejected experiments, numerical errors and
+validation provenance. The [official-document review](pi05-musa-official-review-2026-10-30.md)
+tracks proposed work separately from implemented optimizations.
+
+Submission-time rebuild passed. CTest passed 13 tests and skipped `musa_ops`
+because MUSA initialization failed (`CreatePlatform failed`); this is not a new
+GPU validation pass. The historical 2026-10-30 GPU results are retained separately.

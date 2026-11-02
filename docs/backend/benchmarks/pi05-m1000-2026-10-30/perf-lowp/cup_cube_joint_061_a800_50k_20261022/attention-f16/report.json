@@ -1,0 +1,45 @@
+{
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "dtype": "f16",
+  "steps": 10,
+  "synthetic_inputs": true,
+  "camera_count": 2,
+  "text_token_count": 6,
+  "chunk": 50,
+  "vision_tokens_per_camera": 256,
+  "no_fuse": "0",
+  "warmup": 1,
+  "runs": [
+    {
+      "ms_total": 2791.49072265625,
+      "ms_vision": 478.19970703125,
+      "ms_inference": 2312.770263671875,
+      "wall_ms": 2792.04488600044
+    },
+    {
+      "ms_total": 2785.14013671875,
+      "ms_vision": 475.57586669921875,
+      "ms_inference": 2309.050048828125,
+      "wall_ms": 2785.6916569999157
+    },
+    {
+      "ms_total": 2796.97119140625,
+      "ms_vision": 480.2999572753906,
+      "ms_inference": 2315.593017578125,
+      "wall_ms": 2797.5057490002655
+    }
+  ],
+  "repeat_max_abs": 0.0,
+  "median_ms": {
+    "ms_total": 2791.49072265625,
+    "ms_vision": 478.19970703125,
+    "ms_inference": 2312.770263671875,
+    "wall_ms": 2792.04488600044
+  },
+  "p95_wall_ms": 2796.959662700283,
+  "error_vs_reference": {
+    "max_abs": 0.0456695556640625,
+    "rmse": 0.024495698511600494,
+    "relative_peak": 0.00046922077308408916
+  }
+}
