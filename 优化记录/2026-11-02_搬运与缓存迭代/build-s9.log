@@ -1,0 +1,50 @@
+[1/30] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_fused.cu.o
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:223:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:225:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+/home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:152:17: warning: loop not unrolled: the optimizer was unable to perform the requested transformation; the transformation might be disabled or specified as part of an unsupported transformation ordering [-Wpass-failed=transform-warning]
+__global__ void attention_matmul_f32(const float * a, const float * b, float * out,
+                ^
+/home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:152:17: warning: loop not unrolled: the optimizer was unable to perform the requested transformation; the transformation might be disabled or specified as part of an unsupported transformation ordering [-Wpass-failed=transform-warning]
+4 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:223:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:225:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+2 warnings generated when compiling for host.
+[2/30] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[3/30] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[4/30] Linking CXX shared library bin/libggml.so.0.25.3
+[5/30] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[6/30] Linking CXX executable tests/test_vision_prune
+[7/30] Linking CXX executable tests/test_rope_conventions
+[8/30] Linking CXX executable tests/test_dit_common
+[9/30] Linking CXX executable tests/test_graph_names
+[10/30] Linking CXX shared library libvla_core.so
+[11/30] Linking CXX shared library bin/libllama.so.0.5.0
+[12/30] Linking CXX executable tests/test_qwen3vl_vit
+[13/30] Linking CXX shared library libvla.so
+[14/30] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[15/30] Linking CXX executable vla-server
+[16/30] Linking CXX executable vla-cli
+[17/30] Linking CXX executable vla-bench
+[18/30] Linking CXX shared library bin/libmtmd.so.0.5.0
+[19/30] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[20/30] Linking C executable tests/test_c_api
+[21/30] Linking CXX executable tests/vla_predict_check
+[22/30] Linking CXX shared library bin/libllama-common.so.0.5.0
+[23/30] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[24/30] Linking CXX executable tests/test_config_guard
+[25/30] Linking CXX executable tests/test_prompt
+[26/30] Linking CXX executable tests/test_foldquant_cpu_op
+[27/30] Linking CXX shared library libvlm_core.so
+[28/30] Linking CXX executable tests/test_foldquant_dequant
+[29/30] Linking CXX executable tests/test_musa_ops
+[30/30] Linking CXX executable vlm-server

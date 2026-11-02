@@ -1,0 +1,92 @@
+[0/1] Re-running CMake...
+-- llama.cpp version: 0.5.0-dev
+CMAKE_BUILD_TYPE=Release
+-- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE=OFF
+-- CMAKE_SYSTEM_PROCESSOR: aarch64
+-- GGML_SYSTEM_ARCH: ARM
+-- Including CPU backend
+-- ARM detected
+CMake Warning at build-musa-deps/llama/ggml/src/ggml-cpu/CMakeLists.txt:142 (message):
+  ARM -march/-mcpu not found, -mcpu=native will be used
+Call Stack (most recent call first):
+  build-musa-deps/llama/ggml/src/CMakeLists.txt:586 (ggml_add_cpu_backend_variant_impl)
+
+
+-- Checking for ARM features using flags:
+--   -U__ARM_FEATURE_MATMUL_INT8
+--   -U__ARM_FEATURE_SVE
+--   -U__ARM_FEATURE_SME
+--   -mcpu=native+dotprod+noi8mm+nosve+nosme
+-- Adding CPU backend variant ggml-cpu: -U__ARM_FEATURE_MATMUL_INT8;-U__ARM_FEATURE_SVE;-U__ARM_FEATURE_SME;-mcpu=native+dotprod+noi8mm+nosve+nosme 
+-- MUSA Toolkit found
+-- Using MUSA architectures: 22
+-- FlashAttention K-V type combinations: f16-f16;q4_0-q4_0;q8_0-q8_0;bf16-bf16
+-- Including MUSA backend
+-- ggml version: 0.25.3
+-- ggml commit:  4da6337-dirty
+-- OpenSSL found: 3.0.2
+-- VERSION: 0.2.1
+-- Found atomic: /usr/lib/aarch64-linux-gnu/libatomic.so.1
+-- vla: IPO/LTO disabled (Change Dir: /home/skysi/code/vla.cpp/build-musa-official/CMakeFiles/_CMakeLTOTest-CXX/bin
+
+Run Build Command(s):/usr/bin/ninja && [1/4] Building CXX object CMakeFiles/foo.dir/foo.cpp.o
+[2/4] Building CXX object CMakeFiles/boo.dir/main.cpp.o
+[3/4] Linking CXX static library libfoo.a
+[4/4] Linking CXX executable boo
+FAILED: boo 
+: && /usr/local/musa/bin/clang++ -flto=thin  CMakeFiles/boo.dir/main.cpp.o -o boo  libfoo.a && :
+/usr/bin/ld: /usr/local/musa-5.1.0/bin/../lib/LLVMgold.so: error loading plugin: /usr/local/musa-5.1.0/bin/../lib/LLVMgold.so: 无法打开共享目标文件: 没有那个文件或目录
+clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/skysi/code/vla.cpp/build-musa-official
+[1/31] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_fused.cu.o
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:223:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:225:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+2 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:223:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:225:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+2 warnings generated when compiling for host.
+[2/31] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[3/31] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[4/31] Linking CXX shared library bin/libggml.so.0.25.3
+[5/31] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[6/31] Linking CXX executable tests/test_rope_conventions
+[7/31] Linking CXX executable tests/test_vision_prune
+[8/31] Linking CXX executable tests/test_dit_common
+[9/31] Linking CXX executable tests/test_graph_names
+[10/31] Linking CXX executable tests/test_qwen3vl_vit
+[11/31] Linking CXX shared library bin/libllama.so.0.5.0
+[12/31] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[13/31] Linking CXX shared library bin/libmtmd.so.0.5.0
+[14/31] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[15/31] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+[16/31] Linking CXX shared library bin/libllama-common.so.0.5.0
+[17/31] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[18/31] Linking CXX shared library libvlm_core.so
+[19/31] Linking CXX shared library libvla_core.so
+[20/31] Linking CXX shared library libvla.so
+[21/31] Linking CXX executable vla-cli
+[22/31] Linking CXX executable vla-server
+[23/31] Linking CXX executable vlm-server
+[24/31] Linking CXX executable vla-bench
+[25/31] Linking CXX executable tests/vla_predict_check
+[26/31] Linking C executable tests/test_c_api
+[27/31] Linking CXX executable tests/test_config_guard
+[28/31] Linking CXX executable tests/test_prompt
+[29/31] Linking CXX executable tests/test_foldquant_cpu_op
+[30/31] Linking CXX executable tests/test_foldquant_dequant
+[31/31] Linking CXX executable tests/test_musa_ops

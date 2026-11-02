@@ -73,7 +73,7 @@ struct Graph {
         }
     }
 
-    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs, ggml_tensor * dynamic_scale = nullptr) {
+    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs, ggml_tensor * dynamic_scale = nullptr, bool switch_dtype = false) {
         auto * gf = ggml_new_graph(ctx);
         for (auto * t : outputs) {
             ggml_set_output(t);
@@ -91,7 +91,8 @@ struct Graph {
         if (!alloc || !ggml_gallocr_alloc_graph(alloc, gf)) return {};
         std::vector<float> result;
         // Reuse the allocation and graph: catches stream/lifetime problems too.
-        for (int repeat = 0; repeat < (dynamic_scale ? 9 : 3); ++repeat) {
+        for (int repeat = 0; repeat < ((dynamic_scale || switch_dtype) ? 9 : 3); ++repeat) {
+            if (switch_dtype) inputs[0]->type = repeat/3 == 1 ? GGML_TYPE_BF16 : GGML_TYPE_F16;
             if (dynamic_scale) {
                 float scale = 0.5f * (repeat/3 + 1);
                 std::memcpy(dynamic_scale->op_params, &scale, sizeof(scale));
@@ -130,7 +131,7 @@ vla::GemmaLayerW weights(Graph & g, ggml_type type, int64_t hidden, int64_t qdim
     return w;
 }
 
-std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false, bool flash = false, bool masked = false, bool recapture = false) {
+std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false, bool flash = false, bool masked = false, bool recapture = false, bool reuse = false) {
     Graph g;
     if (!g.ctx) return {};
     auto * C = g.ctx;
@@ -167,9 +168,12 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
         auto * norm = ggml_rms_norm(C, t, cfg.rms_eps);
         return ggml_add(C, ggml_add(C, norm, ggml_mul(C, norm, scale)), shift);
     };
-    for (int step = 0; step < 2; ++step) {
+    vla::KvSlot cache;
+    cache.concat_only = true;
+    for (int step = 0; step < 3; ++step) {
         auto * att = vla::gemma_attn(C, w, adarms(h), suffix_pos, cfg, chunk,
-                                    k, v, suffix_mask, nullptr, nullptr, GGML_TYPE_F32, flash);
+                                    k, v, suffix_mask, nullptr, nullptr, GGML_TYPE_F32, flash,
+                                    nullptr, nullptr, reuse ? &cache : nullptr);
         h = ggml_add(C, h, ggml_mul(C, att, gate));
         auto * mlp = vla::gemma_mlp(C, w, adarms(h), GGML_TYPE_F32);
         h = ggml_add(C, h, ggml_scale(C, ggml_mul(C, mlp, gate), -0.1f));
@@ -211,6 +215,13 @@ std::vector<float> softmax(ggml_backend_t backend, int64_t width, bool masked) {
         if (std::fabs(sum - 1.0) > 2e-5) return {};
     }
     return result;
+}
+
+std::vector<float> graph_source_dtype(ggml_backend_t backend) {
+    Graph g;
+    auto * a = g.input(GGML_TYPE_F16, {128, 64});
+    auto * b = g.input(GGML_TYPE_F32, {128, 50});
+    return g.run(backend, {ggml_mul_mat(g.ctx, a, b)}, nullptr, true);
 }
 
 std::vector<float> action_projection(ggml_backend_t backend, int64_t k, int64_t m, int64_t n) {
@@ -297,6 +308,14 @@ bool large_weight_buffers(ggml_backend_t backend) {
     ggml_free(ctx);
     std::printf("%s segmented weights above 4 GiB\n", ok ? "PASS" : "FAIL");
     return ok;
+}
+
+std::vector<float> selected_rows(ggml_backend_t backend, int count, int keep) {
+    Graph g;
+    auto * scores = g.input(GGML_TYPE_F32, {count});
+    auto * emb = g.input(GGML_TYPE_F32, {37, count});
+    // upload's repeating 67-value pattern deliberately creates score ties.
+    return g.run(backend, {vla::vision_keep_rows(g.ctx, emb, scores, keep)});
 }
 
 std::vector<float> patch_scores(ggml_backend_t backend) {
@@ -397,6 +416,20 @@ int main(int argc, char ** argv) {
     ggml_backend_cpu_set_n_threads(cpu, 4);
     bool ok = true;
     if (!vla::musa_register_fused_ops()) return 1;
+    if (argc == 2 && std::strcmp(argv[1], "--f32-attention") == 0) {
+        ok = compare("f32_attention_cpu", GGML_TYPE_F32,
+                     vision_attention(cpu, false), vision_attention(b.handle, false), 2e-5);
+        ggml_backend_free(cpu);
+        ggml_backend_free(b.handle);
+        return ok ? 0 : 1;
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--dtype-switch") == 0) {
+        ok = compare("graph_source_dtype_switch", GGML_TYPE_BF16,
+                     graph_source_dtype(cpu), graph_source_dtype(b.handle));
+        ggml_backend_free(cpu);
+        ggml_backend_free(b.handle);
+        return ok ? 0 : 1;
+    }
     if (argc == 2 && std::strcmp(argv[1], "--flash-attn") == 0) {
         ok = compare("flash_vision_strided_72", GGML_TYPE_F16,
                      vision_attention(b.handle, false), vision_attention(b.handle, true), 5e-3) && ok;
@@ -405,6 +438,11 @@ int main(int argc, char ** argv) {
                 ok = compare("flash_gemma_vs_unfused", GGML_TYPE_F16,
                     gemma(b.handle, GGML_TYPE_F16, prefix, true, false, masked),
                     gemma(b.handle, GGML_TYPE_F16, prefix, true, true, masked), 5e-3) && ok;
+        for (int64_t prefix : {17, 278, 518})
+            for (bool masked : {false, true})
+                ok = compare("flash_reuse_kv", GGML_TYPE_F16,
+                    gemma(b.handle, GGML_TYPE_F16, prefix, true, true, masked, false, false),
+                    gemma(b.handle, GGML_TYPE_F16, prefix, true, true, masked, false, true), 1e-12) && ok;
         ok = compare("flash_gemma_recapture", GGML_TYPE_F16,
                      gemma(b.handle, GGML_TYPE_F16, 17, true, false, false, true),
                      gemma(b.handle, GGML_TYPE_F16, 17, true, true, false, true), 5e-3) && ok;
@@ -412,6 +450,13 @@ int main(int argc, char ** argv) {
         ggml_backend_free(b.handle);
         return ok ? 0 : 1;
     }
+
+    ok = compare("graph_source_dtype_switch", GGML_TYPE_BF16,
+                 graph_source_dtype(cpu), graph_source_dtype(b.handle)) && ok;
+    for (int count : {17, 256})
+        for (int keep : {1, count/2, count})
+            ok = compare("stable_vision_keep", GGML_TYPE_F32,
+                         selected_rows(cpu, count, keep), selected_rows(b.handle, count, keep), 1e-12) && ok;
 
     for (auto type : {GGML_TYPE_F32, GGML_TYPE_F16})
         for (bool swapped : {false, true})

@@ -1,0 +1,179 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+{"iteration": 0, "warmup": true, "ms_total": 1646.406005859375, "ms_vision": 507.3421936035156, "ms_inference": 1107.318603515625, "wall_ms": 1647.2422699989693}
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+{"iteration": 1, "warmup": true, "ms_total": 2578.443115234375, "ms_vision": 811.7520141601562, "ms_inference": 1766.1649169921875, "wall_ms": 2578.9868460014986}
+{"iteration": 2, "warmup": true, "ms_total": 1535.209716796875, "ms_vision": 443.693603515625, "ms_inference": 1091.104736328125, "wall_ms": 1535.7611639992683}
+{"iteration": 3, "warmup": false, "ms_total": 1533.104736328125, "ms_vision": 442.75738525390625, "ms_inference": 1089.863037109375, "wall_ms": 1533.622072000071}
+{"iteration": 4, "warmup": false, "ms_total": 1533.3902587890625, "ms_vision": 443.3524475097656, "ms_inference": 1089.6070556640625, "wall_ms": 1533.8625450003747}
+{"iteration": 5, "warmup": false, "ms_total": 1532.4840087890625, "ms_vision": 441.9847106933594, "ms_inference": 1090.0062255859375, "wall_ms": 1533.0267760000424}
+{"iteration": 6, "warmup": false, "ms_total": 1534.919677734375, "ms_vision": 442.49298095703125, "ms_inference": 1091.94189453125, "wall_ms": 1535.4253700006666}
+{"iteration": 7, "warmup": false, "ms_total": 1533.4783935546875, "ms_vision": 442.5942077636719, "ms_inference": 1090.4647216796875, "wall_ms": 1533.9481599985447}
+{"iteration": 8, "warmup": false, "ms_total": 1532.1417236328125, "ms_vision": 442.3275146484375, "ms_inference": 1089.327392578125, "wall_ms": 1532.635431000017}
+{"iteration": 9, "warmup": false, "ms_total": 1535.62255859375, "ms_vision": 443.6479187011719, "ms_inference": 1091.51708984375, "wall_ms": 1536.0974259983777}
+{"iteration": 10, "warmup": false, "ms_total": 1534.0050048828125, "ms_vision": 443.08062744140625, "ms_inference": 1090.507568359375, "wall_ms": 1534.4866960003856}
+{"iteration": 11, "warmup": false, "ms_total": 1533.653564453125, "ms_vision": 443.5699768066406, "ms_inference": 1089.5660400390625, "wall_ms": 1534.1854470007092}
+{"iteration": 12, "warmup": false, "ms_total": 1531.8421630859375, "ms_vision": 443.27642822265625, "ms_inference": 1088.0711669921875, "wall_ms": 1532.3776780005574}
+{"iteration": 13, "warmup": false, "ms_total": 1534.1419677734375, "ms_vision": 443.73321533203125, "ms_inference": 1089.8795166015625, "wall_ms": 1534.6700320005766}
+{"iteration": 14, "warmup": false, "ms_total": 1533.9779052734375, "ms_vision": 443.8816223144531, "ms_inference": 1089.581298828125, "wall_ms": 1534.4922240001324}
+{"iteration": 15, "warmup": false, "ms_total": 1533.836669921875, "ms_vision": 443.2586975097656, "ms_inference": 1090.0704345703125, "wall_ms": 1534.3128549993708}
+{"iteration": 16, "warmup": false, "ms_total": 1531.7821044921875, "ms_vision": 442.7119140625, "ms_inference": 1088.5830078125, "wall_ms": 1532.2616450011992}
+{"iteration": 17, "warmup": false, "ms_total": 1534.3480224609375, "ms_vision": 443.3096008300781, "ms_inference": 1090.578857421875, "wall_ms": 1534.8507200014865}
+{
+  "metadata": {
+    "source_commit": "dfc0da11d12770b4b671086fa694b3bdeaec9171",
+    "source_diff_sha256": "8a69bdb68fb254b056691cd2f8694be13e438a421635353b07cb5e25b776b690",
+    "library": "/home/skysi/VLA/baseline-dfc0da1/libvla.so",
+    "library_sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "core_sha256": "252fc6d8d504c67b8068b604a9d4ba3c13c1df4ad99172d87d0f0b134e8c94ee",
+    "backend_sha256": {
+      "/home/skysi/VLA/baseline-dfc0da1/libggml-base.so": "3eb9f7dcf0398d4a31a4cef225b11e847c847202dcd51c29416c3badd6559a10",
+      "/home/skysi/VLA/baseline-dfc0da1/libggml-cpu.so": "5ecb455569f96e5129e615afed0f17e2f564a5fc0496b15aee3ce29e456b4074",
+      "/home/skysi/VLA/baseline-dfc0da1/libggml-musa.so": "930ae546607c36e61f98852f32863a899b402035036dbd8cacb8553f115cb350"
+    },
+    "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+    "power_profile": "performance",
+    "environment": {
+      "VLA_DEVICE": "0",
+      "VLA_N_THREADS": "4",
+      "VLA_PI05_NO_FUSE": null,
+      "VLA_PI05_NO_PROJ_FUSE": null,
+      "GGML_CUDA_DISABLE_GRAPHS": null,
+      "GGML_MUSA_DISABLE_GRAPHS": null,
+      "VLA_PI05_SPLIT_PHASES": null,
+      "VLA_PI05_HOST_PRUNE": null,
+      "VLA_PI05_NO_PRUNE_FLASH": null,
+      "VLA_PI05_NO_VISION_BATCH": null,
+      "VLA_PI05_NO_SEPARATE_GRAPHS": null,
+      "VLA_PI05_KV_REUSE": null,
+      "VLA_PI05_NO_KV_REUSE": null,
+      "VLA_MUSA_F32_ATTN_TILE": null
+    }
+  },
+  "split_phases": false,
+  "flash_attn": true,
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "dtype": "f16",
+  "act_dtype": "f32",
+  "steps": 10,
+  "synthetic_inputs": true,
+  "camera_count": 2,
+  "text_token_count": 6,
+  "chunk": 50,
+  "vision_tokens_per_camera": 256,
+  "no_fuse": "0",
+  "warmup": 3,
+  "runs": [
+    {
+      "ms_total": 1533.104736328125,
+      "ms_vision": 442.75738525390625,
+      "ms_inference": 1089.863037109375,
+      "wall_ms": 1533.622072000071
+    },
+    {
+      "ms_total": 1533.3902587890625,
+      "ms_vision": 443.3524475097656,
+      "ms_inference": 1089.6070556640625,
+      "wall_ms": 1533.8625450003747
+    },
+    {
+      "ms_total": 1532.4840087890625,
+      "ms_vision": 441.9847106933594,
+      "ms_inference": 1090.0062255859375,
+      "wall_ms": 1533.0267760000424
+    },
+    {
+      "ms_total": 1534.919677734375,
+      "ms_vision": 442.49298095703125,
+      "ms_inference": 1091.94189453125,
+      "wall_ms": 1535.4253700006666
+    },
+    {
+      "ms_total": 1533.4783935546875,
+      "ms_vision": 442.5942077636719,
+      "ms_inference": 1090.4647216796875,
+      "wall_ms": 1533.9481599985447
+    },
+    {
+      "ms_total": 1532.1417236328125,
+      "ms_vision": 442.3275146484375,
+      "ms_inference": 1089.327392578125,
+      "wall_ms": 1532.635431000017
+    },
+    {
+      "ms_total": 1535.62255859375,
+      "ms_vision": 443.6479187011719,
+      "ms_inference": 1091.51708984375,
+      "wall_ms": 1536.0974259983777
+    },
+    {
+      "ms_total": 1534.0050048828125,
+      "ms_vision": 443.08062744140625,
+      "ms_inference": 1090.507568359375,
+      "wall_ms": 1534.4866960003856
+    },
+    {
+      "ms_total": 1533.653564453125,
+      "ms_vision": 443.5699768066406,
+      "ms_inference": 1089.5660400390625,
+      "wall_ms": 1534.1854470007092
+    },
+    {
+      "ms_total": 1531.8421630859375,
+      "ms_vision": 443.27642822265625,
+      "ms_inference": 1088.0711669921875,
+      "wall_ms": 1532.3776780005574
+    },
+    {
+      "ms_total": 1534.1419677734375,
+      "ms_vision": 443.73321533203125,
+      "ms_inference": 1089.8795166015625,
+      "wall_ms": 1534.6700320005766
+    },
+    {
+      "ms_total": 1533.9779052734375,
+      "ms_vision": 443.8816223144531,
+      "ms_inference": 1089.581298828125,
+      "wall_ms": 1534.4922240001324
+    },
+    {
+      "ms_total": 1533.836669921875,
+      "ms_vision": 443.2586975097656,
+      "ms_inference": 1090.0704345703125,
+      "wall_ms": 1534.3128549993708
+    },
+    {
+      "ms_total": 1531.7821044921875,
+      "ms_vision": 442.7119140625,
+      "ms_inference": 1088.5830078125,
+      "wall_ms": 1532.2616450011992
+    },
+    {
+      "ms_total": 1534.3480224609375,
+      "ms_vision": 443.3096008300781,
+      "ms_inference": 1090.578857421875,
+      "wall_ms": 1534.8507200014865
+    }
+  ],
+  "repeat_max_abs": 0.0,
+  "median_ms": {
+    "ms_total": 1533.653564453125,
+    "ms_vision": 443.2586975097656,
+    "ms_inference": 1089.8795166015625,
+    "wall_ms": 1534.1854470007092
+  },
+  "p95_wall_ms": 1535.62698679998,
+  "error_vs_reference": {
+    "max_abs": 0.18576812744140625,
+    "rmse": 0.052499186247587204,
+    "relative_peak": 0.0019086295505985618
+  }
+}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 5.05 GiB
+vla(pi05): model loaded (n_threads=4)

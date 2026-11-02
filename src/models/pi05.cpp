@@ -70,6 +70,8 @@ struct Pi05ModelArch : public ModelArchBase {
     const std::vector<ggml_tensor *> * vision_forward(const ImageView* images, int n_images);
     bool read_pruned_images(std::vector<float> & out);
     int64_t vision_keep = 0;
+    bool device_prune = false;
+    bool musa_backend = false;
 
     ggml_backend_t        backend     = nullptr;
     ggml_backend_buffer_t weight_buf  = nullptr;
@@ -477,6 +479,9 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
             if (m->fused_ew)
                 std::printf("vla(pi05): fused expert elementwise ops on (VLA_PI05_NO_FUSE=1 to disable)\n");
         }
+        m->musa_backend = b.is_musa;
+        m->device_prune = b.is_musa && !env_flag("VLA_PI05_HOST_PRUNE");
+        if (m->device_prune) musa_register_fused_ops();
         if (b.is_musa && !fq.present && !env_flag("VLA_PI05_NO_FUSE")) {
             m->fused_ew = musa_register_fused_ops();
             m->adarms_spec.eps = cfg.rms_eps;
@@ -533,6 +538,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
             std::fprintf(stderr, "vla(pi05): invalid visual pruning count or unsupported activation dtype\n");
             return nullptr;
         }
+        m->device_prune = m->device_prune && m->vis.n_tokens <= 256;
         m->cfg.n_img = m->vision_keep;
         std::printf("vla(pi05): visual token pruning %lld -> %lld per image (attention, spatial order)\n",
                     (long long)m->vis.n_tokens, (long long)m->vision_keep);
@@ -612,6 +618,9 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         std::printf("vla(pi05): fused SigLIP blocks (VLA_PI05_NO_VIT_FUSE=1 to disable)\n");
     if (m->vision_keep) {
         m->vis.vit.enc.cfg.flash_attn = false;
+#ifdef GGML_USE_MUSA
+        m->vis.vit.enc.cfg.flash_attn = m->musa_backend && use_fused_attention() && !env_flag("VLA_PI05_NO_PRUNE_FLASH");
+#endif
         m->vis.vit.enc.cfg.fused = false;
         m->vis.vit.enc.cfg.int8 = false;
         m->vis.vit.enc.cfg.act = GGML_TYPE_F32;
@@ -736,19 +745,14 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
                 const auto & enc = vis.vit.enc;
                 for (size_t i = 0; i < enc.blk.size(); ++i) {
                     const auto & w = enc.blk[i];
-                    if (i + 1 == enc.blk.size()) {
-                        // Reuse the unfused attention definition to expose ranking scores.
-                        auto * norm = layer_norm(VC, h, w.ln1w, w.ln1b, enc.cfg.ln_eps);
-                        auto * q = to_heads(VC, linear(VC, w.Wq, w.bq, norm), enc.cfg.head_dim, enc.cfg.heads, K);
-                        auto * k = to_heads(VC, linear(VC, w.Wk, w.bk, norm), enc.cfg.head_dim, enc.cfg.heads, K);
-                        auto * kq = ggml_mul_mat(VC, k, q);
-                        ggml_prec_set_acc(kq, GGML_PREC_F32);
-                        auto * aw = ggml_soft_max_ext(VC, kq, nullptr, 1.0f / std::sqrt((float)enc.cfg.head_dim), 0.0f);
+                    ggml_tensor * aw = nullptr;
+                    const bool last = i + 1 == enc.blk.size();
+                    h = enc.block(VC, w, h, K, nv, last ? &aw : nullptr);
+                    if (last) {
                         auto * scores = vision_patch_scores(VC, aw);
                         ggml_set_output(scores);
                         vio.scores.push_back(scores);
                     }
-                    h = enc.block(VC, w, h, K);
                 }
                 h = layer_norm(VC, h, vis.vit.post_ln_w, vis.vit.post_ln_b, enc.cfg.ln_eps);
             } else {
@@ -758,8 +762,12 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
             if (vis.proj_b)
                 proj = ggml_add(VC, proj, vis.proj_b);
             proj = as_type(VC, proj, GGML_TYPE_F32);
+            if (musa_backend && nv > 1 && !vis.vit.enc.cfg.fused)
+                proj = ggml_reshape_2d(VC, proj, proj->ne[0], K*nv);
             if (proj->op == GGML_OP_VIEW || proj->op == GGML_OP_RESHAPE)
                 proj = ggml_cont(VC, proj);
+            if (vision_keep && device_prune)
+                proj = vision_keep_rows(VC, proj, vio.scores.back(), (int)vision_keep);
             ggml_set_output(proj);
             vio.emb.push_back(proj);
             return proj;
@@ -774,7 +782,11 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         vio.t_px.clear();
         vio.emb.clear();
         vio.scores.clear();
-        if (vis.vit.enc.cfg.fused || n_images == 1) {
+        bool batch_views = vis.vit.enc.cfg.fused || n_images == 1;
+#ifdef GGML_USE_MUSA
+        batch_views = batch_views || (musa_backend && !vision_keep && !env_flag("VLA_PI05_NO_VISION_BATCH"));
+#endif
+        if (batch_views) {
             // The fused blocks take every view in one pass (nv * K rows per GEMM).
             ggml_build_forward_expand(vg, tower(new_px(n_images), n_images));
         } else {
@@ -838,7 +850,7 @@ bool Pi05ModelArch::encode_images(const ImageView* images, int n_images, std::ve
     stats = Stats{};
     const std::vector<ggml_tensor *> * embs = vision_forward(images, n_images);
     bool ok = embs != nullptr;
-    if (ok && vision_keep) {
+    if (ok && vision_keep && !device_prune) {
         ok = read_pruned_images(out);
     } else if (ok) {
         size_t n = 0;
@@ -871,12 +883,15 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     const float   dt        = -1.0f/(float) num_steps;
 #ifdef GGML_USE_MUSA
     static const bool split_phases = env_flag("VLA_PI05_SPLIT_PHASES");
-    if (split_phases && (kv_inplace || fq_fast)) {
+    static const bool separate_enabled = !env_flag("VLA_PI05_NO_SEPARATE_GRAPHS");
+    const bool separate_graphs = musa_backend && separate_enabled;
+    if ((split_phases || separate_graphs) && (kv_inplace || fq_fast)) {
         std::fprintf(stderr, "vla(pi05): phase timing requires the ordinary cached-prefix path\n");
         return {};
     }
 #else
     const bool split_phases = false;
+    const bool separate_graphs = false;
 #endif
 
     int64_t n_img_tokens = 0;
@@ -970,7 +985,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         }
 
     ggml_cgraph * gf = ggml_new_graph_custom(C, max_nodes, false);
-    if (split_phases) {
+    if (split_phases || separate_graphs) {
         // Visit every prefix dependency first; the full graph still owns allocation/lifetimes.
         for (int64_t i=0; i<n_layers; ++i) {
             ggml_build_forward_expand(gf, cK[i]);
@@ -979,6 +994,13 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         gio.prefix_nodes = ggml_graph_n_nodes(gf);
     }
 
+    std::vector<KvSlot> concat_cache;
+#ifdef GGML_USE_MUSA
+    if (use_fused_attention() && !kv_inplace && !fq_fast && env_flag("VLA_PI05_KV_REUSE") && !env_flag("VLA_PI05_NO_KV_REUSE")) {
+        concat_cache.resize(n_layers);
+        for (auto & slot : concat_cache) slot.concat_only = true;
+    }
+#endif
     ggml_tensor * x_t = t_x0;
     for (int step=0; step<num_steps; ++step) {
         auto mod = [&](int64_t j) {
@@ -995,7 +1017,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
             h = build_expert_layer(C, ex_layers[i], h, t_suffix_pos, mod(2*i), mod(2*i+1), cfg, n_suf,
                                    cK[i], cV[i], t_suffix_mask, act_type,
                                    fused_ew ? &adarms_spec : nullptr, fused_ew ? &gateres_spec : nullptr,
-                                   kv_inplace ? &kv[i] : nullptr, kv16 ? &fqx : nullptr);
+                                   kv_inplace ? &kv[i] : (concat_cache.empty() ? nullptr : &concat_cache[i]), kv16 ? &fqx : nullptr);
         }
 
         ggml_tensor * h_final = build_adarms(C, h, mod(2*n_layers), hidden_ex, cfg.rms_eps, nullptr);
@@ -1036,7 +1058,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         const auto tv0 = clk::now();
         const std::vector<ggml_tensor *> * embs = vision_forward(in.images, in.n_images);
         if (!embs) return {};
-        if (vision_keep) {
+        if (vision_keep && !device_prune) {
             std::vector<float> selected;
             if (!read_pruned_images(selected)) return {};
             ggml_backend_tensor_set(t_image_emb, selected.data(), 0, selected.size() * sizeof(float));
@@ -1090,7 +1112,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     static const bool split_host = env_flag("VLA_PI05_HOST_SPLIT");
     ggml_status st;
 #ifdef GGML_USE_MUSA
-    if (split_phases) {
+    if (split_phases || separate_graphs) {
         auto run = [&](int begin, int end) {
             // Match the existing backend_fallback slice, retaining parent use counts for fusion.
             ggml_cgraph view = *gf;
@@ -1098,14 +1120,16 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
             view.nodes = gf->nodes+begin;
             view.grads = view.grad_accs = view.leafs = nullptr;
             view.uid = 0;
-            return ggml_backend_graph_compute(backend, &view);
+            return split_phases ? ggml_backend_graph_compute(backend, &view)
+                                : ggml_backend_graph_compute_async(backend, &view);
         };
         st = run(0, gio.prefix_nodes);
         const auto tp = clk::now();
         if (st == GGML_STATUS_SUCCESS)
             st = run(gio.prefix_nodes, ggml_graph_n_nodes(gf));
+        if (!split_phases) ggml_backend_synchronize(backend);
         const auto te = clk::now();
-        std::fprintf(stderr, "VLA_PI05_PHASES {\"vision_ms\":%.6f,\"prefix_ms\":%.6f,\"denoise_ms\":%.6f,\"steps\":%d}\n",
+        if (split_phases) std::fprintf(stderr, "VLA_PI05_PHASES {\"vision_ms\":%.6f,\"prefix_ms\":%.6f,\"denoise_ms\":%.6f,\"steps\":%d}\n",
                      stats.ms_vision, std::chrono::duration<double, std::milli>(tp-ti0).count(),
                      std::chrono::duration<double, std::milli>(te-tp).count(), num_steps);
     } else

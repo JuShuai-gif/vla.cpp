@@ -1,0 +1,44 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "median_ms": {
+      "ms_total": 719.9990844726562,
+      "ms_vision": 261.5225524902344,
+      "ms_inference": 458.23577880859375,
+      "wall_ms": 720.4748450003535
+    },
+    "reference_error": {
+      "max_abs": 0.46366119384765625,
+      "rmse": 0.1044497862458229,
+      "relative_peak": 0.0043542878702282906
+    },
+    "baseline_max_abs": 0.3822479248046875,
+    "baseline_relative_peak": 0.003589363671344044,
+    "phase_median_ms": {
+      "vision_ms": 261.522552,
+      "prefix_ms": 299.73501,
+      "denoise_ms": 158.443934
+    }
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "median_ms": {
+      "ms_total": 1512.24658203125,
+      "ms_vision": 420.87481689453125,
+      "ms_inference": 1091.36279296875,
+      "wall_ms": 1512.7413409991277
+    },
+    "reference_error": {
+      "max_abs": 0.18576812744140625,
+      "rmse": 0.052499186247587204,
+      "relative_peak": 0.0019086295505985618
+    },
+    "baseline_max_abs": 0.0,
+    "baseline_relative_peak": 0.0,
+    "phase_median_ms": {
+      "vision_ms": 420.874817,
+      "prefix_ms": 486.877452,
+      "denoise_ms": 604.480287
+    }
+  }
+]

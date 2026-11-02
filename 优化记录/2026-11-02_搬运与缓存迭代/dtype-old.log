@@ -1,0 +1,8 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+musa_ops: backend = MUSA (device 0: M1000)
+FAIL graph_source_dtype_switch/bf16: 28800 values, max_abs=22.92737 normalized=7.734033 tolerance=0.01
+  repeat 0 max_abs=0.002075195
+  repeat 1 max_abs=22.92737
+  repeat 2 max_abs=0.002075195

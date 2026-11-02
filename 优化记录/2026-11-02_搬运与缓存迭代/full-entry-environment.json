@@ -1,0 +1,8 @@
+{
+  "VLA_PI05_NO_KV_REUSE": "1",
+  "VLA_PI05_VISION_BATCH": "1",
+  "VLA_PI05_PRUNE_FLASH": "1",
+  "VLA_MUSA_F32_ATTN_TILE": "1",
+  "VLA_PI05_SEPARATE_GRAPHS": "1",
+  "note": "Matches final default execution; K=32 experiment not enabled."
+}

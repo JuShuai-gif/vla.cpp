@@ -1,0 +1,31 @@
+[1/31] Building CXX object CMakeFiles/vla_core.dir/src/modules/siglip_vit.cpp.o
+[2/31] Building CXX object CMakeFiles/vla_core.dir/src/modules/qwen3_lm.cpp.o
+[3/31] Building CXX object CMakeFiles/vla_core.dir/src/modules/dit_head.cpp.o
+[4/31] Building CXX object CMakeFiles/vla_core.dir/src/modules/encoder.cpp.o
+[5/31] Building CXX object CMakeFiles/vla_core.dir/src/models/gr00tn1d5.cpp.o
+[6/31] Building CXX object CMakeFiles/vla_core.dir/src/models/pi0.cpp.o
+[7/31] Building CXX object CMakeFiles/vla_core.dir/src/models/gr00tn1d6.cpp.o
+[8/31] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+[9/31] Building CXX object CMakeFiles/vla_core.dir/src/models/gr00tn1d7.cpp.o
+[10/31] Building CXX object CMakeFiles/vla_core.dir/src/models/vla_adapter.cpp.o
+[11/31] Building CXX object CMakeFiles/vla_core.dir/src/models/openvla_oft.cpp.o
+[12/31] Building CXX object CMakeFiles/vla_core.dir/src/models/smolvla.cpp.o
+[13/31] Building CXX object CMakeFiles/vla_core.dir/src/models/vla_jepa.cpp.o
+[14/31] Building CXX object CMakeFiles/vla_core.dir/src/models/turbovla.cpp.o
+[15/31] Building CXX object CMakeFiles/vla_core.dir/src/models/act.cpp.o
+[16/31] Building CXX object tests/CMakeFiles/test_qwen3vl_vit.dir/test_qwen3vl_vit.cpp.o
+[17/31] Linking CXX executable tests/test_qwen3vl_vit
+[18/31] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+[19/31] Building CXX object CMakeFiles/vla_core.dir/src/models/octo.cpp.o
+[20/31] Linking CXX shared library libvla_core.so
+[21/31] Linking CXX shared library libvla.so
+[22/31] Linking CXX executable vla-bench
+[23/31] Linking CXX executable vla-cli
+[24/31] Linking CXX executable vla-server
+[25/31] Linking CXX executable tests/vla_predict_check
+[26/31] Linking C executable tests/test_c_api
+[27/31] Linking CXX executable tests/test_config_guard
+[28/31] Linking CXX executable tests/test_prompt
+[29/31] Linking CXX executable tests/test_foldquant_cpu_op
+[30/31] Linking CXX executable tests/test_foldquant_dequant
+[31/31] Linking CXX executable tests/test_musa_ops

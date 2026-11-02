@@ -1,0 +1,17 @@
+[
+  {
+    "path": "trace-full/api_musa_api_trace.json.gz",
+    "uncompressed_bytes": 5778311,
+    "uncompressed_sha256": "b005d47cc0cc4abdab893944592a4ee3f18d5b7dc7540618d1fda45bbb2f23ca"
+  },
+  {
+    "path": "trace-pruned/api_musa_api_trace.json.gz",
+    "uncompressed_bytes": 2826700,
+    "uncompressed_sha256": "4df49619ab56da052f6c35bbc4b4177a7b1b24746407fc7bd92db5e5de557052"
+  },
+  {
+    "path": "build-s3.log.gz",
+    "uncompressed_bytes": 2821493,
+    "uncompressed_sha256": "7b78ce0e6568dca176a7f006401b6d5531eb56a80b6cfe3c31199bc47bad523d"
+  }
+]

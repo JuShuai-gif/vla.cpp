@@ -72,7 +72,9 @@ void EncStack::declare(WeightLoader & L, const char * prefix, int64_t layers, co
 }
 
 ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor * x,
-                              int64_t seq, int64_t nv) const {
+                              int64_t seq, int64_t nv, ggml_tensor ** attention_out) const {
+    GGML_ASSERT(!attention_out || (!cfg.fused && !cfg.fused_ops && cfg.act == GGML_TYPE_F32));
+    const bool use_flash = cfg.flash_attn && !attention_out;
     const int64_t hd    = cfg.head_dim;
     const int64_t heads = cfg.heads;
     const float   scale = 1.0f/std::sqrt((float)hd);
@@ -114,7 +116,7 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
         ggml_tensor * k  = ggml_add(C, mm_act(C, w.Wk, n1, at), w.bk);
         ggml_tensor * v  = ggml_add(C, mm_act(C, w.Wv, n1, at), w.bv);
         ggml_tensor * att;
-        if (cfg.flash_attn && fa_takes_views()) {
+        if (use_flash && fa_takes_views()) {
             auto heads_view = [&](ggml_tensor * p) {
                 return ggml_permute(C, ggml_reshape_3d(C, p, hd, heads, seq), 0, 2, 1, 3);
             };
@@ -140,7 +142,7 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
     // activations with one batched cuBLAS call, which the fused ops' single
     // GEMM over all views does not reproduce bit for bit.
     if (cfg.fused_ops && nv == 1) {
-        const bool fa = cfg.flash_attn;
+        const bool fa = use_flash;
         ggml_tensor * n1 = fused_ln(C, x, w.ln1w, w.ln1b, cfg.ln_eps, false,
                                     bf16_operand(w.Wq, seq) && bf16_operand(w.Wk, seq) && bf16_operand(w.Wv, seq));
         auto heads_of = [&](ggml_tensor * W, ggml_tensor * b, bool vt, bool f16) {
@@ -164,7 +166,7 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
 
     ggml_tensor * att;
 #ifdef GGML_USE_MUSA
-    if (cfg.flash_attn) {
+    if (use_flash) {
         auto heads_view = [&](ggml_tensor * p) {
             return ggml_permute(C, ggml_reshape_4d(C, p, hd, heads, seq, nv), 0, 2, 1, 3);
         };
@@ -172,7 +174,7 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
         att = flash_attention(C, heads_view(q), heads_view(k), heads_view(v), nullptr, scale);
     } else
 #endif
-    if (cfg.flash_attn && fa_takes_views()) {
+    if (use_flash && fa_takes_views()) {
         // A view-taking FA (fa_takes_views) reads the projections in place and
         // converts them itself, so no contiguous copy or F16 cast per operand.
         auto heads_view = [&](ggml_tensor * p) {
@@ -185,10 +187,10 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
     } else {
         ggml_tensor * Q = to_heads(C, q, hd, heads, seq, nv);
         ggml_tensor * K = to_heads(C, k, hd, heads, seq, nv);
-        if (cfg.flash_attn)
+        if (use_flash)
             att = flash_attention(C, Q, K, to_heads(C, v, hd, heads, seq, nv), nullptr, scale);
         else
-            att = attention(C, Q, K, to_heads_v(C, v, hd, heads, seq, nv), nullptr, scale, cfg.hidden, seq, nv);
+            att = attention(C, Q, K, to_heads_v(C, v, hd, heads, seq, nv), nullptr, scale, cfg.hidden, seq, nv, attention_out);
     }
 
     ggml_tensor * h1 = ggml_add(C, x, linear(C, w.Wo, w.bo, att));

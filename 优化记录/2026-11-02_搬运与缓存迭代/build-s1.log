@@ -1,0 +1,49 @@
+[1/33] Building CXX object tests/CMakeFiles/test_vision_prune.dir/test_vision_prune.cpp.o
+[2/33] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+[3/33] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_fused.cu.o
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:223:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:225:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+2 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:223:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:225:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+2 warnings generated when compiling for host.
+[4/33] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[5/33] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[6/33] Linking CXX shared library bin/libggml.so.0.25.3
+[7/33] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[8/33] Linking CXX executable tests/test_rope_conventions
+[9/33] Linking CXX executable tests/test_vision_prune
+[10/33] Linking CXX executable tests/test_dit_common
+[11/33] Linking CXX executable tests/test_graph_names
+[12/33] Linking CXX executable tests/test_qwen3vl_vit
+[13/33] Linking CXX shared library bin/libllama.so.0.5.0
+[14/33] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[15/33] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+[16/33] Linking CXX shared library bin/libmtmd.so.0.5.0
+[17/33] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[18/33] Linking CXX shared library libvla_core.so
+[19/33] Linking CXX shared library libvla.so
+[20/33] Linking CXX executable vla-cli
+[21/33] Linking CXX shared library bin/libllama-common.so.0.5.0
+[22/33] Linking CXX executable vla-server
+[23/33] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[24/33] Linking CXX executable vla-bench
+[25/33] Linking CXX shared library libvlm_core.so
+[26/33] Linking CXX executable tests/vla_predict_check
+[27/33] Linking C executable tests/test_c_api
+[28/33] Linking CXX executable tests/test_config_guard
+[29/33] Linking CXX executable tests/test_prompt
+[30/33] Linking CXX executable tests/test_foldquant_cpu_op
+[31/33] Linking CXX executable tests/test_foldquant_dequant
+[32/33] Linking CXX executable vlm-server
+[33/33] Linking CXX executable tests/test_musa_ops

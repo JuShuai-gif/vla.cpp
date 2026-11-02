@@ -1,0 +1,110 @@
+{
+  "source_base": "dfc0da11d12770b4b671086fa694b3bdeaec9171",
+  "llama_base": "4da6337767f973e2b4d0797e5b323d77d8565e4a",
+  "power": "performance",
+  "uname": "Linux aibox 6.6.10 #1 SMP PREEMPT Thu Jul  9 05:35:20 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux",
+  "groups": "uid=1000(skysi) gid=1000(skysi) \u7ec4=1000(skysi),27(sudo),44(video),110(render)",
+  "libraries": [
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/libvla_core.so",
+      "bytes": 1839768,
+      "sha256": "80949a10be39de28f3cd6bd6ba892ad61c55ec2bb4ac08078cbedf05a67db2dd"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/libvlm_core.so",
+      "bytes": 50936,
+      "sha256": "26cd8b0de94dc7c0c9bde01279d99165e30c7dba50fec0dccc1aadf2c293bea0"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+      "bytes": 14560,
+      "sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/bin/libllama-common.so.0.5.0",
+      "bytes": 5784144,
+      "sha256": "ef429c214afca42ee42772d92a65e1ecc0d24d14cdb62b6824e100421d867677"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0.25.3",
+      "bytes": 897264,
+      "sha256": "3eb9f7dcf0398d4a31a4cef225b11e847c847202dcd51c29416c3badd6559a10"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-cpu.so.0.25.3",
+      "bytes": 1068912,
+      "sha256": "5ecb455569f96e5129e615afed0f17e2f564a5fc0496b15aee3ce29e456b4074"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml.so.0.25.3",
+      "bytes": 51912,
+      "sha256": "7d4911b703486a5fc8a8005a6052b11f96169f6f04a9ef3db257da73eac1ae6c"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0.25.3",
+      "bytes": 89628568,
+      "sha256": "448040ecd2d1472680afe829a2c82b8eaa9c625a66c8adb4f568b3279d817456"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/bin/libllama.so.0.5.0",
+      "bytes": 4157120,
+      "sha256": "d58b1ab942e96d309155285361c81570ac6c0c0fdcc46e1b80b39b29939b1780"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/bin/libmtmd.so.0.5.0",
+      "bytes": 1535760,
+      "sha256": "8b7133d7bd649ebacb52007126402e4b4f42d98ad0a9989b3c8f2383356e03e5"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libllama-common.so",
+      "bytes": 5784144,
+      "sha256": "ef429c214afca42ee42772d92a65e1ecc0d24d14cdb62b6824e100421d867677"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libggml-base.so",
+      "bytes": 897264,
+      "sha256": "3eb9f7dcf0398d4a31a4cef225b11e847c847202dcd51c29416c3badd6559a10"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libggml-cpu.so",
+      "bytes": 1068912,
+      "sha256": "5ecb455569f96e5129e615afed0f17e2f564a5fc0496b15aee3ce29e456b4074"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libggml.so",
+      "bytes": 51912,
+      "sha256": "7d4911b703486a5fc8a8005a6052b11f96169f6f04a9ef3db257da73eac1ae6c"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libvla_core.so",
+      "bytes": 1839560,
+      "sha256": "252fc6d8d504c67b8068b604a9d4ba3c13c1df4ad99172d87d0f0b134e8c94ee"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libvlm_core.so",
+      "bytes": 50936,
+      "sha256": "26cd8b0de94dc7c0c9bde01279d99165e30c7dba50fec0dccc1aadf2c293bea0"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libggml-musa.so",
+      "bytes": 89619808,
+      "sha256": "930ae546607c36e61f98852f32863a899b402035036dbd8cacb8553f115cb350"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libvla.so",
+      "bytes": 14560,
+      "sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libllama.so",
+      "bytes": 4157120,
+      "sha256": "d58b1ab942e96d309155285361c81570ac6c0c0fdcc46e1b80b39b29939b1780"
+    },
+    {
+      "path": "/home/skysi/VLA/baseline-dfc0da1/libmtmd.so",
+      "bytes": 1535760,
+      "sha256": "8b7133d7bd649ebacb52007126402e4b4f42d98ad0a9989b3c8f2383356e03e5"
+    }
+  ],
+  "note": "Final library after MUSA-only scope guard and process-fixed separate-graph switch. Measured environment retained separately."
+}

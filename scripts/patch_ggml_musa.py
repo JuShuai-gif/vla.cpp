@@ -241,10 +241,19 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor 
 #endif
 """
     text = text.replace(previous_guard, "")
+    old_guard = """#ifdef GGML_USE_MUSA
+        if (node->op == GGML_OP_MUL_MAT && node->src[0]->type == GGML_TYPE_F32 &&
+            !ggml_musa_small_f32_matmul(node->src[0], node->src[1], node)) {
+            return false;
+        }
+#endif
+"""
+    text = text.replace(old_guard, "")
     anchor = "        // [TAG_MUL_MAT_ID_CUDA_GRAPHS]\n"
     replacement = """#ifdef GGML_USE_MUSA
         if (node->op == GGML_OP_MUL_MAT && node->src[0]->type == GGML_TYPE_F32 &&
-            !ggml_musa_small_f32_matmul(node->src[0], node->src[1], node)) {
+            !ggml_musa_small_f32_matmul(node->src[0], node->src[1], node) &&
+            !(ggml_musa_ext_supports && ggml_musa_ext_supports(node))) {
             return false;
         }
 #endif
@@ -252,6 +261,14 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor 
     if replacement not in text:
         if text.count(anchor) != 1:
             raise SystemExit(f"{path}: missing MUSA graph compatibility anchor")
+        text = text.replace(anchor, replacement)
+
+    # Source tensors can reuse addresses across graphs while their dtype changes.
+    anchor = "                prop.node_src_data_ptrs[j] = cgraph->nodes[i]->src[j]->data;"
+    replacement = anchor + "\n                prop.node_src_types[j] = cgraph->nodes[i]->src[j]->type;"
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing graph source type anchor")
         text = text.replace(anchor, replacement)
 
     # MUSA corrupts some captured graphs if a fresh executable updates itself.
@@ -265,6 +282,18 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor 
     if text != original:
         path.write_text(text)
         print(f"MUSA: graph-safe F32 projections and executable initialization in {path}")
+
+    path = root / "ggml/src/ggml-cuda/common.cuh"
+    original = text = path.read_text()
+    anchor = "        void *   node_src_data_ptrs[GGML_MAX_SRC];"
+    replacement = anchor + "\n        ggml_type node_src_types[GGML_MAX_SRC];"
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing graph source types declaration")
+        text = text.replace(anchor, replacement)
+    if text != original:
+        path.write_text(text)
+        print(f"MUSA: graph cache tracks source dtypes in {path}")
 
 
 if __name__ == "__main__":

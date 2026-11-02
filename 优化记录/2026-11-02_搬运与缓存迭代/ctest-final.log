@@ -1,0 +1,102 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp/build-musa-official
+Test project /home/skysi/code/vla.cpp/build-musa-official
+      Start  1: vision_common
+    Test  #1: vision_common ....................   Passed    0.00 sec
+      Start  1: vision_common
+    Test  #1: vision_common ....................   Passed    0.00 sec
+      Start  1: vision_common
+ 1/16 Test  #1: vision_common ....................   Passed    0.00 sec
+      Start  2: vision_prune
+    Test  #2: vision_prune .....................   Passed    0.01 sec
+      Start  2: vision_prune
+    Test  #2: vision_prune .....................   Passed    0.01 sec
+      Start  2: vision_prune
+ 2/16 Test  #2: vision_prune .....................   Passed    0.01 sec
+      Start  3: rope_conventions
+    Test  #3: rope_conventions .................   Passed    0.01 sec
+      Start  3: rope_conventions
+    Test  #3: rope_conventions .................   Passed    0.01 sec
+      Start  3: rope_conventions
+ 3/16 Test  #3: rope_conventions .................   Passed    0.01 sec
+      Start  4: c_api
+    Test  #4: c_api ............................   Passed    0.04 sec
+      Start  4: c_api
+    Test  #4: c_api ............................   Passed    0.04 sec
+      Start  4: c_api
+ 4/16 Test  #4: c_api ............................   Passed    0.04 sec
+      Start  5: dit_common
+    Test  #5: dit_common .......................   Passed    0.00 sec
+      Start  5: dit_common
+    Test  #5: dit_common .......................   Passed    0.00 sec
+      Start  5: dit_common
+ 5/16 Test  #5: dit_common .......................   Passed    0.00 sec
+      Start  6: graph_names
+    Test  #6: graph_names ......................   Passed    0.00 sec
+      Start  6: graph_names
+    Test  #6: graph_names ......................   Passed    0.00 sec
+      Start  6: graph_names
+ 6/16 Test  #6: graph_names ......................   Passed    0.00 sec
+      Start  7: qwen3vl_vit
+    Test  #7: qwen3vl_vit ......................   Passed    0.00 sec
+      Start  7: qwen3vl_vit
+    Test  #7: qwen3vl_vit ......................   Passed    0.00 sec
+      Start  7: qwen3vl_vit
+ 7/16 Test  #7: qwen3vl_vit ......................   Passed    0.00 sec
+      Start  8: config_guard
+    Test  #8: config_guard .....................   Passed    0.04 sec
+      Start  8: config_guard
+    Test  #8: config_guard .....................   Passed    0.04 sec
+      Start  8: config_guard
+ 8/16 Test  #8: config_guard .....................   Passed    0.03 sec
+      Start  9: prompt
+    Test  #9: prompt ...........................   Passed    0.04 sec
+      Start  9: prompt
+    Test  #9: prompt ...........................   Passed    0.03 sec
+      Start  9: prompt
+ 9/16 Test  #9: prompt ...........................   Passed    0.03 sec
+      Start 10: foldquant_cpu_op
+    Test #10: foldquant_cpu_op .................   Passed    0.04 sec
+      Start 10: foldquant_cpu_op
+    Test #10: foldquant_cpu_op .................   Passed    0.04 sec
+      Start 10: foldquant_cpu_op
+10/16 Test #10: foldquant_cpu_op .................   Passed    0.04 sec
+      Start 11: foldquant_dequant
+    Test #11: foldquant_dequant ................   Passed    0.05 sec
+      Start 11: foldquant_dequant
+    Test #11: foldquant_dequant ................   Passed    0.05 sec
+      Start 11: foldquant_dequant
+11/16 Test #11: foldquant_dequant ................   Passed    0.05 sec
+      Start 12: musa_ops
+    Test #12: musa_ops .........................   Passed    3.70 sec
+      Start 12: musa_ops
+    Test #12: musa_ops .........................   Passed    3.77 sec
+      Start 12: musa_ops
+12/16 Test #12: musa_ops .........................   Passed    4.01 sec
+      Start 13: musa_f32_attention
+    Test #13: musa_f32_attention ...............   Passed    0.23 sec
+      Start 13: musa_f32_attention
+    Test #13: musa_f32_attention ...............   Passed    0.22 sec
+      Start 13: musa_f32_attention
+13/16 Test #13: musa_f32_attention ...............   Passed    0.25 sec
+      Start 14: musa_flash_attn
+    Test #14: musa_flash_attn ..................   Passed    1.53 sec
+      Start 14: musa_flash_attn
+    Test #14: musa_flash_attn ..................   Passed    1.48 sec
+      Start 14: musa_flash_attn
+14/16 Test #14: musa_flash_attn ..................   Passed    1.57 sec
+      Start 15: musa_cpu_selection
+    Test #15: musa_cpu_selection ...............   Passed    0.04 sec
+      Start 15: musa_cpu_selection
+    Test #15: musa_cpu_selection ...............   Passed    0.04 sec
+      Start 15: musa_cpu_selection
+15/16 Test #15: musa_cpu_selection ...............   Passed    0.04 sec
+      Start 16: musa_invalid_device
+    Test #16: musa_invalid_device ..............   Passed    0.04 sec
+      Start 16: musa_invalid_device
+    Test #16: musa_invalid_device ..............   Passed    0.04 sec
+      Start 16: musa_invalid_device
+16/16 Test #16: musa_invalid_device ..............   Passed    0.04 sec
+
+100% tests passed, 0 tests failed out of 16
+
+Total Test time (real) =  17.66 sec

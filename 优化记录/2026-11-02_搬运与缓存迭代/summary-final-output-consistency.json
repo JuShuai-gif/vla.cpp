@@ -1,0 +1,34 @@
+[
+  {
+    "path": "final-r2/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "max_abs_vs_final_r1": 0.0
+  },
+  {
+    "path": "final-phases/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "max_abs_vs_final_r1": 0.0
+  },
+  {
+    "path": "final-scope-check/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "max_abs_vs_final_r1": 0.0
+  },
+  {
+    "path": "trace-pruned/actions.npy",
+    "max_abs_vs_final_r1": 0.0
+  },
+  {
+    "path": "final-r2/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "max_abs_vs_final_r1": 0.0
+  },
+  {
+    "path": "final-phases/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "max_abs_vs_final_r1": 0.0
+  },
+  {
+    "path": "final-scope-check/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "max_abs_vs_final_r1": 0.0
+  },
+  {
+    "path": "trace-full/actions.npy",
+    "max_abs_vs_final_r1": 0.0
+  }
+]

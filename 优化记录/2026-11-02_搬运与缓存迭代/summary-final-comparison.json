@@ -1,0 +1,104 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "baseline": {
+      "samples": 30,
+      "median_ms": {
+        "wall_ms": 748.035352999068,
+        "ms_vision": 289.9273223876953,
+        "ms_inference": 457.37635803222656
+      },
+      "round_median_ms": [
+        {
+          "ms_total": 748.0027465820312,
+          "ms_vision": 289.92974853515625,
+          "ms_inference": 457.620361328125,
+          "wall_ms": 748.4933680007089
+        },
+        {
+          "ms_total": 747.2760620117188,
+          "ms_vision": 289.79547119140625,
+          "ms_inference": 457.06317138671875,
+          "wall_ms": 747.7714019987616
+        }
+      ],
+      "repeat_max_abs": 0.0
+    },
+    "final": {
+      "samples": 30,
+      "median_ms": {
+        "wall_ms": 719.6165830000609,
+        "ms_vision": 261.5312805175781,
+        "ms_inference": 457.15576171875
+      },
+      "round_median_ms": [
+        {
+          "ms_total": 719.0554809570312,
+          "ms_vision": 261.5403747558594,
+          "ms_inference": 457.0898132324219,
+          "wall_ms": 719.5249790001981
+        },
+        {
+          "ms_total": 719.2353515625,
+          "ms_vision": 261.5221862792969,
+          "ms_inference": 457.396484375,
+          "wall_ms": 719.7028919999866
+        }
+      ],
+      "repeat_max_abs": 0.0
+    },
+    "saved_ms": 28.418769999007054,
+    "latency_reduction_pct": 3.7991212427419097
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "baseline": {
+      "samples": 30,
+      "median_ms": {
+        "wall_ms": 1532.607631499559,
+        "ms_vision": 443.3115692138672,
+        "ms_inference": 1088.9552001953125
+      },
+      "round_median_ms": [
+        {
+          "ms_total": 1529.9241943359375,
+          "ms_vision": 443.58209228515625,
+          "ms_inference": 1086.2525634765625,
+          "wall_ms": 1530.3903829990304
+        },
+        {
+          "ms_total": 1533.653564453125,
+          "ms_vision": 443.2586975097656,
+          "ms_inference": 1089.8795166015625,
+          "wall_ms": 1534.1854470007092
+        }
+      ],
+      "repeat_max_abs": 0.0
+    },
+    "final": {
+      "samples": 30,
+      "median_ms": {
+        "wall_ms": 1508.1417934989076,
+        "ms_vision": 420.458984375,
+        "ms_inference": 1086.734130859375
+      },
+      "round_median_ms": [
+        {
+          "ms_total": 1508.4232177734375,
+          "ms_vision": 420.4566955566406,
+          "ms_inference": 1087.0501708984375,
+          "wall_ms": 1508.929136000006
+        },
+        {
+          "ms_total": 1506.806640625,
+          "ms_vision": 420.47100830078125,
+          "ms_inference": 1086.5445556640625,
+          "wall_ms": 1507.2648680015845
+        }
+      ],
+      "repeat_max_abs": 0.0
+    },
+    "saved_ms": 24.465838000651274,
+    "latency_reduction_pct": 1.5963536588104454
+  }
+]

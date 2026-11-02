@@ -1,0 +1,188 @@
+diff --git a/src/models/pi05.cpp b/src/models/pi05.cpp
+index c31b96c..fc94029 100644
+--- a/src/models/pi05.cpp
++++ b/src/models/pi05.cpp
+@@ -70,6 +70,7 @@ struct Pi05ModelArch : public ModelArchBase {
+     const std::vector<ggml_tensor *> * vision_forward(const ImageView* images, int n_images);
+     bool read_pruned_images(std::vector<float> & out);
+     int64_t vision_keep = 0;
++    bool device_prune = false;
+ 
+     ggml_backend_t        backend     = nullptr;
+     ggml_backend_buffer_t weight_buf  = nullptr;
+@@ -477,6 +478,8 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+             if (m->fused_ew)
+                 std::printf("vla(pi05): fused expert elementwise ops on (VLA_PI05_NO_FUSE=1 to disable)\n");
+         }
++        m->device_prune = b.is_musa && !env_flag("VLA_PI05_HOST_PRUNE");
++        if (m->device_prune) musa_register_fused_ops();
+         if (b.is_musa && !fq.present && !env_flag("VLA_PI05_NO_FUSE")) {
+             m->fused_ew = musa_register_fused_ops();
+             m->adarms_spec.eps = cfg.rms_eps;
+@@ -533,6 +536,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+             std::fprintf(stderr, "vla(pi05): invalid visual pruning count or unsupported activation dtype\n");
+             return nullptr;
+         }
++        m->device_prune = m->device_prune && m->vis.n_tokens <= 256;
+         m->cfg.n_img = m->vision_keep;
+         std::printf("vla(pi05): visual token pruning %lld -> %lld per image (attention, spatial order)\n",
+                     (long long)m->vis.n_tokens, (long long)m->vision_keep);
+@@ -760,6 +764,8 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+             proj = as_type(VC, proj, GGML_TYPE_F32);
+             if (proj->op == GGML_OP_VIEW || proj->op == GGML_OP_RESHAPE)
+                 proj = ggml_cont(VC, proj);
++            if (vision_keep && device_prune)
++                proj = vision_keep_rows(VC, proj, vio.scores.back(), (int)vision_keep);
+             ggml_set_output(proj);
+             vio.emb.push_back(proj);
+             return proj;
+@@ -838,7 +844,7 @@ bool Pi05ModelArch::encode_images(const ImageView* images, int n_images, std::ve
+     stats = Stats{};
+     const std::vector<ggml_tensor *> * embs = vision_forward(images, n_images);
+     bool ok = embs != nullptr;
+-    if (ok && vision_keep) {
++    if (ok && vision_keep && !device_prune) {
+         ok = read_pruned_images(out);
+     } else if (ok) {
+         size_t n = 0;
+@@ -1036,7 +1042,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+         const auto tv0 = clk::now();
+         const std::vector<ggml_tensor *> * embs = vision_forward(in.images, in.n_images);
+         if (!embs) return {};
+-        if (vision_keep) {
++        if (vision_keep && !device_prune) {
+             std::vector<float> selected;
+             if (!read_pruned_images(selected)) return {};
+             ggml_backend_tensor_set(t_image_emb, selected.data(), 0, selected.size() * sizeof(float));
+diff --git a/src/modules/vision_prune.h b/src/modules/vision_prune.h
+index 1c9399f..e779681 100644
+--- a/src/modules/vision_prune.h
++++ b/src/modules/vision_prune.h
+@@ -3,6 +3,8 @@
+ #include "ggml.h"
+ #include <algorithm>
+ #include <cmath>
++#include <cstdint>
++#include <cstring>
+ #include <numeric>
+ #include <stdexcept>
+ #include <vector>
+@@ -32,4 +34,22 @@ inline std::vector<int> vision_keep_indices(const std::vector<float> & scores, i
+     return ids;
+ }
+ 
++// Stable top-k, returned in original spatial order. GPU uses the same score/id ordering.
++constexpr uint32_t VISION_KEEP_MAGIC = 0x564b4944u;
++inline void vision_keep_cpu(ggml_tensor * dst, int ith, int, void *) {
++    if (ith != 0) return;
++    const auto * scores = static_cast<const float *>(dst->src[0]->data);
++    const auto ids = vision_keep_indices({scores, scores + dst->src[0]->ne[0]}, (int)dst->ne[0]);
++    std::memcpy(dst->data, ids.data(), ids.size()*sizeof(int32_t));
++}
++inline ggml_tensor * vision_keep_rows(ggml_context * C, ggml_tensor * emb, ggml_tensor * scores, int keep) {
++    GGML_ASSERT(scores->type == GGML_TYPE_F32 && ggml_is_contiguous(scores));
++    GGML_ASSERT(keep > 0 && keep <= scores->ne[0] && emb->ne[1] == scores->ne[0]);
++    static const uint32_t spec = VISION_KEEP_MAGIC;
++    ggml_tensor * args[] = {scores};
++    auto * ids = ggml_custom_4d(C, GGML_TYPE_I32, keep, 1, 1, 1, args, 1,
++                                vision_keep_cpu, 1, (void *)&spec);
++    return ggml_get_rows(C, emb, ids);
++}
++
+ }
+diff --git a/src/musa/vla_musa_fused.cu b/src/musa/vla_musa_fused.cu
+index 8ec51c0..e2a0573 100644
+--- a/src/musa/vla_musa_fused.cu
++++ b/src/musa/vla_musa_fused.cu
+@@ -2,6 +2,8 @@
+ // SPDX-License-Identifier: Apache-2.0
+ // F32 expert adaRMS and gated residuals, on the graph's own MUSA stream.
+ #include "layers/fused_ew.h"
++#include "modules/vision_prune.h"
++#include <cassert>
+ #include "musa/vla_musa_ops.h"
+ #include <musa_runtime.h>
+ #include <musa_fp16.h>
+@@ -46,6 +48,10 @@ bool supports(const ggml_tensor * t) {
+     if (t->op == GGML_OP_RMS_NORM)
+         return dense_f16(t) && dense_f16(t->src[0]);
+     const uint32_t m = magic(t);
++    if (m == VISION_KEEP_MAGIC)
++        return t->type == GGML_TYPE_I32 && dense_f32(t->src[0]) &&
++               ggml_is_vector(t->src[0]) && t->src[0]->ne[0] <= WG &&
++               t->ne[0] > 0 && t->ne[0] <= t->src[0]->ne[0];
+     if (m != FUSED_ADARMS_MAGIC && m != FUSED_GATERES_MAGIC) return false;
+     const auto * x = t->src[0];
+     const auto * mod = t->src[m == FUSED_ADARMS_MAGIC ? 1 : 2];
+@@ -103,12 +109,39 @@ __global__ void merged_geglu(const T * src, T * dst, int h, bool swapped) {
+     dst[row+col] = store<T>(gelu*u);
+ }
+ 
++
++// 256 patches: exact ranking, ties prefer the lower spatial index.
++__global__ void vision_keep(const float * scores, int32_t * ids, int n, int keep) {
++    __shared__ float values[WG];
++    __shared__ int selected[WG];
++    const int i = threadIdx.x;
++    if (i < n) {
++        assert(isfinite(scores[i]));
++        values[i] = scores[i];
++    }
++    __syncthreads();
++    int rank = 0;
++    if (i < n) {
++        for (int j = 0; j < n; ++j)
++            rank += values[j] > values[i] || (values[j] == values[i] && j < i);
++    }
++    selected[i] = i < n && rank < keep;
++    __syncthreads();
++    if (selected[i]) {
++        int out = 0;
++        for (int j = 0; j < i; ++j) out += selected[j];
++        ids[out] = i;
++    }
++}
++
+ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
+     if (!supports(t)) return false;
+     const auto stream = (musaStream_t) stream_ptr;
+     const int h = (int) t->ne[0];
+     const auto * x = (const float *) t->src[0]->data;
+-    if (t->op == GGML_OP_GLU) {
++    if (magic(t) == VISION_KEEP_MAGIC) {
++        vision_keep<<<1, WG, 0, stream>>>(x, (int32_t *)t->data, t->src[0]->ne[0], h);
++    } else if (t->op == GGML_OP_GLU) {
+         const dim3 grid((h+WG-1)/WG, ggml_nrows(t));
+         const bool swapped = ((const int32_t *) t->op_params)[1] != 0;
+         if (t->type == GGML_TYPE_F16)
+diff --git a/tests/test_musa_ops.cpp b/tests/test_musa_ops.cpp
+index e22b298..49f7efc 100644
+--- a/tests/test_musa_ops.cpp
++++ b/tests/test_musa_ops.cpp
+@@ -299,6 +299,14 @@ bool large_weight_buffers(ggml_backend_t backend) {
+     return ok;
+ }
+ 
++std::vector<float> selected_rows(ggml_backend_t backend, int count, int keep) {
++    Graph g;
++    auto * scores = g.input(GGML_TYPE_F32, {count});
++    auto * emb = g.input(GGML_TYPE_F32, {37, count});
++    // upload's repeating 67-value pattern deliberately creates score ties.
++    return g.run(backend, {vla::vision_keep_rows(g.ctx, emb, scores, keep)});
++}
++
+ std::vector<float> patch_scores(ggml_backend_t backend) {
+     Graph g;
+     auto * a = g.input(GGML_TYPE_F32, {256, 256, 16});
+@@ -413,6 +421,11 @@ int main(int argc, char ** argv) {
+         return ok ? 0 : 1;
+     }
+ 
++    for (int count : {17, 256})
++        for (int keep : {1, count/2, count})
++            ok = compare("stable_vision_keep", GGML_TYPE_F32,
++                         selected_rows(cpu, count, keep), selected_rows(b.handle, count, keep), 1e-12) && ok;
++
+     for (auto type : {GGML_TYPE_F32, GGML_TYPE_F16})
+         for (bool swapped : {false, true})
+             ok = compare("merged_geglu_rows", type, merged_glu_reference(type, swapped),

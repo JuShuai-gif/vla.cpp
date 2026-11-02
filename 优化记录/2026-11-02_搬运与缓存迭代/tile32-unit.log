@@ -1,0 +1,4 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+musa_ops: backend = MUSA (device 0: M1000)
+PASS f32_attention_cpu/f32: 442368 values, max_abs=1.769513e-08 normalized=1.079558e-06 tolerance=2e-05

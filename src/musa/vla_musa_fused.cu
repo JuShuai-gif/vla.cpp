@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // F32 expert adaRMS and gated residuals, on the graph's own MUSA stream.
 #include "layers/fused_ew.h"
+#include "modules/vision_prune.h"
+#include <cassert>
+#include <cstdlib>
 #include "musa/vla_musa_ops.h"
 #include <musa_runtime.h>
 #include <musa_fp16.h>
@@ -37,7 +40,20 @@ bool dense_f16(const ggml_tensor * t) {
     return t && t->type == GGML_TYPE_F16 && ggml_is_contiguous(t);
 }
 
+bool tiled_attention(const ggml_tensor * t) {
+    static const bool enabled = [] {
+        const char * value = std::getenv("VLA_MUSA_F32_ATTN_TILE");
+        return !value || std::strcmp(value, "0") != 0;
+    }();
+    if (!enabled || t->op != GGML_OP_MUL_MAT || !dense_f32(t) ||
+        !dense_f32(t->src[0]) || !dense_f32(t->src[1])) return false;
+    const auto * a = t->src[0]; const auto * b = t->src[1];
+    return a->ne[2] > 1 && a->ne[2] == b->ne[2] && a->ne[3] == 1 && b->ne[3] == 1 &&
+           a->ne[0] <= 256 && a->ne[1] <= 256 && b->ne[1] <= 256;
+}
+
 bool supports(const ggml_tensor * t) {
+    if (tiled_attention(t)) return true;
     if (t->op == GGML_OP_GLU && ggml_get_glu_op(t) == GGML_GLU_OP_GEGLU && !t->src[1])
         return (dense_f16(t) || dense_f32(t)) && ggml_is_contiguous(t->src[0]) &&
                t->src[0]->type == t->type && t->src[0]->ne[0] == 2*t->ne[0];
@@ -46,6 +62,10 @@ bool supports(const ggml_tensor * t) {
     if (t->op == GGML_OP_RMS_NORM)
         return dense_f16(t) && dense_f16(t->src[0]);
     const uint32_t m = magic(t);
+    if (m == VISION_KEEP_MAGIC)
+        return t->type == GGML_TYPE_I32 && dense_f32(t->src[0]) &&
+               ggml_is_vector(t->src[0]) && t->src[0]->ne[0] <= WG &&
+               t->ne[0] > 0 && t->ne[0] <= t->src[0]->ne[0];
     if (m != FUSED_ADARMS_MAGIC && m != FUSED_GATERES_MAGIC) return false;
     const auto * x = t->src[0];
     const auto * mod = t->src[m == FUSED_ADARMS_MAGIC ? 1 : 2];
@@ -103,12 +123,68 @@ __global__ void merged_geglu(const T * src, T * dst, int h, bool swapped) {
     dst[row+col] = store<T>(gelu*u);
 }
 
+
+// 256 patches: exact ranking, ties prefer the lower spatial index.
+__global__ void vision_keep(const float * scores, int32_t * ids, int n, int keep) {
+    __shared__ float values[WG];
+    __shared__ int selected[WG];
+    const int i = threadIdx.x;
+    if (i < n) {
+        assert(isfinite(scores[i]));
+        values[i] = scores[i];
+    }
+    __syncthreads();
+    int rank = 0;
+    if (i < n) {
+        for (int j = 0; j < n; ++j)
+            rank += values[j] > values[i] || (values[j] == values[i] && j < i);
+    }
+    selected[i] = i < n && rank < keep;
+    __syncthreads();
+    if (selected[i]) {
+        int out = 0;
+        for (int j = 0; j < i; ++j) out += selected[j];
+        ids[out] = i;
+    }
+}
+
+
+// F32 batched QK/AV, avoiding muBLAS's capture-time host synchronization.
+// Columns of A and B are contiguous; compute A^T B in 16x16 tiles.
+__global__ void attention_matmul_f32(const float * a, const float * b, float * out,
+                                      int k, int m, int n) {
+    __shared__ float at[16][17], bt[16][17];
+    const int x=threadIdx.x, y=threadIdx.y;
+    const int row=blockIdx.x*16+x, col=blockIdx.y*16+y;
+    a += (size_t)blockIdx.z*k*m;
+    b += (size_t)blockIdx.z*k*n;
+    out += (size_t)blockIdx.z*m*n;
+    float sum=0.0f;
+    for (int base=0; base<k; base+=16) {
+        const int ar=blockIdx.x*16+y;
+        at[y][x] = ar<m && base+x<k ? a[(size_t)ar*k+base+x] : 0.0f;
+        bt[y][x] = col<n && base+x<k ? b[(size_t)col*k+base+x] : 0.0f;
+        __syncthreads();
+        #pragma unroll
+        for (int j=0; j<16; ++j) sum=fmaf(at[x][j],bt[y][j],sum);
+        __syncthreads();
+    }
+    if (row<m && col<n) out[(size_t)col*m+row]=sum;
+}
+
 bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
     if (!supports(t)) return false;
     const auto stream = (musaStream_t) stream_ptr;
     const int h = (int) t->ne[0];
     const auto * x = (const float *) t->src[0]->data;
-    if (t->op == GGML_OP_GLU) {
+    if (tiled_attention(t)) {
+        const auto * a=t->src[0]; const auto * b=t->src[1];
+        const dim3 grid((a->ne[1]+15)/16,(b->ne[1]+15)/16,a->ne[2]);
+        attention_matmul_f32<<<grid,dim3(16,16),0,stream>>>(
+            (const float *)a->data,(const float *)b->data,(float *)t->data,a->ne[0],a->ne[1],b->ne[1]);
+    } else if (magic(t) == VISION_KEEP_MAGIC) {
+        vision_keep<<<1, WG, 0, stream>>>(x, (int32_t *)t->data, t->src[0]->ne[0], h);
+    } else if (t->op == GGML_OP_GLU) {
         const dim3 grid((h+WG-1)/WG, ggml_nrows(t));
         const bool swapped = ((const int32_t *) t->op_params)[1] != 0;
         if (t->type == GGML_TYPE_F16)

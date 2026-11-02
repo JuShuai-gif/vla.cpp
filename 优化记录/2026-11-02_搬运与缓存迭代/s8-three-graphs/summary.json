@@ -1,0 +1,34 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "median_ms": {
+      "ms_total": 719.3999633789062,
+      "ms_vision": 261.7318420410156,
+      "ms_inference": 457.3905029296875,
+      "wall_ms": 719.882671999585
+    },
+    "reference_error": {
+      "max_abs": 0.46366119384765625,
+      "rmse": 0.1044497862458229,
+      "relative_peak": 0.0043542878702282906
+    },
+    "baseline_max_abs": 0.3822479248046875,
+    "baseline_relative_peak": 0.003589363671344044
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "median_ms": {
+      "ms_total": 1508.1744384765625,
+      "ms_vision": 420.63287353515625,
+      "ms_inference": 1086.586669921875,
+      "wall_ms": 1508.6593960004393
+    },
+    "reference_error": {
+      "max_abs": 0.18576812744140625,
+      "rmse": 0.052499186247587204,
+      "relative_peak": 0.0019086295505985618
+    },
+    "baseline_max_abs": 0.0,
+    "baseline_relative_peak": 0.0
+  }
+]

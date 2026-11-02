@@ -3,6 +3,8 @@
 #include "ggml.h"
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
+#include <cstring>
 #include <numeric>
 #include <stdexcept>
 #include <vector>
@@ -30,6 +32,24 @@ inline std::vector<int> vision_keep_indices(const std::vector<float> & scores, i
     ids.resize(keep);
     std::sort(ids.begin(), ids.end());
     return ids;
+}
+
+// Stable top-k, returned in original spatial order. GPU uses the same score/id ordering.
+constexpr uint32_t VISION_KEEP_MAGIC = 0x564b4944u;
+inline void vision_keep_cpu(ggml_tensor * dst, int ith, int, void *) {
+    if (ith != 0) return;
+    const auto * scores = static_cast<const float *>(dst->src[0]->data);
+    const auto ids = vision_keep_indices({scores, scores + dst->src[0]->ne[0]}, (int)dst->ne[0]);
+    std::memcpy(dst->data, ids.data(), ids.size()*sizeof(int32_t));
+}
+inline ggml_tensor * vision_keep_rows(ggml_context * C, ggml_tensor * emb, ggml_tensor * scores, int keep) {
+    GGML_ASSERT(scores->type == GGML_TYPE_F32 && ggml_is_contiguous(scores));
+    GGML_ASSERT(keep > 0 && keep <= scores->ne[0] && emb->ne[1] == scores->ne[0]);
+    static const uint32_t spec = VISION_KEEP_MAGIC;
+    ggml_tensor * args[] = {scores};
+    auto * ids = ggml_custom_4d(C, GGML_TYPE_I32, keep, 1, 1, 1, args, 1,
+                                vision_keep_cpu, 1, (void *)&spec);
+    return ggml_get_rows(C, emb, ids);
 }
 
 }

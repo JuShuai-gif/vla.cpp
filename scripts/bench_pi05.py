@@ -60,13 +60,16 @@ metadata = {
     'source_diff_sha256': hashlib.sha256(subprocess.check_output(['git', 'diff', 'HEAD'], cwd=repo)).hexdigest(),
     'library': str(library),
     'library_sha256': hashlib.sha256(library.read_bytes()).hexdigest(),
+    'core_sha256': hashlib.sha256((library.parent/'libvla_core.so').read_bytes()).hexdigest() if (library.parent/'libvla_core.so').exists() else None,
     'backend_sha256': {str(p.resolve()): hashlib.sha256(p.read_bytes()).hexdigest()
-                       for p in sorted((library.parent/'bin').glob('libggml-*.so'))},
+                       for p in sorted((library.parent/'bin' if (library.parent/'bin').exists() else library.parent).glob('libggml-*.so'))},
     'platform': platform.platform(),
     'power_profile': command_output(['powerprofilesctl', 'get']),
     'environment': {k: os.environ.get(k) for k in (
         'VLA_DEVICE', 'VLA_N_THREADS', 'VLA_PI05_NO_FUSE', 'VLA_PI05_NO_PROJ_FUSE',
-        'GGML_CUDA_DISABLE_GRAPHS', 'GGML_MUSA_DISABLE_GRAPHS', 'VLA_PI05_SPLIT_PHASES')},
+        'GGML_CUDA_DISABLE_GRAPHS', 'GGML_MUSA_DISABLE_GRAPHS', 'VLA_PI05_SPLIT_PHASES',
+        'VLA_PI05_HOST_PRUNE', 'VLA_PI05_NO_PRUNE_FLASH', 'VLA_PI05_NO_VISION_BATCH',
+        'VLA_PI05_NO_SEPARATE_GRAPHS', 'VLA_PI05_KV_REUSE', 'VLA_PI05_NO_KV_REUSE', 'VLA_MUSA_F32_ATTN_TILE')},
 }
 
 opt.out_dir.mkdir(parents=True, exist_ok=True)

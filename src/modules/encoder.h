@@ -73,7 +73,7 @@ struct EncStack {
     void declare(WeightLoader & L, const char * prefix, int64_t layers, const EncNames & n = EncNames{});
 
     ggml_tensor * block(ggml_context * C, const EncBlockW & w, ggml_tensor * x,
-                        int64_t seq, int64_t nv = 1) const;
+                        int64_t seq, int64_t nv = 1, ggml_tensor ** attention_out = nullptr) const;
 
     ggml_tensor * build(ggml_context * C, ggml_tensor * x, int64_t seq, int64_t nv = 1) const;
 };

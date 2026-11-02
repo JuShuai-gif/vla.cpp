@@ -1,0 +1,703 @@
+diff --git a/scripts/bench_pi05.py b/scripts/bench_pi05.py
+index 0ff8aaf..075a725 100644
+--- a/scripts/bench_pi05.py
++++ b/scripts/bench_pi05.py
+@@ -60,13 +60,16 @@ metadata = {
+     'source_diff_sha256': hashlib.sha256(subprocess.check_output(['git', 'diff', 'HEAD'], cwd=repo)).hexdigest(),
+     'library': str(library),
+     'library_sha256': hashlib.sha256(library.read_bytes()).hexdigest(),
++    'core_sha256': hashlib.sha256((library.parent/'libvla_core.so').read_bytes()).hexdigest() if (library.parent/'libvla_core.so').exists() else None,
+     'backend_sha256': {str(p.resolve()): hashlib.sha256(p.read_bytes()).hexdigest()
+-                       for p in sorted((library.parent/'bin').glob('libggml-*.so'))},
++                       for p in sorted((library.parent/'bin' if (library.parent/'bin').exists() else library.parent).glob('libggml-*.so'))},
+     'platform': platform.platform(),
+     'power_profile': command_output(['powerprofilesctl', 'get']),
+     'environment': {k: os.environ.get(k) for k in (
+         'VLA_DEVICE', 'VLA_N_THREADS', 'VLA_PI05_NO_FUSE', 'VLA_PI05_NO_PROJ_FUSE',
+-        'GGML_CUDA_DISABLE_GRAPHS', 'GGML_MUSA_DISABLE_GRAPHS', 'VLA_PI05_SPLIT_PHASES')},
++        'GGML_CUDA_DISABLE_GRAPHS', 'GGML_MUSA_DISABLE_GRAPHS', 'VLA_PI05_SPLIT_PHASES',
++        'VLA_PI05_HOST_PRUNE', 'VLA_PI05_NO_PRUNE_FLASH', 'VLA_PI05_NO_VISION_BATCH',
++        'VLA_PI05_NO_SEPARATE_GRAPHS', 'VLA_PI05_KV_REUSE', 'VLA_PI05_NO_KV_REUSE', 'VLA_MUSA_F32_ATTN_TILE')},
+ }
+ 
+ opt.out_dir.mkdir(parents=True, exist_ok=True)
+diff --git a/scripts/patch_ggml_musa.py b/scripts/patch_ggml_musa.py
+index 86e29cd..0d645e6 100644
+--- a/scripts/patch_ggml_musa.py
++++ b/scripts/patch_ggml_musa.py
+@@ -241,10 +241,19 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor
+ #endif
+ """
+     text = text.replace(previous_guard, "")
++    old_guard = """#ifdef GGML_USE_MUSA
++        if (node->op == GGML_OP_MUL_MAT && node->src[0]->type == GGML_TYPE_F32 &&
++            !ggml_musa_small_f32_matmul(node->src[0], node->src[1], node)) {
++            return false;
++        }
++#endif
++"""
++    text = text.replace(old_guard, "")
+     anchor = "        // [TAG_MUL_MAT_ID_CUDA_GRAPHS]\n"
+     replacement = """#ifdef GGML_USE_MUSA
+         if (node->op == GGML_OP_MUL_MAT && node->src[0]->type == GGML_TYPE_F32 &&
+-            !ggml_musa_small_f32_matmul(node->src[0], node->src[1], node)) {
++            !ggml_musa_small_f32_matmul(node->src[0], node->src[1], node) &&
++            !(ggml_musa_ext_supports && ggml_musa_ext_supports(node))) {
+             return false;
+         }
+ #endif
+@@ -254,6 +263,14 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor
+             raise SystemExit(f"{path}: missing MUSA graph compatibility anchor")
+         text = text.replace(anchor, replacement)
+ 
++    # Source tensors can reuse addresses across graphs while their dtype changes.
++    anchor = "                prop.node_src_data_ptrs[j] = cgraph->nodes[i]->src[j]->data;"
++    replacement = anchor + "\n                prop.node_src_types[j] = cgraph->nodes[i]->src[j]->type;"
++    if replacement not in text:
++        if text.count(anchor) != 1:
++            raise SystemExit(f"{path}: missing graph source type anchor")
++        text = text.replace(anchor, replacement)
++
+     # MUSA corrupts some captured graphs if a fresh executable updates itself.
+     anchor = """        }
+         if (cuda_graph_update_required) { // Update graph executable"""
+@@ -266,6 +283,18 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor
+         path.write_text(text)
+         print(f"MUSA: graph-safe F32 projections and executable initialization in {path}")
+ 
++    path = root / "ggml/src/ggml-cuda/common.cuh"
++    original = text = path.read_text()
++    anchor = "        void *   node_src_data_ptrs[GGML_MAX_SRC];"
++    replacement = anchor + "\n        ggml_type node_src_types[GGML_MAX_SRC];"
++    if replacement not in text:
++        if text.count(anchor) != 1:
++            raise SystemExit(f"{path}: missing graph source types declaration")
++        text = text.replace(anchor, replacement)
++    if text != original:
++        path.write_text(text)
++        print(f"MUSA: graph cache tracks source dtypes in {path}")
++
+ 
+ if __name__ == "__main__":
+     if len(sys.argv) != 2:
+diff --git a/src/layers/attn.h b/src/layers/attn.h
+index 25271e5..0179601 100644
+--- a/src/layers/attn.h
++++ b/src/layers/attn.h
+@@ -36,11 +36,13 @@ inline ggml_tensor * to_heads_v(ggml_context * C, ggml_tensor * p, int64_t hd, i
+ }
+ 
+ inline ggml_tensor * attention(ggml_context * C, ggml_tensor * Q, ggml_tensor * K, ggml_tensor * V,
+-                               ggml_tensor * mask, float scale, int64_t dim, int64_t T, int64_t nv = 1) {
++                               ggml_tensor * mask, float scale, int64_t dim, int64_t T, int64_t nv = 1,
++                               ggml_tensor ** weights_out = nullptr) {
+     ggml_tensor * kq = ggml_mul_mat(C, K, Q);
+     ggml_prec_set_acc(kq, GGML_PREC_F32);
+ 
+     ggml_tensor * aw  = ggml_soft_max_ext(C, kq, mask, scale, 0.0f);
++    if (weights_out) *weights_out = aw;
+     ggml_tensor * kqv = ggml_mul_mat(C, V, aw);
+     return ggml_reshape_3d(C, ggml_cont(C, ggml_permute(C, kqv, 0, 2, 1, 3)), dim, T, nv);
+ }
+diff --git a/src/models/pi05.cpp b/src/models/pi05.cpp
+index c31b96c..0959d6c 100644
+--- a/src/models/pi05.cpp
++++ b/src/models/pi05.cpp
+@@ -70,6 +70,8 @@ struct Pi05ModelArch : public ModelArchBase {
+     const std::vector<ggml_tensor *> * vision_forward(const ImageView* images, int n_images);
+     bool read_pruned_images(std::vector<float> & out);
+     int64_t vision_keep = 0;
++    bool device_prune = false;
++    bool musa_backend = false;
+ 
+     ggml_backend_t        backend     = nullptr;
+     ggml_backend_buffer_t weight_buf  = nullptr;
+@@ -477,6 +479,9 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+             if (m->fused_ew)
+                 std::printf("vla(pi05): fused expert elementwise ops on (VLA_PI05_NO_FUSE=1 to disable)\n");
+         }
++        m->musa_backend = b.is_musa;
++        m->device_prune = b.is_musa && !env_flag("VLA_PI05_HOST_PRUNE");
++        if (m->device_prune) musa_register_fused_ops();
+         if (b.is_musa && !fq.present && !env_flag("VLA_PI05_NO_FUSE")) {
+             m->fused_ew = musa_register_fused_ops();
+             m->adarms_spec.eps = cfg.rms_eps;
+@@ -533,6 +538,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+             std::fprintf(stderr, "vla(pi05): invalid visual pruning count or unsupported activation dtype\n");
+             return nullptr;
+         }
++        m->device_prune = m->device_prune && m->vis.n_tokens <= 256;
+         m->cfg.n_img = m->vision_keep;
+         std::printf("vla(pi05): visual token pruning %lld -> %lld per image (attention, spatial order)\n",
+                     (long long)m->vis.n_tokens, (long long)m->vision_keep);
+@@ -612,6 +618,9 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+         std::printf("vla(pi05): fused SigLIP blocks (VLA_PI05_NO_VIT_FUSE=1 to disable)\n");
+     if (m->vision_keep) {
+         m->vis.vit.enc.cfg.flash_attn = false;
++#ifdef GGML_USE_MUSA
++        m->vis.vit.enc.cfg.flash_attn = m->musa_backend && use_fused_attention() && !env_flag("VLA_PI05_NO_PRUNE_FLASH");
++#endif
+         m->vis.vit.enc.cfg.fused = false;
+         m->vis.vit.enc.cfg.int8 = false;
+         m->vis.vit.enc.cfg.act = GGML_TYPE_F32;
+@@ -736,19 +745,14 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+                 const auto & enc = vis.vit.enc;
+                 for (size_t i = 0; i < enc.blk.size(); ++i) {
+                     const auto & w = enc.blk[i];
+-                    if (i + 1 == enc.blk.size()) {
+-                        // Reuse the unfused attention definition to expose ranking scores.
+-                        auto * norm = layer_norm(VC, h, w.ln1w, w.ln1b, enc.cfg.ln_eps);
+-                        auto * q = to_heads(VC, linear(VC, w.Wq, w.bq, norm), enc.cfg.head_dim, enc.cfg.heads, K);
+-                        auto * k = to_heads(VC, linear(VC, w.Wk, w.bk, norm), enc.cfg.head_dim, enc.cfg.heads, K);
+-                        auto * kq = ggml_mul_mat(VC, k, q);
+-                        ggml_prec_set_acc(kq, GGML_PREC_F32);
+-                        auto * aw = ggml_soft_max_ext(VC, kq, nullptr, 1.0f / std::sqrt((float)enc.cfg.head_dim), 0.0f);
++                    ggml_tensor * aw = nullptr;
++                    const bool last = i + 1 == enc.blk.size();
++                    h = enc.block(VC, w, h, K, nv, last ? &aw : nullptr);
++                    if (last) {
+                         auto * scores = vision_patch_scores(VC, aw);
+                         ggml_set_output(scores);
+                         vio.scores.push_back(scores);
+                     }
+-                    h = enc.block(VC, w, h, K);
+                 }
+                 h = layer_norm(VC, h, vis.vit.post_ln_w, vis.vit.post_ln_b, enc.cfg.ln_eps);
+             } else {
+@@ -758,8 +762,11 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+             if (vis.proj_b)
+                 proj = ggml_add(VC, proj, vis.proj_b);
+             proj = as_type(VC, proj, GGML_TYPE_F32);
++            if (nv > 1) proj = ggml_reshape_2d(VC, proj, proj->ne[0], K*nv);
+             if (proj->op == GGML_OP_VIEW || proj->op == GGML_OP_RESHAPE)
+                 proj = ggml_cont(VC, proj);
++            if (vision_keep && device_prune)
++                proj = vision_keep_rows(VC, proj, vio.scores.back(), (int)vision_keep);
+             ggml_set_output(proj);
+             vio.emb.push_back(proj);
+             return proj;
+@@ -774,7 +781,11 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+         vio.t_px.clear();
+         vio.emb.clear();
+         vio.scores.clear();
+-        if (vis.vit.enc.cfg.fused || n_images == 1) {
++        bool batch_views = vis.vit.enc.cfg.fused || n_images == 1;
++#ifdef GGML_USE_MUSA
++        batch_views = batch_views || (musa_backend && !vision_keep && !env_flag("VLA_PI05_NO_VISION_BATCH"));
++#endif
++        if (batch_views) {
+             // The fused blocks take every view in one pass (nv * K rows per GEMM).
+             ggml_build_forward_expand(vg, tower(new_px(n_images), n_images));
+         } else {
+@@ -838,7 +849,7 @@ bool Pi05ModelArch::encode_images(const ImageView* images, int n_images, std::ve
+     stats = Stats{};
+     const std::vector<ggml_tensor *> * embs = vision_forward(images, n_images);
+     bool ok = embs != nullptr;
+-    if (ok && vision_keep) {
++    if (ok && vision_keep && !device_prune) {
+         ok = read_pruned_images(out);
+     } else if (ok) {
+         size_t n = 0;
+@@ -871,12 +882,14 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+     const float   dt        = -1.0f/(float) num_steps;
+ #ifdef GGML_USE_MUSA
+     static const bool split_phases = env_flag("VLA_PI05_SPLIT_PHASES");
+-    if (split_phases && (kv_inplace || fq_fast)) {
++    const bool separate_graphs = musa_backend && !env_flag("VLA_PI05_NO_SEPARATE_GRAPHS");
++    if ((split_phases || separate_graphs) && (kv_inplace || fq_fast)) {
+         std::fprintf(stderr, "vla(pi05): phase timing requires the ordinary cached-prefix path\n");
+         return {};
+     }
+ #else
+     const bool split_phases = false;
++    const bool separate_graphs = false;
+ #endif
+ 
+     int64_t n_img_tokens = 0;
+@@ -970,7 +983,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+         }
+ 
+     ggml_cgraph * gf = ggml_new_graph_custom(C, max_nodes, false);
+-    if (split_phases) {
++    if (split_phases || separate_graphs) {
+         // Visit every prefix dependency first; the full graph still owns allocation/lifetimes.
+         for (int64_t i=0; i<n_layers; ++i) {
+             ggml_build_forward_expand(gf, cK[i]);
+@@ -979,6 +992,13 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+         gio.prefix_nodes = ggml_graph_n_nodes(gf);
+     }
+ 
++    std::vector<KvSlot> concat_cache;
++#ifdef GGML_USE_MUSA
++    if (use_fused_attention() && !kv_inplace && !fq_fast && env_flag("VLA_PI05_KV_REUSE") && !env_flag("VLA_PI05_NO_KV_REUSE")) {
++        concat_cache.resize(n_layers);
++        for (auto & slot : concat_cache) slot.concat_only = true;
++    }
++#endif
+     ggml_tensor * x_t = t_x0;
+     for (int step=0; step<num_steps; ++step) {
+         auto mod = [&](int64_t j) {
+@@ -995,7 +1015,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+             h = build_expert_layer(C, ex_layers[i], h, t_suffix_pos, mod(2*i), mod(2*i+1), cfg, n_suf,
+                                    cK[i], cV[i], t_suffix_mask, act_type,
+                                    fused_ew ? &adarms_spec : nullptr, fused_ew ? &gateres_spec : nullptr,
+-                                   kv_inplace ? &kv[i] : nullptr, kv16 ? &fqx : nullptr);
++                                   kv_inplace ? &kv[i] : (concat_cache.empty() ? nullptr : &concat_cache[i]), kv16 ? &fqx : nullptr);
+         }
+ 
+         ggml_tensor * h_final = build_adarms(C, h, mod(2*n_layers), hidden_ex, cfg.rms_eps, nullptr);
+@@ -1036,7 +1056,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+         const auto tv0 = clk::now();
+         const std::vector<ggml_tensor *> * embs = vision_forward(in.images, in.n_images);
+         if (!embs) return {};
+-        if (vision_keep) {
++        if (vision_keep && !device_prune) {
+             std::vector<float> selected;
+             if (!read_pruned_images(selected)) return {};
+             ggml_backend_tensor_set(t_image_emb, selected.data(), 0, selected.size() * sizeof(float));
+@@ -1090,7 +1110,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+     static const bool split_host = env_flag("VLA_PI05_HOST_SPLIT");
+     ggml_status st;
+ #ifdef GGML_USE_MUSA
+-    if (split_phases) {
++    if (split_phases || separate_graphs) {
+         auto run = [&](int begin, int end) {
+             // Match the existing backend_fallback slice, retaining parent use counts for fusion.
+             ggml_cgraph view = *gf;
+@@ -1098,14 +1118,16 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+             view.nodes = gf->nodes+begin;
+             view.grads = view.grad_accs = view.leafs = nullptr;
+             view.uid = 0;
+-            return ggml_backend_graph_compute(backend, &view);
++            return split_phases ? ggml_backend_graph_compute(backend, &view)
++                                : ggml_backend_graph_compute_async(backend, &view);
+         };
+         st = run(0, gio.prefix_nodes);
+         const auto tp = clk::now();
+         if (st == GGML_STATUS_SUCCESS)
+             st = run(gio.prefix_nodes, ggml_graph_n_nodes(gf));
++        if (!split_phases) ggml_backend_synchronize(backend);
+         const auto te = clk::now();
+-        std::fprintf(stderr, "VLA_PI05_PHASES {\"vision_ms\":%.6f,\"prefix_ms\":%.6f,\"denoise_ms\":%.6f,\"steps\":%d}\n",
++        if (split_phases) std::fprintf(stderr, "VLA_PI05_PHASES {\"vision_ms\":%.6f,\"prefix_ms\":%.6f,\"denoise_ms\":%.6f,\"steps\":%d}\n",
+                      stats.ms_vision, std::chrono::duration<double, std::milli>(tp-ti0).count(),
+                      std::chrono::duration<double, std::milli>(te-tp).count(), num_steps);
+     } else
+diff --git a/src/modules/encoder.cpp b/src/modules/encoder.cpp
+index d4ede65..fac428e 100644
+--- a/src/modules/encoder.cpp
++++ b/src/modules/encoder.cpp
+@@ -72,7 +72,9 @@ void EncStack::declare(WeightLoader & L, const char * prefix, int64_t layers, co
+ }
+ 
+ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor * x,
+-                              int64_t seq, int64_t nv) const {
++                              int64_t seq, int64_t nv, ggml_tensor ** attention_out) const {
++    GGML_ASSERT(!attention_out || (!cfg.fused && !cfg.fused_ops && cfg.act == GGML_TYPE_F32));
++    const bool use_flash = cfg.flash_attn && !attention_out;
+     const int64_t hd    = cfg.head_dim;
+     const int64_t heads = cfg.heads;
+     const float   scale = 1.0f/std::sqrt((float)hd);
+@@ -114,7 +116,7 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
+         ggml_tensor * k  = ggml_add(C, mm_act(C, w.Wk, n1, at), w.bk);
+         ggml_tensor * v  = ggml_add(C, mm_act(C, w.Wv, n1, at), w.bv);
+         ggml_tensor * att;
+-        if (cfg.flash_attn && fa_takes_views()) {
++        if (use_flash && fa_takes_views()) {
+             auto heads_view = [&](ggml_tensor * p) {
+                 return ggml_permute(C, ggml_reshape_3d(C, p, hd, heads, seq), 0, 2, 1, 3);
+             };
+@@ -140,7 +142,7 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
+     // activations with one batched cuBLAS call, which the fused ops' single
+     // GEMM over all views does not reproduce bit for bit.
+     if (cfg.fused_ops && nv == 1) {
+-        const bool fa = cfg.flash_attn;
++        const bool fa = use_flash;
+         ggml_tensor * n1 = fused_ln(C, x, w.ln1w, w.ln1b, cfg.ln_eps, false,
+                                     bf16_operand(w.Wq, seq) && bf16_operand(w.Wk, seq) && bf16_operand(w.Wv, seq));
+         auto heads_of = [&](ggml_tensor * W, ggml_tensor * b, bool vt, bool f16) {
+@@ -164,7 +166,7 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
+ 
+     ggml_tensor * att;
+ #ifdef GGML_USE_MUSA
+-    if (cfg.flash_attn) {
++    if (use_flash) {
+         auto heads_view = [&](ggml_tensor * p) {
+             return ggml_permute(C, ggml_reshape_4d(C, p, hd, heads, seq, nv), 0, 2, 1, 3);
+         };
+@@ -172,7 +174,7 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
+         att = flash_attention(C, heads_view(q), heads_view(k), heads_view(v), nullptr, scale);
+     } else
+ #endif
+-    if (cfg.flash_attn && fa_takes_views()) {
++    if (use_flash && fa_takes_views()) {
+         // A view-taking FA (fa_takes_views) reads the projections in place and
+         // converts them itself, so no contiguous copy or F16 cast per operand.
+         auto heads_view = [&](ggml_tensor * p) {
+@@ -185,10 +187,10 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
+     } else {
+         ggml_tensor * Q = to_heads(C, q, hd, heads, seq, nv);
+         ggml_tensor * K = to_heads(C, k, hd, heads, seq, nv);
+-        if (cfg.flash_attn)
++        if (use_flash)
+             att = flash_attention(C, Q, K, to_heads(C, v, hd, heads, seq, nv), nullptr, scale);
+         else
+-            att = attention(C, Q, K, to_heads_v(C, v, hd, heads, seq, nv), nullptr, scale, cfg.hidden, seq, nv);
++            att = attention(C, Q, K, to_heads_v(C, v, hd, heads, seq, nv), nullptr, scale, cfg.hidden, seq, nv, attention_out);
+     }
+ 
+     ggml_tensor * h1 = ggml_add(C, x, linear(C, w.Wo, w.bo, att));
+diff --git a/src/modules/encoder.h b/src/modules/encoder.h
+index f796020..ffdd9d5 100644
+--- a/src/modules/encoder.h
++++ b/src/modules/encoder.h
+@@ -73,7 +73,7 @@ struct EncStack {
+     void declare(WeightLoader & L, const char * prefix, int64_t layers, const EncNames & n = EncNames{});
+ 
+     ggml_tensor * block(ggml_context * C, const EncBlockW & w, ggml_tensor * x,
+-                        int64_t seq, int64_t nv = 1) const;
++                        int64_t seq, int64_t nv = 1, ggml_tensor ** attention_out = nullptr) const;
+ 
+     ggml_tensor * build(ggml_context * C, ggml_tensor * x, int64_t seq, int64_t nv = 1) const;
+ };
+diff --git a/src/modules/gemma_expert.h b/src/modules/gemma_expert.h
+index c6d783e..f81607f 100644
+--- a/src/modules/gemma_expert.h
++++ b/src/modules/gemma_expert.h
+@@ -186,6 +186,8 @@ struct KvSlot {
+     ggml_tensor * k = nullptr, * v = nullptr;
+     // The prefix pass's writes: a dependency of every later read of the buffer.
+     ggml_tensor * k_pre = nullptr, * v_pre = nullptr;
++    // MUSA ordinary attention: keep the first concat and overwrite only its suffix.
++    bool concat_only = false;
+ };
+ 
+ struct GemmaStack {
+@@ -406,7 +408,7 @@ inline ggml_tensor * gemma_attn(
+         ggml_tensor * fq_x = nullptr, ggml_tensor * fq_res = nullptr, KvSlot * kv = nullptr,
+         ggml_tensor * cached_K16 = nullptr, ggml_tensor * cached_V16 = nullptr,
+         ggml_tensor * fq_xq = nullptr, ggml_tensor * fq_gate = nullptr) {
+-    if (kv)
++    if (kv && !kv->concat_only)
+         return gemma_attn_kv(ctx, w, x_norm, positions, cfg, seq, *kv, mask, at);
+     // FoldQuant: q/k/v share one act node over fq_x (the raw residual stream when
+     // the RMSNorm and its folded gamma ride in the act node, the adaRMS output
+@@ -551,8 +553,28 @@ inline ggml_tensor * gemma_attn(
+     ggml_tensor * K_full = k_rope;
+     ggml_tensor * V_full = v_h;
+     if (cached_K && cached_V) {
+-        K_full = ggml_concat(ctx, cached_K, k_rope, 2);
+-        V_full = ggml_concat(ctx, cached_V, v_h,    2);
++        auto append = [&](ggml_tensor * prefix, ggml_tensor * suffix, ggml_tensor *& buffer) {
++            if (!buffer) {
++                buffer = ggml_concat(ctx, prefix, suffix, 2);
++                ggml_set_output(buffer); // Other denoising steps overwrite the tail; never recycle it.
++                return buffer;
++            }
++            GGML_ASSERT(ggml_is_contiguous(buffer) && buffer->type == suffix->type);
++            auto * tail = ggml_view_3d(ctx, buffer, suffix->ne[0], suffix->ne[1], suffix->ne[2],
++                                      buffer->nb[1], buffer->nb[2], prefix->ne[2]*buffer->nb[2]);
++            auto * write = ggml_cpy(ctx, suffix, tail);
++            auto * read = ggml_view_tensor(ctx, buffer);
++            // suffix depends on the previous step, so earlier reads finish before this write.
++            add_dep(read, write);
++            return read;
++        };
++        if (kv && kv->concat_only) {
++            K_full = append(cached_K, k_rope, kv->k);
++            V_full = append(cached_V, v_h, kv->v);
++        } else {
++            K_full = ggml_concat(ctx, cached_K, k_rope, 2);
++            V_full = ggml_concat(ctx, cached_V, v_h,    2);
++        }
+     }
+ 
+     const float scale = 1.f/std::sqrt((float) hd);
+diff --git a/src/modules/vision_prune.h b/src/modules/vision_prune.h
+index 1c9399f..e779681 100644
+--- a/src/modules/vision_prune.h
++++ b/src/modules/vision_prune.h
+@@ -3,6 +3,8 @@
+ #include "ggml.h"
+ #include <algorithm>
+ #include <cmath>
++#include <cstdint>
++#include <cstring>
+ #include <numeric>
+ #include <stdexcept>
+ #include <vector>
+@@ -32,4 +34,22 @@ inline std::vector<int> vision_keep_indices(const std::vector<float> & scores, i
+     return ids;
+ }
+ 
++// Stable top-k, returned in original spatial order. GPU uses the same score/id ordering.
++constexpr uint32_t VISION_KEEP_MAGIC = 0x564b4944u;
++inline void vision_keep_cpu(ggml_tensor * dst, int ith, int, void *) {
++    if (ith != 0) return;
++    const auto * scores = static_cast<const float *>(dst->src[0]->data);
++    const auto ids = vision_keep_indices({scores, scores + dst->src[0]->ne[0]}, (int)dst->ne[0]);
++    std::memcpy(dst->data, ids.data(), ids.size()*sizeof(int32_t));
++}
++inline ggml_tensor * vision_keep_rows(ggml_context * C, ggml_tensor * emb, ggml_tensor * scores, int keep) {
++    GGML_ASSERT(scores->type == GGML_TYPE_F32 && ggml_is_contiguous(scores));
++    GGML_ASSERT(keep > 0 && keep <= scores->ne[0] && emb->ne[1] == scores->ne[0]);
++    static const uint32_t spec = VISION_KEEP_MAGIC;
++    ggml_tensor * args[] = {scores};
++    auto * ids = ggml_custom_4d(C, GGML_TYPE_I32, keep, 1, 1, 1, args, 1,
++                                vision_keep_cpu, 1, (void *)&spec);
++    return ggml_get_rows(C, emb, ids);
++}
++
+ }
+diff --git a/src/musa/vla_musa_fused.cu b/src/musa/vla_musa_fused.cu
+index 8ec51c0..933c235 100644
+--- a/src/musa/vla_musa_fused.cu
++++ b/src/musa/vla_musa_fused.cu
+@@ -2,6 +2,9 @@
+ // SPDX-License-Identifier: Apache-2.0
+ // F32 expert adaRMS and gated residuals, on the graph's own MUSA stream.
+ #include "layers/fused_ew.h"
++#include "modules/vision_prune.h"
++#include <cassert>
++#include <cstdlib>
+ #include "musa/vla_musa_ops.h"
+ #include <musa_runtime.h>
+ #include <musa_fp16.h>
+@@ -37,7 +40,20 @@ bool dense_f16(const ggml_tensor * t) {
+     return t && t->type == GGML_TYPE_F16 && ggml_is_contiguous(t);
+ }
+ 
++bool tiled_attention(const ggml_tensor * t) {
++    static const bool enabled = [] {
++        const char * value = std::getenv("VLA_MUSA_F32_ATTN_TILE");
++        return !value || std::strcmp(value, "0") != 0;
++    }();
++    if (!enabled || t->op != GGML_OP_MUL_MAT || !dense_f32(t) ||
++        !dense_f32(t->src[0]) || !dense_f32(t->src[1])) return false;
++    const auto * a = t->src[0]; const auto * b = t->src[1];
++    return a->ne[2] > 1 && a->ne[2] == b->ne[2] && a->ne[3] == 1 && b->ne[3] == 1 &&
++           a->ne[0] <= 256 && a->ne[1] <= 256 && b->ne[1] <= 256;
++}
++
+ bool supports(const ggml_tensor * t) {
++    if (tiled_attention(t)) return true;
+     if (t->op == GGML_OP_GLU && ggml_get_glu_op(t) == GGML_GLU_OP_GEGLU && !t->src[1])
+         return (dense_f16(t) || dense_f32(t)) && ggml_is_contiguous(t->src[0]) &&
+                t->src[0]->type == t->type && t->src[0]->ne[0] == 2*t->ne[0];
+@@ -46,6 +62,10 @@ bool supports(const ggml_tensor * t) {
+     if (t->op == GGML_OP_RMS_NORM)
+         return dense_f16(t) && dense_f16(t->src[0]);
+     const uint32_t m = magic(t);
++    if (m == VISION_KEEP_MAGIC)
++        return t->type == GGML_TYPE_I32 && dense_f32(t->src[0]) &&
++               ggml_is_vector(t->src[0]) && t->src[0]->ne[0] <= WG &&
++               t->ne[0] > 0 && t->ne[0] <= t->src[0]->ne[0];
+     if (m != FUSED_ADARMS_MAGIC && m != FUSED_GATERES_MAGIC) return false;
+     const auto * x = t->src[0];
+     const auto * mod = t->src[m == FUSED_ADARMS_MAGIC ? 1 : 2];
+@@ -103,12 +123,68 @@ __global__ void merged_geglu(const T * src, T * dst, int h, bool swapped) {
+     dst[row+col] = store<T>(gelu*u);
+ }
+ 
++
++// 256 patches: exact ranking, ties prefer the lower spatial index.
++__global__ void vision_keep(const float * scores, int32_t * ids, int n, int keep) {
++    __shared__ float values[WG];
++    __shared__ int selected[WG];
++    const int i = threadIdx.x;
++    if (i < n) {
++        assert(isfinite(scores[i]));
++        values[i] = scores[i];
++    }
++    __syncthreads();
++    int rank = 0;
++    if (i < n) {
++        for (int j = 0; j < n; ++j)
++            rank += values[j] > values[i] || (values[j] == values[i] && j < i);
++    }
++    selected[i] = i < n && rank < keep;
++    __syncthreads();
++    if (selected[i]) {
++        int out = 0;
++        for (int j = 0; j < i; ++j) out += selected[j];
++        ids[out] = i;
++    }
++}
++
++
++// F32 batched QK/AV, avoiding muBLAS's capture-time host synchronization.
++// Columns of A and B are contiguous; compute A^T B in 16x16 tiles.
++__global__ void attention_matmul_f32(const float * a, const float * b, float * out,
++                                      int k, int m, int n) {
++    __shared__ float at[16][17], bt[16][17];
++    const int x=threadIdx.x, y=threadIdx.y;
++    const int row=blockIdx.x*16+x, col=blockIdx.y*16+y;
++    a += (size_t)blockIdx.z*k*m;
++    b += (size_t)blockIdx.z*k*n;
++    out += (size_t)blockIdx.z*m*n;
++    float sum=0.0f;
++    for (int base=0; base<k; base+=16) {
++        const int ar=blockIdx.x*16+y;
++        at[y][x] = ar<m && base+x<k ? a[(size_t)ar*k+base+x] : 0.0f;
++        bt[y][x] = col<n && base+x<k ? b[(size_t)col*k+base+x] : 0.0f;
++        __syncthreads();
++        #pragma unroll
++        for (int j=0; j<16; ++j) sum=fmaf(at[x][j],bt[y][j],sum);
++        __syncthreads();
++    }
++    if (row<m && col<n) out[(size_t)col*m+row]=sum;
++}
++
+ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
+     if (!supports(t)) return false;
+     const auto stream = (musaStream_t) stream_ptr;
+     const int h = (int) t->ne[0];
+     const auto * x = (const float *) t->src[0]->data;
+-    if (t->op == GGML_OP_GLU) {
++    if (tiled_attention(t)) {
++        const auto * a=t->src[0]; const auto * b=t->src[1];
++        const dim3 grid((a->ne[1]+15)/16,(b->ne[1]+15)/16,a->ne[2]);
++        attention_matmul_f32<<<grid,dim3(16,16),0,stream>>>(
++            (const float *)a->data,(const float *)b->data,(float *)t->data,a->ne[0],a->ne[1],b->ne[1]);
++    } else if (magic(t) == VISION_KEEP_MAGIC) {
++        vision_keep<<<1, WG, 0, stream>>>(x, (int32_t *)t->data, t->src[0]->ne[0], h);
++    } else if (t->op == GGML_OP_GLU) {
+         const dim3 grid((h+WG-1)/WG, ggml_nrows(t));
+         const bool swapped = ((const int32_t *) t->op_params)[1] != 0;
+         if (t->type == GGML_TYPE_F16)
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index def919f..8fefd26 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -89,6 +89,8 @@ if(GGML_MUSA)
+     target_link_libraries(test_musa_ops PRIVATE vla_core)
+     target_compile_options(test_musa_ops PRIVATE -Wall -Wextra)
+     add_test(NAME musa_ops COMMAND test_musa_ops)
++    add_test(NAME musa_f32_attention COMMAND test_musa_ops --f32-attention)
++    set_tests_properties(musa_f32_attention PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
+     set_tests_properties(musa_ops PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
+     if(GGML_CUDA_FA)
+         add_test(NAME musa_flash_attn COMMAND test_musa_ops --flash-attn)
+diff --git a/tests/test_musa_ops.cpp b/tests/test_musa_ops.cpp
+index e22b298..2c9a895 100644
+--- a/tests/test_musa_ops.cpp
++++ b/tests/test_musa_ops.cpp
+@@ -73,7 +73,7 @@ struct Graph {
+         }
+     }
+ 
+-    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs, ggml_tensor * dynamic_scale = nullptr) {
++    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs, ggml_tensor * dynamic_scale = nullptr, bool switch_dtype = false) {
+         auto * gf = ggml_new_graph(ctx);
+         for (auto * t : outputs) {
+             ggml_set_output(t);
+@@ -91,7 +91,8 @@ struct Graph {
+         if (!alloc || !ggml_gallocr_alloc_graph(alloc, gf)) return {};
+         std::vector<float> result;
+         // Reuse the allocation and graph: catches stream/lifetime problems too.
+-        for (int repeat = 0; repeat < (dynamic_scale ? 9 : 3); ++repeat) {
++        for (int repeat = 0; repeat < ((dynamic_scale || switch_dtype) ? 9 : 3); ++repeat) {
++            if (switch_dtype) inputs[0]->type = repeat/3 == 1 ? GGML_TYPE_BF16 : GGML_TYPE_F16;
+             if (dynamic_scale) {
+                 float scale = 0.5f * (repeat/3 + 1);
+                 std::memcpy(dynamic_scale->op_params, &scale, sizeof(scale));
+@@ -130,7 +131,7 @@ vla::GemmaLayerW weights(Graph & g, ggml_type type, int64_t hidden, int64_t qdim
+     return w;
+ }
+ 
+-std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false, bool flash = false, bool masked = false, bool recapture = false) {
++std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false, bool flash = false, bool masked = false, bool recapture = false, bool reuse = false) {
+     Graph g;
+     if (!g.ctx) return {};
+     auto * C = g.ctx;
+@@ -167,9 +168,12 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
+         auto * norm = ggml_rms_norm(C, t, cfg.rms_eps);
+         return ggml_add(C, ggml_add(C, norm, ggml_mul(C, norm, scale)), shift);
+     };
+-    for (int step = 0; step < 2; ++step) {
++    vla::KvSlot cache;
++    cache.concat_only = true;
++    for (int step = 0; step < 3; ++step) {
+         auto * att = vla::gemma_attn(C, w, adarms(h), suffix_pos, cfg, chunk,
+-                                    k, v, suffix_mask, nullptr, nullptr, GGML_TYPE_F32, flash);
++                                    k, v, suffix_mask, nullptr, nullptr, GGML_TYPE_F32, flash,
++                                    nullptr, nullptr, reuse ? &cache : nullptr);
+         h = ggml_add(C, h, ggml_mul(C, att, gate));
+         auto * mlp = vla::gemma_mlp(C, w, adarms(h), GGML_TYPE_F32);
+         h = ggml_add(C, h, ggml_scale(C, ggml_mul(C, mlp, gate), -0.1f));
+@@ -213,6 +217,13 @@ std::vector<float> softmax(ggml_backend_t backend, int64_t width, bool masked) {
+     return result;
+ }
+ 
++std::vector<float> graph_source_dtype(ggml_backend_t backend) {
++    Graph g;
++    auto * a = g.input(GGML_TYPE_F16, {128, 64});
++    auto * b = g.input(GGML_TYPE_F32, {128, 50});
++    return g.run(backend, {ggml_mul_mat(g.ctx, a, b)}, nullptr, true);
++}
++
+ std::vector<float> action_projection(ggml_backend_t backend, int64_t k, int64_t m, int64_t n) {
+     Graph g;
+     auto * a=g.input(GGML_TYPE_F32,{k,m});
+@@ -299,6 +310,14 @@ bool large_weight_buffers(ggml_backend_t backend) {
+     return ok;
+ }
+ 
++std::vector<float> selected_rows(ggml_backend_t backend, int count, int keep) {
++    Graph g;
++    auto * scores = g.input(GGML_TYPE_F32, {count});
++    auto * emb = g.input(GGML_TYPE_F32, {37, count});
++    // upload's repeating 67-value pattern deliberately creates score ties.
++    return g.run(backend, {vla::vision_keep_rows(g.ctx, emb, scores, keep)});
++}
++
+ std::vector<float> patch_scores(ggml_backend_t backend) {
+     Graph g;
+     auto * a = g.input(GGML_TYPE_F32, {256, 256, 16});
+@@ -397,6 +416,20 @@ int main(int argc, char ** argv) {
+     ggml_backend_cpu_set_n_threads(cpu, 4);
+     bool ok = true;
+     if (!vla::musa_register_fused_ops()) return 1;
++    if (argc == 2 && std::strcmp(argv[1], "--f32-attention") == 0) {
++        ok = compare("f32_attention_cpu", GGML_TYPE_F32,
++                     vision_attention(cpu, false), vision_attention(b.handle, false), 2e-5);
++        ggml_backend_free(cpu);
++        ggml_backend_free(b.handle);
++        return ok ? 0 : 1;
++    }
++    if (argc == 2 && std::strcmp(argv[1], "--dtype-switch") == 0) {
++        ok = compare("graph_source_dtype_switch", GGML_TYPE_BF16,
++                     graph_source_dtype(cpu), graph_source_dtype(b.handle));
++        ggml_backend_free(cpu);
++        ggml_backend_free(b.handle);
++        return ok ? 0 : 1;
++    }
+     if (argc == 2 && std::strcmp(argv[1], "--flash-attn") == 0) {
+         ok = compare("flash_vision_strided_72", GGML_TYPE_F16,
+                      vision_attention(b.handle, false), vision_attention(b.handle, true), 5e-3) && ok;
+@@ -405,6 +438,11 @@ int main(int argc, char ** argv) {
+                 ok = compare("flash_gemma_vs_unfused", GGML_TYPE_F16,
+                     gemma(b.handle, GGML_TYPE_F16, prefix, true, false, masked),
+                     gemma(b.handle, GGML_TYPE_F16, prefix, true, true, masked), 5e-3) && ok;
++        for (int64_t prefix : {17, 278, 518})
++            for (bool masked : {false, true})
++                ok = compare("flash_reuse_kv", GGML_TYPE_F16,
++                    gemma(b.handle, GGML_TYPE_F16, prefix, true, true, masked, false, false),
++                    gemma(b.handle, GGML_TYPE_F16, prefix, true, true, masked, false, true), 1e-12) && ok;
+         ok = compare("flash_gemma_recapture", GGML_TYPE_F16,
+                      gemma(b.handle, GGML_TYPE_F16, 17, true, false, false, true),
+                      gemma(b.handle, GGML_TYPE_F16, 17, true, true, false, true), 5e-3) && ok;
+@@ -413,6 +451,13 @@ int main(int argc, char ** argv) {
+         return ok ? 0 : 1;
+     }
+ 
++    ok = compare("graph_source_dtype_switch", GGML_TYPE_BF16,
++                 graph_source_dtype(cpu), graph_source_dtype(b.handle)) && ok;
++    for (int count : {17, 256})
++        for (int keep : {1, count/2, count})
++            ok = compare("stable_vision_keep", GGML_TYPE_F32,
++                         selected_rows(cpu, count, keep), selected_rows(b.handle, count, keep), 1e-12) && ok;
++
+     for (auto type : {GGML_TYPE_F32, GGML_TYPE_F16})
+         for (bool swapped : {false, true})
+             ok = compare("merged_geglu_rows", type, merged_glu_reference(type, swapped),

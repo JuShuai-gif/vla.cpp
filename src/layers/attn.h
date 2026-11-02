@@ -36,11 +36,13 @@ inline ggml_tensor * to_heads_v(ggml_context * C, ggml_tensor * p, int64_t hd, i
 }
 
 inline ggml_tensor * attention(ggml_context * C, ggml_tensor * Q, ggml_tensor * K, ggml_tensor * V,
-                               ggml_tensor * mask, float scale, int64_t dim, int64_t T, int64_t nv = 1) {
+                               ggml_tensor * mask, float scale, int64_t dim, int64_t T, int64_t nv = 1,
+                               ggml_tensor ** weights_out = nullptr) {
     ggml_tensor * kq = ggml_mul_mat(C, K, Q);
     ggml_prec_set_acc(kq, GGML_PREC_F32);
 
     ggml_tensor * aw  = ggml_soft_max_ext(C, kq, mask, scale, 0.0f);
+    if (weights_out) *weights_out = aw;
     ggml_tensor * kqv = ggml_mul_mat(C, V, aw);
     return ggml_reshape_3d(C, ggml_cont(C, ggml_permute(C, kqv, 0, 2, 1, 3)), dim, T, nv);
 }

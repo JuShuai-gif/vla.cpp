@@ -1,0 +1,23 @@
+MUSA: patched /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/softmax.cu
+MUSA: patched /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: patched extension hooks in /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: F16 GEMMs use F32 accumulation/output in /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: F16 RMSNorm bypasses F32-only fusion in /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: fixed host FA capability check in /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/fattn.cu
+MUSA: retained pre-mp22 FA rejection in /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/fattn.cu
+MUSA: strided broadcast GEMM in /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: graph-safe F32 projections and executable initialization in /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: graph cache tracks source dtypes in /tmp/vla-musa-patch-uricnr2g/ggml/src/ggml-cuda/common.cuh
+fresh PASS: idempotent and matches built dependency
+MUSA: patched /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/softmax.cu
+MUSA: patched /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: patched extension hooks in /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: F16 GEMMs use F32 accumulation/output in /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: F16 RMSNorm bypasses F32-only fusion in /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: fixed host FA capability check in /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/fattn.cu
+MUSA: retained pre-mp22 FA rejection in /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/fattn.cu
+MUSA: strided broadcast GEMM in /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: graph-safe F32 projections and executable initialization in /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: graph-safe F32 projections and executable initialization in /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/ggml-cuda.cu
+MUSA: graph cache tracks source dtypes in /tmp/vla-musa-patch-nnbtff8j/ggml/src/ggml-cuda/common.cuh
+upgrade-dfc0da1 PASS: idempotent and matches built dependency

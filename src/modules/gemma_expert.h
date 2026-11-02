@@ -186,6 +186,8 @@ struct KvSlot {
     ggml_tensor * k = nullptr, * v = nullptr;
     // The prefix pass's writes: a dependency of every later read of the buffer.
     ggml_tensor * k_pre = nullptr, * v_pre = nullptr;
+    // MUSA ordinary attention: keep the first concat and overwrite only its suffix.
+    bool concat_only = false;
 };
 
 struct GemmaStack {
@@ -406,7 +408,7 @@ inline ggml_tensor * gemma_attn(
         ggml_tensor * fq_x = nullptr, ggml_tensor * fq_res = nullptr, KvSlot * kv = nullptr,
         ggml_tensor * cached_K16 = nullptr, ggml_tensor * cached_V16 = nullptr,
         ggml_tensor * fq_xq = nullptr, ggml_tensor * fq_gate = nullptr) {
-    if (kv)
+    if (kv && !kv->concat_only)
         return gemma_attn_kv(ctx, w, x_norm, positions, cfg, seq, *kv, mask, at);
     // FoldQuant: q/k/v share one act node over fq_x (the raw residual stream when
     // the RMSNorm and its folded gamma ride in the act node, the adaRMS output
@@ -551,8 +553,28 @@ inline ggml_tensor * gemma_attn(
     ggml_tensor * K_full = k_rope;
     ggml_tensor * V_full = v_h;
     if (cached_K && cached_V) {
-        K_full = ggml_concat(ctx, cached_K, k_rope, 2);
-        V_full = ggml_concat(ctx, cached_V, v_h,    2);
+        auto append = [&](ggml_tensor * prefix, ggml_tensor * suffix, ggml_tensor *& buffer) {
+            if (!buffer) {
+                buffer = ggml_concat(ctx, prefix, suffix, 2);
+                ggml_set_output(buffer); // Other denoising steps overwrite the tail; never recycle it.
+                return buffer;
+            }
+            GGML_ASSERT(ggml_is_contiguous(buffer) && buffer->type == suffix->type);
+            auto * tail = ggml_view_3d(ctx, buffer, suffix->ne[0], suffix->ne[1], suffix->ne[2],
+                                      buffer->nb[1], buffer->nb[2], prefix->ne[2]*buffer->nb[2]);
+            auto * write = ggml_cpy(ctx, suffix, tail);
+            auto * read = ggml_view_tensor(ctx, buffer);
+            // suffix depends on the previous step, so earlier reads finish before this write.
+            add_dep(read, write);
+            return read;
+        };
+        if (kv && kv->concat_only) {
+            K_full = append(cached_K, k_rope, kv->k);
+            V_full = append(cached_V, v_h, kv->v);
+        } else {
+            K_full = ggml_concat(ctx, cached_K, k_rope, 2);
+            V_full = ggml_concat(ctx, cached_V, v_h,    2);
+        }
     }
 
     const float scale = 1.f/std::sqrt((float) hd);
