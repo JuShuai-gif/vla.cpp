@@ -1,0 +1,10 @@
+[
+  {
+    "stage": "fused-denoise",
+    "returncode": 0
+  },
+  {
+    "stage": "fused-all",
+    "returncode": 0
+  }
+]

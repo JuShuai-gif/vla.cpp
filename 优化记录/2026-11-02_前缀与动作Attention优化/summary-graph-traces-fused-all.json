@@ -1,0 +1,25 @@
+[
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "all_graph_api_counts": {
+      "musaLaunchKernel": 11788,
+      "musaStreamBeginCapture": 3,
+      "musaStreamEndCapture": 3,
+      "musaGraphInstantiate": 3,
+      "musaGraphLaunch": 9,
+      "musaGraphExecDestroy": 3,
+      "musaGraphDestroy": 3
+    },
+    "after_last_instantiate": {
+      "musaGraphLaunch": 7,
+      "musaStreamSynchronize": 21,
+      "musaGetDevice": 23,
+      "musaMemcpyAsync": 15,
+      "musaFree": 20,
+      "musaSetDevice": 4,
+      "musaStreamDestroy": 1,
+      "musaGraphExecDestroy": 3,
+      "musaGraphDestroy": 3
+    }
+  }
+]

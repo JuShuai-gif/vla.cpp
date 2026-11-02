@@ -1,0 +1,182 @@
+[
+  {
+    "q": 50,
+    "k": 328,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 0.362704,
+    "runs": 15,
+    "graph_bytes": 1155072
+  },
+  {
+    "q": 50,
+    "k": 328,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 0.841689,
+    "runs": 15,
+    "graph_bytes": 1438208
+  },
+  {
+    "q": 50,
+    "k": 328,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 0.424543,
+    "runs": 15,
+    "graph_bytes": 1253632
+  },
+  {
+    "q": 50,
+    "k": 328,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 0.826439,
+    "runs": 15,
+    "graph_bytes": 1503872
+  },
+  {
+    "q": 50,
+    "k": 568,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 0.451165,
+    "runs": 15,
+    "graph_bytes": 1400832
+  },
+  {
+    "q": 50,
+    "k": 568,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 1.049932,
+    "runs": 15,
+    "graph_bytes": 2190848
+  },
+  {
+    "q": 50,
+    "k": 568,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 0.507906,
+    "runs": 15,
+    "graph_bytes": 1571328
+  },
+  {
+    "q": 50,
+    "k": 568,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 1.104542,
+    "runs": 15,
+    "graph_bytes": 2304512
+  },
+  {
+    "q": 278,
+    "k": 278,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 0.847396,
+    "runs": 15,
+    "graph_bytes": 4839424
+  },
+  {
+    "q": 278,
+    "k": 278,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 3.334909,
+    "runs": 15,
+    "graph_bytes": 5177472
+  },
+  {
+    "q": 278,
+    "k": 278,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 0.944249,
+    "runs": 15,
+    "graph_bytes": 5303296
+  },
+  {
+    "q": 278,
+    "k": 278,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 3.356293,
+    "runs": 15,
+    "graph_bytes": 5486720
+  },
+  {
+    "q": 518,
+    "k": 518,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 1.64344,
+    "runs": 15,
+    "graph_bytes": 9017344
+  },
+  {
+    "q": 518,
+    "k": 518,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 7.772692,
+    "runs": 15,
+    "graph_bytes": 13625472
+  },
+  {
+    "q": 518,
+    "k": 518,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 1.875536,
+    "runs": 15,
+    "graph_bytes": 10627456
+  },
+  {
+    "q": 518,
+    "k": 518,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 7.790684,
+    "runs": 15,
+    "graph_bytes": 14698880
+  },
+  {
+    "q": 17,
+    "k": 67,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 0.224874,
+    "runs": 15,
+    "graph_bytes": 347136
+  },
+  {
+    "q": 17,
+    "k": 67,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 0.360925,
+    "runs": 15,
+    "graph_bytes": 278656
+  },
+  {
+    "q": 17,
+    "k": 67,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 0.226341,
+    "runs": 15,
+    "graph_bytes": 354048
+  },
+  {
+    "q": 17,
+    "k": 67,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 0.362122,
+    "runs": 15,
+    "graph_bytes": 283264
+  }
+]

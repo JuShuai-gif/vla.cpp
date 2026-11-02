@@ -1,0 +1,75 @@
+{
+  "exact_match_to_prior_references": true,
+  "models": [
+    {
+      "model": "pi05_cube_merge_cksize50_step3_0929",
+      "cases": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "repeat_max_abs": 0.0,
+      "baseline_errors": [
+        {
+          "case": 0,
+          "max_abs": 0.0,
+          "relative_peak": 0.0
+        },
+        {
+          "case": 1,
+          "max_abs": 0.0,
+          "relative_peak": 0.0
+        },
+        {
+          "case": 2,
+          "max_abs": 0.0,
+          "relative_peak": 0.0
+        }
+      ]
+    },
+    {
+      "model": "cup_cube_joint_061_a800_50k_20261022",
+      "cases": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        2,
+        2,
+        0,
+        0,
+        0
+      ],
+      "repeat_max_abs": 0.0,
+      "baseline_errors": [
+        {
+          "case": 0,
+          "max_abs": 0.0,
+          "relative_peak": 0.0
+        },
+        {
+          "case": 1,
+          "max_abs": 0.0,
+          "relative_peak": 0.0
+        },
+        {
+          "case": 2,
+          "max_abs": 0.0,
+          "relative_peak": 0.0
+        }
+      ]
+    }
+  ]
+}

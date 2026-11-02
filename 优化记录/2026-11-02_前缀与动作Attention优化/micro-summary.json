@@ -1,0 +1,182 @@
+[
+  {
+    "q": 50,
+    "k": 328,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 1.158194,
+    "runs": 15,
+    "graph_bytes": 1155072
+  },
+  {
+    "q": 50,
+    "k": 328,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 0.844419,
+    "runs": 15,
+    "graph_bytes": 1438208
+  },
+  {
+    "q": 50,
+    "k": 328,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 1.10945,
+    "runs": 15,
+    "graph_bytes": 1253632
+  },
+  {
+    "q": 50,
+    "k": 328,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 0.839022,
+    "runs": 15,
+    "graph_bytes": 1503872
+  },
+  {
+    "q": 50,
+    "k": 568,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 1.479708,
+    "runs": 15,
+    "graph_bytes": 1400832
+  },
+  {
+    "q": 50,
+    "k": 568,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 1.266572,
+    "runs": 15,
+    "graph_bytes": 2190848
+  },
+  {
+    "q": 50,
+    "k": 568,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 1.508369,
+    "runs": 15,
+    "graph_bytes": 1571328
+  },
+  {
+    "q": 50,
+    "k": 568,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 1.075685,
+    "runs": 15,
+    "graph_bytes": 2304512
+  },
+  {
+    "q": 278,
+    "k": 278,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 2.843661,
+    "runs": 15,
+    "graph_bytes": 4839424
+  },
+  {
+    "q": 278,
+    "k": 278,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 3.338796,
+    "runs": 15,
+    "graph_bytes": 5177472
+  },
+  {
+    "q": 278,
+    "k": 278,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 3.07389,
+    "runs": 15,
+    "graph_bytes": 5303296
+  },
+  {
+    "q": 278,
+    "k": 278,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 3.316023,
+    "runs": 15,
+    "graph_bytes": 5486720
+  },
+  {
+    "q": 518,
+    "k": 518,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 7.619646,
+    "runs": 15,
+    "graph_bytes": 9017344
+  },
+  {
+    "q": 518,
+    "k": 518,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 7.8128,
+    "runs": 15,
+    "graph_bytes": 13625472
+  },
+  {
+    "q": 518,
+    "k": 518,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 8.271638,
+    "runs": 15,
+    "graph_bytes": 10627456
+  },
+  {
+    "q": 518,
+    "k": 518,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 7.765344,
+    "runs": 15,
+    "graph_bytes": 14698880
+  },
+  {
+    "q": 17,
+    "k": 67,
+    "mask": 0,
+    "mode": 1,
+    "mean_ms": 0.365258,
+    "runs": 15,
+    "graph_bytes": 347136
+  },
+  {
+    "q": 17,
+    "k": 67,
+    "mask": 0,
+    "mode": 2,
+    "mean_ms": 0.428177,
+    "runs": 15,
+    "graph_bytes": 278656
+  },
+  {
+    "q": 17,
+    "k": 67,
+    "mask": 1,
+    "mode": 1,
+    "mean_ms": 0.399412,
+    "runs": 15,
+    "graph_bytes": 354048
+  },
+  {
+    "q": 17,
+    "k": 67,
+    "mask": 1,
+    "mode": 2,
+    "mean_ms": 0.389426,
+    "runs": 15,
+    "graph_bytes": 283264
+  }
+]

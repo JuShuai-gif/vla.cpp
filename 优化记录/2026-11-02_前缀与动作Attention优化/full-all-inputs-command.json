@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/home/skysi/code/vla.cpp/.venv-converter/bin/python",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u524d\u7f00\u4e0e\u52a8\u4f5cAttention\u4f18\u5316/check_full_model_inputs.py",
+    "full-fused-all"
+  ],
+  "env": {
+    "VLA_DEVICE": "0",
+    "VLA_N_THREADS": "4",
+    "VLA_MUSA_VISION_SDPA": "1",
+    "VLA_PI05_VISION_QKV": "1",
+    "VLA_MUSA_GEMMA_ATTN": "fused-all"
+  }
+}

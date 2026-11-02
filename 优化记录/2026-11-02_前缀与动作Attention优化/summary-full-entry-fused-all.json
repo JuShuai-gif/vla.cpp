@@ -1,0 +1,32 @@
+[
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "act_dtype": "f32",
+    "camera_order": [
+      "observation.images.wrist",
+      "observation.images.top"
+    ],
+    "text_tokens": 42,
+    "warmup": 2,
+    "repeat_max_abs": 0.0,
+    "max_abs": 0.029003143310546875,
+    "rmse": 0.008812696087438324,
+    "relative_peak": 0.00031207014933067663,
+    "passed": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "act_dtype": "f16",
+    "camera_order": [
+      "observation.images.wrist",
+      "observation.images.top"
+    ],
+    "text_tokens": 42,
+    "warmup": 2,
+    "repeat_max_abs": 0.0,
+    "max_abs": 0.039928436279296875,
+    "rmse": 0.014898250622030913,
+    "relative_peak": 0.0004296249181960006,
+    "passed": true
+  }
+]

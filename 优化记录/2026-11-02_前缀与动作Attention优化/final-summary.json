@@ -1,0 +1,98 @@
+{
+  "pruned": {
+    "baseline": {
+      "n": 30,
+      "mean_ms": 580.9227490998941,
+      "median_ms": 580.8173100012937,
+      "p95_ms": 582.5614084498739,
+      "round_means_ms": [
+        580.7533693330091,
+        581.092128866779
+      ],
+      "attention_mode": null,
+      "error_vs_musa_f32": {
+        "max_abs": 0.09456253051757812,
+        "rmse": 0.025586381554603577,
+        "relative_peak": 0.0008880459936335683
+      }
+    },
+    "final": {
+      "n": 30,
+      "mean_ms": 542.1736819662328,
+      "median_ms": 542.0432840001013,
+      "p95_ms": 543.0818964503487,
+      "round_means_ms": [
+        542.4346636663055,
+        541.9127002661602
+      ],
+      "attention_mode": "fused-denoise",
+      "error_vs_musa_f32": {
+        "max_abs": 0.06395721435546875,
+        "rmse": 0.021445689722895622,
+        "relative_peak": 0.0006006284966133535
+      }
+    },
+    "latency_reduction_percent": 6.670261612873773,
+    "speedup": 1.0714698415333161,
+    "phases": {
+      "baseline": {
+        "vision_ms": 127.14913779999999,
+        "prefix_ms": 297.0462972,
+        "denoise_ms": 155.78118560000001
+      },
+      "final": {
+        "vision_ms": 126.9212052,
+        "prefix_ms": 296.7522634,
+        "denoise_ms": 118.6731338
+      }
+    }
+  },
+  "full": {
+    "baseline": {
+      "n": 30,
+      "mean_ms": 1243.4212208333822,
+      "median_ms": 1243.25906750164,
+      "p95_ms": 1247.147776249949,
+      "round_means_ms": [
+        1241.3787193332003,
+        1245.4637223335642
+      ],
+      "attention_mode": null,
+      "error_vs_musa_f32": {
+        "max_abs": 0.12726211547851562,
+        "rmse": 0.03930078074336052,
+        "relative_peak": 0.001307523692958057
+      }
+    },
+    "final": {
+      "n": 30,
+      "mean_ms": 952.2662471998046,
+      "median_ms": 952.2492160012916,
+      "p95_ms": 954.1943609994632,
+      "round_means_ms": [
+        952.6632477999859,
+        951.8692465996234
+      ],
+      "attention_mode": "fused-all",
+      "error_vs_musa_f32": {
+        "max_abs": 0.04351806640625,
+        "rmse": 0.013396469876170158,
+        "relative_peak": 0.0004471158026717603
+      }
+    },
+    "latency_reduction_percent": 23.415634923653293,
+    "speedup": 1.3057495469252807,
+    "phases": {
+      "baseline": {
+        "vision_ms": 165.66042499999998,
+        "prefix_ms": 481.5887718,
+        "denoise_ms": 594.6366042
+      },
+      "final": {
+        "vision_ms": 165.962845,
+        "prefix_ms": 380.38208700000007,
+        "denoise_ms": 409.0271422
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "ctest",
+    "--test-dir",
+    "build-musa-official",
+    "--output-on-failure"
+  ],
+  "env": {
+    "VLA_DEVICE": "0",
+    "VLA_N_THREADS": "4",
+    "VLA_MUSA_VISION_SDPA": "1",
+    "VLA_PI05_VISION_QKV": "1",
+    "VLA_MUSA_GEMMA_ATTN": "fused-denoise"
+  }
+}

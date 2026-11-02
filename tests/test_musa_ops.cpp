@@ -15,6 +15,7 @@
 #include "musa/vla_musa_ops.h"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -54,8 +55,12 @@ struct Graph {
             std::vector<float> data(n);
             for (size_t i = 0; i < n; ++i)
                 data[i] = ((int) ((i*37 + j*13) % 67) - 33) / 128.0f;
+            if (std::strcmp(ggml_get_name(t), "attention_values") == 0)
+                for (size_t i=0; i<n; ++i) data[i] = 2.0f*std::sin(float(i)*0.017f+float(j));
             if (std::strcmp(ggml_get_name(t), "geglu_values") == 0)
                 for (auto & v : data) v *= 40.0f;
+            if (std::strcmp(ggml_get_name(t), "attention_mask") == 0)
+                for (size_t i=0; i<n; ++i) data[i]=(i%(size_t)t->ne[0])%7==6 ? -INFINITY : -0.125f*(i%5);
             if (std::strcmp(ggml_get_name(t), "mask") == 0)
                 for (size_t i = 0; i < n; ++i)
                     data[i] = (i % (size_t)t->ne[0]) % 7 == 6 ? -INFINITY : 0.0f;
@@ -73,7 +78,7 @@ struct Graph {
         }
     }
 
-    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs, ggml_tensor * dynamic_scale = nullptr, bool switch_dtype = false) {
+    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs, ggml_tensor * dynamic_scale = nullptr, bool switch_dtype = false, int timed_runs = 0) {
         auto * gf = ggml_new_graph(ctx);
         for (auto * t : outputs) {
             ggml_set_output(t);
@@ -90,8 +95,9 @@ struct Graph {
         alloc = ggml_gallocr_new(ggml_backend_get_default_buffer_type(backend));
         if (!alloc || !ggml_gallocr_alloc_graph(alloc, gf)) return {};
         std::vector<float> result;
+        double elapsed_ms = 0;
         // Reuse the allocation and graph: catches stream/lifetime problems too.
-        for (int repeat = 0; repeat < ((dynamic_scale || switch_dtype) ? 9 : 3); ++repeat) {
+        for (int repeat = 0; repeat < ((dynamic_scale || switch_dtype) ? 9 : 3) + timed_runs; ++repeat) {
             if (switch_dtype) inputs[0]->type = repeat/3 == 1 ? GGML_TYPE_BF16 : GGML_TYPE_F16;
             if (dynamic_scale) {
                 float scale = 0.5f * (repeat/3 + 1);
@@ -100,7 +106,10 @@ struct Graph {
             // gallocr may reuse input memory after its last consumer; restore
             // every input just as predict restores each new observation.
             upload();
+            const auto start = std::chrono::steady_clock::now();
             if (ggml_backend_graph_compute(backend, gf) != GGML_STATUS_SUCCESS) return {};
+            if (repeat >= 3) elapsed_ms += std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count();
+            if (timed_runs && repeat >= 3) continue;
             for (auto * t : outputs) {
                 const size_t offset = result.size();
                 result.resize(offset + (size_t) ggml_nelements(t));
@@ -113,6 +122,8 @@ struct Graph {
                 }
             }
         }
+        if (timed_runs) std::printf("ATTENTION_BENCH {\"mean_ms\":%.6f,\"runs\":%d,\"graph_bytes\":%zu}\n",
+            elapsed_ms/timed_runs,timed_runs,ggml_gallocr_get_buffer_size(alloc,0));
         return result;
     }
 };
@@ -318,6 +329,25 @@ std::vector<float> selected_rows(ggml_backend_t backend, int count, int keep) {
     return g.run(backend, {vla::vision_keep_rows(g.ctx, emb, scores, keep)});
 }
 
+std::vector<float> attention256(ggml_backend_t backend, int nq, int nk, bool masked, int mode) {
+    Graph g;
+    auto * q = g.input(GGML_TYPE_F32,{256,8,nq});
+    auto * k = g.input(GGML_TYPE_F16,{256,nk,1});
+    auto * v = g.input(GGML_TYPE_F16,{256,nk,1});
+    for(auto * t:{q,k,v}) ggml_set_name(t,"attention_values");
+    auto * mask = masked ? g.input(GGML_TYPE_F32,{nk,nq}) : nullptr;
+    if(mask) ggml_set_name(mask,"attention_mask");
+    q=ggml_permute(g.ctx,q,0,2,1,3);
+    ggml_tensor * out;
+    if(mode==1) out=vla::flash_attention(g.ctx,q,k,v,mask?ggml_cast(g.ctx,mask,GGML_TYPE_F16):nullptr,1.0f/16);
+    else {
+        k=ggml_cast(g.ctx,k,GGML_TYPE_F32);v=ggml_cast(g.ctx,v,GGML_TYPE_F32);
+        out=vla::attention(g.ctx,q,k,ggml_cont(g.ctx,ggml_transpose(g.ctx,v)),mask,1.0f/16,2048,nq);
+    }
+    std::printf("ATTENTION_CASE q=%d k=%d mask=%d mode=%d\n",nq,nk,masked,mode);
+    return g.run(backend,{out},nullptr,false,mode?15:0);
+}
+
 std::vector<float> strided_pack(ggml_backend_t backend, int64_t hd, int64_t seq, int64_t batch) {
     Graph g;
     auto * x = g.input(GGML_TYPE_F32, {hd, 3*16, seq, batch});
@@ -425,6 +455,16 @@ int main(int argc, char ** argv) {
     ggml_backend_cpu_set_n_threads(cpu, 4);
     bool ok = true;
     if (!vla::musa_register_fused_ops()) return 1;
+    if (argc == 2 && std::strcmp(argv[1], "--attention256") == 0) {
+        for (auto shape : {std::pair<int,int>{50,328},{50,568},{278,278},{518,518},{17,67},{1,1},{1,67},{50,640},{50,641},{640,640}})
+            for (bool masked : {false,true}) {
+                auto ref=attention256(cpu,shape.first,shape.second,masked,0);
+                ok=compare("attention256_vs_cpu",GGML_TYPE_F16,ref,
+                    attention256(b.handle,shape.first,shape.second,masked,1),5e-3)&&ok;
+            }
+        ggml_backend_free(cpu);ggml_backend_free(b.handle);
+        return ok?0:1;
+    }
     if (argc == 2 && std::strcmp(argv[1], "--strided-pack") == 0) {
         for (int64_t hd : {72, 256})
             for (int64_t seq : {17, 256})

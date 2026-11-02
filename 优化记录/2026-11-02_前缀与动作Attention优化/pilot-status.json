@@ -1,0 +1,18 @@
+[
+  {
+    "stage": "baseline",
+    "returncode": 0
+  },
+  {
+    "stage": "prefix",
+    "returncode": 0
+  },
+  {
+    "stage": "denoise",
+    "returncode": 0
+  },
+  {
+    "stage": "all",
+    "returncode": 0
+  }
+]
