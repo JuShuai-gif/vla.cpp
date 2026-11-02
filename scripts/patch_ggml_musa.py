@@ -92,7 +92,7 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
 #ifdef GGML_USE_MUSA
     if (ggml_musa_ext_forward && ggml_musa_ext_forward(dst, (void *) ctx.stream(), dst->op == GGML_OP_MUL_MAT ? (void *) ctx.cublas_handle() : nullptr)) return true;
 #endif"""
-    if replacement not in text:
+    if "if (ggml_musa_ext_forward && ggml_musa_ext_forward(dst," not in text:
         if text.count(anchor) != 1:
             raise SystemExit(f"{path}: missing MUSA compute hook anchor")
         text = text.replace(anchor, replacement)
@@ -294,6 +294,81 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor 
     if text != original:
         path.write_text(text)
         print(f"MUSA: graph cache tracks source dtypes in {path}")
+
+
+    path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
+    original = text = path.read_text()
+    anchor = "static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct ggml_tensor * dst) {"
+    diagnostic = r"""#ifdef GGML_USE_MUSA
+// Diagnostic timing deliberately disables graph execution and synchronizes each op.
+struct vla_musa_op_timer {
+    const ggml_tensor * t;
+    cudaStream_t stream;
+    cudaEvent_t begin = nullptr, end = nullptr;
+    vla_musa_op_timer(const ggml_tensor * tensor, cudaStream_t s): t(tensor), stream(s) {
+        static const bool enabled = std::getenv("VLA_MUSA_PROFILE_OPS") != nullptr;
+        if (!enabled) return;
+        GGML_ASSERT(std::getenv("GGML_CUDA_DISABLE_GRAPHS") != nullptr);
+        CUDA_CHECK(musaEventCreate(&begin)); CUDA_CHECK(musaEventCreate(&end));
+        CUDA_CHECK(cudaEventRecord(begin, stream));
+    }
+    ~vla_musa_op_timer() {
+        if (!begin) return;
+        CUDA_CHECK(cudaEventRecord(end, stream)); CUDA_CHECK(cudaEventSynchronize(end));
+        float ms; CUDA_CHECK(musaEventElapsedTime(&ms, begin, end));
+        std::fprintf(stderr, "VLA_MUSA_OP {\"op\":\"%s\",\"ne\":[%lld,%lld,%lld,%lld],\"ms\":%.6f}\n",
+            ggml_op_name(t->op), (long long)t->ne[0], (long long)t->ne[1],
+            (long long)t->ne[2], (long long)t->ne[3], ms);
+        CUDA_CHECK(cudaEventDestroy(begin)); CUDA_CHECK(cudaEventDestroy(end));
+    }
+};
+#endif
+
+"""
+    replacement = diagnostic + anchor + """
+#ifdef GGML_USE_MUSA
+    vla_musa_op_timer vla_timer(dst, ctx.stream());
+#endif"""
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing diagnostic timer anchor")
+        text = text.replace(anchor, replacement)
+    if text != original:
+        path.write_text(text)
+        print(f"MUSA: optional device-event op diagnostics in {path}")
+
+
+    path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
+    original = text = path.read_text()
+    anchor = '__attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml_tensor *) = nullptr;'
+    replacement = anchor + '\n__attribute__((visibility("default"))) void (*ggml_musa_ext_release)(int, void *) = nullptr;'
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing MUSA release declaration anchor")
+        text = text.replace(anchor, replacement)
+    anchor = """static void ggml_backend_cuda_free(ggml_backend_t backend) {
+    ggml_backend_cuda_context * cuda_ctx = (ggml_backend_cuda_context *)backend->context;
+"""
+    replacement = anchor + """
+#ifdef GGML_USE_MUSA
+    if (ggml_musa_ext_release) {
+        for (int d=0; d<GGML_CUDA_MAX_DEVICES; ++d)
+            for (int s=0; s<GGML_CUDA_MAX_STREAMS; ++s)
+                if (cuda_ctx->streams[d][s]) {
+                    ggml_cuda_set_device(d);
+                    CUDA_CHECK(cudaStreamSynchronize(cuda_ctx->streams[d][s]));
+                    ggml_musa_ext_release(d, (void *)cuda_ctx->streams[d][s]);
+                }
+    }
+#endif
+"""
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing MUSA release callback anchor")
+        text = text.replace(anchor, replacement)
+    if text != original:
+        path.write_text(text)
+        print(f"MUSA: release extension resources with backend streams in {path}")
 
 
 if __name__ == "__main__":

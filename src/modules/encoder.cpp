@@ -38,7 +38,7 @@ void EncStack::declare(WeightLoader & L, const char * prefix, int64_t layers, co
         w.ln1b = L.f32 ("%s.%lld.%s.bias",        prefix, (long long)i, n.ln1);
         w.ln2w = L.f32 ("%s.%lld.%s.weight",      prefix, (long long)i, n.ln2);
         w.ln2b = L.f32 ("%s.%lld.%s.bias",        prefix, (long long)i, n.ln2);
-        if (cfg.fused) {
+        if (cfg.fused || cfg.merge_qkv) {
             const std::string b = std::string(prefix) + "." + std::to_string(i) + ".attn_";
             w.Wq = w.bq = w.Wk = w.bk = w.Wv = w.bv = nullptr;
             if (cfg.int8)
@@ -160,15 +160,24 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
     }
 
     ggml_tensor * n1 = layer_norm(C, x, w.ln1w, w.ln1b, cfg.ln_eps);
-    ggml_tensor * q  = linear(C, w.Wq, w.bq, n1);
-    ggml_tensor * k  = linear(C, w.Wk, w.bk, n1);
-    ggml_tensor * v  = linear(C, w.Wv, w.bv, n1);
+    ggml_tensor * q, * k, * v;
+    if (cfg.merge_qkv) {
+        auto * qkv = linear(C, w.Wqkv, w.bqkv, n1);
+        auto part = [&](int index) {
+            return ggml_view_3d(C, qkv, cfg.hidden, seq, nv, qkv->nb[1], qkv->nb[2],
+                               index*cfg.hidden*ggml_element_size(qkv));
+        };
+        q=part(0); k=part(1); v=part(2);
+    } else {
+        q=linear(C,w.Wq,w.bq,n1); k=linear(C,w.Wk,w.bk,n1); v=linear(C,w.Wv,w.bv,n1);
+    }
 
     ggml_tensor * att;
 #ifdef GGML_USE_MUSA
     if (use_flash) {
         auto heads_view = [&](ggml_tensor * p) {
-            return ggml_permute(C, ggml_reshape_4d(C, p, hd, heads, seq, nv), 0, 2, 1, 3);
+            return ggml_permute(C, ggml_view_4d(C, p, hd, heads, seq, nv,
+                hd*p->nb[0], p->nb[1], p->nb[2], 0), 0, 2, 1, 3);
         };
         // Q is read through strides; K/V conversion also packs the view.
         att = flash_attention(C, heads_view(q), heads_view(k), heads_view(v), nullptr, scale);
@@ -185,12 +194,17 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
         ggml_prec_set_acc(o, GGML_PREC_F32);
         att = ggml_reshape_3d(C, o, cfg.hidden, seq, nv);
     } else {
-        ggml_tensor * Q = to_heads(C, q, hd, heads, seq, nv);
-        ggml_tensor * K = to_heads(C, k, hd, heads, seq, nv);
+        auto packed_heads = [&](ggml_tensor * p, bool transpose) {
+            if (!cfg.merge_qkv) return transpose ? to_heads_v(C,p,hd,heads,seq,nv) : to_heads(C,p,hd,heads,seq,nv);
+            // Pack the head layout directly; avoid a temporary 2D strided copy.
+            auto * h = ggml_view_4d(C,p,hd,heads,seq,nv,hd*p->nb[0],p->nb[1],p->nb[2],0);
+            return ggml_cont(C,ggml_permute(C,h,transpose?1:0,2,transpose?0:1,3));
+        };
+        ggml_tensor * Q = packed_heads(q,false), * K = packed_heads(k,false);
         if (use_flash)
-            att = flash_attention(C, Q, K, to_heads(C, v, hd, heads, seq, nv), nullptr, scale);
+            att = flash_attention(C, Q, K, packed_heads(v,false), nullptr, scale);
         else
-            att = attention(C, Q, K, to_heads_v(C, v, hd, heads, seq, nv), nullptr, scale, cfg.hidden, seq, nv, attention_out);
+            att = attention(C, Q, K, packed_heads(v,true), nullptr, scale, cfg.hidden, seq, nv, attention_out);
     }
 
     ggml_tensor * h1 = ggml_add(C, x, linear(C, w.Wo, w.bo, att));

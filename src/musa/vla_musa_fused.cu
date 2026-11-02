@@ -10,10 +10,19 @@
 #include <musa_fp16.h>
 #include <mublas.h>
 #include <mutex>
+#ifdef VLA_MUSA_MUDNN_ATTN
+#include <mudnn.h>
+#include <map>
+#include <memory>
+#include <tuple>
+#include <vector>
+#include <cmath>
+#endif
 
 extern "C" {
 extern bool (*ggml_musa_ext_forward)(ggml_tensor *, void *, void *);
 extern bool (*ggml_musa_ext_supports)(const ggml_tensor *);
+extern void (*ggml_musa_ext_release)(int, void *);
 }
 
 namespace vla {
@@ -52,7 +61,34 @@ bool tiled_attention(const ggml_tensor * t) {
            a->ne[0] <= 256 && a->ne[1] <= 256 && b->ne[1] <= 256;
 }
 
+bool vector_pack(const ggml_tensor * t) {
+    static const bool enabled = std::getenv("VLA_MUSA_NO_VECTOR_PACK") == nullptr;
+    const auto * a = t->src[0];
+    return enabled && t->op == GGML_OP_CPY && dense_f16(t) && a && a->type == GGML_TYPE_F32 &&
+           ggml_are_same_shape(t, a) && !ggml_is_contiguous(a) && a->nb[0] == sizeof(float) &&
+           a->ne[0] % 4 == 0 && a->nb[1] % 16 == 0 && a->nb[2] % 16 == 0 && a->nb[3] % 16 == 0 &&
+           a->view_offs % 16 == 0;
+}
+
+bool vision_sdpa(const ggml_tensor * t) {
+#ifdef VLA_MUSA_MUDNN_ATTN
+    static const bool enabled = std::getenv("VLA_MUSA_VISION_SDPA") != nullptr;
+    if (!enabled || t->op != GGML_OP_FLASH_ATTN_EXT || !dense_f32(t) || t->src[3]) return false;
+    const auto * q = t->src[0], * k = t->src[1], * v = t->src[2];
+    float params[3]; std::memcpy(params, t->op_params, sizeof(params));
+    return q->type == GGML_TYPE_F32 && q->ne[0] == 72 && q->ne[1] == 256 && q->ne[2] == 16 &&
+        q->ne[3] >= 1 && q->ne[3] <= 2 && q->nb[0] == 4 && q->nb[1]%16 == 0 &&
+        q->nb[2]%16 == 0 && q->nb[3]%16 == 0 && q->view_offs%16 == 0 &&
+        dense_f16(k) && dense_f16(v) && ggml_are_same_shape(q,k) && ggml_are_same_shape(k,v) &&
+        params[1] == 0 && params[2] == 0;
+#else
+    (void)t; return false;
+#endif
+}
+
 bool supports(const ggml_tensor * t) {
+    if (vision_sdpa(t)) return true;
+    if (vector_pack(t)) return true;
     if (tiled_attention(t)) return true;
     if (t->op == GGML_OP_GLU && ggml_get_glu_op(t) == GGML_GLU_OP_GEGLU && !t->src[1])
         return (dense_f16(t) || dense_f32(t)) && ggml_is_contiguous(t->src[0]) &&
@@ -172,12 +208,140 @@ __global__ void attention_matmul_f32(const float * a, const float * b, float * o
     if (row<m && col<n) out[(size_t)col*m+row]=sum;
 }
 
+__global__ void pack_f16x4(const float * src, __half2 * dst, size_t n4, int d4, int rows, int heads,
+                           size_t s1, size_t s2, size_t s3) {
+    const size_t i = (size_t) blockIdx.x * blockDim.x + threadIdx.x;
+    if (i >= n4) return;
+    size_t row = i / d4;
+    const size_t col = (i % d4) * 4;
+    const size_t token = row % rows; row /= rows;
+    const size_t head = row % heads, batch = row / heads;
+    const float4 v = *(const float4 *)(src + col + token*s1 + head*s2 + batch*s3);
+    dst[2*i]   = __floats2half2_rn(v.x, v.y);
+    dst[2*i+1] = __floats2half2_rn(v.z, v.w);
+}
+
+#ifdef VLA_MUSA_MUDNN_ATTN
+#define VLA_DNN_CHECK(call) do { const auto e = (call); if (e != MUDNN_STATUS_SUCCESS) GGML_ABORT("muDNN %s: %d", #call, (int)e); } while(0)
+#define VLA_MU_CHECK(call) do { const auto e = (call); if (e != musaSuccess) GGML_ABORT("MUSA %s: %s", #call, musaGetErrorString(e)); } while(0)
+struct VisionSdpa {
+    mudnnHandle_t handle = nullptr;
+    mudnnScaledDotProductAttentionDescriptor_t attention = nullptr;
+    // muDNN descriptors retain per-operand addresses; never alias Q/K/V/output descriptors.
+    mudnnTensorDescriptor_t tensor[4] = {}, lse_desc = nullptr, empty = nullptr;
+    void * q = nullptr, * k = nullptr, * v = nullptr, * out = nullptr, * lse = nullptr;
+    int device = 0;
+    VisionSdpa(int dev, int batch, float scale, musaStream_t stream): device(dev) {
+        VLA_DNN_CHECK(mudnnCreate(&handle)); VLA_DNN_CHECK(mudnnSetStream(handle,stream));
+        VLA_DNN_CHECK(mudnnCreateScaledDotProductAttentionDescriptor(&attention));
+        VLA_DNN_CHECK(mudnnSetScaledDotProductAttentionDescriptor(attention,MUDNN_TENSOR_OP_MATH,
+            128,batch,16,scale,false,false,false,false,true));
+        for(auto & t:tensor) VLA_DNN_CHECK(mudnnCreateTensorDescriptor(&t));
+        VLA_DNN_CHECK(mudnnCreateTensorDescriptor(&lse_desc)); VLA_DNN_CHECK(mudnnCreateTensorDescriptor(&empty));
+        const int dims[]={batch,16,256,128}, strides[]={16*256*128,256*128,128,1};
+        const int ld[]={batch,16,256,1}, ls[]={16*256,256,1,1};
+        for(auto t:tensor) VLA_DNN_CHECK(mudnnSetTensorNdDescriptor(t,MUDNN_DATA_HALF,4,dims,strides));
+        VLA_DNN_CHECK(mudnnSetTensorNdDescriptor(lse_desc,MUDNN_DATA_FLOAT,4,ld,ls));
+        VLA_MU_CHECK(musaMalloc(&q,(size_t)batch*16*256*128*2));
+        VLA_MU_CHECK(musaMalloc(&k,(size_t)batch*16*256*128*2));
+        VLA_MU_CHECK(musaMalloc(&v,(size_t)batch*16*256*128*2));
+        VLA_MU_CHECK(musaMalloc(&out,(size_t)batch*16*256*128*2));
+        VLA_MU_CHECK(musaMalloc(&lse,(size_t)batch*16*256*4));
+    }
+    ~VisionSdpa() {
+        int old=0;musaGetDevice(&old);musaSetDevice(device);
+        musaFree(q);musaFree(k);musaFree(v);musaFree(out);musaFree(lse);
+        for(auto t:tensor) mudnnDestroyTensorDescriptor(t);
+        mudnnDestroyTensorDescriptor(lse_desc);mudnnDestroyTensorDescriptor(empty);
+        mudnnDestroyScaledDotProductAttentionDescriptor(attention);mudnnDestroy(handle);
+        musaSetDevice(old);
+    }
+};
+
+// The library's supported head width is 128. Zero padding preserves QK and scale.
+template<typename T>
+__global__ void pad_sdpa(const T * src, __half2 * dst, int batch, size_t s1, size_t s2, size_t s3) {
+    const int i=blockIdx.x*blockDim.x+threadIdx.x;
+    if(i>=batch*16*256*32)return;
+    const int col=(i%32)*4, token=(i/32)%256, head=(i/(32*256))%16, b=i/(32*256*16);
+    float a=0,c=0,d=0,e=0;
+    if(col<72){
+        const T * p=src+col+token*s1+head*s2+b*s3;
+        a=load(p[0]);c=load(p[1]);d=load(p[2]);e=load(p[3]);
+    }
+    dst[2*i]=__floats2half2_rn(a,c); dst[2*i+1]=__floats2half2_rn(d,e);
+}
+
+__global__ void unpack_sdpa(const __half2 * src, float4 * dst, int batch) {
+    const int i=blockIdx.x*blockDim.x+threadIdx.x;
+    if(i>=batch*256*16*18)return;
+    const int d4=i%18, head=(i/18)%16, token=(i/(18*16))%256, b=i/(18*16*256);
+    const int j=d4+32*(token+256*(head+16*b));
+    const float2 a=__half22float2(src[2*j]), c=__half22float2(src[2*j+1]);
+    dst[i]=make_float4(a.x,a.y,c.x,c.y);
+}
+
+using VisionKey=std::tuple<int,uintptr_t,int,uint32_t>;
+struct VisionCache {
+    std::mutex mutex;
+    std::map<VisionKey,std::unique_ptr<VisionSdpa>> entries;
+};
+VisionCache & vision_cache() { static VisionCache cache; return cache; }
+void release_vision_sdpa(int device, void * stream) {
+    auto & cache=vision_cache(); std::lock_guard<std::mutex> guard(cache.mutex);
+    for(auto it=cache.entries.begin(); it!=cache.entries.end();)
+        if(std::get<0>(it->first)==device && std::get<1>(it->first)==(uintptr_t)stream)
+            it=cache.entries.erase(it);
+        else ++it;
+}
+
+bool run_vision_sdpa(ggml_tensor * t, musaStream_t stream) {
+    float scale;std::memcpy(&scale,t->op_params,sizeof(scale));
+    uint32_t scale_bits;std::memcpy(&scale_bits,&scale,sizeof(scale));
+    int device=0;VLA_MU_CHECK(musaGetDevice(&device));
+    const auto * q=t->src[0];const int batch=q->ne[3];
+    // One scratch set per stream/shape: nodes execute in order, including graph replay.
+    auto & storage=vision_cache(); std::lock_guard<std::mutex> guard(storage.mutex);
+    auto & cache=storage.entries;
+    const VisionKey key(device,(uintptr_t)stream,batch,scale_bits);
+    auto it=cache.find(key);
+    if(it==cache.end()){
+        musaStreamCaptureStatus capture;VLA_MU_CHECK(musaStreamIsCapturing(stream,&capture));
+        if(capture!=musaStreamCaptureStatusNone)return false;
+        it=cache.emplace(key,std::make_unique<VisionSdpa>(device,batch,scale,stream)).first;
+    }
+    auto & s=*it->second;
+    const size_t n4=(size_t)batch*16*256*72/4;
+    const int packed=batch*16*256*32;
+    pad_sdpa<<<(packed+WG-1)/WG,WG,0,stream>>>((const float *)q->data,(__half2 *)s.q,batch,
+        q->nb[1]/4,q->nb[2]/4,q->nb[3]/4);
+    for(int j=1;j<=2;++j){
+        const auto * a=t->src[j];
+        pad_sdpa<<<(packed+WG-1)/WG,WG,0,stream>>>((const __half *)a->data,
+            (__half2 *)(j==1?s.k:s.v),batch,a->nb[1]/2,a->nb[2]/2,a->nb[3]/2);
+    }
+    VLA_DNN_CHECK(mudnnScaledDotProductAttentionFlashForward(s.handle,s.lse_desc,s.lse,
+        s.tensor[0],s.q,s.tensor[1],s.k,s.tensor[2],s.v,s.empty,nullptr,
+        s.attention,s.empty,nullptr,s.tensor[3],s.out));
+    unpack_sdpa<<<(n4+WG-1)/WG,WG,0,stream>>>((const __half2 *)s.out,(float4 *)t->data,batch);
+    return true;
+}
+#endif
+
 bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
     if (!supports(t)) return false;
     const auto stream = (musaStream_t) stream_ptr;
+#ifdef VLA_MUSA_MUDNN_ATTN
+    if (vision_sdpa(t)) return run_vision_sdpa(t, stream);
+#endif
     const int h = (int) t->ne[0];
     const auto * x = (const float *) t->src[0]->data;
-    if (tiled_attention(t)) {
+    if (vector_pack(t)) {
+        const auto * a = t->src[0];
+        const size_t n4 = ggml_nelements(t)/4;
+        pack_f16x4<<<(n4+WG-1)/WG, WG, 0, stream>>>(x, (__half2 *)t->data, n4,
+            a->ne[0]/4, a->ne[1], a->ne[2], a->nb[1]/4, a->nb[2]/4, a->nb[3]/4);
+    } else if (tiled_attention(t)) {
         const auto * a=t->src[0]; const auto * b=t->src[1];
         const dim3 grid((a->ne[1]+15)/16,(b->ne[1]+15)/16,a->ne[2]);
         attention_matmul_f32<<<grid,dim3(16,16),0,stream>>>(
@@ -231,6 +395,9 @@ __attribute__((visibility("default"))) bool musa_register_fused_ops() {
     std::call_once(once, [] {
         ggml_musa_ext_supports = supports;
         ggml_musa_ext_forward = forward;
+#ifdef VLA_MUSA_MUDNN_ATTN
+        ggml_musa_ext_release = release_vision_sdpa;
+#endif
     });
     return true;
 }

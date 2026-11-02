@@ -1,0 +1,14 @@
+{
+  "cache": [
+    "CMAKE_BUILD_TYPE:STRING=Release",
+    "CMAKE_CXX_COMPILER:UNINITIALIZED=/usr/local/musa/bin/clang++",
+    "CMAKE_C_COMPILER:UNINITIALIZED=/usr/local/musa/bin/clang",
+    "GGML_CUDA_FA:BOOL=ON",
+    "GGML_CUDA_NO_VMM:BOOL=ON",
+    "GGML_MUSA_GRAPHS:BOOL=ON",
+    "MUSA_ARCHITECTURES:UNINITIALIZED=22",
+    "VLA_MUSA_MUDNN_ATTN:BOOL=ON"
+  ],
+  "power_profile": "performance",
+  "dependency_commit": "4da6337767f973e2b4d0797e5b323d77d8565e4a"
+}

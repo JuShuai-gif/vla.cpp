@@ -1,0 +1,62 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "act_dtype": "f32",
+    "camera_order": [
+      "observation.images.top",
+      "observation.images.wrist"
+    ],
+    "text_tokens": 43,
+    "warmup": 2,
+    "repeat_max_abs": 0.0,
+    "max_abs": 0.09495735168457031,
+    "rmse": 0.030222512285066,
+    "relative_peak": 0.0011152847575016762,
+    "passed": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "act_dtype": "f16",
+    "camera_order": [
+      "observation.images.top",
+      "observation.images.wrist"
+    ],
+    "text_tokens": 43,
+    "warmup": 2,
+    "repeat_max_abs": 0.0,
+    "max_abs": 0.10005855560302734,
+    "rmse": 0.04100929920766139,
+    "relative_peak": 0.001175198970295454,
+    "passed": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "act_dtype": "f32",
+    "camera_order": [
+      "observation.images.wrist",
+      "observation.images.top"
+    ],
+    "text_tokens": 42,
+    "warmup": 2,
+    "repeat_max_abs": 0.0,
+    "max_abs": 0.1181793212890625,
+    "rmse": 0.04112256422823644,
+    "relative_peak": 0.0012715945319300753,
+    "passed": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "act_dtype": "f16",
+    "camera_order": [
+      "observation.images.wrist",
+      "observation.images.top"
+    ],
+    "text_tokens": 42,
+    "warmup": 2,
+    "repeat_max_abs": 0.0,
+    "max_abs": 0.11791610717773438,
+    "rmse": 0.0421462745658885,
+    "relative_peak": 0.0012687623814231941,
+    "passed": true
+  }
+]

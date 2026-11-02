@@ -1,0 +1,10 @@
+[
+  {
+    "name": "ctest",
+    "returncode": 0
+  },
+  {
+    "name": "changing-baseline",
+    "returncode": -6
+  }
+]

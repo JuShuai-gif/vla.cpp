@@ -1,0 +1,34 @@
+[
+  {
+    "stage": "baseline-r1",
+    "returncode": 0
+  },
+  {
+    "stage": "final-r1",
+    "returncode": 0
+  },
+  {
+    "stage": "nocache-r1",
+    "returncode": 0
+  },
+  {
+    "stage": "nocache-r2",
+    "returncode": 0
+  },
+  {
+    "stage": "final-r2",
+    "returncode": 0
+  },
+  {
+    "stage": "baseline-r2",
+    "returncode": 0
+  },
+  {
+    "stage": "final-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "final-f16",
+    "returncode": 1
+  }
+]

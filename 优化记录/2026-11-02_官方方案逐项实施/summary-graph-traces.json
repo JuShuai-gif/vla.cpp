@@ -1,0 +1,50 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "all_graph_api_counts": {
+      "musaLaunchKernel": 4933,
+      "musaStreamBeginCapture": 3,
+      "musaStreamEndCapture": 3,
+      "musaGraphInstantiate": 3,
+      "musaGraphLaunch": 9,
+      "musaGraphExecDestroy": 3,
+      "musaGraphDestroy": 3
+    },
+    "after_last_instantiate": {
+      "musaGraphLaunch": 7,
+      "musaStreamSynchronize": 10,
+      "musaGetDevice": 12,
+      "musaMemcpyAsync": 15,
+      "musaFreeHost": 1,
+      "musaFree": 16,
+      "musaSetDevice": 2,
+      "musaStreamDestroy": 1,
+      "musaGraphExecDestroy": 3,
+      "musaGraphDestroy": 3
+    }
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "all_graph_api_counts": {
+      "musaLaunchKernel": 10606,
+      "musaStreamBeginCapture": 3,
+      "musaStreamEndCapture": 3,
+      "musaGraphInstantiate": 3,
+      "musaGraphLaunch": 9,
+      "musaGraphExecDestroy": 3,
+      "musaGraphDestroy": 3
+    },
+    "after_last_instantiate": {
+      "musaGraphLaunch": 7,
+      "musaStreamSynchronize": 10,
+      "musaGetDevice": 12,
+      "musaMemcpyAsync": 11,
+      "musaFreeHost": 1,
+      "musaFree": 16,
+      "musaSetDevice": 2,
+      "musaStreamDestroy": 1,
+      "musaGraphExecDestroy": 3,
+      "musaGraphDestroy": 3
+    }
+  }
+]

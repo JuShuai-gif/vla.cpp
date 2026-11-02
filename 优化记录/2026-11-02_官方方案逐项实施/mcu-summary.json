@@ -1,0 +1,26 @@
+{
+  "compute_percent": {
+    "samples": 27,
+    "min": 63.39,
+    "median": 66.77,
+    "max": 75.04
+  },
+  "l2_percent": {
+    "samples": 27,
+    "min": 3.5,
+    "median": 3.62,
+    "max": 3.83
+  },
+  "duration_us": {
+    "samples": 27,
+    "min": 212.87,
+    "median": 219.84,
+    "max": 231.69
+  },
+  "registers_per_thread": {
+    "samples": 27,
+    "min": 242.0,
+    "median": 242.0,
+    "max": 242.0
+  }
+}

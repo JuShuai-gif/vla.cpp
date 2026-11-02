@@ -231,9 +231,9 @@ std::vector<float> action_projection(ggml_backend_t backend, int64_t k, int64_t 
     return g.run(backend,{ggml_mul_mat(g.ctx,a,b)});
 }
 
-std::vector<float> vision_attention(ggml_backend_t backend, bool flash) {
+std::vector<float> vision_attention(ggml_backend_t backend, bool flash, int64_t heads=4, int64_t nv=2) {
     Graph g;
-    constexpr int64_t hd=72, heads=4, seq=256, nv=2;
+    constexpr int64_t hd=72, seq=256;
     auto * q=g.input(GGML_TYPE_F32, {hd*heads, seq, nv});
     auto * k=g.input(GGML_TYPE_F32, {hd*heads, seq, nv});
     auto * v=g.input(GGML_TYPE_F32, {hd*heads, seq, nv});
@@ -316,6 +316,15 @@ std::vector<float> selected_rows(ggml_backend_t backend, int count, int keep) {
     auto * emb = g.input(GGML_TYPE_F32, {37, count});
     // upload's repeating 67-value pattern deliberately creates score ties.
     return g.run(backend, {vla::vision_keep_rows(g.ctx, emb, scores, keep)});
+}
+
+std::vector<float> strided_pack(ggml_backend_t backend, int64_t hd, int64_t seq, int64_t batch) {
+    Graph g;
+    auto * x = g.input(GGML_TYPE_F32, {hd, 3*16, seq, batch});
+    // A head-aligned slice inside merged QKV, with gaps between token rows.
+    auto * q = ggml_view_4d(g.ctx, x, hd, 16, seq, batch, x->nb[1], x->nb[2], x->nb[3], 16*x->nb[1]);
+    auto * transposed = ggml_permute(g.ctx, q, 0, 2, 1, 3);
+    return g.run(backend, {ggml_cast(g.ctx, transposed, GGML_TYPE_F16)});
 }
 
 std::vector<float> patch_scores(ggml_backend_t backend) {
@@ -416,6 +425,16 @@ int main(int argc, char ** argv) {
     ggml_backend_cpu_set_n_threads(cpu, 4);
     bool ok = true;
     if (!vla::musa_register_fused_ops()) return 1;
+    if (argc == 2 && std::strcmp(argv[1], "--strided-pack") == 0) {
+        for (int64_t hd : {72, 256})
+            for (int64_t seq : {17, 256})
+                for (int64_t batch : {1, 2})
+                    ok = compare("strided_pack", GGML_TYPE_F16,
+                        strided_pack(cpu, hd, seq, batch), strided_pack(b.handle, hd, seq, batch), 1e-12) && ok;
+        ggml_backend_free(cpu);
+        ggml_backend_free(b.handle);
+        return ok ? 0 : 1;
+    }
     if (argc == 2 && std::strcmp(argv[1], "--f32-attention") == 0) {
         ok = compare("f32_attention_cpu", GGML_TYPE_F32,
                      vision_attention(cpu, false), vision_attention(b.handle, false), 2e-5);
@@ -428,6 +447,14 @@ int main(int argc, char ** argv) {
                      graph_source_dtype(cpu), graph_source_dtype(b.handle));
         ggml_backend_free(cpu);
         ggml_backend_free(b.handle);
+        return ok ? 0 : 1;
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--vision-sdpa") == 0) {
+        for (int64_t batch : {1,2})
+            ok = compare("vision_sdpa_16heads", GGML_TYPE_F16,
+                vision_attention(cpu, false, 16, batch),
+                vision_attention(b.handle, true, 16, batch), 5e-3) && ok;
+        ggml_backend_free(cpu); ggml_backend_free(b.handle);
         return ok ? 0 : 1;
     }
     if (argc == 2 && std::strcmp(argv[1], "--flash-attn") == 0) {

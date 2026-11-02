@@ -59,6 +59,8 @@ struct EncCfg {
     // GEMMs take bias, GELU and residual as epilogue, q|k|v is one GEMM, and
     // attention reads its output directly. Set before declare().
     bool fused = false;
+    // F32 graph with merged Q/K/V projections; attention keeps its own dtype.
+    bool merge_qkv = false;
     // With fused: the GEMMs as W8A8 with per-token INT8 activations.
     bool int8 = false;
     // F32 act on CUDA: layers/fused_ops.h nodes, bit-identical to this graph.

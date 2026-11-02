@@ -1,0 +1,22 @@
+[
+  {
+    "name": "production",
+    "returncode": 0
+  },
+  {
+    "name": "production-bucket",
+    "returncode": 0
+  },
+  {
+    "name": "baseline-f16",
+    "returncode": 1
+  },
+  {
+    "name": "final-f16-matched",
+    "returncode": 1
+  },
+  {
+    "name": "fallback",
+    "returncode": 0
+  }
+]

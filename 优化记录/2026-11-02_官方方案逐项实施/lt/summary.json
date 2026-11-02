@@ -1,0 +1,1540 @@
+[
+  {
+    "shape": [
+      2560,
+      278,
+      2048,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "prefix",
+        "count": 18
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 2560,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "ms": 0.590024,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.736288,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.736288,
+        "baseline_ms": 0.590024,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.775688
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      278,
+      2048,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "prefix",
+        "count": 17
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 2048,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "ms": 0.50276,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.571916,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.571916,
+        "baseline_ms": 0.50276,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.607688
+      }
+    ]
+  },
+  {
+    "shape": [
+      32768,
+      278,
+      2048,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "prefix",
+        "count": 17
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 32768,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "ms": 6.546796,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 8.43528,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 8.43528,
+        "baseline_ms": 6.546796,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 8.473764
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      278,
+      16384,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "prefix",
+        "count": 17
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 2048,
+        "n": 278,
+        "k": 16384,
+        "batch": 1,
+        "ms": 5.020216,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 5.143516,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 5.143516,
+        "baseline_ms": 5.020216,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 5.168348
+      }
+    ]
+  },
+  {
+    "shape": [
+      2560,
+      50,
+      1024,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "denoise",
+        "count": 54
+      },
+      {
+        "model": "full",
+        "phase": "denoise",
+        "count": 180
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 2560,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "ms": 0.1949,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.223336,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.223336,
+        "baseline_ms": 0.1949,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.253388
+      }
+    ]
+  },
+  {
+    "shape": [
+      1024,
+      50,
+      2048,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "denoise",
+        "count": 54
+      },
+      {
+        "model": "full",
+        "phase": "denoise",
+        "count": 180
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 1024,
+        "n": 50,
+        "k": 2048,
+        "batch": 1,
+        "ms": 0.206268,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.23426,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.23426,
+        "baseline_ms": 0.206268,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.261548
+      }
+    ]
+  },
+  {
+    "shape": [
+      8192,
+      50,
+      1024,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "denoise",
+        "count": 54
+      },
+      {
+        "model": "full",
+        "phase": "denoise",
+        "count": 180
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 8192,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "ms": 0.463328,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.551388,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.551388,
+        "baseline_ms": 0.463328,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.588212
+      }
+    ]
+  },
+  {
+    "shape": [
+      1024,
+      50,
+      4096,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "denoise",
+        "count": 54
+      },
+      {
+        "model": "full",
+        "phase": "denoise",
+        "count": 180
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 1024,
+        "n": 50,
+        "k": 4096,
+        "batch": 1,
+        "ms": 0.410416,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.430932,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.430932,
+        "baseline_ms": 0.410416,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.462032
+      }
+    ]
+  },
+  {
+    "shape": [
+      256,
+      1152,
+      588,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "vision",
+        "count": 2
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 256,
+        "n": 1152,
+        "k": 588,
+        "batch": 1,
+        "ms": 0.122536,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.158524,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.158524,
+        "baseline_ms": 0.122536,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.181748
+      }
+    ]
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "vision",
+        "count": 120
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 1152,
+        "n": 256,
+        "k": 1152,
+        "batch": 1,
+        "ms": 0.176588,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.200852,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.200852,
+        "baseline_ms": 0.176588,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.226432
+      }
+    ]
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "vision",
+        "count": 30
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 4304,
+        "n": 256,
+        "k": 1152,
+        "batch": 1,
+        "ms": 0.41898,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.671968,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.671968,
+        "baseline_ms": 0.41898,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.7037
+      }
+    ]
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "vision",
+        "count": 30
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 1152,
+        "n": 256,
+        "k": 4304,
+        "batch": 1,
+        "ms": 0.447664,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.516036,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.516036,
+        "baseline_ms": 0.447664,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.55212
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      256,
+      1152,
+      1
+    ],
+    "usage": [
+      {
+        "model": "pruned",
+        "phase": "vision",
+        "count": 2
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 2048,
+        "n": 256,
+        "k": 1152,
+        "batch": 1,
+        "ms": 0.22612,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.328424,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.328424,
+        "baseline_ms": 0.22612,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.362656
+      }
+    ]
+  },
+  {
+    "shape": [
+      2560,
+      518,
+      2048,
+      1
+    ],
+    "usage": [
+      {
+        "model": "full",
+        "phase": "prefix",
+        "count": 18
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 2560,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "ms": 0.940064,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 1.197476,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 1.197476,
+        "baseline_ms": 0.940064,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 1.230328
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      518,
+      2048,
+      1
+    ],
+    "usage": [
+      {
+        "model": "full",
+        "phase": "prefix",
+        "count": 17
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 2048,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "ms": 0.79046,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.95382,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.95382,
+        "baseline_ms": 0.79046,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.999896
+      }
+    ]
+  },
+  {
+    "shape": [
+      32768,
+      518,
+      2048,
+      1
+    ],
+    "usage": [
+      {
+        "model": "full",
+        "phase": "prefix",
+        "count": 17
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 32768,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "ms": 9.913773,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 13.8647,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 13.8647,
+        "baseline_ms": 9.913773,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 13.891144
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      518,
+      16384,
+      1
+    ],
+    "usage": [
+      {
+        "model": "full",
+        "phase": "prefix",
+        "count": 17
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 2048,
+        "n": 518,
+        "k": 16384,
+        "batch": 1,
+        "ms": 5.567264,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 5.910848,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 5.910848,
+        "baseline_ms": 5.567264,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 5.805524
+      }
+    ]
+  },
+  {
+    "shape": [
+      512,
+      1152,
+      588,
+      1
+    ],
+    "usage": [
+      {
+        "model": "full",
+        "phase": "vision",
+        "count": 1
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 512,
+        "n": 1152,
+        "k": 588,
+        "batch": 1,
+        "ms": 0.167736,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.272176,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.272176,
+        "baseline_ms": 0.167736,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.30258
+      }
+    ]
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      2
+    ],
+    "usage": [
+      {
+        "model": "full",
+        "phase": "vision",
+        "count": 108
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 1152,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "ms": 0.234636,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.285608,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.285608,
+        "baseline_ms": 0.234636,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.315832
+      }
+    ]
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      2
+    ],
+    "usage": [
+      {
+        "model": "full",
+        "phase": "vision",
+        "count": 27
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 4304,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "ms": 0.701844,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.955668,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.955668,
+        "baseline_ms": 0.701844,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.990716
+      }
+    ]
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      2
+    ],
+    "usage": [
+      {
+        "model": "full",
+        "phase": "vision",
+        "count": 27
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 1152,
+        "n": 256,
+        "k": 4304,
+        "batch": 2,
+        "ms": 0.846436,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.919516,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.919516,
+        "baseline_ms": 0.846436,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.958096
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      256,
+      1152,
+      2
+    ],
+    "usage": [
+      {
+        "model": "full",
+        "phase": "vision",
+        "count": 1
+      }
+    ],
+    "returncode": 0,
+    "results": [
+      {
+        "kind": "baseline",
+        "m": 2048,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "ms": 0.33562,
+        "lt_version": 101200
+      },
+      {
+        "kind": "query",
+        "workspace": 0,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "candidate",
+        "id": 0,
+        "workspace": 0,
+        "ms": 0.408536,
+        "relative_peak": 0
+      },
+      {
+        "kind": "query",
+        "workspace": 8388608,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 33554432,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "query",
+        "workspace": 67108864,
+        "status": 0,
+        "count": 1
+      },
+      {
+        "kind": "best",
+        "ms": 0.408536,
+        "baseline_ms": 0.33562,
+        "capture_call": 0,
+        "capture_end": 0,
+        "instantiate": 0,
+        "launch": 0,
+        "replay_error": 0,
+        "replay_ms": 0.445496
+      }
+    ]
+  }
+]
