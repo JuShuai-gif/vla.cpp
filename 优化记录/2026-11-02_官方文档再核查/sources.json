@@ -1,0 +1,86 @@
+[
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.1.0/libraries/xlib/muBLASLt_developer_guide/",
+    "file": "muBLASLt_developer_guide.txt",
+    "chars": 8471,
+    "extracted_text_sha256": "4fe13a85034d14162d35ffc80ccc2b39aaad58628a37314194d3333327bd348b",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/gemm_gemv_optimization/",
+    "file": "gemm_gemv_optimization.txt",
+    "chars": 15972,
+    "extracted_text_sha256": "70af9b2303b5483f8ecb65304bd147cccfe637f2a0e28105b7ff9d35236266e8",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/flash_attention_optimization/",
+    "file": "flash_attention_optimization.txt",
+    "chars": 11723,
+    "extracted_text_sha256": "d9ddb1d28fd134ac4a2fa67e885f88c1e09dd278d1f3ea45f210f6ee99327b4e",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/performance_bottleneck/",
+    "file": "performance_bottleneck.txt",
+    "chars": 14494,
+    "extracted_text_sha256": "f41b1edd872cc25b52fa2dfca85cbf39614aed7c68a289727c3ae70851b404c5",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/memory_optimization/",
+    "file": "memory_optimization.txt",
+    "chars": 7093,
+    "extracted_text_sha256": "f637f13dbae8d3b2812c7afc5c81dc8653ab4a4633b31048c1d79e8df1969da3",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/performance_tuning/compute_optimization/",
+    "file": "compute_optimization.txt",
+    "chars": 11126,
+    "extracted_text_sha256": "04f5273ef949029ac606554e26c0ce557312412e4e6560bf6160f27a8706aa83",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/programming_model/l2_cache_management/",
+    "file": "l2_cache_management.txt",
+    "chars": 7308,
+    "extracted_text_sha256": "f354d009843dfec5bc127ca3de8dce9cbcdf9763fc5958da45aae6cb0244d01a",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.1.0/programming_guide/programming_model/advanced_memory/",
+    "file": "advanced_memory.txt",
+    "chars": 15679,
+    "extracted_text_sha256": "85327a992cbf046c62fb9c4b5d3bd4494800c55c68f47cad0d699f5ba176c484",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.1.0/libraries/openlibs/mate/",
+    "file": "mate.txt",
+    "chars": 18258,
+    "extracted_text_sha256": "92235d5747fec1eda734ed8018b43b29440ed57ea025facb04ebdcaf4bf9c3c6",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/musa-sdk/version-5.2.0/releasenote/",
+    "file": "releasenote.txt",
+    "chars": 3663,
+    "extracted_text_sha256": "09aa2ffbdf568833ef78ef6d7f91f024e07c09fe7e4dd7acb7b0af60c93460a3",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/llama.cpp-musa-m1000/Llama.cpp-MUSA-M1000/AIModule/AIModule1.4.1+0.0.9252/quick_start",
+    "file": "quick_start.txt",
+    "chars": 3646,
+    "extracted_text_sha256": "17df6394100a7f7397728a28b973b8490d5e28cb7578a4649356d5df11212205",
+    "retrieved_date": "2026-11-02"
+  },
+  {
+    "url": "https://docs.mthreads.com/llama.cpp-musa-m1000/Llama.cpp-MUSA-M1000/AIModule/AIModule1.4.1+0.0.9252/environment_setup",
+    "file": "environment_setup.txt",
+    "chars": 3701,
+    "extracted_text_sha256": "45b7d63520b78cd80a53d5eab9b1857e4c4dbce0b95289ad0efe0bfe851cd3e0",
+    "retrieved_date": "2026-11-02"
+  }
+]
