@@ -1,0 +1,64 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+{"iteration": 0, "warmup": true, "ms_total": 1053.7210693359375, "ms_vision": 345.3240661621094, "ms_inference": 680.377685546875, "wall_ms": 1054.5729569998912}
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_cuda_compute_forward: MUL_MAT failed
+MUSA error: operation failed due to a previous error during capture
+  current device: 0, in function ggml_cuda_compute_forward at /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:2444
+  err
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=3 real_state=7 real_action=7 max_len=64 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): visual token pruning 256 -> 136 per image (attention, spatial order)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 4.71 GiB
+vla(pi05): model loaded (n_threads=4)
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:109: MUSA error
+[New LWP 35787]
+[New LWP 35811]
+[New LWP 35812]
+[New LWP 35813]
+[New LWP 35814]
+[New LWP 35822]
+[New LWP 35823]
+[New LWP 36066]
+[New LWP 36067]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+0x0000ffff84546800 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	../sysdeps/unix/sysv/linux/wait4.c: 没有那个文件或目录.
+#0  0x0000ffff84546800 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	in ../sysdeps/unix/sysv/linux/wait4.c
+#1  0x0000ffff5d7da3ac in ggml_print_backtrace () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0
+#2  0x0000ffff5d7da5f8 in ggml_abort () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0
+#3  0x0000ffff5d9688d0 in ggml_cuda_error(char const*, char const*, char const*, int, char const*) () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0
+#4  0x0000ffff5d975680 in ggml_cuda_graph_evaluate_and_capture(ggml_backend_cuda_context*, ggml_cgraph*, bool, bool, void const*) () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0
+#5  0x0000ffff5d96ed24 in ggml_backend_cuda_graph_compute(ggml_backend*, ggml_cgraph*) () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0
+#6  0x0000ffff5d7f4ae0 in ggml_backend_graph_compute () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0
+#7  0x0000ffff6313e3c0 in vla::Pi05ModelArch::vision_forward(vla::ImageView const*, int) () from /home/skysi/code/vla.cpp/build-musa-official/libvla_core.so
+#8  0x0000ffff6314073c in vla::Pi05ModelArch::predict(vla::Inputs const&) () from /home/skysi/code/vla.cpp/build-musa-official/libvla_core.so
+#9  0x0000ffff63221560 in vla_predict () from /home/skysi/code/vla.cpp/build-musa-official/libvla.so
+#10 0x0000ffff83286e10 in ?? () from /lib/aarch64-linux-gnu/libffi.so.8
+#11 0x0000ffff83283a94 in ?? () from /lib/aarch64-linux-gnu/libffi.so.8
+#12 0x0000ffff832b21c8 in ?? () from /usr/lib/python3.10/lib-dynload/_ctypes.cpython-310-aarch64-linux-gnu.so
+#13 0x0000ffff832b0974 in ?? () from /usr/lib/python3.10/lib-dynload/_ctypes.cpython-310-aarch64-linux-gnu.so
+#14 0x0000aaaaab59a030 in _PyObject_MakeTpCall ()
+#15 0x0000aaaaab5912ec in _PyEval_EvalFrameDefault ()
+#16 0x0000aaaaab5b37c8 in ?? ()
+#17 0x0000aaaaab58d6d8 in _PyEval_EvalFrameDefault ()
+#18 0x0000aaaaab68a460 in ?? ()
+#19 0x0000aaaaab68a2e4 in PyEval_EvalCode ()
+#20 0x0000aaaaab6bd88c in ?? ()
+#21 0x0000aaaaab6b5f98 in ?? ()
+#22 0x0000aaaaab6bd53c in ?? ()
+#23 0x0000aaaaab6bc6a4 in _PyRun_SimpleFileObject ()
+#24 0x0000aaaaab6bc270 in _PyRun_AnyFileObject ()
+#25 0x0000aaaaab6acbd0 in Py_RunMain ()
+#26 0x0000aaaaab67b448 in Py_BytesMain ()
+#27 0x0000ffff844b73fc in __libc_start_call_main (main=main@entry=0xaaaaab67b420, argc=argc@entry=16, argv=argv@entry=0xfffffe829b38) at ../sysdeps/nptl/libc_start_call_main.h:58
+58	../sysdeps/nptl/libc_start_call_main.h: 没有那个文件或目录.
+#28 0x0000ffff844b74cc in __libc_start_main_impl (main=0xaaaaab67b420, argc=16, argv=0xfffffe829b38, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=<optimized out>) at ../csu/libc-start.c:392
+392	../csu/libc-start.c: 没有那个文件或目录.
+#29 0x0000aaaaab67b330 in _start ()
+[Inferior 1 (process 35775) detached]

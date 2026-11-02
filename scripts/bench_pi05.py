@@ -5,6 +5,10 @@ Uses the same synthetic inputs as validate_pi05.py. Loading and warmup are
 excluded; all model cameras, action chunks and denoising steps are retained.
 """
 import argparse
+import ctypes
+import hashlib
+import platform
+import subprocess
 import json
 import os
 from pathlib import Path
@@ -18,6 +22,7 @@ ap.add_argument('--model', type=Path, required=True)
 ap.add_argument('--out-dir', type=Path, required=True)
 ap.add_argument('--weight-dtype', choices=('f32', 'f16', 'bf16'), default='f32')
 ap.add_argument('--act-dtype', choices=('f32', 'f16'), default='f32')
+ap.add_argument('--flash-attn', action='store_true')
 ap.add_argument('--warmup', type=int, default=1)
 ap.add_argument('--runs', type=int, default=5)
 ap.add_argument('--reference', type=Path, help='Actions .npy from validate_pi05.py or this benchmark')
@@ -31,10 +36,40 @@ os.environ.setdefault('VLA_DEVICE', '0')
 sys.path.insert(0, str(repo/'bindings/python'))
 import vla_cpp
 
+# Do not record CPU fallback as an accelerator benchmark.
+if os.environ['VLA_DEVICE'].lower() != 'cpu':
+    count = vla_cpp._lib_handle().ggml_backend_cuda_get_device_count
+    count.restype = ctypes.c_int
+    device = int(os.environ['VLA_DEVICE'])
+    if device < 0 or device >= count():
+        raise RuntimeError('Requested MUSA device is unavailable; refusing CPU fallback benchmark')
+
+def command_output(args):
+    try:
+        result = subprocess.run(args, cwd=repo, text=True, capture_output=True)
+    except OSError:
+        return None
+    return result.stdout.strip() if result.returncode == 0 else None
+
+library = Path(os.environ['VLA_LIBRARY']).resolve()
+metadata = {
+    'source_commit': command_output(['git', 'rev-parse', 'HEAD']),
+    'source_diff_sha256': hashlib.sha256(subprocess.check_output(['git', 'diff', 'HEAD'], cwd=repo)).hexdigest(),
+    'library': str(library),
+    'library_sha256': hashlib.sha256(library.read_bytes()).hexdigest(),
+    'backend_sha256': {str(p.resolve()): hashlib.sha256(p.read_bytes()).hexdigest()
+                       for p in sorted((library.parent/'bin').glob('libggml-*.so'))},
+    'platform': platform.platform(),
+    'power_profile': command_output(['powerprofilesctl', 'get']),
+    'environment': {k: os.environ.get(k) for k in (
+        'VLA_DEVICE', 'VLA_N_THREADS', 'VLA_PI05_NO_FUSE', 'VLA_PI05_NO_PROJ_FUSE',
+        'GGML_CUDA_DISABLE_GRAPHS', 'GGML_MUSA_DISABLE_GRAPHS')},
+}
+
 opt.out_dir.mkdir(parents=True, exist_ok=True)
 runtime = opt.out_dir/'runtime.json'
 runtime.write_text(json.dumps({'runtime': {'weight_dtype': opt.weight_dtype,
-    'act_dtype': opt.act_dtype, 'flash_attn': False,
+    'act_dtype': opt.act_dtype, 'flash_attn': opt.flash_attn,
     'mm_prec': 'default' if opt.act_dtype == 'f16' else 'f32'}}))
 with vla_cpp.load(str(opt.model), config_path=str(runtime)) as m:
     cfg = m.config
@@ -64,7 +99,7 @@ with vla_cpp.load(str(opt.model), config_path=str(runtime)) as m:
         if i >= opt.warmup:
             rows.append(row)
     np.save(opt.out_dir/'actions.npy', actions)
-    report = {'model': str(opt.model), 'dtype': opt.weight_dtype, 'act_dtype': opt.act_dtype, 'steps': cfg.num_steps,
+    report = {'metadata': metadata, 'flash_attn': opt.flash_attn, 'model': str(opt.model), 'dtype': opt.weight_dtype, 'act_dtype': opt.act_dtype, 'steps': cfg.num_steps,
               'synthetic_inputs': True, 'camera_count': len(images), 'text_token_count': 6,
               'chunk': cfg.n_suffix, 'vision_tokens_per_camera': cfg.n_img,
               'no_fuse': os.environ.get('VLA_PI05_NO_FUSE', '0'),

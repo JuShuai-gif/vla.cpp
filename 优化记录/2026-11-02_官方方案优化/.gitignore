@@ -1,0 +1,2 @@
+# Raw arrays stay beside reports; hashes are in external-artifacts.json.
+*.npy

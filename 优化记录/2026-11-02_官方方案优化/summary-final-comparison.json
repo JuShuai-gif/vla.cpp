@@ -1,0 +1,84 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "f32": {
+      "before_ms": 880.730966000101,
+      "after_ms": 744.5149589998437,
+      "latency_reduction_pct": 15.46624477380324,
+      "speedup": 1.182959395716166,
+      "chunks_per_second": 1.3431563569164096,
+      "phase_median_ms": {
+        "ms_total": 744.0330810546875,
+        "ms_vision": 290.3979797363281,
+        "ms_inference": 453.1930236816406,
+        "wall_ms": 744.5149589998437
+      },
+      "error_vs_musa_f32": {
+        "max_abs": 0.09142303466796875,
+        "rmse": 0.027387332171201706,
+        "relative_peak": 0.0008585627074353397
+      },
+      "repeat_max_abs": 0.0
+    },
+    "f16": {
+      "before_ms": 872.8707509999367,
+      "after_ms": 740.157833000012,
+      "latency_reduction_pct": 15.204188918908379,
+      "speedup": 1.1793035378170786,
+      "chunks_per_second": 1.351063186005604,
+      "phase_median_ms": {
+        "ms_total": 739.6678466796875,
+        "ms_vision": 289.1955261230469,
+        "ms_inference": 450.0047607421875,
+        "wall_ms": 740.157833000012
+      },
+      "error_vs_musa_f32": {
+        "max_abs": 0.0526275634765625,
+        "rmse": 0.021036537364125252,
+        "relative_peak": 0.0004942305968143046
+      },
+      "repeat_max_abs": 0.0
+    }
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "f32": {
+      "before_ms": 2022.0795559998805,
+      "after_ms": 1529.2427240001416,
+      "latency_reduction_pct": 24.372771612145616,
+      "speedup": 1.3222750870513171,
+      "chunks_per_second": 0.6539184292368144,
+      "phase_median_ms": {
+        "ms_total": 1528.7149658203125,
+        "ms_vision": 440.8690490722656,
+        "ms_inference": 1087.58203125,
+        "wall_ms": 1529.2427240001416
+      },
+      "error_vs_musa_f32": {
+        "max_abs": 0.18896102905273438,
+        "rmse": 0.052665404975414276,
+        "relative_peak": 0.0019414342241361737
+      },
+      "repeat_max_abs": 0.0
+    },
+    "f16": {
+      "before_ms": 2003.3496519999971,
+      "after_ms": 1504.8926560002656,
+      "latency_reduction_pct": 24.881178155900486,
+      "speedup": 1.331224286338496,
+      "chunks_per_second": 0.6644992225942682,
+      "phase_median_ms": {
+        "ms_total": 1504.3726806640625,
+        "ms_vision": 438.31298828125,
+        "ms_inference": 1065.17626953125,
+        "wall_ms": 1504.8926560002656
+      },
+      "error_vs_musa_f32": {
+        "max_abs": 0.3301582336425781,
+        "rmse": 0.10428378731012344,
+        "relative_peak": 0.0033921306021511555
+      },
+      "repeat_max_abs": 0.0
+    }
+  }
+]

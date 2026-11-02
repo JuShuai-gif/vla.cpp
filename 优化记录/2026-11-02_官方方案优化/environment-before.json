@@ -1,0 +1,32 @@
+{
+  "commit": {
+    "returncode": 0,
+    "stdout": "309b1c74db4e38f7d0fb8e0089fe06cb3f62413f\n",
+    "stderr": ""
+  },
+  "identity": {
+    "returncode": 0,
+    "stdout": "uid=1000(skysi) gid=1000(skysi) \u7ec4=1000(skysi),27(sudo)\n",
+    "stderr": ""
+  },
+  "power_profile": {
+    "returncode": 0,
+    "stdout": "balanced\n",
+    "stderr": ""
+  },
+  "sdk_packages": {
+    "returncode": 0,
+    "stdout": "musa\t5.1.1-M1000\nmusa-sdk\t5.1.1\n",
+    "stderr": ""
+  },
+  "msys": {
+    "returncode": 0,
+    "stdout": "Moore Perf System Version: 1.7.2-ef443a7e3 \n",
+    "stderr": ""
+  },
+  "mcu": {
+    "returncode": 0,
+    "stdout": "Moore Perf Compute Version:  1.2.2-3a6f1fcec \n",
+    "stderr": ""
+  }
+}

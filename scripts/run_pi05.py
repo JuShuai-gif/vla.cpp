@@ -77,6 +77,7 @@ def main():
     ap.add_argument("--device", default="0", help="MUSA device index, or cpu")
     ap.add_argument("--weight-dtype", choices=("f32", "f16", "bf16"), default="f32")
     ap.add_argument("--act-dtype", choices=("f32", "f16"), default="f32")
+    ap.add_argument("--flash-attn", action="store_true", help="Enable compiled FlashAttention kernels")
     ap.add_argument("--no-fuse", action="store_true", help="Disable MUSA expert fusion for A/B checks")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--output", required=True, type=Path)
@@ -105,7 +106,7 @@ def main():
     images = [prepare_image(provided[k], size) for k in cameras]
     del reader
     runtime = {"runtime": {"weight_dtype": args.weight_dtype, "act_dtype": args.act_dtype,
-                           "mm_prec": "default" if args.act_dtype == "f16" else "f32", "flash_attn": False}}
+                           "mm_prec": "default" if args.act_dtype == "f16" else "f32", "flash_attn": args.flash_attn}}
     with tempfile.TemporaryDirectory(prefix="vla-pi05-") as temp:
         config = Path(temp) / "runtime.json"
         config.write_text(json.dumps(runtime))
@@ -119,7 +120,7 @@ def main():
             st = model.last_stats()
             result = {"model": str(args.model.resolve()), "device_requested": args.device,
                       "weight_dtype": args.weight_dtype, "camera_order": cameras,
-                      "act_dtype": args.act_dtype,
+                      "act_dtype": args.act_dtype, "flash_attn": args.flash_attn,
                       "fusion_disabled": os.environ.get("VLA_PI05_NO_FUSE") == "1",
                       "tokens_per_image": int(cfg.n_img), "num_steps": int(cfg.num_steps),
                       "seed": args.seed, "prompt": prompt, "token_ids": tokens,

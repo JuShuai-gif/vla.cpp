@@ -1,0 +1,8 @@
+k=257 m=256 n=50 output=f16 compute=f32 heuristic_status=0 count=1
+  algo=0 state=0 workspace=0 run_status=8
+k=257 m=256 n=50 output=f32 compute=f32 heuristic_status=0 count=1
+  algo=0 state=0 workspace=0 run_status=0 max_error=0
+k=1024 m=256 n=50 output=f16 compute=f32 heuristic_status=0 count=1
+  algo=0 state=0 workspace=0 run_status=8
+k=1024 m=256 n=50 output=f32 compute=f32 heuristic_status=0 count=1
+  algo=0 state=0 workspace=0 run_status=0 max_error=0

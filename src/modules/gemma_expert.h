@@ -462,10 +462,16 @@ inline ggml_tensor * gemma_attn(
     }
 
     // Q/K/V land in F32: RoPE, the KV cache the suffix passes re-read, and the
-    // score/softmax core all stay full precision. With a view-taking FA
+    // score/softmax core stay full precision without FA. MUSA FA casts K/V
+    // below before caching; Q/RoPE remain F32. With a view-taking FA
     // (fa_takes_views), V skips the F32 cast since only the kernel reads it and
     // converts on load, and Q/K/V reach the kernel as strided views.
+#ifdef GGML_USE_MUSA
+    // The tile FA kernel consumes strides directly; Q stays F32 and K/V F16.
+    const bool fa_views = flash;
+#else
     const bool fa_views = flash && fa_takes_views();
+#endif
     ggml_tensor *q, *k, *v;
     if (w.fq_qkv) {
         // One FoldQuant GEMM; q, k and v are row ranges of each token's output.
@@ -515,6 +521,15 @@ inline ggml_tensor * gemma_attn(
     };
     ggml_tensor * q_rope = rope_call(q_h);
     ggml_tensor * k_rope = rope_call(k_h);
+#ifdef GGML_USE_MUSA
+    if (flash) {
+        // Convert each prefix once, before caching/concatenation. The FA kernel
+        // already consumes F16 K/V; this avoids recasting the whole prefix at
+        // every denoising step and halves the concatenation traffic.
+        k_rope = as_type(ctx, k_rope, GGML_TYPE_F16);
+        v_h = as_type(ctx, v_h, GGML_TYPE_F16);
+    }
+#endif
 
     if (k_out)
         *k_out = k_rope;

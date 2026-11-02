@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "source_commit": "309b1c74db4e38f7d0fb8e0089fe06cb3f62413f",
+    "source_diff_sha256": "90164e1532176b459ebc2e3a937a1046628229296c798c587205ab3412e638a0",
+    "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "library_sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+    "power_profile": "performance",
+    "environment": {
+      "VLA_DEVICE": "0",
+      "VLA_N_THREADS": "4",
+      "VLA_PI05_NO_FUSE": null,
+      "VLA_PI05_NO_PROJ_FUSE": null,
+      "GGML_CUDA_DISABLE_GRAPHS": null,
+      "GGML_MUSA_DISABLE_GRAPHS": null
+    }
+  },
+  "flash_attn": false,
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "dtype": "f16",
+  "act_dtype": "f32",
+  "steps": 10,
+  "synthetic_inputs": true,
+  "camera_count": 2,
+  "text_token_count": 6,
+  "chunk": 50,
+  "vision_tokens_per_camera": 256,
+  "no_fuse": "0",
+  "warmup": 3,
+  "runs": [
+    {
+      "ms_total": 1773.376953125,
+      "ms_vision": 480.23724365234375,
+      "ms_inference": 1292.77099609375,
+      "wall_ms": 1773.9808559999801
+    },
+    {
+      "ms_total": 1779.293701171875,
+      "ms_vision": 484.2601318359375,
+      "ms_inference": 1294.6478271484375,
+      "wall_ms": 1779.8683959999835
+    },
+    {
+      "ms_total": 1783.8443603515625,
+      "ms_vision": 483.4024353027344,
+      "ms_inference": 1300.043212890625,
+      "wall_ms": 1784.4154530002925
+    },
+    {
+      "ms_total": 1807.9801025390625,
+      "ms_vision": 496.23760986328125,
+      "ms_inference": 1311.350341796875,
+      "wall_ms": 1808.5275499997806
+    },
+    {
+      "ms_total": 1784.0115966796875,
+      "ms_vision": 487.9227600097656,
+      "ms_inference": 1295.70849609375,
+      "wall_ms": 1784.5349940002961
+    }
+  ],
+  "repeat_max_abs": 0.0,
+  "median_ms": {
+    "ms_total": 1783.8443603515625,
+    "ms_vision": 484.2601318359375,
+    "ms_inference": 1295.70849609375,
+    "wall_ms": 1784.4154530002925
+  },
+  "p95_wall_ms": 1803.7290387998837,
+  "error_vs_reference": {
+    "max_abs": 0.03082275390625,
+    "rmse": 0.009683733806014061,
+    "relative_peak": 0.00031668090377934277
+  }
+}

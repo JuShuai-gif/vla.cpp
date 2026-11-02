@@ -148,10 +148,16 @@ struct Pi05ModelArch : public ModelArchBase {
 
 namespace {
 
-// On a view-taking flash attention (vla::fa_takes_views()), pi05's three
-// attention sites (SigLIP, the VLM prefix and the action expert) run fused
-// straight off the [hd, H, S] views. Otherwise the unfused graph is used.
-bool use_fused_attention() { return vla::flash_attn_enabled() && vla::fa_takes_views(); }
+// Use fused attention on MUSA or a backend accepting float projection views.
+// MUSA explicitly converts K/V to F16; Q and reductions remain F32.
+bool use_fused_attention() {
+#ifdef GGML_USE_MUSA
+    // MUSA uses the generic tile kernel, without the SYCL-specific KV hooks.
+    return vla::flash_attn_enabled();
+#else
+    return vla::flash_attn_enabled() && vla::fa_takes_views();
+#endif
+}
 
 ggml_tensor * build_adarms(
         ggml_context * ctx, ggml_tensor * x, ggml_tensor * mod, int64_t h, float eps,
@@ -538,7 +544,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
     }
     WeightLoader L("pi05", g, m->ctx_weights, m->matmul_type);
 
-    m->kv_inplace = use_fused_attention() && !fq.present && !env_flag("VLA_PI05_NO_KV_INPLACE");
+    m->kv_inplace = !is_musa && use_fused_attention() && !fq.present && !env_flag("VLA_PI05_NO_KV_INPLACE");
     // Project once into q|k|v and gate|up; MUSA can do this independently of
     // flash attention or the SYCL in-place KV path. No quantization is involved.
     const bool fuse_proj = m->kv_inplace || (is_musa && !fq.present &&

@@ -8,6 +8,7 @@
 #include "backend.h"
 #include "cuda/vla_cuda_ops.h"
 #include "options.h"
+#include "layers/attn.h"
 #include "modules/gemma_expert.h"
 #include "ggml-alloc.h"
 #include "modules/vision_prune.h"
@@ -90,7 +91,7 @@ struct Graph {
         if (!alloc || !ggml_gallocr_alloc_graph(alloc, gf)) return {};
         std::vector<float> result;
         // Reuse the allocation and graph: catches stream/lifetime problems too.
-        for (int repeat = 0; repeat < 2; ++repeat) {
+        for (int repeat = 0; repeat < 3; ++repeat) {
             // gallocr may reuse input memory after its last consumer; restore
             // every input just as predict restores each new observation.
             upload();
@@ -125,7 +126,7 @@ vla::GemmaLayerW weights(Graph & g, ggml_type type, int64_t hidden, int64_t qdim
     return w;
 }
 
-std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false) {
+std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false, bool flash = false, bool masked = false) {
     Graph g;
     if (!g.ctx) return {};
     auto * C = g.ctx;
@@ -144,11 +145,16 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
     auto * x = g.input(GGML_TYPE_F32, {cfg.hidden, prefix});
     auto * pos = g.input(GGML_TYPE_I32, {prefix});
     ggml_tensor * k = nullptr, * v = nullptr;
-    auto * pre = vla::gemma_layer(C, w, x, pos, cfg, prefix, nullptr, nullptr, nullptr, &k, &v);
+    auto * prefix_mask = masked ? g.input(GGML_TYPE_F32, {prefix, prefix}) : nullptr;
+    if (prefix_mask) ggml_set_name(prefix_mask, "mask");
+    auto * pre = vla::gemma_layer(C, w, x, pos, cfg, prefix, nullptr, nullptr, prefix_mask, &k, &v,
+                                GGML_TYPE_F32, flash);
 
     constexpr int64_t chunk = 50;
     auto * h = g.input(GGML_TYPE_F32, {cfg.hidden, chunk});
     auto * suffix_pos = g.input(GGML_TYPE_I32, {chunk});
+    auto * suffix_mask = masked ? g.input(GGML_TYPE_F32, {prefix + chunk, chunk}) : nullptr;
+    if (suffix_mask) ggml_set_name(suffix_mask, "mask");
     auto * mod = g.input(GGML_TYPE_F32, {3*cfg.hidden});
     auto * scale = ggml_view_1d(C, mod, cfg.hidden, 0);
     auto * shift = ggml_view_1d(C, mod, cfg.hidden, cfg.hidden*sizeof(float));
@@ -159,7 +165,7 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
     };
     for (int step = 0; step < 2; ++step) {
         auto * att = vla::gemma_attn(C, w, adarms(h), suffix_pos, cfg, chunk,
-                                    k, v, nullptr, nullptr, nullptr, GGML_TYPE_F32, false);
+                                    k, v, suffix_mask, nullptr, nullptr, GGML_TYPE_F32, flash);
         h = ggml_add(C, h, ggml_mul(C, att, gate));
         auto * mlp = vla::gemma_mlp(C, w, adarms(h), GGML_TYPE_F32);
         h = ggml_add(C, h, ggml_scale(C, ggml_mul(C, mlp, gate), -0.1f));
@@ -200,6 +206,24 @@ std::vector<float> softmax(ggml_backend_t backend, int64_t width, bool masked) {
         if (std::fabs(sum - 1.0) > 2e-5) return {};
     }
     return result;
+}
+
+std::vector<float> vision_attention(ggml_backend_t backend, bool flash) {
+    Graph g;
+    constexpr int64_t hd=72, heads=4, seq=256, nv=2;
+    auto * q=g.input(GGML_TYPE_F32, {hd*heads, seq, nv});
+    auto * k=g.input(GGML_TYPE_F32, {hd*heads, seq, nv});
+    auto * v=g.input(GGML_TYPE_F32, {hd*heads, seq, nv});
+    auto view = [&](ggml_tensor * t) {
+        return ggml_permute(g.ctx, ggml_reshape_4d(g.ctx,t,hd,heads,seq,nv),0,2,1,3);
+    };
+    auto * out = flash
+        ? vla::flash_attention(g.ctx,view(q),view(k),view(v),nullptr,1.f/std::sqrt(float(hd)))
+        : vla::attention(g.ctx,vla::to_heads(g.ctx,q,hd,heads,seq,nv),
+                         vla::to_heads(g.ctx,k,hd,heads,seq,nv),
+                         vla::to_heads_v(g.ctx,v,hd,heads,seq,nv),nullptr,
+                         1.f/std::sqrt(float(hd)),hd*heads,seq,nv);
+    return g.run(backend,{out});
 }
 
 bool compare(const char * name, ggml_type type, const std::vector<float> & ref,
@@ -319,7 +343,7 @@ std::vector<float> merged_glu_reference(ggml_type type, bool swapped) {
         float v = ((i*37)%67-33)/128.0f*40.0f;
         return type == GGML_TYPE_F16 ? ggml_fp16_to_fp32(ggml_fp32_to_fp16(v)) : v;
     };
-    for (int repeat = 0; repeat < 2; ++repeat)
+    for (int repeat = 0; repeat < 3; ++repeat)
         for (int r = 0; r < rows; ++r)
             for (int i = 0; i < h; ++i) {
                 float g = input(r*2*h+i+(swapped ? h : 0));
@@ -352,6 +376,19 @@ int main(int argc, char ** argv) {
     ggml_backend_cpu_set_n_threads(cpu, 4);
     bool ok = true;
     if (!vla::musa_register_fused_ops()) return 1;
+    if (argc == 2 && std::strcmp(argv[1], "--flash-attn") == 0) {
+        ok = compare("flash_vision_strided_72", GGML_TYPE_F16,
+                     vision_attention(b.handle, false), vision_attention(b.handle, true), 5e-3) && ok;
+        for (int64_t prefix : {17, 529})
+            for (bool masked : {false, true})
+                ok = compare("flash_gemma_vs_unfused", GGML_TYPE_F16,
+                    gemma(b.handle, GGML_TYPE_F16, prefix, true, false, masked),
+                    gemma(b.handle, GGML_TYPE_F16, prefix, true, true, masked), 5e-3) && ok;
+        ggml_backend_free(cpu);
+        ggml_backend_free(b.handle);
+        return ok ? 0 : 1;
+    }
+
     for (auto type : {GGML_TYPE_F32, GGML_TYPE_F16})
         for (bool swapped : {false, true})
             ok = compare("merged_geglu_rows", type, merged_glu_reference(type, swapped),

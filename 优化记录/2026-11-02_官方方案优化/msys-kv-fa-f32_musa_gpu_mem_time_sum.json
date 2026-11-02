@@ -1,0 +1,46 @@
+[
+    {
+        "Avg(ns)": 795977,
+        "Count": 724,
+        "Max(ns)": 21018384,
+        "Med(ns)": 28820,
+        "Min(ns)": 280,
+        "Operation": "Memcpy HtoD",
+        "StdDev(ns)": 3399376,
+        "Time(%)": 99.40097035724719,
+        "Total Time(ns)": 576287355
+    },
+    {
+        "Avg(ns)": 8266,
+        "Count": 372,
+        "Max(ns)": 10680,
+        "Med(ns)": 8340,
+        "Min(ns)": 7559,
+        "Operation": "Memcpy DtoH",
+        "StdDev(ns)": 389,
+        "Time(%)": 0.5304361212279025,
+        "Total Time(ns)": 3075258
+    },
+    {
+        "Avg(ns)": 40759,
+        "Count": 8,
+        "Max(ns)": 56199,
+        "Med(ns)": 42979,
+        "Min(ns)": 28320,
+        "Operation": "Memcpy DtoD",
+        "StdDev(ns)": 11784,
+        "Time(%)": 0.056243589818399616,
+        "Total Time(ns)": 326078
+    },
+    {
+        "Avg(ns)": 895,
+        "Count": 80,
+        "Max(ns)": 3040,
+        "Med(ns)": 880,
+        "Min(ns)": 160,
+        "Operation": "Memcpy HtoH",
+        "StdDev(ns)": 559,
+        "Time(%)": 0.01234993170651627,
+        "Total Time(ns)": 71600
+    }
+]

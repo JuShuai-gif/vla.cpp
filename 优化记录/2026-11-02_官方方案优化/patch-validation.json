@@ -1,0 +1,12 @@
+{
+  "dependency_commit": "4da6337767f973e2b4d0797e5b323d77d8565e4a",
+  "fresh_patch_passed": true,
+  "idempotence_passed": true,
+  "matches_current_dependency": true,
+  "sha256": {
+    "ggml/src/ggml-cuda/ggml-cuda.cu": "0725d8bd69adf3642a2857ef3d9a8f9347ccb52cf680326a44268140595538ce",
+    "ggml/src/ggml-cuda/softmax.cu": "15cbd188173dc6ac46b88ea009714c8acc7cd15aa89b0c2867518b009f6e083f",
+    "ggml/src/ggml-cuda/fattn.cu": "0d3261c7e78572150896053d93d033901ed9d4e8dc6b12b68d4011207088331f"
+  },
+  "python_syntax_passed": true
+}

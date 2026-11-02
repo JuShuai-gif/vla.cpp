@@ -1,0 +1,67 @@
+==PROF== [Passed] Application path.  
+==PROF== [Passed] Working directory.  
+==PROF== [Passed] MUSA environment.  
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+{"iteration": 0, "warmup": true, "ms_total": 1780.6690673828125, "ms_vision": 597.0662841796875, "ms_inference": 1137.48291015625, "wall_ms": 1781.5895710000405}
+{"iteration": 1, "warmup": false, "ms_total": 1613.299072265625, "ms_vision": 514.3995361328125, "ms_inference": 1097.3785400390625, "wall_ms": 1613.8825759999236}
+{
+  "metadata": {
+    "source_commit": "309b1c74db4e38f7d0fb8e0089fe06cb3f62413f",
+    "source_diff_sha256": "4bd71bb4bd6f8652052ebb332bc9fc062a9fd7c505941fe8546b1446358fe7bb",
+    "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "library_sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "backend_sha256": {
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0.25.3": "3eb9f7dcf0398d4a31a4cef225b11e847c847202dcd51c29416c3badd6559a10",
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-cpu.so.0.25.3": "5ecb455569f96e5129e615afed0f17e2f564a5fc0496b15aee3ce29e456b4074",
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0.25.3": "274611667cdb997843aa66f9e4a71b37d95e113737b785da3c10136ec8761188"
+    },
+    "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+    "power_profile": "performance",
+    "environment": {
+      "VLA_DEVICE": "0",
+      "VLA_N_THREADS": "4",
+      "VLA_PI05_NO_FUSE": null,
+      "VLA_PI05_NO_PROJ_FUSE": null,
+      "GGML_CUDA_DISABLE_GRAPHS": "1",
+      "GGML_MUSA_DISABLE_GRAPHS": null
+    }
+  },
+  "flash_attn": true,
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "dtype": "f16",
+  "act_dtype": "f32",
+  "steps": 10,
+  "synthetic_inputs": true,
+  "camera_count": 2,
+  "text_token_count": 6,
+  "chunk": 50,
+  "vision_tokens_per_camera": 256,
+  "no_fuse": "0",
+  "warmup": 1,
+  "runs": [
+    {
+      "ms_total": 1613.299072265625,
+      "ms_vision": 514.3995361328125,
+      "ms_inference": 1097.3785400390625,
+      "wall_ms": 1613.8825759999236
+    }
+  ],
+  "repeat_max_abs": 0.0,
+  "median_ms": {
+    "ms_total": 1613.299072265625,
+    "ms_vision": 514.3995361328125,
+    "ms_inference": 1097.3785400390625,
+    "wall_ms": 1613.8825759999236
+  },
+  "p95_wall_ms": 1613.8825759999236
+}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 5.05 GiB
+vla(pi05): model loaded (n_threads=4)
+==PROF== '/home/skysi/code/vla.cpp/.venv-converter/bin/python' exit, exit code(0)  
+==PROF== Capture finished. Path is /home/skysi/VLA/perf-official-20261102/kv-fa-f32.msys-rep  

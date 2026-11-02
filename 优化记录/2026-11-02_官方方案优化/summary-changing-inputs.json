@@ -1,0 +1,32 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "sequence_lengths": [
+      6,
+      9,
+      6,
+      9
+    ],
+    "repeat_max_abs": [
+      0.0,
+      0.0
+    ],
+    "between_input_max_abs": 21.764781951904297,
+    "passed": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "sequence_lengths": [
+      6,
+      9,
+      6,
+      9
+    ],
+    "repeat_max_abs": [
+      0.0,
+      0.0
+    ],
+    "between_input_max_abs": 11.643291473388672,
+    "passed": true
+  }
+]

@@ -1,0 +1,387 @@
+[1/31] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+[2/31] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/ggml-cuda/fattn.cu.o
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:1:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1452:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1453:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:730:19: warning: unused parameter 'ne12' [-Wunused-parameter]
+        const int ne12, const int nblocks_stream_k,
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:3:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mma.cuh:709:5: warning: non-void function does not return a value [-Wreturn-type]
+    }
+    ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:609:19: warning: unused parameter 'jt' [-Wunused-parameter]
+        const int jt,
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:611:19: warning: unused parameter 'k_VKQ_sup' [-Wunused-parameter]
+        const int k_VKQ_sup) {
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:1214:19: warning: unused parameter 'ne11' [-Wunused-parameter]
+        const int ne11,
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:1221:19: warning: unused parameter 'zt_gqa' [-Wunused-parameter]
+        const int zt_gqa,
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:107:146: warning: function 'ggml_cuda_flash_attn_ext_compact_mask' could be declared with attribute 'noreturn' [-Wmissing-noreturn]
+        const ggml_tensor * mask, int32_t * indices, int32_t * counts, int32_t n_queries, int32_t ncols1, int32_t n_kv_max, cudaStream_t stream) {
+                                                                                                                                                 ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:415:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 1, 16>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 1, 16>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:179:13: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 1, 16>' requested here
+            ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 16/ncols2, ncols2>(ctx, dst);
+            ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:327:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 2, 16>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 2, 16>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:186:9: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 2, 16>' requested here
+        ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 32/ncols2, ncols2>(ctx, dst);
+        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:327:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 4, 16>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 4, 16>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:190:5: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 4, 16>' requested here
+    ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 64/ncols2, ncols2>(ctx, dst);
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:327:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 1, 8>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 1, 8>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:172:13: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 1, 8>' requested here
+            ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 8/ncols2, ncols2>(ctx, dst);
+            ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:330:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 8>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128,  8>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 2, 8>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 2, 8>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:179:13: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 2, 8>' requested here
+            ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 16/ncols2, ncols2>(ctx, dst);
+            ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:330:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 8>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128,  8>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 4, 8>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 4, 8>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:186:9: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 4, 8>' requested here
+        ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 32/ncols2, ncols2>(ctx, dst);
+        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:330:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 8>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128,  8>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 8, 8>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 8, 8>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:190:5: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 8, 8>' requested here
+    ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 64/ncols2, ncols2>(ctx, dst);
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:330:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 8>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128,  8>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<512, 2, 4>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<512, 2, 4>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:172:13: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<576, 512, 2, 4>' requested here
+            ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 8/ncols2, ncols2>(ctx, dst);
+            ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:374:21: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<576, 512, 4>' requested here
+                    ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<576, 512, 4>(ctx, dst);
+                    ^
+22 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:1:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1452:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1453:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:730:19: warning: unused parameter 'ne12' [-Wunused-parameter]
+        const int ne12, const int nblocks_stream_k,
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:3:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mma.cuh:709:5: warning: non-void function does not return a value [-Wreturn-type]
+    }
+    ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:609:19: warning: unused parameter 'jt' [-Wunused-parameter]
+        const int jt,
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:611:19: warning: unused parameter 'k_VKQ_sup' [-Wunused-parameter]
+        const int k_VKQ_sup) {
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:1214:19: warning: unused parameter 'ne11' [-Wunused-parameter]
+        const int ne11,
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:1221:19: warning: unused parameter 'zt_gqa' [-Wunused-parameter]
+        const int zt_gqa,
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:107:146: warning: function 'ggml_cuda_flash_attn_ext_compact_mask' could be declared with attribute 'noreturn' [-Wmissing-noreturn]
+        const ggml_tensor * mask, int32_t * indices, int32_t * counts, int32_t n_queries, int32_t ncols1, int32_t n_kv_max, cudaStream_t stream) {
+                                                                                                                                                 ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:415:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 1, 16>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 1, 16>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:179:13: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 1, 16>' requested here
+            ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 16/ncols2, ncols2>(ctx, dst);
+            ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:327:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 2, 16>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 2, 16>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:186:9: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 2, 16>' requested here
+        ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 32/ncols2, ncols2>(ctx, dst);
+        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:327:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 4, 16>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 4, 16>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:190:5: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 4, 16>' requested here
+    ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 64/ncols2, ncols2>(ctx, dst);
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:327:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 16>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 1, 8>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 1, 8>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:172:13: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 1, 8>' requested here
+            ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 8/ncols2, ncols2>(ctx, dst);
+            ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:330:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 8>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128,  8>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 2, 8>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 2, 8>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:179:13: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 2, 8>' requested here
+            ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 16/ncols2, ncols2>(ctx, dst);
+            ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:330:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 8>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128,  8>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 4, 8>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 4, 8>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:186:9: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 4, 8>' requested here
+        ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 32/ncols2, ncols2>(ctx, dst);
+        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:330:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 8>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128,  8>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<128, 8, 8>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<128, 8, 8>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:190:5: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<192, 128, 8, 8>' requested here
+    ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 64/ncols2, ncols2>(ctx, dst);
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:330:17: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128, 8>' requested here
+                ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<192, 128,  8>(ctx, dst);
+                ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:906:72: warning: comparison of integers of different signs: 'uint32_t' (aka 'unsigned int') and 'const int' [-Wsign-compare]
+        if (fastmodulo(kbc, fd_iter_k) == 0 || fastdiv(kbc, fd_iter_k) < tile_kbc0) {
+                                               ~~~~~~~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-common.cuh:1287:37: note: in instantiation of function template specialization 'flash_attn_stream_k_fixup_general<512, 2, 4>' requested here
+            ggml_cuda_kernel_launch(flash_attn_stream_k_fixup_general<DV, ncols1, ncols2>, launch_params,
+                                    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn-mma-f16.cuh:2112:5: note: in instantiation of function template specialization 'launch_fattn<512, 2, 4>' requested here
+    launch_fattn<DV, ncols1, ncols2>
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:172:13: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_case<576, 512, 2, 4>' requested here
+            ggml_cuda_flash_attn_ext_mma_f16_case<DKQ, DV, 8/ncols2, ncols2>(ctx, dst);
+            ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/fattn.cu:374:21: note: in instantiation of function template specialization 'ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<576, 512, 4>' requested here
+                    ggml_cuda_flash_attn_ext_mma_f16_switch_ncols1<576, 512, 4>(ctx, dst);
+                    ^
+22 warnings generated when compiling for host.
+[3/31] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[4/31] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[5/31] Linking CXX shared library bin/libggml.so.0.25.3
+[6/31] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[7/31] Linking CXX executable tests/test_vision_prune
+[8/31] Linking CXX executable tests/test_rope_conventions
+[9/31] Linking CXX executable tests/test_dit_common
+[10/31] Linking CXX executable tests/test_graph_names
+[11/31] Linking CXX shared library libvla_core.so
+[12/31] Linking CXX executable tests/test_qwen3vl_vit
+[13/31] Linking CXX shared library bin/libllama.so.0.5.0
+[14/31] Linking CXX shared library libvla.so
+[15/31] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[16/31] Linking CXX executable vla-server
+[17/31] Linking CXX executable vla-cli
+[18/31] Linking CXX executable vla-bench
+[19/31] Linking CXX shared library bin/libmtmd.so.0.5.0
+[20/31] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[21/31] Linking CXX executable tests/vla_predict_check
+[22/31] Linking C executable tests/test_c_api
+[23/31] Linking CXX shared library bin/libllama-common.so.0.5.0
+[24/31] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[25/31] Linking CXX executable tests/test_config_guard
+[26/31] Linking CXX executable tests/test_prompt
+[27/31] Linking CXX executable tests/test_foldquant_cpu_op
+[28/31] Linking CXX shared library libvlm_core.so
+[29/31] Linking CXX executable tests/test_foldquant_dequant
+[30/31] Linking CXX executable tests/test_musa_ops
+[31/31] Linking CXX executable vlm-server

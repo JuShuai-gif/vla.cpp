@@ -143,6 +143,80 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
         path.write_text(text)
         print(f"MUSA: F16 RMSNorm bypasses F32-only fusion in {path}")
 
+    # Host compilation has no __MUSA_ARCH__. Do not reject kernels compiled for mp_22.
+    path = root / "ggml/src/ggml-cuda/fattn.cu"
+    original = text = path.read_text()
+    anchor = "#ifndef FLASH_ATTN_AVAILABLE\n    GGML_UNUSED(device); GGML_UNUSED(dst);"
+    replacement = """#if !defined(FLASH_ATTN_AVAILABLE) && !(defined(GGML_USE_MUSA) && !defined(__MUSA_ARCH__) && !defined(GGML_CUDA_NO_FA))
+    GGML_UNUSED(device); GGML_UNUSED(dst);"""
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing MUSA host FA dispatch anchor")
+        text = text.replace(anchor, replacement)
+    if text != original:
+        path.write_text(text)
+        print(f"MUSA: fixed host FA capability check in {path}")
+
+    # Preserve the pre-mp22 rejection when the host compiler has no arch macro.
+    original = text = path.read_text()
+    anchor = "    const ggml_tensor * KQV   = dst;"
+    replacement = """#ifdef GGML_USE_MUSA
+    if (ggml_cuda_info().devices[device].cc < GGML_CUDA_CC_QY2) {
+        return BEST_FATTN_KERNEL_NONE;
+    }
+#endif
+""" + anchor
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing MUSA runtime FA architecture anchor")
+        text = text.replace(anchor, replacement)
+    if text != original:
+        path.write_text(text)
+        print(f"MUSA: retained pre-mp22 FA rejection in {path}")
+
+    # Uniform head strides avoid device pointer-array construction for MQA/GQA.
+    path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
+    original = text = path.read_text()
+    anchor = "    } else if (r2 == 1 && r3 == 1 && is_src0_cont_2 && is_src1_cont_2) {"
+    replacement = """#ifdef GGML_USE_MUSA
+    } else if (ne13 == 1 && ne03 == 1 && (ne02 == 1 || r2 == 1)) {
+        const int64_t stride_a = ne02 == 1 ? 0 : s02;
+        CUBLAS_CHECK(cublasGemmStridedBatchedEx(cublas_h, CUBLAS_OP_T, CUBLAS_OP_N,
+                ne01, ne11, ne10,
+                alpha, src0_ptr, cu_data_type_a, s01, stride_a,
+                       src1_ptr, cu_data_type_b, s11, s12,
+                beta, dst_ptr, cu_data_type, ne0, ne1*ne0,
+                ne12, cu_compute_type, CUBLAS_GEMM_DEFAULT_TENSOR_OP));
+#endif
+""" + anchor
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing MUSA strided batch anchor")
+        text = text.replace(anchor, replacement)
+    if text != original:
+        path.write_text(text)
+        print(f"MUSA: strided broadcast GEMM in {path}")
+
+    # M1000/5.1: FP32 GEMMs invalidate capture; BF16/FA graph replay fails
+    # numerical regression. Keep these graphs on normal stream execution.
+    path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
+    original = text = path.read_text()
+    anchor = "        // [TAG_MUL_MAT_ID_CUDA_GRAPHS]\n"
+    replacement = """#ifdef GGML_USE_MUSA
+        if (node->op == GGML_OP_FLASH_ATTN_EXT ||
+            (node->op == GGML_OP_MUL_MAT && node->src[0]->type != GGML_TYPE_F16)) {
+            return false;
+        }
+#endif
+""" + anchor
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing MUSA graph compatibility anchor")
+        text = text.replace(anchor, replacement)
+    if text != original:
+        path.write_text(text)
+        print(f"MUSA: guard unsupported graph capture/replay in {path}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

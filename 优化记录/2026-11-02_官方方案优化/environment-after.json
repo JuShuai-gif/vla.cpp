@@ -1,0 +1,28 @@
+{
+  "identity": {
+    "returncode": 0,
+    "stdout": "uid=1000(skysi) gid=1000(skysi) \u7ec4=1000(skysi),27(sudo),44(video),110(render)\n",
+    "stderr": ""
+  },
+  "power_profile": {
+    "returncode": 0,
+    "stdout": "performance\n",
+    "stderr": ""
+  },
+  "sdk": {
+    "returncode": 0,
+    "stdout": "musa\t5.1.1-M1000\nmusa-sdk\t5.1.1\n",
+    "stderr": ""
+  },
+  "source": {
+    "returncode": 0,
+    "stdout": "309b1c74db4e38f7d0fb8e0089fe06cb3f62413f\n",
+    "stderr": ""
+  },
+  "libraries": {
+    "/home/skysi/code/vla.cpp/build-musa-official/libvla.so": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so": "f12e294294d766ecedbd11d0406336feee5e3d08f7e02692f36ee3fcc4509fe9",
+    "/home/skysi/code/vla.cpp/build-musa-m1000/libvla.so": "aaf65fd61ff7c9d56b1d4204a19f555f3e122a94409c1e0b33678865a60e8902",
+    "/home/skysi/code/vla.cpp/build-musa-m1000/bin/libggml-musa.so": "3c3bd40812bfbf713c6797ff3385299fba14505e8270ef810f52369d03c4fb27"
+  }
+}

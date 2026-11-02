@@ -163,6 +163,15 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
     ggml_tensor * v  = linear(C, w.Wv, w.bv, n1);
 
     ggml_tensor * att;
+#ifdef GGML_USE_MUSA
+    if (cfg.flash_attn) {
+        auto heads_view = [&](ggml_tensor * p) {
+            return ggml_permute(C, ggml_reshape_4d(C, p, hd, heads, seq, nv), 0, 2, 1, 3);
+        };
+        // Q is read through strides; K/V conversion also packs the view.
+        att = flash_attention(C, heads_view(q), heads_view(k), heads_view(v), nullptr, scale);
+    } else
+#endif
     if (cfg.flash_attn && fa_takes_views()) {
         // A view-taking FA (fa_takes_views) reads the projections in place and
         // converts them itself, so no contiguous copy or F16 cast per operand.

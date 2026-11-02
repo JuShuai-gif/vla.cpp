@@ -1,0 +1,92 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+{"iteration": 0, "warmup": true, "ms_total": 2224.008056640625, "ms_vision": 533.6497192382812, "ms_inference": 1634.8021240234375, "wall_ms": 2224.904162000257}
+{"iteration": 1, "warmup": true, "ms_total": 2025.242919921875, "ms_vision": 480.49493408203125, "ms_inference": 1544.2744140625, "wall_ms": 2025.8126260000608}
+{"iteration": 2, "warmup": true, "ms_total": 2021.8134765625, "ms_vision": 478.5405578613281, "ms_inference": 1542.695068359375, "wall_ms": 2022.3878159999913}
+{"iteration": 3, "warmup": false, "ms_total": 2023.3773193359375, "ms_vision": 478.6014709472656, "ms_inference": 1544.1990966796875, "wall_ms": 2023.9754909998737}
+{"iteration": 4, "warmup": false, "ms_total": 2023.8553466796875, "ms_vision": 479.2412414550781, "ms_inference": 1544.1170654296875, "wall_ms": 2024.4280960000651}
+{"iteration": 5, "warmup": false, "ms_total": 2020.186767578125, "ms_vision": 477.70947265625, "ms_inference": 1541.94970703125, "wall_ms": 2020.7270739997512}
+{"iteration": 6, "warmup": false, "ms_total": 2019.3729248046875, "ms_vision": 477.84844970703125, "ms_inference": 1541.0126953125, "wall_ms": 2019.8795480000626}
+{"iteration": 7, "warmup": false, "ms_total": 2020.2491455078125, "ms_vision": 477.8601379394531, "ms_inference": 1541.9110107421875, "wall_ms": 2020.7693699999254}
+{
+  "metadata": {
+    "source_commit": "309b1c74db4e38f7d0fb8e0089fe06cb3f62413f",
+    "source_diff_sha256": "f8dd2845e3d3a375aba015a073d72cde68266e9c62d80dbad028a276bddfbe7d",
+    "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "library_sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+    "power_profile": "performance",
+    "environment": {
+      "VLA_DEVICE": "0",
+      "VLA_N_THREADS": "4",
+      "VLA_PI05_NO_FUSE": null,
+      "VLA_PI05_NO_PROJ_FUSE": null,
+      "GGML_CUDA_DISABLE_GRAPHS": "1",
+      "GGML_MUSA_DISABLE_GRAPHS": null
+    }
+  },
+  "flash_attn": false,
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "dtype": "f16",
+  "act_dtype": "f32",
+  "steps": 10,
+  "synthetic_inputs": true,
+  "camera_count": 2,
+  "text_token_count": 6,
+  "chunk": 50,
+  "vision_tokens_per_camera": 256,
+  "no_fuse": "0",
+  "warmup": 3,
+  "runs": [
+    {
+      "ms_total": 2023.3773193359375,
+      "ms_vision": 478.6014709472656,
+      "ms_inference": 1544.1990966796875,
+      "wall_ms": 2023.9754909998737
+    },
+    {
+      "ms_total": 2023.8553466796875,
+      "ms_vision": 479.2412414550781,
+      "ms_inference": 1544.1170654296875,
+      "wall_ms": 2024.4280960000651
+    },
+    {
+      "ms_total": 2020.186767578125,
+      "ms_vision": 477.70947265625,
+      "ms_inference": 1541.94970703125,
+      "wall_ms": 2020.7270739997512
+    },
+    {
+      "ms_total": 2019.3729248046875,
+      "ms_vision": 477.84844970703125,
+      "ms_inference": 1541.0126953125,
+      "wall_ms": 2019.8795480000626
+    },
+    {
+      "ms_total": 2020.2491455078125,
+      "ms_vision": 477.8601379394531,
+      "ms_inference": 1541.9110107421875,
+      "wall_ms": 2020.7693699999254
+    }
+  ],
+  "repeat_max_abs": 0.0,
+  "median_ms": {
+    "ms_total": 2020.2491455078125,
+    "ms_vision": 477.8601379394531,
+    "ms_inference": 1541.94970703125,
+    "wall_ms": 2020.7693699999254
+  },
+  "p95_wall_ms": 2024.3375750000268,
+  "error_vs_reference": {
+    "max_abs": 0.03082275390625,
+    "rmse": 0.009683733806014061,
+    "relative_peak": 0.00031668090377934277
+  }
+}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 5.05 GiB
+vla(pi05): model loaded (n_threads=4)

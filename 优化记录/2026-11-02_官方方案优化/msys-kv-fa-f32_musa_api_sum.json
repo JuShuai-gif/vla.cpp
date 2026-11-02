@@ -1,0 +1,167 @@
+[
+    {
+        "Avg(ns)": 2800928,
+        "Max(ns)": 545925417,
+        "Med(ns)": 2045606,
+        "Min(ns)": 3800,
+        "Name": "musaMemcpyAsync",
+        "Num Calls": 1184,
+        "StdDev(ns)": 23439924,
+        "Time(%)": 50.0793928674497,
+        "Total Time(ns)": 3316298912
+    },
+    {
+        "Avg(ns)": 140562898,
+        "Max(ns)": 747891020,
+        "Med(ns)": 41365427,
+        "Min(ns)": 6720,
+        "Name": "musaMalloc",
+        "Num Calls": 13,
+        "StdDev(ns)": 238127872,
+        "Time(%)": 27.59430388169947,
+        "Total Time(ns)": 1827317679
+    },
+    {
+        "Avg(ns)": 582545,
+        "Max(ns)": 282120277,
+        "Med(ns)": 7020,
+        "Min(ns)": 840,
+        "Name": "musaStreamSynchronize",
+        "Num Calls": 1146,
+        "StdDev(ns)": 12104907,
+        "Time(%)": 10.081384014373878,
+        "Total Time(ns)": 667597607
+    },
+    {
+        "Avg(ns)": 49776,
+        "Max(ns)": 46132514,
+        "Med(ns)": 4160,
+        "Min(ns)": 1520,
+        "Name": "musaLaunchKernel",
+        "Num Calls": 12548,
+        "StdDev(ns)": 718003,
+        "Time(%)": 9.432052925608641,
+        "Total Time(ns)": 624598364
+    },
+    {
+        "Avg(ns)": 11408850,
+        "Max(ns)": 54065972,
+        "Med(ns)": 783035,
+        "Min(ns)": 32359,
+        "Name": "musaFree",
+        "Num Calls": 13,
+        "StdDev(ns)": 18683916,
+        "Time(%)": 2.239704005783482,
+        "Total Time(ns)": 148315056
+    },
+    {
+        "Avg(ns)": 55838,
+        "Max(ns)": 16013846,
+        "Med(ns)": 2160,
+        "Min(ns)": 400,
+        "Name": "musaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags",
+        "Num Calls": 502,
+        "StdDev(ns)": 884250,
+        "Time(%)": 0.4232945648531077,
+        "Total Time(ns)": 28030917
+    },
+    {
+        "Avg(ns)": 750,
+        "Max(ns)": 239719,
+        "Med(ns)": 160,
+        "Min(ns)": 159,
+        "Name": "musaGetDevice",
+        "Num Calls": 4945,
+        "StdDev(ns)": 4258,
+        "Time(%)": 0.056046625442268835,
+        "Total Time(ns)": 3711454
+    },
+    {
+        "Avg(ns)": 216,
+        "Max(ns)": 6200,
+        "Med(ns)": 200,
+        "Min(ns)": 160,
+        "Name": "musaGetLastError",
+        "Num Calls": 15623,
+        "StdDev(ns)": 75,
+        "Time(%)": 0.05116295054971859,
+        "Total Time(ns)": 3388053
+    },
+    {
+        "Avg(ns)": 1768707,
+        "Max(ns)": 1768707,
+        "Med(ns)": 1768707,
+        "Min(ns)": 1768707,
+        "Name": "musaStreamCreateWithFlags",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 0.026709224672087806,
+        "Total Time(ns)": 1768707
+    },
+    {
+        "Avg(ns)": 973073,
+        "Max(ns)": 973073,
+        "Med(ns)": 973073,
+        "Min(ns)": 973073,
+        "Name": "musaStreamDestroy",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 0.0146943645156278,
+        "Total Time(ns)": 973073
+    },
+    {
+        "Avg(ns)": 7620,
+        "Max(ns)": 31800,
+        "Med(ns)": 5280,
+        "Min(ns)": 240,
+        "Name": "musaGetDeviceProperties_v2",
+        "Num Calls": 6,
+        "StdDev(ns)": 11378,
+        "Time(%)": 0.000690417209864525,
+        "Total Time(ns)": 45720
+    },
+    {
+        "Avg(ns)": 24280,
+        "Max(ns)": 24280,
+        "Med(ns)": 24280,
+        "Min(ns)": 24280,
+        "Name": "musaGetDeviceCount",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 0.00036665200908815983,
+        "Total Time(ns)": 24280
+    },
+    {
+        "Avg(ns)": 7639,
+        "Max(ns)": 7639,
+        "Med(ns)": 7639,
+        "Min(ns)": 7639,
+        "Name": "musaDeviceGetPCIBusId",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 0.00011535645376542229,
+        "Total Time(ns)": 7639
+    },
+    {
+        "Avg(ns)": 4480,
+        "Max(ns)": 4480,
+        "Med(ns)": 4480,
+        "Min(ns)": 4480,
+        "Name": "musaStreamQuery",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 6.765243001297184e-05,
+        "Total Time(ns)": 4480
+    },
+    {
+        "Avg(ns)": 960,
+        "Max(ns)": 960,
+        "Med(ns)": 960,
+        "Min(ns)": 960,
+        "Name": "musaDeviceGetAttribute",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 1.4496949288493964e-05,
+        "Total Time(ns)": 960
+    }
+]

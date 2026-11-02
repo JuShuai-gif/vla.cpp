@@ -1,0 +1,332 @@
+diff --git a/scripts/bench_pi05.py b/scripts/bench_pi05.py
+index 3f7088b..b5b43a8 100644
+--- a/scripts/bench_pi05.py
++++ b/scripts/bench_pi05.py
+@@ -5,6 +5,10 @@ Uses the same synthetic inputs as validate_pi05.py. Loading and warmup are
+ excluded; all model cameras, action chunks and denoising steps are retained.
+ """
+ import argparse
++import ctypes
++import hashlib
++import platform
++import subprocess
+ import json
+ import os
+ from pathlib import Path
+@@ -18,6 +22,7 @@ ap.add_argument('--model', type=Path, required=True)
+ ap.add_argument('--out-dir', type=Path, required=True)
+ ap.add_argument('--weight-dtype', choices=('f32', 'f16', 'bf16'), default='f32')
+ ap.add_argument('--act-dtype', choices=('f32', 'f16'), default='f32')
++ap.add_argument('--flash-attn', action='store_true')
+ ap.add_argument('--warmup', type=int, default=1)
+ ap.add_argument('--runs', type=int, default=5)
+ ap.add_argument('--reference', type=Path, help='Actions .npy from validate_pi05.py or this benchmark')
+@@ -31,10 +36,37 @@ os.environ.setdefault('VLA_DEVICE', '0')
+ sys.path.insert(0, str(repo/'bindings/python'))
+ import vla_cpp
+ 
++# Do not record CPU fallback as an accelerator benchmark.
++if os.environ['VLA_DEVICE'].lower() != 'cpu':
++    count = vla_cpp._lib_handle().ggml_backend_cuda_get_device_count
++    count.restype = ctypes.c_int
++    device = int(os.environ['VLA_DEVICE'])
++    if device < 0 or device >= count():
++        raise RuntimeError('Requested MUSA device is unavailable; refusing CPU fallback benchmark')
++
++def command_output(args):
++    result = subprocess.run(args, cwd=repo, text=True, capture_output=True)
++    return result.stdout.strip() if result.returncode == 0 else None
++
++library = Path(os.environ['VLA_LIBRARY']).resolve()
++metadata = {
++    'source_commit': command_output(['git', 'rev-parse', 'HEAD']),
++    'source_diff_sha256': hashlib.sha256(subprocess.check_output(['git', 'diff', 'HEAD'], cwd=repo)).hexdigest(),
++    'library': str(library),
++    'library_sha256': hashlib.sha256(library.read_bytes()).hexdigest(),
++    'backend_sha256': {str(p.resolve()): hashlib.sha256(p.read_bytes()).hexdigest()
++                       for p in sorted((library.parent/'bin').glob('libggml-*.so'))},
++    'platform': platform.platform(),
++    'power_profile': command_output(['powerprofilesctl', 'get']),
++    'environment': {k: os.environ.get(k) for k in (
++        'VLA_DEVICE', 'VLA_N_THREADS', 'VLA_PI05_NO_FUSE', 'VLA_PI05_NO_PROJ_FUSE',
++        'GGML_CUDA_DISABLE_GRAPHS', 'GGML_MUSA_DISABLE_GRAPHS')},
++}
++
+ opt.out_dir.mkdir(parents=True, exist_ok=True)
+ runtime = opt.out_dir/'runtime.json'
+ runtime.write_text(json.dumps({'runtime': {'weight_dtype': opt.weight_dtype,
+-    'act_dtype': opt.act_dtype, 'flash_attn': False,
++    'act_dtype': opt.act_dtype, 'flash_attn': opt.flash_attn,
+     'mm_prec': 'default' if opt.act_dtype == 'f16' else 'f32'}}))
+ with vla_cpp.load(str(opt.model), config_path=str(runtime)) as m:
+     cfg = m.config
+@@ -64,7 +96,7 @@ with vla_cpp.load(str(opt.model), config_path=str(runtime)) as m:
+         if i >= opt.warmup:
+             rows.append(row)
+     np.save(opt.out_dir/'actions.npy', actions)
+-    report = {'model': str(opt.model), 'dtype': opt.weight_dtype, 'act_dtype': opt.act_dtype, 'steps': cfg.num_steps,
++    report = {'metadata': metadata, 'flash_attn': opt.flash_attn, 'model': str(opt.model), 'dtype': opt.weight_dtype, 'act_dtype': opt.act_dtype, 'steps': cfg.num_steps,
+               'synthetic_inputs': True, 'camera_count': len(images), 'text_token_count': 6,
+               'chunk': cfg.n_suffix, 'vision_tokens_per_camera': cfg.n_img,
+               'no_fuse': os.environ.get('VLA_PI05_NO_FUSE', '0'),
+diff --git a/scripts/patch_ggml_musa.py b/scripts/patch_ggml_musa.py
+index 3e8a472..e440919 100644
+--- a/scripts/patch_ggml_musa.py
++++ b/scripts/patch_ggml_musa.py
+@@ -143,6 +143,61 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
+         path.write_text(text)
+         print(f"MUSA: F16 RMSNorm bypasses F32-only fusion in {path}")
+ 
++    # Host compilation has no __MUSA_ARCH__. Do not reject kernels compiled for mp_22.
++    path = root / "ggml/src/ggml-cuda/fattn.cu"
++    original = text = path.read_text()
++    anchor = "#ifndef FLASH_ATTN_AVAILABLE\n    GGML_UNUSED(device); GGML_UNUSED(dst);"
++    replacement = """#if !defined(FLASH_ATTN_AVAILABLE) && !(defined(GGML_USE_MUSA) && !defined(__MUSA_ARCH__) && !defined(GGML_CUDA_NO_FA))
++    GGML_UNUSED(device); GGML_UNUSED(dst);"""
++    if replacement not in text:
++        if text.count(anchor) != 1:
++            raise SystemExit(f"{path}: missing MUSA host FA dispatch anchor")
++        text = text.replace(anchor, replacement)
++    if text != original:
++        path.write_text(text)
++        print(f"MUSA: fixed host FA capability check in {path}")
++
++    # Uniform head strides avoid the pointer-array BLAS path, which breaks capture.
++    path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
++    original = text = path.read_text()
++    anchor = "    } else if (r2 == 1 && r3 == 1 && is_src0_cont_2 && is_src1_cont_2) {"
++    replacement = """#ifdef GGML_USE_MUSA
++    } else if (ne13 == 1 && ne03 == 1 && (ne02 == 1 || r2 == 1)) {
++        const int64_t stride_a = ne02 == 1 ? 0 : s02;
++        CUBLAS_CHECK(cublasGemmStridedBatchedEx(cublas_h, CUBLAS_OP_T, CUBLAS_OP_N,
++                ne01, ne11, ne10,
++                alpha, src0_ptr, cu_data_type_a, s01, stride_a,
++                       src1_ptr, cu_data_type_b, s11, s12,
++                beta, dst_ptr, cu_data_type, ne0, ne1*ne0,
++                ne12, cu_compute_type, CUBLAS_GEMM_DEFAULT_TENSOR_OP));
++#endif
++""" + anchor
++    if replacement not in text:
++        if text.count(anchor) != 1:
++            raise SystemExit(f"{path}: missing MUSA strided batch anchor")
++        text = text.replace(anchor, replacement)
++    if text != original:
++        path.write_text(text)
++        print(f"MUSA: capture-compatible broadcast GEMM in {path}")
++
++    # This M1000 muBLAS release invalidates capture for FP32 GEMMs.
++    path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
++    original = text = path.read_text()
++    anchor = "        // [TAG_MUL_MAT_ID_CUDA_GRAPHS]\n"
++    replacement = """#ifdef GGML_USE_MUSA
++        if (node->op == GGML_OP_MUL_MAT && node->src[0]->type == GGML_TYPE_F32) {
++            return false;
++        }
++#endif
++""" + anchor
++    if replacement not in text:
++        if text.count(anchor) != 1:
++            raise SystemExit(f"{path}: missing MUSA graph compatibility anchor")
++        text = text.replace(anchor, replacement)
++    if text != original:
++        path.write_text(text)
++        print(f"MUSA: keep FP32 GEMMs outside capture in {path}")
++
+ 
+ if __name__ == "__main__":
+     if len(sys.argv) != 2:
+diff --git a/scripts/run_pi05.py b/scripts/run_pi05.py
+index aa49169..16a7680 100644
+--- a/scripts/run_pi05.py
++++ b/scripts/run_pi05.py
+@@ -77,6 +77,7 @@ def main():
+     ap.add_argument("--device", default="0", help="MUSA device index, or cpu")
+     ap.add_argument("--weight-dtype", choices=("f32", "f16", "bf16"), default="f32")
+     ap.add_argument("--act-dtype", choices=("f32", "f16"), default="f32")
++    ap.add_argument("--flash-attn", action="store_true", help="Enable compiled FlashAttention kernels")
+     ap.add_argument("--no-fuse", action="store_true", help="Disable MUSA expert fusion for A/B checks")
+     ap.add_argument("--seed", type=int, default=0)
+     ap.add_argument("--output", required=True, type=Path)
+@@ -105,7 +106,7 @@ def main():
+     images = [prepare_image(provided[k], size) for k in cameras]
+     del reader
+     runtime = {"runtime": {"weight_dtype": args.weight_dtype, "act_dtype": args.act_dtype,
+-                           "mm_prec": "default" if args.act_dtype == "f16" else "f32", "flash_attn": False}}
++                           "mm_prec": "default" if args.act_dtype == "f16" else "f32", "flash_attn": args.flash_attn}}
+     with tempfile.TemporaryDirectory(prefix="vla-pi05-") as temp:
+         config = Path(temp) / "runtime.json"
+         config.write_text(json.dumps(runtime))
+@@ -119,7 +120,7 @@ def main():
+             st = model.last_stats()
+             result = {"model": str(args.model.resolve()), "device_requested": args.device,
+                       "weight_dtype": args.weight_dtype, "camera_order": cameras,
+-                      "act_dtype": args.act_dtype,
++                      "act_dtype": args.act_dtype, "flash_attn": args.flash_attn,
+                       "fusion_disabled": os.environ.get("VLA_PI05_NO_FUSE") == "1",
+                       "tokens_per_image": int(cfg.n_img), "num_steps": int(cfg.num_steps),
+                       "seed": args.seed, "prompt": prompt, "token_ids": tokens,
+diff --git a/src/models/pi05.cpp b/src/models/pi05.cpp
+index f57c4a2..2bfb9e4 100644
+--- a/src/models/pi05.cpp
++++ b/src/models/pi05.cpp
+@@ -151,7 +151,14 @@ namespace {
+ // On a view-taking flash attention (vla::fa_takes_views()), pi05's three
+ // attention sites (SigLIP, the VLM prefix and the action expert) run fused
+ // straight off the [hd, H, S] views. Otherwise the unfused graph is used.
+-bool use_fused_attention() { return vla::flash_attn_enabled() && vla::fa_takes_views(); }
++bool use_fused_attention() {
++#ifdef GGML_USE_MUSA
++    // The MUSA FA path materializes contiguous Q/K/V; it does not use SYCL KV hooks.
++    return vla::flash_attn_enabled();
++#else
++    return vla::flash_attn_enabled() && vla::fa_takes_views();
++#endif
++}
+ 
+ ggml_tensor * build_adarms(
+         ggml_context * ctx, ggml_tensor * x, ggml_tensor * mod, int64_t h, float eps,
+@@ -538,7 +545,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+     }
+     WeightLoader L("pi05", g, m->ctx_weights, m->matmul_type);
+ 
+-    m->kv_inplace = use_fused_attention() && !fq.present && !env_flag("VLA_PI05_NO_KV_INPLACE");
++    m->kv_inplace = !is_musa && use_fused_attention() && !fq.present && !env_flag("VLA_PI05_NO_KV_INPLACE");
+     // Project once into q|k|v and gate|up; MUSA can do this independently of
+     // flash attention or the SYCL in-place KV path. No quantization is involved.
+     const bool fuse_proj = m->kv_inplace || (is_musa && !fq.present &&
+diff --git a/src/modules/gemma_expert.h b/src/modules/gemma_expert.h
+index 55c71a0..e387e02 100644
+--- a/src/modules/gemma_expert.h
++++ b/src/modules/gemma_expert.h
+@@ -465,7 +465,12 @@ inline ggml_tensor * gemma_attn(
+     // score/softmax core all stay full precision. With a view-taking FA
+     // (fa_takes_views), V skips the F32 cast since only the kernel reads it and
+     // converts on load, and Q/K/V reach the kernel as strided views.
++#ifdef GGML_USE_MUSA
++    // The tile FA kernel consumes strides directly; Q stays F32 and K/V F16.
++    const bool fa_views = flash;
++#else
+     const bool fa_views = flash && fa_takes_views();
++#endif
+     ggml_tensor *q, *k, *v;
+     if (w.fq_qkv) {
+         // One FoldQuant GEMM; q, k and v are row ranges of each token's output.
+@@ -515,6 +520,15 @@ inline ggml_tensor * gemma_attn(
+     };
+     ggml_tensor * q_rope = rope_call(q_h);
+     ggml_tensor * k_rope = rope_call(k_h);
++#ifdef GGML_USE_MUSA
++    if (flash) {
++        // Convert each prefix once, before caching/concatenation. The FA kernel
++        // already consumes F16 K/V; this avoids recasting the whole prefix at
++        // every denoising step and halves the concatenation traffic.
++        k_rope = as_type(ctx, k_rope, GGML_TYPE_F16);
++        v_h = as_type(ctx, v_h, GGML_TYPE_F16);
++    }
++#endif
+ 
+     if (k_out)
+         *k_out = k_rope;
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index e6c83de..def919f 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -90,6 +90,10 @@ if(GGML_MUSA)
+     target_compile_options(test_musa_ops PRIVATE -Wall -Wextra)
+     add_test(NAME musa_ops COMMAND test_musa_ops)
+     set_tests_properties(musa_ops PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
++    if(GGML_CUDA_FA)
++        add_test(NAME musa_flash_attn COMMAND test_musa_ops --flash-attn)
++        set_tests_properties(musa_flash_attn PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
++    endif()
+     add_test(NAME musa_cpu_selection COMMAND test_musa_ops --expect-cpu)
+     set_tests_properties(musa_cpu_selection PROPERTIES ENVIRONMENT "VLA_DEVICE=cpu")
+     add_test(NAME musa_invalid_device COMMAND test_musa_ops --expect-cpu)
+diff --git a/tests/test_musa_ops.cpp b/tests/test_musa_ops.cpp
+index 93814dd..7c3a831 100644
+--- a/tests/test_musa_ops.cpp
++++ b/tests/test_musa_ops.cpp
+@@ -90,7 +90,7 @@ struct Graph {
+         if (!alloc || !ggml_gallocr_alloc_graph(alloc, gf)) return {};
+         std::vector<float> result;
+         // Reuse the allocation and graph: catches stream/lifetime problems too.
+-        for (int repeat = 0; repeat < 2; ++repeat) {
++        for (int repeat = 0; repeat < 3; ++repeat) {
+             // gallocr may reuse input memory after its last consumer; restore
+             // every input just as predict restores each new observation.
+             upload();
+@@ -125,7 +125,7 @@ vla::GemmaLayerW weights(Graph & g, ggml_type type, int64_t hidden, int64_t qdim
+     return w;
+ }
+ 
+-std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false) {
++std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false, bool flash = false, bool masked = false) {
+     Graph g;
+     if (!g.ctx) return {};
+     auto * C = g.ctx;
+@@ -144,11 +144,16 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
+     auto * x = g.input(GGML_TYPE_F32, {cfg.hidden, prefix});
+     auto * pos = g.input(GGML_TYPE_I32, {prefix});
+     ggml_tensor * k = nullptr, * v = nullptr;
+-    auto * pre = vla::gemma_layer(C, w, x, pos, cfg, prefix, nullptr, nullptr, nullptr, &k, &v);
++    auto * prefix_mask = masked ? g.input(GGML_TYPE_F32, {prefix, prefix}) : nullptr;
++    if (prefix_mask) ggml_set_name(prefix_mask, "mask");
++    auto * pre = vla::gemma_layer(C, w, x, pos, cfg, prefix, nullptr, nullptr, prefix_mask, &k, &v,
++                                GGML_TYPE_F32, flash);
+ 
+     constexpr int64_t chunk = 50;
+     auto * h = g.input(GGML_TYPE_F32, {cfg.hidden, chunk});
+     auto * suffix_pos = g.input(GGML_TYPE_I32, {chunk});
++    auto * suffix_mask = masked ? g.input(GGML_TYPE_F32, {prefix + chunk, chunk}) : nullptr;
++    if (suffix_mask) ggml_set_name(suffix_mask, "mask");
+     auto * mod = g.input(GGML_TYPE_F32, {3*cfg.hidden});
+     auto * scale = ggml_view_1d(C, mod, cfg.hidden, 0);
+     auto * shift = ggml_view_1d(C, mod, cfg.hidden, cfg.hidden*sizeof(float));
+@@ -159,7 +164,7 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
+     };
+     for (int step = 0; step < 2; ++step) {
+         auto * att = vla::gemma_attn(C, w, adarms(h), suffix_pos, cfg, chunk,
+-                                    k, v, nullptr, nullptr, nullptr, GGML_TYPE_F32, false);
++                                    k, v, suffix_mask, nullptr, nullptr, GGML_TYPE_F32, flash);
+         h = ggml_add(C, h, ggml_mul(C, att, gate));
+         auto * mlp = vla::gemma_mlp(C, w, adarms(h), GGML_TYPE_F32);
+         h = ggml_add(C, h, ggml_scale(C, ggml_mul(C, mlp, gate), -0.1f));
+@@ -319,7 +324,7 @@ std::vector<float> merged_glu_reference(ggml_type type, bool swapped) {
+         float v = ((i*37)%67-33)/128.0f*40.0f;
+         return type == GGML_TYPE_F16 ? ggml_fp16_to_fp32(ggml_fp32_to_fp16(v)) : v;
+     };
+-    for (int repeat = 0; repeat < 2; ++repeat)
++    for (int repeat = 0; repeat < 3; ++repeat)
+         for (int r = 0; r < rows; ++r)
+             for (int i = 0; i < h; ++i) {
+                 float g = input(r*2*h+i+(swapped ? h : 0));
+@@ -352,6 +357,17 @@ int main(int argc, char ** argv) {
+     ggml_backend_cpu_set_n_threads(cpu, 4);
+     bool ok = true;
+     if (!vla::musa_register_fused_ops()) return 1;
++    if (argc == 2 && std::strcmp(argv[1], "--flash-attn") == 0) {
++        for (int64_t prefix : {17, 529})
++            for (bool masked : {false, true})
++                ok = compare("flash_gemma_vs_unfused", GGML_TYPE_F16,
++                    gemma(b.handle, GGML_TYPE_F16, prefix, true, false, masked),
++                    gemma(b.handle, GGML_TYPE_F16, prefix, true, true, masked), 5e-3) && ok;
++        ggml_backend_free(cpu);
++        ggml_backend_free(b.handle);
++        return ok ? 0 : 1;
++    }
++
+     for (auto type : {GGML_TYPE_F32, GGML_TYPE_F16})
+         for (bool swapped : {false, true})
+             ok = compare("merged_geglu_rows", type, merged_glu_reference(type, swapped),
+diff --git "a/\344\274\230\345\214\226\350\256\260\345\275\225/README.md" "b/\344\274\230\345\214\226\350\256\260\345\275\225/README.md"
+index 9d98137..8b69f77 100644
+--- "a/\344\274\230\345\214\226\350\256\260\345\275\225/README.md"
++++ "b/\344\274\230\345\214\226\350\256\260\345\275\225/README.md"
+@@ -8,6 +8,7 @@
+ | --- | --- |
+ | [方案与验证说明](方案与验证说明.md) | 两类模型的转换、推理、验证命令和已实现的优化 |
+ | [官方文档调研](MUSA_M1000_PI05_优化调研_2026-10-30.md) | 官方资料、环境核查、待实施方案及适用限制 |
++| [2026-11-02 官方方案优化](2026-11-02_官方方案优化/README.md) | 进行中：Graph/FA 实验构建、设备权限恢复、后续对照 |
+ | [2026-10-30 首次整模型验证](2026-10-30_首次整模型验证/README.md) | 最早可核验的 CPU/MUSA 单次耗时、原始报告、误差和日志 |
+ | [2026-10-30 M1000 首轮优化](2026-10-30_M1000首轮优化/README.md) | 阶段耗时对比、退步方案、56 份原始报告/配置/日志及校验清单 |
+ 

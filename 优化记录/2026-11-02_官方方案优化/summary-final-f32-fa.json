@@ -1,0 +1,30 @@
+[
+  {
+    "stage": "fa",
+    "act_dtype": "f32",
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "exit_code": 0,
+    "median_wall_ms": 744.5149589998437,
+    "error": {
+      "max_abs": 0.09142303466796875,
+      "rmse": 0.027387332171201706,
+      "relative_peak": 0.0008585627074353397
+    },
+    "repeat_max_abs": 0.0,
+    "numerical_pass": true
+  },
+  {
+    "stage": "fa",
+    "act_dtype": "f32",
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "exit_code": 0,
+    "median_wall_ms": 1529.2427240001416,
+    "error": {
+      "max_abs": 0.18896102905273438,
+      "rmse": 0.052665404975414276,
+      "relative_peak": 0.0019414342241361737
+    },
+    "repeat_max_abs": 0.0,
+    "numerical_pass": true
+  }
+]

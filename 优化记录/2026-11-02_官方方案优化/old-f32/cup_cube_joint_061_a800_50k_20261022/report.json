@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "source_commit": "309b1c74db4e38f7d0fb8e0089fe06cb3f62413f",
+    "source_diff_sha256": "f8dd2845e3d3a375aba015a073d72cde68266e9c62d80dbad028a276bddfbe7d",
+    "library": "/home/skysi/code/vla.cpp/build-musa-m1000/libvla.so",
+    "library_sha256": "aaf65fd61ff7c9d56b1d4204a19f555f3e122a94409c1e0b33678865a60e8902",
+    "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+    "power_profile": "performance",
+    "environment": {
+      "VLA_DEVICE": "0",
+      "VLA_N_THREADS": "4",
+      "VLA_PI05_NO_FUSE": null,
+      "VLA_PI05_NO_PROJ_FUSE": null,
+      "GGML_CUDA_DISABLE_GRAPHS": "1",
+      "GGML_MUSA_DISABLE_GRAPHS": null
+    }
+  },
+  "flash_attn": false,
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "dtype": "f16",
+  "act_dtype": "f32",
+  "steps": 10,
+  "synthetic_inputs": true,
+  "camera_count": 2,
+  "text_token_count": 6,
+  "chunk": 50,
+  "vision_tokens_per_camera": 256,
+  "no_fuse": "0",
+  "warmup": 3,
+  "runs": [
+    {
+      "ms_total": 2021.8619384765625,
+      "ms_vision": 479.4710388183594,
+      "ms_inference": 1541.93310546875,
+      "wall_ms": 2022.3933489996853
+    },
+    {
+      "ms_total": 2021.5679931640625,
+      "ms_vision": 478.17236328125,
+      "ms_inference": 1542.940673828125,
+      "wall_ms": 2022.0795559998805
+    },
+    {
+      "ms_total": 2021.890380859375,
+      "ms_vision": 477.7431335449219,
+      "ms_inference": 1543.6549072265625,
+      "wall_ms": 2022.4175250000371
+    },
+    {
+      "ms_total": 2021.482421875,
+      "ms_vision": 477.6839599609375,
+      "ms_inference": 1543.3316650390625,
+      "wall_ms": 2022.0195320002858
+    },
+    {
+      "ms_total": 2019.8922119140625,
+      "ms_vision": 478.39996337890625,
+      "ms_inference": 1540.9715576171875,
+      "wall_ms": 2020.430572999885
+    }
+  ],
+  "repeat_max_abs": 0.0,
+  "median_ms": {
+    "ms_total": 2021.5679931640625,
+    "ms_vision": 478.17236328125,
+    "ms_inference": 1542.940673828125,
+    "wall_ms": 2022.0795559998805
+  },
+  "p95_wall_ms": 2022.4126897999668,
+  "error_vs_reference": {
+    "max_abs": 0.03082275390625,
+    "rmse": 0.009683733806014061,
+    "relative_peak": 0.00031668090377934277
+  }
+}

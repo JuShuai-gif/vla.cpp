@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "/home/skysi/code/vla.cpp/.venv-converter/bin/python",
+    "/home/skysi/code/vla.cpp/scripts/run_pi05.py",
+    "--model",
+    "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+    "--image",
+    "top=/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/top-480x640.png",
+    "--image",
+    "wrist=/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/wrist-480x640.png",
+    "--text",
+    "pick up the cube",
+    "--state",
+    "7.539384841918945,72.60015869140625,-66.07098388671875,2.209120273590088,58.785526275634766,0.7304090261459351,73.93515014648438",
+    "--weight-dtype",
+    "f16",
+    "--act-dtype",
+    "f32",
+    "--flash-attn",
+    "--seed",
+    "0",
+    "--output",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/full-entry/pi05_cube_merge_cksize50_step3_0929/f32.json"
+  ],
+  "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so"
+}

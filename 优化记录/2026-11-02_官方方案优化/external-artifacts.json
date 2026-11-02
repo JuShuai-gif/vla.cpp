@@ -1,0 +1,135 @@
+[
+  {
+    "path": "/home/skysi/VLA/perf-official-20261102/kv-fa-f32.msys-rep",
+    "bytes": 6230016,
+    "sha256": "8ed67095430a9b32b66c8a73f48ad23bd0fbcfac9278af1ad50db1356f630cfb",
+    "stage": "kv-fa-f32",
+    "kind": "msys raw trace"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/control-f32/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "3cc871e3139ec98cb8e1dc0ddd54b007fab0cd157300b0b895412b6147b1933e",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/control-f32/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "7619788f09653fb85683fbf9624d0582f9c30b5654b97d13fd0ee5178571b934",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/final-fa-f16/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "573cd8ac153c49d294a30bd237c83d49cc8043875daa6ba921f8ef44b25519e5",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/final-fa-f16/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "13decc34120e68128acad494bda057b3b1a60f7230c563608112a054118fcd75",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/final-fa-f32/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "2fd13074f95d45d2fa2ef30bd4a8d18256ffb7519ba546759cdffce2de490e54",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/final-fa-f32/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "9d13ac24adb60d9155eedd1b3bb68c17d6ec5bab92b6597aae9e09f7e19eaf13",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/final-old-f16/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "3347db2fa00d9239db1def5931f5c86b1f76477abd0acc37a4b3ed4c5a8346e4",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/final-old-f16/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "b0ae93647fe0a88685261d3fda51f2e62b1bbfceb16f6a126f95b2f2acd0aa6d",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/fixed-control-f32/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "3cc871e3139ec98cb8e1dc0ddd54b007fab0cd157300b0b895412b6147b1933e",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/fixed-control-f32/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "7619788f09653fb85683fbf9624d0582f9c30b5654b97d13fd0ee5178571b934",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/fixed-fa-f32/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "2fd13074f95d45d2fa2ef30bd4a8d18256ffb7519ba546759cdffce2de490e54",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/fixed-fa-f32/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "9d13ac24adb60d9155eedd1b3bb68c17d6ec5bab92b6597aae9e09f7e19eaf13",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/guarded-graph-f32/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "3cc871e3139ec98cb8e1dc0ddd54b007fab0cd157300b0b895412b6147b1933e",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/guarded-graph-f32/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "7619788f09653fb85683fbf9624d0582f9c30b5654b97d13fd0ee5178571b934",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/guarded-graph-fa-f32/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "2fd13074f95d45d2fa2ef30bd4a8d18256ffb7519ba546759cdffce2de490e54",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/guarded-graph-fa-f32/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "9d13ac24adb60d9155eedd1b3bb68c17d6ec5bab92b6597aae9e09f7e19eaf13",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/kv-fa-f32/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "2fd13074f95d45d2fa2ef30bd4a8d18256ffb7519ba546759cdffce2de490e54",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/kv-fa-f32/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "9d13ac24adb60d9155eedd1b3bb68c17d6ec5bab92b6597aae9e09f7e19eaf13",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/old-f32/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "3cc871e3139ec98cb8e1dc0ddd54b007fab0cd157300b0b895412b6147b1933e",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/old-f32/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "7619788f09653fb85683fbf9624d0582f9c30b5654b97d13fd0ee5178571b934",
+    "kind": "raw actions, not stored in Git"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5b98\u65b9\u65b9\u6848\u4f18\u5316/profile-kv-fa-f32/actions.npy",
+    "bytes": 6528,
+    "sha256": "2fd13074f95d45d2fa2ef30bd4a8d18256ffb7519ba546759cdffce2de490e54",
+    "kind": "raw actions, not stored in Git"
+  }
+]
