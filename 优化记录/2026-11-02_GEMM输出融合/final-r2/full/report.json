@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "source_commit": "5df2a3bf309b467ea3bf2c54af515009ca686ed5",
+    "source_diff_sha256": "7b0c00f1465c76fe2530af560fa3a3076a519c70781049087a32aa6285616e12",
+    "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "library_sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "core_sha256": "515d245806b700b2e1d094ebefc31d44136230a648c68264a3ae332b7f2e31d6",
+    "backend_sha256": {
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0.25.3": "3eb9f7dcf0398d4a31a4cef225b11e847c847202dcd51c29416c3badd6559a10",
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-cpu.so.0.25.3": "5ecb455569f96e5129e615afed0f17e2f564a5fc0496b15aee3ce29e456b4074",
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0.25.3": "dccb99d0216d5dd00aab2f31b3df11620cd63719f73e84fe34a111bbcae30baf"
+    },
+    "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+    "power_profile": "performance",
+    "environment": {
+      "VLA_DEVICE": "0",
+      "VLA_N_THREADS": "4",
+      "VLA_PI05_NO_FUSE": null,
+      "VLA_PI05_NO_PROJ_FUSE": null,
+      "VLA_MUSA_GEMMA_ATTN": "fused-all",
+      "VLA_MUSA_VISION_EPILOGUE": "all",
+      "VLA_MUSA_NO_VECTOR_PACK": null,
+      "VLA_MUSA_VISION_SDPA": "1",
+      "VLA_PI05_VISION_QKV": "1",
+      "VLA_PI05_INPUT_CACHE": null,
+      "VLA_MUSA_PROFILE_OPS": null,
+      "VLA_PI05_DUMP_GRAPH": null,
+      "VLA_PI05_DUMP_PRUNE": null,
+      "GGML_CUDA_DISABLE_GRAPHS": null,
+      "GGML_MUSA_DISABLE_GRAPHS": null,
+      "VLA_PI05_SPLIT_PHASES": null,
+      "VLA_PI05_HOST_PRUNE": null,
+      "VLA_PI05_NO_PRUNE_FLASH": null,
+      "VLA_PI05_NO_VISION_BATCH": null,
+      "VLA_PI05_NO_SEPARATE_GRAPHS": null,
+      "VLA_PI05_KV_REUSE": null,
+      "VLA_PI05_NO_KV_REUSE": null,
+      "VLA_MUSA_F32_ATTN_TILE": null
+    }
+  },
+  "split_phases": false,
+  "flash_attn": true,
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "dtype": "f16",
+  "act_dtype": "f32",
+  "steps": 10,
+  "synthetic_inputs": true,
+  "camera_count": 2,
+  "text_token_count": 6,
+  "chunk": 50,
+  "vision_tokens_per_camera": 256,
+  "no_fuse": "0",
+  "warmup": 3,
+  "runs": [
+    {
+      "ms_total": 934.2010498046875,
+      "ms_vision": 148.867919921875,
+      "ms_inference": 784.8531494140625,
+      "wall_ms": 934.7382519990788
+    },
+    {
+      "ms_total": 935.1068115234375,
+      "ms_vision": 149.19000244140625,
+      "ms_inference": 785.4500122070312,
+      "wall_ms": 935.6144929988659
+    },
+    {
+      "ms_total": 934.245849609375,
+      "ms_vision": 148.9576873779297,
+      "ms_inference": 784.830322265625,
+      "wall_ms": 934.7376530022302
+    },
+    {
+      "ms_total": 933.0614013671875,
+      "ms_vision": 149.04127502441406,
+      "ms_inference": 783.5245971679688,
+      "wall_ms": 933.6262520009768
+    },
+    {
+      "ms_total": 933.6734008789062,
+      "ms_vision": 148.9499969482422,
+      "ms_inference": 784.198486328125,
+      "wall_ms": 934.1862929977651
+    },
+    {
+      "ms_total": 933.5955810546875,
+      "ms_vision": 149.1653289794922,
+      "ms_inference": 783.891845703125,
+      "wall_ms": 934.1080530030013
+    },
+    {
+      "ms_total": 933.8131103515625,
+      "ms_vision": 149.02484130859375,
+      "ms_inference": 784.2332763671875,
+      "wall_ms": 934.3014139994921
+    },
+    {
+      "ms_total": 935.4774169921875,
+      "ms_vision": 149.02383422851562,
+      "ms_inference": 785.9107055664062,
+      "wall_ms": 935.9783369982324
+    },
+    {
+      "ms_total": 935.5463256835938,
+      "ms_vision": 150.86956787109375,
+      "ms_inference": 784.11376953125,
+      "wall_ms": 936.0676969990891
+    },
+    {
+      "ms_total": 935.610595703125,
+      "ms_vision": 149.13807678222656,
+      "ms_inference": 785.9319458007812,
+      "wall_ms": 936.0796569999366
+    },
+    {
+      "ms_total": 934.385009765625,
+      "ms_vision": 149.0150146484375,
+      "ms_inference": 784.8377075195312,
+      "wall_ms": 934.8520959974849
+    },
+    {
+      "ms_total": 935.230712890625,
+      "ms_vision": 149.05264282226562,
+      "ms_inference": 785.6478881835938,
+      "wall_ms": 935.713137001585
+    },
+    {
+      "ms_total": 934.6036376953125,
+      "ms_vision": 148.7355194091797,
+      "ms_inference": 785.326904296875,
+      "wall_ms": 935.1005369971972
+    },
+    {
+      "ms_total": 933.2666015625,
+      "ms_vision": 148.7103729248047,
+      "ms_inference": 784.02392578125,
+      "wall_ms": 933.7477760018373
+    },
+    {
+      "ms_total": 934.699951171875,
+      "ms_vision": 148.89559936523438,
+      "ms_inference": 785.2357177734375,
+      "wall_ms": 935.2079780001077
+    }
+  ],
+  "repeat_max_abs": 0.0,
+  "median_ms": {
+    "ms_total": 934.385009765625,
+    "ms_vision": 149.02383422851562,
+    "ms_inference": 784.8377075195312,
+    "wall_ms": 934.8520959974849
+  },
+  "p95_wall_ms": 936.0712849993433,
+  "error_vs_reference": {
+    "max_abs": 0.04351806640625,
+    "rmse": 0.013396469876170158,
+    "relative_peak": 0.0004471158026717603
+  }
+}

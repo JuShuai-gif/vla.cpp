@@ -1,0 +1,134 @@
+[
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      1
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":1152,\"batch\":1,\"ms\":0.380912,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      1
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":1152,\"batch\":1,\"ms\":0.378856,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      1
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":4304,\"n\":256,\"k\":1152,\"batch\":1,\"ms\":1.235620,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      1
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":4304,\"n\":256,\"k\":1152,\"batch\":1,\"ms\":1.243636,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      1
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":4304,\"batch\":1,\"ms\":0.693068,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      1
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":4304,\"batch\":1,\"ms\":0.694648,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      2
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":1152,\"batch\":2,\"ms\":0.718124,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      2
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":1152,\"batch\":2,\"ms\":0.723456,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      2
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":4304,\"n\":256,\"k\":1152,\"batch\":2,\"ms\":2.440956,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      2
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":4304,\"n\":256,\"k\":1152,\"batch\":2,\"ms\":2.473172,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      2
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":4304,\"batch\":2,\"ms\":1.347356,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      2
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":4304,\"batch\":2,\"ms\":1.352648,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  }
+]

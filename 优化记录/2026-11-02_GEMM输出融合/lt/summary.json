@@ -1,0 +1,134 @@
+[
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      1
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":1152,\"batch\":1,\"ms\":0.206364,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":0.275856,\"relative_peak\":0}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n{\"kind\":\"best\",\"ms\":0.275856,\"baseline_ms\":0.206364,\"capture_call\":0,\"capture_end\":0,\"instantiate\":0,\"launch\":0,\"replay_error\":0,\"replay_ms\":0.295100}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      1
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":1152,\"batch\":1,\"ms\":0.205724,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":0.278464,\"relative_peak\":0.000116889345}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n{\"kind\":\"best\",\"ms\":0.278464,\"baseline_ms\":0.205724,\"capture_call\":0,\"capture_end\":0,\"instantiate\":0,\"launch\":0,\"replay_error\":0.000116889345,\"replay_ms\":0.303840}\n"
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      1
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":4304,\"n\":256,\"k\":1152,\"batch\":1,\"ms\":0.602084,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":0.862188,\"relative_peak\":0}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n{\"kind\":\"best\",\"ms\":0.862188,\"baseline_ms\":0.602084,\"capture_call\":0,\"capture_end\":0,\"instantiate\":0,\"launch\":0,\"replay_error\":0,\"replay_ms\":0.888900}\n"
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      1
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":4304,\"n\":256,\"k\":1152,\"batch\":1,\"ms\":0.608980,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":0.873732,\"relative_peak\":0.000116889345}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n{\"kind\":\"best\",\"ms\":0.873732,\"baseline_ms\":0.608980,\"capture_call\":0,\"capture_end\":0,\"instantiate\":0,\"launch\":0,\"replay_error\":0.000116889345,\"replay_ms\":0.895500}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      1
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":4304,\"batch\":1,\"ms\":0.525228,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":0.592904,\"relative_peak\":0}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n{\"kind\":\"best\",\"ms\":0.592904,\"baseline_ms\":0.525228,\"capture_call\":0,\"capture_end\":0,\"instantiate\":0,\"launch\":0,\"replay_error\":0,\"replay_ms\":0.613704}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      1
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":4304,\"batch\":1,\"ms\":0.526056,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":0.597332,\"relative_peak\":0.000116747232}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n{\"kind\":\"best\",\"ms\":0.597332,\"baseline_ms\":0.526056,\"capture_call\":0,\"capture_end\":0,\"instantiate\":0,\"launch\":0,\"replay_error\":0.000116747232,\"replay_ms\":0.618472}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      2
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":1152,\"batch\":2,\"ms\":0.340048,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":0.356020,\"relative_peak\":0.981115136}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      2
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":1152,\"batch\":2,\"ms\":0.343928,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":0.358200,\"relative_peak\":0.987437515}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      2
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":4304,\"n\":256,\"k\":1152,\"batch\":2,\"ms\":1.044016,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":1.162224,\"relative_peak\":0.981115136}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      2
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":4304,\"n\":256,\"k\":1152,\"batch\":2,\"ms\":1.043016,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":1.167152,\"relative_peak\":0.987437515}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      2
+    ],
+    "gelu": 0,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":4304,\"batch\":2,\"ms\":0.963844,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":0.996268,\"relative_peak\":0.983519043}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      2
+    ],
+    "gelu": 1,
+    "returncode": 0,
+    "output": "{\"kind\":\"baseline\",\"m\":1152,\"n\":256,\"k\":4304,\"batch\":2,\"ms\":0.965328,\"lt_version\":101200}\n{\"kind\":\"query\",\"workspace\":0,\"status\":0,\"count\":1}\n{\"kind\":\"candidate\",\"id\":0,\"workspace\":0,\"ms\":1.002232,\"relative_peak\":0.98623723}\n{\"kind\":\"query\",\"workspace\":8388608,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":33554432,\"status\":0,\"count\":1}\n{\"kind\":\"query\",\"workspace\":67108864,\"status\":0,\"count\":1}\n"
+  }
+]

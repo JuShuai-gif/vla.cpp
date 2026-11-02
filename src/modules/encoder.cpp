@@ -25,6 +25,8 @@
 #include "layers/qlinear.h"
 
 #include <cmath>
+#include <cstdlib>
+#include <cstring>
 
 namespace vla {
 
@@ -207,6 +209,23 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
             att = attention(C, Q, K, packed_heads(v,true), nullptr, scale, cfg.hidden, seq, nv, attention_out);
     }
 
+#ifdef GGML_USE_MUSA
+    static const int epilogue = [] {
+        const char * p = std::getenv("VLA_MUSA_VISION_EPILOGUE");
+        return !p ? 0 : std::strcmp(p, "all") == 0 ? 3 :
+               std::strcmp(p, "gelu") == 0 ? 1 : std::strcmp(p, "residual") == 0 ? 2 : 0;
+    }();
+    if (epilogue && w.bo && w.bfc1 && w.bfc2) {
+        auto add_residual = [&](ggml_tensor * y, ggml_tensor * bias, ggml_tensor * r) {
+            return (epilogue & 2) ? fused_bias_res(C, y, bias, r) : ggml_add(C, r, ggml_add(C, y, bias));
+        };
+        auto * h1 = add_residual(ggml_mul_mat(C, w.Wo, att), w.bo, x);
+        auto * n2 = layer_norm(C, h1, w.ln2w, w.ln2b, cfg.ln_eps);
+        auto * up = ggml_mul_mat(C, w.Wfc1, n2);
+        auto * act = (epilogue & 1) ? fused_bias_gelu(C, up, w.bfc1) : ggml_gelu(C, ggml_add(C, up, w.bfc1));
+        return add_residual(ggml_mul_mat(C, w.Wfc2, act), w.bfc2, h1);
+    }
+#endif
     ggml_tensor * h1 = ggml_add(C, x, linear(C, w.Wo, w.bo, att));
     ggml_tensor * n2 = layer_norm(C, h1, w.ln2w, w.ln2b, cfg.ln_eps);
     return ggml_add(C, h1, ffn_gelu(C, w.Wfc1, w.bfc1, w.Wfc2, w.bfc2, n2));

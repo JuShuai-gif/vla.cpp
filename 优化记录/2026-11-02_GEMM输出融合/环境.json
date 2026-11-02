@@ -1,0 +1,35 @@
+{
+  "time": {
+    "argv": [
+      "date",
+      "-Is"
+    ],
+    "returncode": 0,
+    "output": "2026-11-02T16:34:25+08:00\n"
+  },
+  "compiler": {
+    "argv": [
+      "/usr/local/musa/bin/mcc",
+      "--version"
+    ],
+    "returncode": 0,
+    "output": "clang version 14.0.0 (git@sh-code.mthreads.com:sw/mtcc.git 61c54cd8e5c72ef146656c7beee1889a837ed7bc)\nmcc version 5.1.0\nTarget: aarch64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /usr/local/musa/bin\n"
+  },
+  "power": {
+    "argv": [
+      "powerprofilesctl",
+      "get"
+    ],
+    "returncode": 0,
+    "output": "performance\n"
+  },
+  "gpu": {
+    "argv": [
+      "mthreads-smi"
+    ],
+    "returncode": 0,
+    "output": "mthreads-smi version is 1.4.0\ncpu information:                                      \n    cpu name:                                    M1000\n    cpu utilization:                            38.56%\n    cpu frequency:                                    \n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n                                         2650000000 HZ\n    cpu temperature:                           45.30 C\ngpu information:                                      \n    gpu utilization:                            97.00%\n    gpu frequency:                       1500000000 HZ\n    gpu temperature:                           49.72 C\nsystem memory information:                            \n    used:                                  25219316 KB\n    capacity:                              32643308 KB\ndisplay screen information:                           \n    screen size:                file system error inch\nbattery information:                                  \n    current power:               file system error mWh\n    power capacity:              file system error mWh\nfan information:                                      \n    count:                                           1\n    index 0:                                  2600 rpm\nbios information:                                     \n    bios version:                                1.4.0\ndisk information:                                     \n    size:                                 500107608 KB\nvpu information:                                      \n    encoder:                                     0.00%\n    decoder:                                     0.00%\nnpu information:                                      \n    npu utilization:                                  \n                                                    0%\n                                                    0%\n\u001b[00m"
+  },
+  "sdk_root": "/usr/local/musa-5.1.0",
+  "lt_header_sha256": "ce7fa8dae940972199f4d971d043bfbe76e7577125e572a005b11f59f4e7534f"
+}

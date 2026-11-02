@@ -1,0 +1,6 @@
+*.npy
+__pycache__/
+*.log
+source.patch
+nodes.json
+*.patch

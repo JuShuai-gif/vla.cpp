@@ -393,7 +393,8 @@ elseif(GGML_MUSA)
     # device kernels are built by mcc; vla.cpp's NVIDIA-only hooks are not.
     target_compile_definitions(vla_core PUBLIC GGML_USE_MUSA)
     target_include_directories(vla_core SYSTEM PRIVATE ${llama_SOURCE_DIR}/ggml/src)
-    target_sources(ggml-musa PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu)
+    target_sources(ggml-musa PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_epilogue.cu)
     option(VLA_MUSA_MUDNN_ATTN "Enable optional muDNN vision attention on MUSA" OFF)
     if(VLA_MUSA_MUDNN_ATTN)
         find_library(VLA_MUDNN_LIBRARY NAMES mudnn HINTS /usr/local/musa/lib REQUIRED)
@@ -404,16 +405,23 @@ elseif(GGML_MUSA)
     endif()
 
     set(_vla_musa_flags "-O3 -x musa -mtgpu -ffp-contract=off")
+    # Match ggml-musa unary.cu math without changing existing strict fused kernels.
+    set(_vla_musa_epilogue_flags "-Od3 -fno-strict-aliasing -ffast-math -fsigned-char -x musa -mtgpu -fmusa-flush-denormals-to-zero")
     set(_vla_musa_archs "${MUSA_ARCHITECTURES}")
     if(NOT _vla_musa_archs)
         set(_vla_musa_archs 21 22 31) # same default as ggml-musa
     endif()
     foreach(ARCH ${_vla_musa_archs})
         string(APPEND _vla_musa_flags " --cuda-gpu-arch=mp_${ARCH}")
+        string(APPEND _vla_musa_epilogue_flags " --cuda-gpu-arch=mp_${ARCH}")
     endforeach()
     set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu
         TARGET_DIRECTORY ggml-musa PROPERTIES
         LANGUAGE CXX COMPILE_FLAGS "${_vla_musa_flags}"
+        INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_epilogue.cu
+        TARGET_DIRECTORY ggml-musa PROPERTIES
+        LANGUAGE CXX COMPILE_FLAGS "${_vla_musa_epilogue_flags}"
         INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/src")
 endif()
 

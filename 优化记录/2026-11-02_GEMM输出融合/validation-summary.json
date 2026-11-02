@@ -1,0 +1,30 @@
+[
+  {
+    "name": "ctest",
+    "returncode": 0
+  },
+  {
+    "name": "final-full-bucket",
+    "returncode": 0
+  },
+  {
+    "name": "final-full",
+    "returncode": 0
+  },
+  {
+    "name": "final-pruned-bucket",
+    "returncode": 0
+  },
+  {
+    "name": "final-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "full-entry",
+    "returncode": 0
+  },
+  {
+    "name": "trace-graphs",
+    "returncode": 0
+  }
+]

@@ -1,0 +1,197 @@
+{
+  "pruned": {
+    "baseline": {
+      "vision": {
+        "IM2COL": 2,
+        "RESHAPE": 42,
+        "MUL_MAT": 128,
+        "PERMUTE": 96,
+        "CONT": 16,
+        "TRANSPOSE": 4,
+        "ADD": 248,
+        "NORM": 62,
+        "MUL": 62,
+        "VIEW": 180,
+        "CPY": 56,
+        "FLASH_ATTN_EXT": 28,
+        "UNARY": 30,
+        "SOFT_MAX": 2,
+        "MEAN": 4,
+        "CUSTOM": 2,
+        "GET_ROWS": 2
+      },
+      "prefix": {
+        "RMS_NORM": 35,
+        "MUL": 35,
+        "MUL_MAT": 69,
+        "VIEW": 106,
+        "ROPE": 35,
+        "CPY": 36,
+        "PERMUTE": 51,
+        "FLASH_ATTN_EXT": 17,
+        "RESHAPE": 17,
+        "ADD": 34,
+        "GLU": 17
+      },
+      "denoise": {
+        "MUL_MAT": 222,
+        "ADD": 15,
+        "VIEW": 441,
+        "CUSTOM": 216,
+        "ROPE": 108,
+        "PERMUTE": 162,
+        "CPY": 108,
+        "CONCAT": 108,
+        "FLASH_ATTN_EXT": 54,
+        "RESHAPE": 54,
+        "GLU": 54,
+        "RMS_NORM": 3,
+        "MUL": 3,
+        "SCALE": 3
+      }
+    },
+    "final": {
+      "vision": {
+        "IM2COL": 2,
+        "RESHAPE": 42,
+        "MUL_MAT": 128,
+        "PERMUTE": 96,
+        "CONT": 16,
+        "TRANSPOSE": 4,
+        "ADD": 98,
+        "NORM": 62,
+        "MUL": 62,
+        "VIEW": 180,
+        "CPY": 56,
+        "FLASH_ATTN_EXT": 28,
+        "CUSTOM": 92,
+        "SOFT_MAX": 2,
+        "MEAN": 4,
+        "GET_ROWS": 2
+      },
+      "prefix": {
+        "RMS_NORM": 35,
+        "MUL": 35,
+        "MUL_MAT": 69,
+        "VIEW": 106,
+        "ROPE": 35,
+        "CPY": 36,
+        "PERMUTE": 51,
+        "FLASH_ATTN_EXT": 17,
+        "RESHAPE": 17,
+        "ADD": 34,
+        "GLU": 17
+      },
+      "denoise": {
+        "MUL_MAT": 222,
+        "ADD": 15,
+        "VIEW": 441,
+        "CUSTOM": 216,
+        "ROPE": 108,
+        "PERMUTE": 162,
+        "CPY": 108,
+        "CONCAT": 108,
+        "FLASH_ATTN_EXT": 54,
+        "RESHAPE": 54,
+        "GLU": 54,
+        "RMS_NORM": 3,
+        "MUL": 3,
+        "SCALE": 3
+      }
+    },
+    "vision_nodes_removed": 90
+  },
+  "full": {
+    "baseline": {
+      "vision": {
+        "IM2COL": 1,
+        "RESHAPE": 32,
+        "MUL_MAT": 110,
+        "PERMUTE": 83,
+        "CONT": 3,
+        "ADD": 220,
+        "NORM": 55,
+        "MUL": 55,
+        "VIEW": 162,
+        "CPY": 54,
+        "FLASH_ATTN_EXT": 27,
+        "UNARY": 27
+      },
+      "prefix": {
+        "RMS_NORM": 35,
+        "MUL": 35,
+        "MUL_MAT": 69,
+        "VIEW": 106,
+        "ROPE": 35,
+        "CPY": 36,
+        "PERMUTE": 51,
+        "FLASH_ATTN_EXT": 17,
+        "RESHAPE": 17,
+        "ADD": 34,
+        "GLU": 17
+      },
+      "denoise": {
+        "MUL_MAT": 740,
+        "ADD": 50,
+        "VIEW": 1470,
+        "CUSTOM": 720,
+        "ROPE": 360,
+        "PERMUTE": 540,
+        "CPY": 360,
+        "CONCAT": 360,
+        "FLASH_ATTN_EXT": 180,
+        "RESHAPE": 180,
+        "GLU": 180,
+        "RMS_NORM": 10,
+        "MUL": 10,
+        "SCALE": 10
+      }
+    },
+    "final": {
+      "vision": {
+        "IM2COL": 1,
+        "RESHAPE": 32,
+        "MUL_MAT": 110,
+        "PERMUTE": 83,
+        "CONT": 3,
+        "ADD": 85,
+        "NORM": 55,
+        "MUL": 55,
+        "VIEW": 162,
+        "CPY": 54,
+        "FLASH_ATTN_EXT": 27,
+        "CUSTOM": 81
+      },
+      "prefix": {
+        "RMS_NORM": 35,
+        "MUL": 35,
+        "MUL_MAT": 69,
+        "VIEW": 106,
+        "ROPE": 35,
+        "CPY": 36,
+        "PERMUTE": 51,
+        "FLASH_ATTN_EXT": 17,
+        "RESHAPE": 17,
+        "ADD": 34,
+        "GLU": 17
+      },
+      "denoise": {
+        "MUL_MAT": 740,
+        "ADD": 50,
+        "VIEW": 1470,
+        "CUSTOM": 720,
+        "ROPE": 360,
+        "PERMUTE": 540,
+        "CPY": 360,
+        "CONCAT": 360,
+        "FLASH_ATTN_EXT": 180,
+        "RESHAPE": 180,
+        "GLU": 180,
+        "RMS_NORM": 10,
+        "MUL": 10,
+        "SCALE": 10
+      }
+    },
+    "vision_nodes_removed": 81
+  }
+}

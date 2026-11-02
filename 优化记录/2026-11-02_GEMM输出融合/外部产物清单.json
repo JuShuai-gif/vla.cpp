@@ -1,0 +1,322 @@
+[
+  {
+    "path": "/home/skysi/VLA/vision-epilogue-graphs-20261102/full.msys-rep",
+    "bytes": 4038656,
+    "sha256": "771e795ae7d1f2909e593a440e1e627d1582baeab32e40435aa0674e3ba8c52b"
+  },
+  {
+    "path": "/home/skysi/VLA/vision-epilogue-graphs-20261102/pruned.msys-rep",
+    "bytes": 1941504,
+    "sha256": "bfecdb1d7e5813eb5066b7e40a6538706664a238d65709d2c321d92649b7da82"
+  },
+  {
+    "path": "/home/skysi/VLA/vision-epilogue-graphs-20261102-noncontract/full.msys-rep",
+    "bytes": 4038656,
+    "sha256": "2e97ee82331da0d336875ef38d5f2baf594d51d23f951f238d1490913dd5f9d8"
+  },
+  {
+    "path": "/home/skysi/VLA/vision-epilogue-graphs-20261102-noncontract/pruned.msys-rep",
+    "bytes": 1941504,
+    "sha256": "3208db70f37dabc8a6a772f4d4659cc5a08cbdbe4d7a4657ad436b0c21d8215f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/baseline/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/baseline/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/baseline-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/baseline-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/baseline-r1/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/baseline-r1/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/baseline-r2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/baseline-r2/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-full/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-full/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "0d388df9db21999ee60c102ad1a46d045a999f2d21de55966b6b26762c31d9d1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-full/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "ec6bac7e53f13249ebce44096dc27e7ab493323ccb128131343953fb19e283fa"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "6c30b9f731a34422108a2f3e1a893443636d6a62a847cada3a893b10908ebeba"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "defbe71cb39ffe184e29fcfc7ecf7acd3e9de9cc6e9d496628d51fb4404d58f5"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "7fe17a548a78d391230dbe5e4dcaa8c5f5bb96bc22bc2e5a44ecbdb35fef0d83"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "df58e0024f742aa4e6b121ea7415340da9c33002107e283c9266100dcc5a8d70"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "a378c85b783631d444a47ba49478f9d0ce597b2e8951d0796cd11d0bb3fa0fc7"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "2f07cfeaa1f02a8b10912b5f50da5ce963d4c322d1a5164977c4edb339fd356f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "778f8b4fdca12dbad1a9c3725fe56a3fdc7ea022d214049692d51354956756c9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "4c804dcc9ca57c6c0c7134dd1d0005766957dd74e49d7d32e7c646cf45b3aef9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-r1/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-r1/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-r2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-r2/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/pilot-all/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "b1f7761603ce3dc087a3c54c9353c9b410bd36ea5e60ba4713714b343440bab3"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/pilot-all/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "cb163266b2ed1d6ce2dfa8e7cbbd6bf42b74c30c3e2d1c81651c404151a5ccd1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/pilot-gelu/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "b1f7761603ce3dc087a3c54c9353c9b410bd36ea5e60ba4713714b343440bab3"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/pilot-gelu/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "cb163266b2ed1d6ce2dfa8e7cbbd6bf42b74c30c3e2d1c81651c404151a5ccd1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/pilot-residual/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/pilot-residual/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/trace-full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/trace-pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-full/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "b1f7761603ce3dc087a3c54c9353c9b410bd36ea5e60ba4713714b343440bab3"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-full/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "a1eaf740e0917958b8fae406920d8e1458ea84d307650383be0997dd95e092d4"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-full/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "8c727f6e898e0b5b8c5e60f7d3ffa4715eefbdc44aa47203888cc54462ec2f6c"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "acca222abbc0dd24b7986e3a3c719c3c7a89d50696eedb35dc7aed4d30810edb"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "9cca828401a5d88625a7d4d3726426e0832a9b6ec9d71d515f66c0b238823182"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "6af40bc0b7f87e4d5637832738b99f60aa4431d906850b735133bcc36e5acde4"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "cb163266b2ed1d6ce2dfa8e7cbbd6bf42b74c30c3e2d1c81651c404151a5ccd1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "44286e2f098c41cc073051fc6637f804a1110d07baa05f7740e2862cd79cd0ec"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "72592fd5de3229b9b29941118bf8dd7d519c74939393057123864c63ed11b8f1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "27a60d99f02aed1f96ceaef25b1d2b346ce04e47d201f09d832321c7b706e8bf"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "cae9468e882f829c4fbb029b80ea90cfa908ff38ceaa823357c411d0ec66a116"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "2a9ca94e79a2ba41a99b632b343ab2dbde67a4706e4d4b570ca79f42f96eeb3b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/trace-full/actions.npy",
+    "bytes": 6528,
+    "sha256": "b1f7761603ce3dc087a3c54c9353c9b410bd36ea5e60ba4713714b343440bab3"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/关闭乘加合并版本/trace-pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "cb163266b2ed1d6ce2dfa8e7cbbd6bf42b74c30c3e2d1c81651c404151a5ccd1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "df58e0024f742aa4e6b121ea7415340da9c33002107e283c9266100dcc5a8d70"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "a378c85b783631d444a47ba49478f9d0ce597b2e8951d0796cd11d0bb3fa0fc7"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final-bucket/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "2f07cfeaa1f02a8b10912b5f50da5ce963d4c322d1a5164977c4edb339fd356f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final-bucket/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "778f8b4fdca12dbad1a9c3725fe56a3fdc7ea022d214049692d51354956756c9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final-bucket/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "4c804dcc9ca57c6c0c7134dd1d0005766957dd74e49d7d32e7c646cf45b3aef9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "0d388df9db21999ee60c102ad1a46d045a999f2d21de55966b6b26762c31d9d1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "ec6bac7e53f13249ebce44096dc27e7ab493323ccb128131343953fb19e283fa"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all-bucket/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "6c30b9f731a34422108a2f3e1a893443636d6a62a847cada3a893b10908ebeba"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all-bucket/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "defbe71cb39ffe184e29fcfc7ecf7acd3e9de9cc6e9d496628d51fb4404d58f5"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all-bucket/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "7fe17a548a78d391230dbe5e4dcaa8c5f5bb96bc22bc2e5a44ecbdb35fef0d83"
+  }
+]

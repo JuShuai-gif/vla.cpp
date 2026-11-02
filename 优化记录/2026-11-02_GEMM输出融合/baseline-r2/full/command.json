@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "/home/skysi/code/vla.cpp/.venv-converter/bin/python",
+    "/home/skysi/code/vla.cpp/scripts/bench_pi05.py",
+    "--model",
+    "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+    "--out-dir",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_GEMM\u8f93\u51fa\u878d\u5408/baseline-r2/full",
+    "--weight-dtype",
+    "f16",
+    "--act-dtype",
+    "f32",
+    "--flash-attn",
+    "--warmup",
+    "3",
+    "--runs",
+    "15",
+    "--reference",
+    "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/musa-f32-actions.npy"
+  ],
+  "env": {
+    "VLA_DEVICE": "0",
+    "VLA_N_THREADS": "4",
+    "VLA_MUSA_VISION_SDPA": "1",
+    "VLA_PI05_VISION_QKV": "1",
+    "BENCH_RUNS": "15",
+    "VLA_LIBRARY": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "VLA_MUSA_GEMMA_ATTN": "fused-all"
+  }
+}

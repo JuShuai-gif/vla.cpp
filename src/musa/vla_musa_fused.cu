@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // F32 expert adaRMS and gated residuals, on the graph's own MUSA stream.
 #include "layers/fused_ew.h"
+#include "layers/fused_ops.h"
 #include "modules/vision_prune.h"
 #include <cassert>
 #include <cstdlib>
@@ -122,6 +123,17 @@ bool supports(const ggml_tensor * t) {
     if (t->op == GGML_OP_RMS_NORM)
         return dense_f16(t) && dense_f16(t->src[0]);
     const uint32_t m = magic(t);
+    if (m == FUSED_MAGIC) {
+        const auto & spec = *(const FusedSpec *) userdata(t);
+        if (spec.kind != FusedKind::BiasGelu && spec.kind != FusedKind::BiasRes) return false;
+        // Two-dimensional launch: larger tensors must use the fallback.
+        return !spec.out_bf16 && ggml_nrows(t) <= 65535 && t->ne[0] <= INT32_MAX-WG &&
+               dense_f32(t) && dense_f32(t->src[0]) &&
+               ggml_are_same_shape(t, t->src[0]) && dense_f32(t->src[1]) &&
+               ggml_nelements(t->src[1]) == t->ne[0] &&
+               (spec.kind != FusedKind::BiasRes ||
+                (dense_f32(t->src[2]) && ggml_are_same_shape(t, t->src[2])));
+    }
     if (m == VISION_KEEP_MAGIC)
         return t->type == GGML_TYPE_I32 && dense_f32(t->src[0]) &&
                ggml_is_vector(t->src[0]) && t->src[0]->ne[0] <= WG &&
@@ -466,6 +478,8 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
         const dim3 grid((a->ne[1]+15)/16,(b->ne[1]+15)/16,a->ne[2]);
         attention_matmul_f32<<<grid,dim3(16,16),0,stream>>>(
             (const float *)a->data,(const float *)b->data,(float *)t->data,a->ne[0],a->ne[1],b->ne[1]);
+    } else if (magic(t) == FUSED_MAGIC) {
+        musa_vision_epilogue(t, ((const FusedSpec *) userdata(t))->kind == FusedKind::BiasGelu, stream_ptr);
     } else if (magic(t) == VISION_KEEP_MAGIC) {
         vision_keep<<<1, WG, 0, stream>>>(x, (int32_t *)t->data, t->src[0]->ne[0], h);
     } else if (t->op == GGML_OP_GLU) {

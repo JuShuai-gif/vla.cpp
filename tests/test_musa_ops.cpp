@@ -9,6 +9,7 @@
 #include "cuda/vla_cuda_ops.h"
 #include "options.h"
 #include "layers/attn.h"
+#include "layers/fused_ops.h"
 #include "modules/gemma_expert.h"
 #include "ggml-alloc.h"
 #include "modules/vision_prune.h"
@@ -57,6 +58,8 @@ struct Graph {
                 data[i] = ((int) ((i*37 + j*13) % 67) - 33) / 128.0f;
             if (std::strcmp(ggml_get_name(t), "attention_values") == 0)
                 for (size_t i=0; i<n; ++i) data[i] = 2.0f*std::sin(float(i)*0.017f+float(j));
+            if (std::strcmp(ggml_get_name(t), "epilogue_values") == 0)
+                for (size_t i=0; i<n; ++i) data[i] = 10.0f*std::sin(float(i)*0.017f+float(j));
             if (std::strcmp(ggml_get_name(t), "geglu_values") == 0)
                 for (auto & v : data) v *= 40.0f;
             if (std::strcmp(ggml_get_name(t), "attention_mask") == 0)
@@ -207,6 +210,17 @@ std::vector<float> vision(ggml_backend_t backend, ggml_type type) {
     auto * bias = g.input(GGML_TYPE_F32, {256});
     h = ggml_gelu(g.ctx, ggml_add(g.ctx, vla::mm_f32(g.ctx, W, ggml_norm(g.ctx, h, 1e-6f)), bias));
     return g.run(backend, {h});
+}
+
+std::vector<float> vision_epilogue(ggml_backend_t backend, int64_t h, int64_t seq, int64_t batch, bool fused) {
+    Graph g;
+    auto * x = g.input(GGML_TYPE_F32, {h,seq,batch});
+    ggml_set_name(x, "epilogue_values"); // Cover saturated and near-zero activation values.
+    auto * bias = g.input(GGML_TYPE_F32, {h});
+    auto * residual = g.input(GGML_TYPE_F32, {h,seq,batch});
+    auto * gelu = fused ? vla::fused_bias_gelu(g.ctx,x,bias) : ggml_gelu(g.ctx,ggml_add(g.ctx,x,bias));
+    auto * res = fused ? vla::fused_bias_res(g.ctx,x,bias,residual) : ggml_add(g.ctx,residual,ggml_add(g.ctx,x,bias));
+    return g.run(backend,{gelu,res},nullptr,false,5);
 }
 
 std::vector<float> softmax(ggml_backend_t backend, int64_t width, bool masked) {
@@ -464,6 +478,28 @@ int main(int argc, char ** argv) {
             }
         ggml_backend_free(cpu);ggml_backend_free(b.handle);
         return ok?0:1;
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--vision-epilogue") == 0) {
+        {
+            Graph g;
+            auto * x = g.input(GGML_TYPE_F32,{33,65536});
+            auto * bias = g.input(GGML_TYPE_F32,{33});
+            auto * op = vla::fused_bias_gelu(g.ctx,x,bias);
+            ok = !ggml_backend_supports_op(b.handle,op) && ggml_backend_supports_op(cpu,op) && ok;
+        }
+        for (int64_t h : {33,1152,4304})
+            for (int64_t seq : {17,256})
+                for (int64_t batch : {1,2}) {
+                    const auto fused = vision_epilogue(b.handle,h,seq,batch,true);
+                    ok = compare("vision_epilogue_musa",GGML_TYPE_F32,
+                        vision_epilogue(b.handle,h,seq,batch,false),fused,1e-12) && ok;
+                    // ggml CPU GELU uses an F16 lookup table. The fused CPU
+                    // callback evaluates the same F32 tanh formula as MUSA.
+                    ok = compare("vision_epilogue_cpu_fallback",GGML_TYPE_F32,
+                        vision_epilogue(cpu,h,seq,batch,true),fused,2e-6) && ok;
+                }
+        ggml_backend_free(cpu);ggml_backend_free(b.handle);
+        return ok ? 0 : 1;
     }
     if (argc == 2 && std::strcmp(argv[1], "--strided-pack") == 0) {
         for (int64_t hd : {72, 256})

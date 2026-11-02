@@ -1,0 +1,62 @@
+[
+  {
+    "model": "pruned",
+    "stage": "baseline-r1",
+    "max_abs": 0.0
+  },
+  {
+    "model": "pruned",
+    "stage": "baseline-r2",
+    "max_abs": 0.0
+  },
+  {
+    "model": "pruned",
+    "stage": "final-r1",
+    "max_abs": 0.0
+  },
+  {
+    "model": "pruned",
+    "stage": "final-r2",
+    "max_abs": 0.0
+  },
+  {
+    "model": "pruned",
+    "stage": "baseline-phases",
+    "max_abs": 0.0
+  },
+  {
+    "model": "pruned",
+    "stage": "final-phases",
+    "max_abs": 0.0
+  },
+  {
+    "model": "full",
+    "stage": "baseline-r1",
+    "max_abs": 0.0
+  },
+  {
+    "model": "full",
+    "stage": "baseline-r2",
+    "max_abs": 0.0
+  },
+  {
+    "model": "full",
+    "stage": "final-r1",
+    "max_abs": 0.0
+  },
+  {
+    "model": "full",
+    "stage": "final-r2",
+    "max_abs": 0.0
+  },
+  {
+    "model": "full",
+    "stage": "baseline-phases",
+    "max_abs": 0.0
+  },
+  {
+    "model": "full",
+    "stage": "final-phases",
+    "max_abs": 0.0
+  }
+]
