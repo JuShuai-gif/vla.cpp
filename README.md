@@ -202,3 +202,5 @@ Built on:
 - [`llama.cpp`](https://github.com/ggml-org/llama.cpp) - LLM inference engine in C/C++.
 - [LIBERO](https://github.com/Lifelong-Robot-Learning/LIBERO) - benchmark suite for the success-rate sweeps.
 - [SimplerEnv](https://github.com/simpler-env/SimplerEnv) - the second simulator in the eval scaffold.
+
+Optimization plans, stage comparisons and raw reports: [优化记录](优化记录/README.md).

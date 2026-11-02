@@ -44,4 +44,4 @@
 
 ## 尚未实施的官方文档优化
 
-Graph、FlashAttention、进一步的 KV/RoPE 布局、muDNN copy、muBLASLt 调优均未产生新增优化结果。详见 [官方调研与实施顺序](../../pi05-musa-official-review-2026-10-30.md)；使用与验证命令见 [本地模型工作流](../../pi05-local.md)。
+Graph、FlashAttention、进一步的 KV/RoPE 布局、muDNN copy、muBLASLt 调优均未产生新增优化结果。详见 [官方调研与实施顺序](../MUSA_M1000_PI05_优化调研_2026-10-30.md)；使用与验证命令见 [本地模型工作流](../方案与验证说明.md)。

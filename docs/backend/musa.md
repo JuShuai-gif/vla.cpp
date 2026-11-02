@@ -99,7 +99,7 @@ The board checkout is `/home/skysi/code/vla.cpp`, and the verified build is
 `build-musa-m1000`. Its pinned llama checkout is `build-musa-deps/llama`, selected
 with `-DFETCHCONTENT_SOURCE_DIR_LLAMA="$PWD/build-musa-deps/llama"` to avoid
 fetching every upstream tag. Both local pi0.5 variants have now passed conversion and CPU/MUSA inference checks.
-See [local pi0.5 workflow](pi05-local.md) for current commands, results, and limits.
+See [local pi0.5 workflow](../../优化记录/方案与验证说明.md) for current commands, results, and limits.
 
 ## pi0.5 checkpoint validation
 
@@ -120,18 +120,18 @@ runs the same executable on CPU; a missing/out-of-range GPU also logs a CPU
 fallback, so check the backend line rather than only the exit status.
 
 Activations default to F32; pi0.5 also supports `--act-dtype f16` with F16
-weights and fusion (see [local workflow](pi05-local.md)). `--act-dtype bf16` is a CUDA/SYCL-specific path and is not
+weights and fusion (see [local workflow](../../优化记录/方案与验证说明.md)). `--act-dtype bf16` is a CUDA/SYCL-specific path and is not
 implemented for MUSA. FoldQuant checkpoints use the existing float-weight
 dequantization path, not native MUSA W8A8/W4A4 execution; its numerical behavior
 differs from the integer reference and needs separate model-level validation.
 
 ## Local checkpoint follow-up (2026-10-30)
 
-See [pi05-local.md](pi05-local.md). The final suite is 14/14, including attention
+See [pi05-local.md](../../优化记录/方案与验证说明.md). The final suite is 14/14, including attention
 score reduction and a segmented 5 GiB weight-allocation regression. MUSA buffers
 are capped at 2 GiB because this M1000/5.1 stack aliases offsets 4 GiB apart
 inside a single large allocation. Both standard 27-layer/256-token and pruned
 15-layer/136-token checkpoints have completed full CPU/MUSA synthetic checks.
 
 Current experiment records and submission-time validation are in the
-[versioned benchmark archive](benchmarks/pi05-m1000-2026-10-30/README.md).
+[versioned benchmark archive](../../优化记录/2026-10-30_M1000首轮优化/README.md).
