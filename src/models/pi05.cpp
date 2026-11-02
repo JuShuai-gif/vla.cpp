@@ -19,6 +19,9 @@
 #include "model.h"
 
 #include "ggml.h"
+#ifdef GGML_USE_MUSA
+#include "ggml-impl.h"
+#endif
 #include "ggml-backend.h"
 #include "backend.h"
 #include "gguf_reader.h"
@@ -119,6 +122,7 @@ struct Pi05ModelArch : public ModelArchBase {
         std::vector<ggml_tensor *> t_view_rows;
         ggml_tensor *t_x0=nullptr,*t_suffix_pos=nullptr,*x_final=nullptr;
         ggml_tensor *t_prefix_mask=nullptr,*t_suffix_mask=nullptr;  // lang_bucket only
+        int prefix_nodes = 0;
     };
     graph_cache<MainKey, MainIO> main_graph;
     // Opened once at load: reopening per predict re-parses the whole GGUF header.
@@ -865,6 +869,15 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     const int64_t max_ad    = cfg.max_action_dim;
     const int     num_steps = cfg.num_steps;
     const float   dt        = -1.0f/(float) num_steps;
+#ifdef GGML_USE_MUSA
+    static const bool split_phases = env_flag("VLA_PI05_SPLIT_PHASES");
+    if (split_phases && (kv_inplace || fq_fast)) {
+        std::fprintf(stderr, "vla(pi05): phase timing requires the ordinary cached-prefix path\n");
+        return {};
+    }
+#else
+    const bool split_phases = false;
+#endif
 
     int64_t n_img_tokens = 0;
     if (in.precomputed_img_emb) {
@@ -956,6 +969,16 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
             cV16[i] = ggml_cast(C, ggml_permute(C, cV[i], 0, 2, 1, 3), GGML_TYPE_F16);
         }
 
+    ggml_cgraph * gf = ggml_new_graph_custom(C, max_nodes, false);
+    if (split_phases) {
+        // Visit every prefix dependency first; the full graph still owns allocation/lifetimes.
+        for (int64_t i=0; i<n_layers; ++i) {
+            ggml_build_forward_expand(gf, cK[i]);
+            ggml_build_forward_expand(gf, cV[i]);
+        }
+        gio.prefix_nodes = ggml_graph_n_nodes(gf);
+    }
+
     ggml_tensor * x_t = t_x0;
     for (int step=0; step<num_steps; ++step) {
         auto mod = [&](int64_t j) {
@@ -992,7 +1015,6 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     gio.t_x0=t_x0; gio.t_suffix_pos=t_suffix_pos; gio.x_final=x_final;
     gio.t_prefix_mask=t_prefix_mask; gio.t_suffix_mask=t_suffix_mask;
 
-    ggml_cgraph * gf = ggml_new_graph_custom(C, max_nodes, false);
     ggml_build_forward_expand(gf, x_final);
     return gf;
     });
@@ -1067,6 +1089,27 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     const auto ti0 = clk::now();
     static const bool split_host = env_flag("VLA_PI05_HOST_SPLIT");
     ggml_status st;
+#ifdef GGML_USE_MUSA
+    if (split_phases) {
+        auto run = [&](int begin, int end) {
+            // Match the existing backend_fallback slice, retaining parent use counts for fusion.
+            ggml_cgraph view = *gf;
+            view.size = 0; view.n_nodes = end-begin; view.n_leafs = 0;
+            view.nodes = gf->nodes+begin;
+            view.grads = view.grad_accs = view.leafs = nullptr;
+            view.uid = 0;
+            return ggml_backend_graph_compute(backend, &view);
+        };
+        st = run(0, gio.prefix_nodes);
+        const auto tp = clk::now();
+        if (st == GGML_STATUS_SUCCESS)
+            st = run(gio.prefix_nodes, ggml_graph_n_nodes(gf));
+        const auto te = clk::now();
+        std::fprintf(stderr, "VLA_PI05_PHASES {\"vision_ms\":%.6f,\"prefix_ms\":%.6f,\"denoise_ms\":%.6f,\"steps\":%d}\n",
+                     stats.ms_vision, std::chrono::duration<double, std::milli>(tp-ti0).count(),
+                     std::chrono::duration<double, std::milli>(te-tp).count(), num_steps);
+    } else
+#endif
     if (split_host) {
         st = ggml_backend_graph_compute_async(backend, gf);
         const float ms_submit = std::chrono::duration<float, std::milli>(clk::now()-ti0).count();

@@ -392,6 +392,7 @@ elseif(GGML_MUSA)
     # ggml-musa reuses ggml-cuda's API and exports GGML_USE_CUDA too. Its
     # device kernels are built by mcc; vla.cpp's NVIDIA-only hooks are not.
     target_compile_definitions(vla_core PUBLIC GGML_USE_MUSA)
+    target_include_directories(vla_core SYSTEM PRIVATE ${llama_SOURCE_DIR}/ggml/src)
     target_sources(ggml-musa PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu)
     set(_vla_musa_flags "-O3 -x musa -mtgpu -ffp-contract=off")
     set(_vla_musa_archs "${MUSA_ARCHITECTURES}")

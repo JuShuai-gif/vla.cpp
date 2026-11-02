@@ -1,0 +1,10 @@
+{
+  "commit": "23d7052e13b7bfbab41cde6488a3a875910eacd1",
+  "power_profile": "performance",
+  "identity": "uid=1000(skysi) gid=1000(skysi) \u7ec4=1000(skysi),27(sudo),44(video),110(render)",
+  "libraries": {
+    "/home/skysi/code/vla.cpp/build-musa-official/libvla.so": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "/home/skysi/code/vla.cpp/build-musa-official/libvla_core.so": "252fc6d8d504c67b8068b604a9d4ba3c13c1df4ad99172d87d0f0b134e8c94ee",
+    "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0.25.3": "930ae546607c36e61f98852f32863a899b402035036dbd8cacb8553f115cb350"
+  }
+}

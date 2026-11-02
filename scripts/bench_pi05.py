@@ -23,12 +23,15 @@ ap.add_argument('--out-dir', type=Path, required=True)
 ap.add_argument('--weight-dtype', choices=('f32', 'f16', 'bf16'), default='f32')
 ap.add_argument('--act-dtype', choices=('f32', 'f16'), default='f32')
 ap.add_argument('--flash-attn', action='store_true')
+ap.add_argument('--split-phases', action='store_true', help='MUSA diagnostic: synchronize prefix/denoising separately')
 ap.add_argument('--warmup', type=int, default=1)
 ap.add_argument('--runs', type=int, default=5)
 ap.add_argument('--reference', type=Path, help='Actions .npy from validate_pi05.py or this benchmark')
 opt = ap.parse_args()
 if opt.runs < 1 or opt.warmup < 0:
     ap.error('runs must be positive and warmup nonnegative')
+if opt.split_phases:
+    os.environ['VLA_PI05_SPLIT_PHASES'] = '1'
 repo = Path(__file__).resolve().parents[1]
 os.environ.setdefault('VLA_LIBRARY', str(repo/'build-musa-m1000/libvla.so'))
 os.environ.setdefault('VLA_N_THREADS', '4')
@@ -63,7 +66,7 @@ metadata = {
     'power_profile': command_output(['powerprofilesctl', 'get']),
     'environment': {k: os.environ.get(k) for k in (
         'VLA_DEVICE', 'VLA_N_THREADS', 'VLA_PI05_NO_FUSE', 'VLA_PI05_NO_PROJ_FUSE',
-        'GGML_CUDA_DISABLE_GRAPHS', 'GGML_MUSA_DISABLE_GRAPHS')},
+        'GGML_CUDA_DISABLE_GRAPHS', 'GGML_MUSA_DISABLE_GRAPHS', 'VLA_PI05_SPLIT_PHASES')},
 }
 
 opt.out_dir.mkdir(parents=True, exist_ok=True)
@@ -99,7 +102,7 @@ with vla_cpp.load(str(opt.model), config_path=str(runtime)) as m:
         if i >= opt.warmup:
             rows.append(row)
     np.save(opt.out_dir/'actions.npy', actions)
-    report = {'metadata': metadata, 'flash_attn': opt.flash_attn, 'model': str(opt.model), 'dtype': opt.weight_dtype, 'act_dtype': opt.act_dtype, 'steps': cfg.num_steps,
+    report = {'metadata': metadata, 'split_phases': opt.split_phases, 'flash_attn': opt.flash_attn, 'model': str(opt.model), 'dtype': opt.weight_dtype, 'act_dtype': opt.act_dtype, 'steps': cfg.num_steps,
               'synthetic_inputs': True, 'camera_count': len(images), 'text_token_count': 6,
               'chunk': cfg.n_suffix, 'vision_tokens_per_camera': cfg.n_img,
               'no_fuse': os.environ.get('VLA_PI05_NO_FUSE', '0'),

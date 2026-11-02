@@ -1,0 +1,22 @@
+[
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u4e09\u90e8\u5206\u8017\u65f6/cup_cube_joint_061_a800_50k_20261022/split/actions.npy",
+    "bytes": 6528,
+    "sha256": "bafd9a88864cf0eef9f0aeeb551dd1291a76a01674582b8595f723fefb8e65a7"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u4e09\u90e8\u5206\u8017\u65f6/cup_cube_joint_061_a800_50k_20261022/whole/actions.npy",
+    "bytes": 6528,
+    "sha256": "bafd9a88864cf0eef9f0aeeb551dd1291a76a01674582b8595f723fefb8e65a7"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u4e09\u90e8\u5206\u8017\u65f6/pi05_cube_merge_cksize50_step3_0929/split/actions.npy",
+    "bytes": 6528,
+    "sha256": "7ca1bdff24dc56a92f192baad67841d696683f8b06e589a248af5f004cdc9b5a"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u4e09\u90e8\u5206\u8017\u65f6/pi05_cube_merge_cksize50_step3_0929/whole/actions.npy",
+    "bytes": 6528,
+    "sha256": "7ca1bdff24dc56a92f192baad67841d696683f8b06e589a248af5f004cdc9b5a"
+  }
+]
