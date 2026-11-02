@@ -1,0 +1,5 @@
+musaMalloc(&a, k*m*4): operation not permitted when stream is capturing
+k=32 m=1024 n=50 output=f32 compute=f32 heuristic_status=0 count=1
+  algo=0 state=0 workspace=0 run_status=0 max_error=0
+capture blas=0 last=901 end=901
+k=1024 m=32 n=50 output=f32 compute=f32 heuristic_status=0 count=1

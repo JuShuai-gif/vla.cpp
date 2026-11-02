@@ -1,0 +1,233 @@
+[
+    {
+        "Avg(ns)": 4603891,
+        "Max(ns)": 1111447115,
+        "Med(ns)": 6940,
+        "Min(ns)": 880,
+        "Name": "musaStreamSynchronize",
+        "Num Calls": 1128,
+        "StdDev(ns)": 62297326,
+        "Time(%)": 44.34611616966021,
+        "Total Time(ns)": 5193189940
+    },
+    {
+        "Avg(ns)": 190862470,
+        "Max(ns)": 1079781562,
+        "Med(ns)": 41659464,
+        "Min(ns)": 5880,
+        "Name": "musaMalloc",
+        "Num Calls": 13,
+        "StdDev(ns)": 336306727,
+        "Time(%)": 21.187771311595174,
+        "Total Time(ns)": 2481212118
+    },
+    {
+        "Avg(ns)": 141049,
+        "Max(ns)": 47594205,
+        "Med(ns)": 3660,
+        "Min(ns)": 1560,
+        "Name": "musaLaunchKernel",
+        "Num Calls": 12464,
+        "StdDev(ns)": 1228530,
+        "Time(%)": 15.012377156760218,
+        "Total Time(ns)": 1758037293
+    },
+    {
+        "Avg(ns)": 1098351,
+        "Max(ns)": 89625230,
+        "Med(ns)": 12275040,
+        "Min(ns)": 4040,
+        "Name": "musaMemcpyAsync",
+        "Num Calls": 1122,
+        "StdDev(ns)": 4347708,
+        "Time(%)": 10.523390035771637,
+        "Total Time(ns)": 1232350609
+    },
+    {
+        "Avg(ns)": 335428683,
+        "Max(ns)": 448013615,
+        "Med(ns)": 335428683,
+        "Min(ns)": 222843751,
+        "Name": "musaGraphInstantiate",
+        "Num Calls": 2,
+        "StdDev(ns)": 112584932,
+        "Time(%)": 5.728640590778826,
+        "Total Time(ns)": 670857366
+    },
+    {
+        "Avg(ns)": 23921690,
+        "Max(ns)": 143001530,
+        "Med(ns)": 758078,
+        "Min(ns)": 32640,
+        "Name": "musaFree",
+        "Num Calls": 13,
+        "StdDev(ns)": 40105780,
+        "Time(%)": 2.6555629828176155,
+        "Total Time(ns)": 310981979
+    },
+    {
+        "Avg(ns)": 62882,
+        "Max(ns)": 17047944,
+        "Med(ns)": 2100,
+        "Min(ns)": 400,
+        "Name": "musaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags",
+        "Num Calls": 502,
+        "StdDev(ns)": 988421,
+        "Time(%)": 0.2695590024324166,
+        "Total Time(ns)": 31566938
+    },
+    {
+        "Avg(ns)": 5998820,
+        "Max(ns)": 9584049,
+        "Med(ns)": 5998820,
+        "Min(ns)": 2413592,
+        "Name": "musaGraphExecDestroy",
+        "Num Calls": 2,
+        "StdDev(ns)": 3585228,
+        "Time(%)": 0.10245124628502965,
+        "Total Time(ns)": 11997641
+    },
+    {
+        "Avg(ns)": 3057690,
+        "Max(ns)": 4731465,
+        "Med(ns)": 3057690,
+        "Min(ns)": 1383915,
+        "Name": "musaGraphDestroy",
+        "Num Calls": 2,
+        "StdDev(ns)": 1673775,
+        "Time(%)": 0.05222095764546918,
+        "Total Time(ns)": 6115380
+    },
+    {
+        "Avg(ns)": 652111,
+        "Max(ns)": 1231796,
+        "Med(ns)": 591998,
+        "Min(ns)": 331719,
+        "Name": "musaGraphLaunch",
+        "Num Calls": 6,
+        "StdDev(ns)": 327051,
+        "Time(%)": 0.03341137752826196,
+        "Total Time(ns)": 3912668
+    },
+    {
+        "Avg(ns)": 240,
+        "Max(ns)": 19960,
+        "Med(ns)": 200,
+        "Min(ns)": 160,
+        "Name": "musaGetLastError",
+        "Num Calls": 15255,
+        "StdDev(ns)": 177,
+        "Time(%)": 0.03130424978710392,
+        "Total Time(ns)": 3665911
+    },
+    {
+        "Avg(ns)": 616,
+        "Max(ns)": 11560,
+        "Med(ns)": 200,
+        "Min(ns)": 159,
+        "Name": "musaGetDevice",
+        "Num Calls": 5523,
+        "StdDev(ns)": 1457,
+        "Time(%)": 0.02907208987102872,
+        "Total Time(ns)": 3404512
+    },
+    {
+        "Avg(ns)": 1554515,
+        "Max(ns)": 1554515,
+        "Med(ns)": 1554515,
+        "Min(ns)": 1554515,
+        "Name": "musaStreamCreateWithFlags",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 0.013274442794110346,
+        "Total Time(ns)": 1554515
+    },
+    {
+        "Avg(ns)": 1352355,
+        "Max(ns)": 1352355,
+        "Med(ns)": 1352355,
+        "Min(ns)": 1352355,
+        "Name": "musaStreamDestroy",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 0.011548141436286621,
+        "Total Time(ns)": 1352355
+    },
+    {
+        "Avg(ns)": 123699,
+        "Max(ns)": 175359,
+        "Med(ns)": 123699,
+        "Min(ns)": 72040,
+        "Name": "musaStreamEndCapture",
+        "Num Calls": 2,
+        "StdDev(ns)": 51659,
+        "Time(%)": 0.0021126099605472486,
+        "Total Time(ns)": 247399
+    },
+    {
+        "Avg(ns)": 7873,
+        "Max(ns)": 31840,
+        "Med(ns)": 5440,
+        "Min(ns)": 200,
+        "Name": "musaGetDeviceProperties_v2",
+        "Num Calls": 6,
+        "StdDev(ns)": 11329,
+        "Time(%)": 0.00040339570708148383,
+        "Total Time(ns)": 47240
+    },
+    {
+        "Avg(ns)": 23099,
+        "Max(ns)": 36399,
+        "Med(ns)": 23099,
+        "Min(ns)": 9800,
+        "Name": "musaStreamBeginCapture",
+        "Num Calls": 2,
+        "StdDev(ns)": 13299,
+        "Time(%)": 0.0003945063139597263,
+        "Total Time(ns)": 46199
+    },
+    {
+        "Avg(ns)": 33520,
+        "Max(ns)": 33520,
+        "Med(ns)": 33520,
+        "Min(ns)": 33520,
+        "Name": "musaGetDeviceCount",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 0.00028623675066408416,
+        "Total Time(ns)": 33520
+    },
+    {
+        "Avg(ns)": 6760,
+        "Max(ns)": 6760,
+        "Med(ns)": 6760,
+        "Min(ns)": 6760,
+        "Name": "musaDeviceGetPCIBusId",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 5.772554995492867e-05,
+        "Total Time(ns)": 6760
+    },
+    {
+        "Avg(ns)": 4360,
+        "Max(ns)": 4360,
+        "Med(ns)": 4360,
+        "Min(ns)": 4360,
+        "Name": "musaStreamQuery",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 3.723127186442145e-05,
+        "Total Time(ns)": 4360
+    },
+    {
+        "Avg(ns)": 1000,
+        "Max(ns)": 1000,
+        "Med(ns)": 1000,
+        "Min(ns)": 1000,
+        "Name": "musaDeviceGetAttribute",
+        "Num Calls": 1,
+        "StdDev(ns)": 0,
+        "Time(%)": 8.539282537711342e-06,
+        "Total Time(ns)": 1000
+    }
+]

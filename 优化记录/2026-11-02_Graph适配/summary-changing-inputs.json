@@ -1,0 +1,64 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "sequence_lengths": [
+      6,
+      6,
+      6,
+      9,
+      9,
+      9,
+      6,
+      6,
+      6,
+      9,
+      9,
+      9
+    ],
+    "repeat_max_abs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "between_input_max_abs": 21.774581909179688,
+    "passed": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "sequence_lengths": [
+      6,
+      6,
+      6,
+      9,
+      9,
+      9,
+      6,
+      6,
+      6,
+      9,
+      9,
+      9
+    ],
+    "repeat_max_abs": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "between_input_max_abs": 11.641395568847656,
+    "passed": true
+  }
+]

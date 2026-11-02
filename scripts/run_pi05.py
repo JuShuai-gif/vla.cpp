@@ -79,9 +79,12 @@ def main():
     ap.add_argument("--act-dtype", choices=("f32", "f16"), default="f32")
     ap.add_argument("--flash-attn", action="store_true", help="Enable compiled FlashAttention kernels")
     ap.add_argument("--no-fuse", action="store_true", help="Disable MUSA expert fusion for A/B checks")
+    ap.add_argument("--warmup", type=int, default=0, help="Resident warmup predictions; use 2 to exercise Graph replay")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--output", required=True, type=Path)
     args = ap.parse_args()
+    if args.warmup < 0:
+        ap.error("--warmup must be nonnegative")
     os.environ["VLA_DEVICE"] = args.device
     if args.no_fuse:
         os.environ["VLA_PI05_NO_FUSE"] = "1"
@@ -115,12 +118,19 @@ def main():
             padded = np.zeros(int(cfg.max_state_dim), dtype=np.float32)
             padded[:len(state)] = state
             noise = np.random.default_rng(args.seed).standard_normal(int(cfg.n_suffix * cfg.max_action_dim)).astype(np.float32)
-            actions = model.predict(images, tokens=tokens, state=padded, noise=noise, pixel_format=vla_cpp.PIXEL_F32_RGB_01, timing=vla_cpp.TIMING_PHASE)
-            if not np.isfinite(actions).all(): raise ValueError("Non-finite policy output")
+            first = None
+            repeat_max_abs = 0.0
+            for _ in range(args.warmup + 1):
+                actions = model.predict(images, tokens=tokens, state=padded, noise=noise, pixel_format=vla_cpp.PIXEL_F32_RGB_01, timing=vla_cpp.TIMING_PHASE)
+                if not np.isfinite(actions).all(): raise ValueError("Non-finite policy output")
+                if first is None:
+                    first = actions.copy()
+                repeat_max_abs = max(repeat_max_abs, float(np.max(np.abs(actions-first))))
             st = model.last_stats()
             result = {"model": str(args.model.resolve()), "device_requested": args.device,
                       "weight_dtype": args.weight_dtype, "camera_order": cameras,
                       "act_dtype": args.act_dtype, "flash_attn": args.flash_attn,
+                      "warmup": args.warmup, "repeat_max_abs": repeat_max_abs,
                       "fusion_disabled": os.environ.get("VLA_PI05_NO_FUSE") == "1",
                       "tokens_per_image": int(cfg.n_img), "num_steps": int(cfg.num_steps),
                       "seed": args.seed, "prompt": prompt, "token_ids": tokens,

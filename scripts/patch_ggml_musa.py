@@ -197,14 +197,54 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
         path.write_text(text)
         print(f"MUSA: strided broadcast GEMM in {path}")
 
-    # M1000/5.1: FP32 GEMMs invalidate capture; BF16/FA graph replay fails
-    # numerical regression. Keep these graphs on normal stream execution.
+    # Avoid muBLAS host-scalar copies and stream sync for small F32 projections.
     path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
     original = text = path.read_text()
-    anchor = "        // [TAG_MUL_MAT_ID_CUDA_GRAPHS]\n"
-    replacement = """#ifdef GGML_USE_MUSA
+    anchor = "static void ggml_cuda_mul_mat(ggml_backend_cuda_context & ctx, const ggml_tensor * src0, const ggml_tensor * src1, ggml_tensor * dst) {"
+    helper = """#ifdef GGML_USE_MUSA
+static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor * b, const ggml_tensor * dst) {
+    return a->type == GGML_TYPE_F32 && b->type == GGML_TYPE_F32 && dst->type == GGML_TYPE_F32 &&
+           a->ne[2] == 1 && a->ne[3] == 1 && b->ne[2] == 1 && b->ne[3] == 1 &&
+           (a->ne[0] <= 32 || a->ne[1] <= 32) && a->ne[0] % 2 == 0 &&
+           ggml_is_contiguous(a) && ggml_is_contiguous(b) && ggml_is_contiguous(dst);
+}
+#endif
+
+"""
+    replacement = helper + anchor + """
+#ifdef GGML_USE_MUSA
+    if (ggml_musa_small_f32_matmul(src0, src1, dst)) {
+        // Reuse the F32 vector kernel in batches of at most eight columns.
+        for (int64_t col = 0; col < src1->ne[1]; col += MMVF_MAX_BATCH_SIZE) {
+            ggml_tensor b = *src1, d = *dst;
+            b.ne[1] = d.ne[1] = std::min<int64_t>(MMVF_MAX_BATCH_SIZE, src1->ne[1] - col);
+            b.data = (char *) src1->data + col * src1->nb[1];
+            d.data = (char *) dst->data + col * dst->nb[1];
+            b.nb[2] = b.nb[3] = b.nb[1] * b.ne[1];
+            d.nb[2] = d.nb[3] = d.nb[1] * d.ne[1];
+            ggml_cuda_mul_mat_vec_f(ctx, src0, &b, nullptr, &d);
+        }
+        return;
+    }
+#endif"""
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing MUSA F32 projection anchor")
+        text = text.replace(anchor, replacement)
+
+    # Upgrade an existing 47a75fb dependency checkout, not just a fresh fetch.
+    previous_guard = """#ifdef GGML_USE_MUSA
         if (node->op == GGML_OP_FLASH_ATTN_EXT ||
             (node->op == GGML_OP_MUL_MAT && node->src[0]->type != GGML_TYPE_F16)) {
+            return false;
+        }
+#endif
+"""
+    text = text.replace(previous_guard, "")
+    anchor = "        // [TAG_MUL_MAT_ID_CUDA_GRAPHS]\n"
+    replacement = """#ifdef GGML_USE_MUSA
+        if (node->op == GGML_OP_MUL_MAT && node->src[0]->type == GGML_TYPE_F32 &&
+            !ggml_musa_small_f32_matmul(node->src[0], node->src[1], node)) {
             return false;
         }
 #endif
@@ -213,9 +253,18 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
         if text.count(anchor) != 1:
             raise SystemExit(f"{path}: missing MUSA graph compatibility anchor")
         text = text.replace(anchor, replacement)
+
+    # MUSA corrupts some captured graphs if a fresh executable updates itself.
+    anchor = """        }
+        if (cuda_graph_update_required) { // Update graph executable"""
+    replacement = """        } else if (cuda_graph_update_required) { // Update graph executable"""
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit(f"{path}: missing graph initial update anchor")
+        text = text.replace(anchor, replacement)
     if text != original:
         path.write_text(text)
-        print(f"MUSA: guard unsupported graph capture/replay in {path}")
+        print(f"MUSA: graph-safe F32 projections and executable initialization in {path}")
 
 
 if __name__ == "__main__":

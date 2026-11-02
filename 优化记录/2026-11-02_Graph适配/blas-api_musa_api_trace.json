@@ -1,0 +1,666 @@
+[
+    {
+        "CorrID": 8,
+        "Duration(ns)": 1991991,
+        "Name": "musaStreamCreate",
+        "Pid": 69816,
+        "Start(ns)": 0,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 9,
+        "Duration(ns)": 2320,
+        "Name": "musaGetDevice",
+        "Pid": 69816,
+        "Start(ns)": 2023951,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 10,
+        "Duration(ns)": 39080,
+        "Name": "musaGetDeviceProperties_v2",
+        "Pid": 69816,
+        "Start(ns)": 2028431,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 11,
+        "Duration(ns)": 240,
+        "Name": "musaGetDeviceProperties_v2",
+        "Pid": 69816,
+        "Start(ns)": 2068031,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 12,
+        "Duration(ns)": 7350646,
+        "Name": "musaMalloc",
+        "Pid": 69816,
+        "Start(ns)": 2083990,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 13,
+        "Duration(ns)": 3480,
+        "Name": "musaStreamQuery",
+        "Pid": 69816,
+        "Start(ns)": 9452396,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 14,
+        "Duration(ns)": 600,
+        "Name": "musaGetLastError",
+        "Pid": 69816,
+        "Start(ns)": 9457756,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 15,
+        "Duration(ns)": 7919,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 9459676,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 16,
+        "Duration(ns)": 936316,
+        "Name": "musaMalloc",
+        "Pid": 69816,
+        "Start(ns)": 9468235,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 17,
+        "Duration(ns)": 894196,
+        "Name": "musaMalloc",
+        "Pid": 69816,
+        "Start(ns)": 10405111,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 18,
+        "Duration(ns)": 873716,
+        "Name": "musaMalloc",
+        "Pid": 69816,
+        "Start(ns)": 11299867,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 19,
+        "Duration(ns)": 38039,
+        "Name": "musaMemset",
+        "Pid": 69816,
+        "Start(ns)": 12188183,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 20,
+        "Duration(ns)": 2720,
+        "Name": "musaMemset",
+        "Pid": 69816,
+        "Start(ns)": 12226742,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 21,
+        "Duration(ns)": 1233995,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 15170048,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 22,
+        "Duration(ns)": 615717,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 16405483,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 23,
+        "Duration(ns)": 119040,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 17087199,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 24,
+        "Duration(ns)": 24400,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 17206599,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 25,
+        "Duration(ns)": 7760,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 17233839,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 26,
+        "Duration(ns)": 1419154,
+        "Name": "musaLaunchKernel",
+        "Pid": 69816,
+        "Start(ns)": 17268198,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 27,
+        "Duration(ns)": 477317,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 18691112,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 28,
+        "Duration(ns)": 560,
+        "Name": "musaGetLastError",
+        "Pid": 69816,
+        "Start(ns)": 19169829,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 29,
+        "Duration(ns)": 18960,
+        "Name": "musaStreamBeginCapture",
+        "Pid": 69816,
+        "Start(ns)": 19171629,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 30,
+        "Duration(ns)": 6280,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 19192909,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 31,
+        "Duration(ns)": 2640,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 19199549,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 32,
+        "Duration(ns)": 400,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 19202509,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 33,
+        "Duration(ns)": 3080,
+        "Name": "musaLaunchKernel",
+        "Pid": 69816,
+        "Start(ns)": 19205349,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 34,
+        "Duration(ns)": 200,
+        "Name": "musaGetLastError",
+        "Pid": 69816,
+        "Start(ns)": 19209549,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 35,
+        "Duration(ns)": 2800,
+        "Name": "musaStreamEndCapture",
+        "Pid": 69816,
+        "Start(ns)": 19210869,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 36,
+        "Duration(ns)": 920,
+        "Name": "musaGetErrorString",
+        "Pid": 69816,
+        "Start(ns)": 19215069,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 37,
+        "Duration(ns)": 345319,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 19230829,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 38,
+        "Duration(ns)": 286758,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 19576428,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 39,
+        "Duration(ns)": 1285714,
+        "Name": "musaLaunchKernel",
+        "Pid": 69816,
+        "Start(ns)": 19885386,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 40,
+        "Duration(ns)": 680,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 21172700,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 41,
+        "Duration(ns)": 240,
+        "Name": "musaGetLastError",
+        "Pid": 69816,
+        "Start(ns)": 21173820,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 42,
+        "Duration(ns)": 1280,
+        "Name": "musaStreamBeginCapture",
+        "Pid": 69816,
+        "Start(ns)": 21174620,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 43,
+        "Duration(ns)": 3480,
+        "Name": "musaLaunchKernel",
+        "Pid": 69816,
+        "Start(ns)": 21178500,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 44,
+        "Duration(ns)": 240,
+        "Name": "musaGetLastError",
+        "Pid": 69816,
+        "Start(ns)": 21182340,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 45,
+        "Duration(ns)": 2440,
+        "Name": "musaStreamEndCapture",
+        "Pid": 69816,
+        "Start(ns)": 21183140,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 46,
+        "Duration(ns)": 440,
+        "Name": "musaGetErrorString",
+        "Pid": 69816,
+        "Start(ns)": 21185980,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 47,
+        "Duration(ns)": 600637,
+        "Name": "musaGraphInstantiate",
+        "Pid": 69816,
+        "Start(ns)": 21202020,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 48,
+        "Duration(ns)": 11400,
+        "Name": "musaGraphLaunch",
+        "Pid": 69816,
+        "Start(ns)": 21804457,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 49,
+        "Duration(ns)": 491918,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 21816337,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 50,
+        "Duration(ns)": 472598,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 22481454,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 51,
+        "Duration(ns)": 9880,
+        "Name": "musaMemset",
+        "Pid": 69816,
+        "Start(ns)": 23010531,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 52,
+        "Duration(ns)": 8400,
+        "Name": "musaGraphLaunch",
+        "Pid": 69816,
+        "Start(ns)": 23020851,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 53,
+        "Duration(ns)": 218039,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 23029651,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 54,
+        "Duration(ns)": 455318,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 23247930,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 55,
+        "Duration(ns)": 148279,
+        "Name": "musaGraphExecDestroy",
+        "Pid": 69816,
+        "Start(ns)": 23755848,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 56,
+        "Duration(ns)": 4920,
+        "Name": "musaGraphDestroy",
+        "Pid": 69816,
+        "Start(ns)": 23905447,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 57,
+        "Duration(ns)": 712957,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 23910767,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 58,
+        "Duration(ns)": 646677,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 24624284,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 59,
+        "Duration(ns)": 85479,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 25275921,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 60,
+        "Duration(ns)": 21200,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 25361840,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 61,
+        "Duration(ns)": 1360,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 25383520,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 62,
+        "Duration(ns)": 12200,
+        "Name": "musaLaunchKernel",
+        "Pid": 69816,
+        "Start(ns)": 25387560,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 63,
+        "Duration(ns)": 550197,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 25400960,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 64,
+        "Duration(ns)": 240,
+        "Name": "musaGetLastError",
+        "Pid": 69816,
+        "Start(ns)": 25951517,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 65,
+        "Duration(ns)": 1240,
+        "Name": "musaStreamBeginCapture",
+        "Pid": 69816,
+        "Start(ns)": 25952357,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 66,
+        "Duration(ns)": 1960,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 25954797,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 67,
+        "Duration(ns)": 1840,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 25956997,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 68,
+        "Duration(ns)": 360,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 25959157,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 69,
+        "Duration(ns)": 2040,
+        "Name": "musaLaunchKernel",
+        "Pid": 69816,
+        "Start(ns)": 25960637,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 70,
+        "Duration(ns)": 200,
+        "Name": "musaGetLastError",
+        "Pid": 69816,
+        "Start(ns)": 25963597,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 71,
+        "Duration(ns)": 720,
+        "Name": "musaStreamEndCapture",
+        "Pid": 69816,
+        "Start(ns)": 25964237,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 72,
+        "Duration(ns)": 200,
+        "Name": "musaGetErrorString",
+        "Pid": 69816,
+        "Start(ns)": 25965277,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 73,
+        "Duration(ns)": 609397,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 25967157,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 74,
+        "Duration(ns)": 597478,
+        "Name": "musaMemcpy",
+        "Pid": 69816,
+        "Start(ns)": 26576994,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 75,
+        "Duration(ns)": 1240,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 27175951,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 76,
+        "Duration(ns)": 560,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 27178751,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 77,
+        "Duration(ns)": 240,
+        "Name": "musaGetLastError",
+        "Pid": 69816,
+        "Start(ns)": 27179631,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 78,
+        "Duration(ns)": 680,
+        "Name": "musaStreamBeginCapture",
+        "Pid": 69816,
+        "Start(ns)": 27180391,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 79,
+        "Duration(ns)": 1720,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 27181671,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 80,
+        "Duration(ns)": 1880,
+        "Name": "musaMemcpyAsync",
+        "Pid": 69816,
+        "Start(ns)": 27183711,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 81,
+        "Duration(ns)": 320,
+        "Name": "musaStreamSynchronize",
+        "Pid": 69816,
+        "Start(ns)": 27185831,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 82,
+        "Duration(ns)": 2320,
+        "Name": "musaLaunchKernel",
+        "Pid": 69816,
+        "Start(ns)": 27186871,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 83,
+        "Duration(ns)": 200,
+        "Name": "musaGetLastError",
+        "Pid": 69816,
+        "Start(ns)": 27189671,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 84,
+        "Duration(ns)": 480,
+        "Name": "musaStreamEndCapture",
+        "Pid": 69816,
+        "Start(ns)": 27190111,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 85,
+        "Duration(ns)": 120,
+        "Name": "musaGetErrorString",
+        "Pid": 69816,
+        "Start(ns)": 27191111,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 86,
+        "Duration(ns)": 166600,
+        "Name": "musaFree",
+        "Pid": 69816,
+        "Start(ns)": 27192831,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 87,
+        "Duration(ns)": 107079,
+        "Name": "musaFree",
+        "Pid": 69816,
+        "Start(ns)": 27360351,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 88,
+        "Duration(ns)": 107960,
+        "Name": "musaFree",
+        "Pid": 69816,
+        "Start(ns)": 27467990,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 89,
+        "Duration(ns)": 713156,
+        "Name": "musaFree",
+        "Pid": 69816,
+        "Start(ns)": 27578110,
+        "Tid": 69816
+    },
+    {
+        "CorrID": 90,
+        "Duration(ns)": 535558,
+        "Name": "musaStreamDestroy",
+        "Pid": 69816,
+        "Start(ns)": 28300386,
+        "Tid": 69816
+    }
+]

@@ -1,0 +1,321 @@
+[1/33] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+[2/33] Building CXX object CMakeFiles/vla_core.dir/src/models/pi0.cpp.o
+[3/33] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+[4/33] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/ggml-cuda/ggml-cuda.cu.o
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/allreduce.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1452:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1453:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:32:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/mmf.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mma.cuh:709:5: warning: non-void function does not return a value [-Wreturn-type]
+    }
+    ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:33:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq.cuh:437:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:12:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:103:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:192:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:255:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:318:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:398:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:476:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:542:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:603:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:716:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:827:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:951:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1041:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1103:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1167:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1232:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1300:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1364:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1433:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1500:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1569:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1678:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback, prec_src1);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:4862:82: warning: format specifies type 'void *' but the argument has type 'const ggml_tensor *' [-Wformat-pedantic]
+                GGML_LOG_DEBUG("Adding stream at node %s %p\n", root_node->name, root_node);
+                                                         ~~                      ^~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-impl.h:122:69: note: expanded from macro 'GGML_LOG_DEBUG'
+#define GGML_LOG_DEBUG(...) ggml_log_internal(GGML_LOG_LEVEL_DEBUG, __VA_ARGS__)
+                                                                    ^~~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5513:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5506:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5503:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5495:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5486:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5449:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5443:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5436:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5380:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5373:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5359:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5355:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5316:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5256:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5242:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+44 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/allreduce.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1452:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1453:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:32:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/mmf.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mma.cuh:709:5: warning: non-void function does not return a value [-Wreturn-type]
+    }
+    ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:33:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq.cuh:437:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:12:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:103:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:192:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:255:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:318:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:398:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:476:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:542:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:603:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:716:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:827:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:951:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1041:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1103:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1167:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1232:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1300:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1364:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1433:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1500:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1569:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1678:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback, prec_src1);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:4862:82: warning: format specifies type 'void *' but the argument has type 'const ggml_tensor *' [-Wformat-pedantic]
+                GGML_LOG_DEBUG("Adding stream at node %s %p\n", root_node->name, root_node);
+                                                         ~~                      ^~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-impl.h:122:69: note: expanded from macro 'GGML_LOG_DEBUG'
+#define GGML_LOG_DEBUG(...) ggml_log_internal(GGML_LOG_LEVEL_DEBUG, __VA_ARGS__)
+                                                                    ^~~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5513:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5506:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5503:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5495:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5486:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5449:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5443:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5436:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5380:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5373:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5359:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5355:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5316:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5256:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5242:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+44 warnings generated when compiling for host.
+[5/33] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[6/33] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[7/33] Linking CXX shared library bin/libggml.so.0.25.3
+[8/33] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[9/33] Linking CXX executable tests/test_vision_prune
+[10/33] Linking CXX executable tests/test_rope_conventions
+[11/33] Linking CXX executable tests/test_dit_common
+[12/33] Linking CXX executable tests/test_graph_names
+[13/33] Linking CXX shared library libvla_core.so
+[14/33] Linking CXX executable tests/test_qwen3vl_vit
+[15/33] Linking CXX shared library bin/libllama.so.0.5.0
+[16/33] Linking CXX shared library libvla.so
+[17/33] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[18/33] Linking CXX executable vla-server
+[19/33] Linking CXX executable vla-cli
+[20/33] Linking CXX executable vla-bench
+[21/33] Linking CXX shared library bin/libmtmd.so.0.5.0
+[22/33] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[23/33] Linking C executable tests/test_c_api
+[24/33] Linking CXX executable tests/vla_predict_check
+[25/33] Linking CXX shared library bin/libllama-common.so.0.5.0
+[26/33] Linking CXX executable tests/test_config_guard
+[27/33] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[28/33] Linking CXX executable tests/test_prompt
+[29/33] Linking CXX executable tests/test_foldquant_cpu_op
+[30/33] Linking CXX shared library libvlm_core.so
+[31/33] Linking CXX executable tests/test_foldquant_dequant
+[32/33] Linking CXX executable tests/test_musa_ops
+[33/33] Linking CXX executable vlm-server

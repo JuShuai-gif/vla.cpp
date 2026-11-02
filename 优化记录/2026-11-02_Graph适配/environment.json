@@ -1,0 +1,14 @@
+{
+  "commit": "47a75fbaeaefc89a3b22c8d25066ee3194ceee4b",
+  "identity": "uid=1000(skysi) gid=1000(skysi) \u7ec4=1000(skysi),27(sudo),44(video),110(render)",
+  "power_profile": "performance",
+  "sdk": "musa\t5.1.1-M1000\nmusa-sdk\t5.1.1",
+  "libraries": {
+    "/home/skysi/code/vla.cpp/build-musa-official/libvla.so": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "/home/skysi/code/vla.cpp/build-musa-official/libvla_core.so": "729622ee4f70e0b34c8a78aa23c547a84366da81842e095151e1fb9aa37f0dab",
+    "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0.25.3": "930ae546607c36e61f98852f32863a899b402035036dbd8cacb8553f115cb350",
+    "/home/skysi/VLA/graph-baseline-47a75fb/libvla.so": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "/home/skysi/VLA/graph-baseline-47a75fb/libvla_core.so": "729622ee4f70e0b34c8a78aa23c547a84366da81842e095151e1fb9aa37f0dab",
+    "/home/skysi/VLA/graph-baseline-47a75fb/bin/libggml-musa.so": "f12e294294d766ecedbd11d0406336feee5e3d08f7e02692f36ee3fcc4509fe9"
+  }
+}

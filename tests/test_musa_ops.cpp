@@ -73,7 +73,7 @@ struct Graph {
         }
     }
 
-    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs) {
+    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs, ggml_tensor * dynamic_scale = nullptr) {
         auto * gf = ggml_new_graph(ctx);
         for (auto * t : outputs) {
             ggml_set_output(t);
@@ -91,7 +91,11 @@ struct Graph {
         if (!alloc || !ggml_gallocr_alloc_graph(alloc, gf)) return {};
         std::vector<float> result;
         // Reuse the allocation and graph: catches stream/lifetime problems too.
-        for (int repeat = 0; repeat < 3; ++repeat) {
+        for (int repeat = 0; repeat < (dynamic_scale ? 9 : 3); ++repeat) {
+            if (dynamic_scale) {
+                float scale = 0.5f * (repeat/3 + 1);
+                std::memcpy(dynamic_scale->op_params, &scale, sizeof(scale));
+            }
             // gallocr may reuse input memory after its last consumer; restore
             // every input just as predict restores each new observation.
             upload();
@@ -126,7 +130,7 @@ vla::GemmaLayerW weights(Graph & g, ggml_type type, int64_t hidden, int64_t qdim
     return w;
 }
 
-std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false, bool flash = false, bool masked = false) {
+std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix, bool packed = false, bool flash = false, bool masked = false, bool recapture = false) {
     Graph g;
     if (!g.ctx) return {};
     auto * C = g.ctx;
@@ -170,7 +174,8 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
         auto * mlp = vla::gemma_mlp(C, w, adarms(h), GGML_TYPE_F32);
         h = ggml_add(C, h, ggml_scale(C, ggml_mul(C, mlp, gate), -0.1f));
     }
-    return g.run(backend, {pre, h});
+    auto * scaled = recapture ? ggml_scale(C, h, 0.5f) : nullptr;
+    return g.run(backend, {pre, scaled ? scaled : h}, scaled);
 }
 
 std::vector<float> vision(ggml_backend_t backend, ggml_type type) {
@@ -206,6 +211,13 @@ std::vector<float> softmax(ggml_backend_t backend, int64_t width, bool masked) {
         if (std::fabs(sum - 1.0) > 2e-5) return {};
     }
     return result;
+}
+
+std::vector<float> action_projection(ggml_backend_t backend, int64_t k, int64_t m, int64_t n) {
+    Graph g;
+    auto * a=g.input(GGML_TYPE_F32,{k,m});
+    auto * b=g.input(GGML_TYPE_F32,{k,n});
+    return g.run(backend,{ggml_mul_mat(g.ctx,a,b)});
 }
 
 std::vector<float> vision_attention(ggml_backend_t backend, bool flash) {
@@ -250,6 +262,15 @@ bool compare(const char * name, ggml_type type, const std::vector<float> & ref,
     const bool ok = peak > 0 && relative < tolerance;
     std::printf("%s %s/%s: %zu values, max_abs=%.7g normalized=%.7g tolerance=%.4g\n",
                 ok ? "PASS" : "FAIL", name, ggml_type_name(type), got.size(), error, relative, tolerance);
+    if (!ok && ref.size() % 3 == 0) {
+        const size_t n = ref.size()/3;
+        for (size_t repeat=0; repeat<3; ++repeat) {
+            double e=0;
+            for (size_t i=repeat*n; i<(repeat+1)*n; ++i)
+                e=std::max(e,std::fabs(double(ref[i])-got[i]));
+            std::printf("  repeat %zu max_abs=%.7g\n",repeat,e);
+        }
+    }
     return ok;
 }
 
@@ -384,6 +405,9 @@ int main(int argc, char ** argv) {
                 ok = compare("flash_gemma_vs_unfused", GGML_TYPE_F16,
                     gemma(b.handle, GGML_TYPE_F16, prefix, true, false, masked),
                     gemma(b.handle, GGML_TYPE_F16, prefix, true, true, masked), 5e-3) && ok;
+        ok = compare("flash_gemma_recapture", GGML_TYPE_F16,
+                     gemma(b.handle, GGML_TYPE_F16, 17, true, false, false, true),
+                     gemma(b.handle, GGML_TYPE_F16, 17, true, true, false, true), 5e-3) && ok;
         ggml_backend_free(cpu);
         ggml_backend_free(b.handle);
         return ok ? 0 : 1;
@@ -407,6 +431,12 @@ int main(int argc, char ** argv) {
         }
     }
     ok = large_weight_buffers(b.handle) && ok;
+    for (int64_t n : {7, 50, 51}) {
+        ok = compare("action_input_f32", GGML_TYPE_F32,
+                     action_projection(cpu,32,1024,n), action_projection(b.handle,32,1024,n), 2e-5) && ok;
+        ok = compare("action_output_f32", GGML_TYPE_F32,
+                     action_projection(cpu,1024,32,n), action_projection(b.handle,1024,32,n), 2e-5) && ok;
+    }
     ok = compare("visual_patch_scores", GGML_TYPE_F32, patch_scores(cpu), patch_scores(b.handle), 2e-5) && ok;
     for (int64_t width : {1, 32, 51, 256, 579, 8192, 32769}) {
         for (bool masked : {false, true}) {

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# M1000: compile FlashAttention; Graph stays off after capture/replay regressions.
+# M1000: Graph and FlashAttention, with capture-compatible F32 projections.
 # Override MUSA_ARCHITECTURES for other Moore Threads devices.
 set -euo pipefail
 
@@ -15,7 +15,7 @@ cmake -S "$root" -B "$build" -G Ninja \
     -DCMAKE_CXX_COMPILER="$MUSA_PATH/bin/clang++" \
     -DCMAKE_BUILD_RPATH="$MUSA_PATH/lib" \
     -DGGML_MUSA=ON -DMUSA_ARCHITECTURES="${MUSA_ARCHITECTURES:-22}" \
-    -DGGML_CUDA_NO_VMM=ON -DGGML_MUSA_GRAPHS=OFF -DGGML_CUDA_FA=ON \
+    -DGGML_CUDA_NO_VMM=ON -DGGML_MUSA_GRAPHS=ON -DGGML_CUDA_FA=ON \
     -DVLA_BUILD_SERVER=ON -DVLA_SPM=ON -DVLA_BUILD_TESTS=ON "$@"
 cmake --build "$build" --parallel "${JOBS:-4}"
 ctest --test-dir "$build" --output-on-failure

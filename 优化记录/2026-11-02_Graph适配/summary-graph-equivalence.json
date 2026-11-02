@@ -1,0 +1,26 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "act_dtype": "f32",
+    "graph_vs_control_max_abs": 0.0,
+    "exact_match": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "act_dtype": "f32",
+    "graph_vs_control_max_abs": 0.0,
+    "exact_match": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "act_dtype": "f16",
+    "graph_vs_control_max_abs": 0.0,
+    "exact_match": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "act_dtype": "f16",
+    "graph_vs_control_max_abs": 0.0,
+    "exact_match": true
+  }
+]

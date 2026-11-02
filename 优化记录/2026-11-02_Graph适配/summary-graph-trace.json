@@ -1,0 +1,21 @@
+{
+  "total_api_counts": {
+    "musaLaunchKernel": 12464,
+    "musaStreamBeginCapture": 2,
+    "musaStreamEndCapture": 2,
+    "musaGraphInstantiate": 2,
+    "musaGraphLaunch": 6,
+    "musaGraphExecDestroy": 2,
+    "musaGraphDestroy": 2
+  },
+  "api_counts_after_last_instantiate": {
+    "musaGraphLaunch": 5,
+    "musaStreamSynchronize": 24,
+    "musaGetDevice": 20,
+    "musaMemcpyAsync": 19,
+    "musaFree": 11,
+    "musaStreamDestroy": 1,
+    "musaGraphExecDestroy": 2,
+    "musaGraphDestroy": 2
+  }
+}

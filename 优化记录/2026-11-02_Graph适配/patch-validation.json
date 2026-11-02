@@ -1,0 +1,10 @@
+{
+  "fresh_patch": true,
+  "idempotence": true,
+  "matches_built_dependency": true,
+  "sha256": {
+    "ggml/src/ggml-cuda/softmax.cu": "15cbd188173dc6ac46b88ea009714c8acc7cd15aa89b0c2867518b009f6e083f",
+    "ggml/src/ggml-cuda/ggml-cuda.cu": "9a4064d1370638051cad14c53e4a4c8d0179cfd4c03a020b1c116ff2cb65afa0",
+    "ggml/src/ggml-cuda/fattn.cu": "0d3261c7e78572150896053d93d033901ed9d4e8dc6b12b68d4011207088331f"
+  }
+}

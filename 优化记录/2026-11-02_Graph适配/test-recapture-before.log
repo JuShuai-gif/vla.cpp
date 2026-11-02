@@ -1,0 +1,23 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+musa_ops: backend = MUSA (device 0: M1000)
+PASS flash_vision_strided_72/f16: 442368 values, max_abs=8.065719e-05 normalized=0.004920793 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 25728 values, max_abs=0.07130241 normalized=0.0007805117 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 25728 values, max_abs=0.0702635 normalized=0.0007443085 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 222336 values, max_abs=0.1081314 normalized=0.001190544 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 222336 values, max_abs=0.09796333 normalized=0.001020965 tolerance=0.005
+PASS flash_gemma_recapture/f16: 77184 values, max_abs=0.1069546 normalized=0.0007805187 tolerance=0.005
