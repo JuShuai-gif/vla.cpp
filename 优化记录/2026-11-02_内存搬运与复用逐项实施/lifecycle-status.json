@@ -1,0 +1,58 @@
+[
+  {
+    "name": "pageable-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "pageable-full",
+    "returncode": 0
+  },
+  {
+    "name": "pinned-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "pinned-full",
+    "returncode": 0
+  },
+  {
+    "name": "mapped-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "mapped-full",
+    "returncode": 0
+  },
+  {
+    "name": "async-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "async-full",
+    "returncode": 0
+  },
+  {
+    "name": "direct-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "direct-full",
+    "returncode": 0
+  },
+  {
+    "name": "mapped-direct-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "mapped-direct-full",
+    "returncode": 0
+  },
+  {
+    "name": "kv-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "kv-full",
+    "returncode": 0
+  }
+]

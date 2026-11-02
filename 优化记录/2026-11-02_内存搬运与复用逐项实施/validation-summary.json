@@ -1,0 +1,54 @@
+[
+  {
+    "name": "final-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "final-pruned-bucket",
+    "returncode": 0
+  },
+  {
+    "name": "final-full",
+    "returncode": 0
+  },
+  {
+    "name": "final-full-bucket",
+    "returncode": 0
+  },
+  {
+    "name": "lifecycle-final-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "lifecycle-final-full",
+    "returncode": 0
+  },
+  {
+    "name": "lifecycle-host-prune",
+    "returncode": 0
+  },
+  {
+    "name": "full-entry",
+    "returncode": 0
+  },
+  {
+    "name": "entry-exact",
+    "returncode": 0
+  },
+  {
+    "name": "profile-final",
+    "returncode": 0
+  },
+  {
+    "name": "summarize-final",
+    "returncode": 0
+  },
+  {
+    "name": "profile-mapped",
+    "returncode": 0
+  },
+  {
+    "name": "summarize-mapped",
+    "returncode": 0
+  }
+]

@@ -1,0 +1,757 @@
+[
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/baseline/full.json",
+    "bytes": 9913405,
+    "sha256": "ef3b3a49ee6601bc9fff9d5dad9fbd62ae398d79920090cc35589f5faa498503"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/baseline/full.msys-rep",
+    "bytes": 4050944,
+    "sha256": "527e163c4e01abf34412fc3dde860f140cc704d9f8450340ae1fcf4515d90347"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/baseline/pruned.json",
+    "bytes": 4655290,
+    "sha256": "4923bb8d304c52f780a1f9358778ef2b89df43e704d0d4a874e52f944372e61d"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/baseline/pruned.msys-rep",
+    "bytes": 1966080,
+    "sha256": "80616586e38c2dd867206aef54daf43ae1c1bac411b331c8bb150619d6b131ea"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/before-main-pin/full.json",
+    "bytes": 25507251,
+    "sha256": "371ae8d4936c05d0f47aea730ea8f807ed8adcdef5a7a5dc32a23ed1f897b140"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/before-main-pin/full.msys-rep",
+    "bytes": 8740864,
+    "sha256": "7387ab4fc18aacecfdcfcc19f95944c4e6a242255eed5dd4e88a5be6a1848074"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/before-main-pin/pruned.json",
+    "bytes": 11628851,
+    "sha256": "cb61239b143e3f9bbbb4e6cc925cae4387a1de0b0615112d43d7c66d81b78e2d"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/before-main-pin/pruned.msys-rep",
+    "bytes": 3964928,
+    "sha256": "8cf7d87c07ee69131c95b4ea244218bf7a73cb4d86c3caac02925a92d9ea2f5c"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/final/full.json",
+    "bytes": 25505945,
+    "sha256": "79e86eec049a411913906b868a4cb8a0e17cdda824efe0027f88f615967d15a6"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/final/full.msys-rep",
+    "bytes": 8740864,
+    "sha256": "32dbb18d2e358041ee50347abcf03d039bd4970900fed273e1d4976dc3425956"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/final/pruned.json",
+    "bytes": 11626878,
+    "sha256": "f80afa3336108ed3e37b66c5ec6a2925353aecb2e2695b8dae271bd453a2edce"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/final/pruned.msys-rep",
+    "bytes": 3964928,
+    "sha256": "9dda6ea01561adb21865920a6b904ca7c09ee92c755dd0b9aafbbe5d7ff13389"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/mapped-final/full.json",
+    "bytes": 25503858,
+    "sha256": "903aaba08a0b7e8cff88148547d9574595aa5657e41074ca4482ae7031c9b34e"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/mapped-final/full.msys-rep",
+    "bytes": 8740864,
+    "sha256": "45eb0e22d514bf5a2640baa2da75aebd08952bb250939dbf1fac8973b4ba8027"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/mapped-final/pruned.json",
+    "bytes": 11619242,
+    "sha256": "165a5209ce18b75c2acf9440720a90dde2f4c50753968815d903d7e3228f23e4"
+  },
+  {
+    "path": "/home/skysi/VLA/memory-reuse-20261102/mapped-final/pruned.msys-rep",
+    "bytes": 3964928,
+    "sha256": "a38fadf61c47e0efe859c52584a53f82635433b97bbc768f7fe0ec2f466b0de6"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/async/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/async/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/async-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/async-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/baseline/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/baseline/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/baseline-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/baseline-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/baseline-r1/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/baseline-r1/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/baseline-r2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/baseline-r2/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-full/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-full/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "0d388df9db21999ee60c102ad1a46d045a999f2d21de55966b6b26762c31d9d1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-full/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "ec6bac7e53f13249ebce44096dc27e7ab493323ccb128131343953fb19e283fa"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "6c30b9f731a34422108a2f3e1a893443636d6a62a847cada3a893b10908ebeba"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "defbe71cb39ffe184e29fcfc7ecf7acd3e9de9cc6e9d496628d51fb4404d58f5"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "7fe17a548a78d391230dbe5e4dcaa8c5f5bb96bc22bc2e5a44ecbdb35fef0d83"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "df58e0024f742aa4e6b121ea7415340da9c33002107e283c9266100dcc5a8d70"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "a378c85b783631d444a47ba49478f9d0ce597b2e8951d0796cd11d0bb3fa0fc7"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "2f07cfeaa1f02a8b10912b5f50da5ce963d4c322d1a5164977c4edb339fd356f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "778f8b4fdca12dbad1a9c3725fe56a3fdc7ea022d214049692d51354956756c9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "4c804dcc9ca57c6c0c7134dd1d0005766957dd74e49d7d32e7c646cf45b3aef9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/combined/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/combined/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/combined-kv/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/combined-kv/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/combined-kv-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/combined-kv-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/combined-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/combined-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/compare-baseline-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/compare-baseline-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/compare-final-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/compare-final-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/direct/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/direct/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/direct-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/direct-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/dispatch/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/dispatch/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/final-r1/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/final-r1/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/final-r2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/final-r2/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/flatten/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/flatten/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/flatten-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/flatten-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/fold-control-r1/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/fold-control-r2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/fold-enabled-r1/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/fold-enabled-r2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/io-baseline/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/io-baseline/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/io-before-main-pin/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/io-before-main-pin/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/io-final/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/io-final/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/io-mapped-final/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/io-mapped-final/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/kv/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/kv/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/kv-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/kv-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/late-control/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/late-control/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/late-control-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/late-control-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/layout/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/layout/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/layout-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/layout-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-async/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-async/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-direct/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-direct/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-final/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-final/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-host-prune/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-kv/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-kv/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-mapped/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-mapped/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-mapped-direct/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-mapped-direct/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-pageable/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-pageable/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-pinned/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/lifecycle-pinned/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/main-pin/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/main-pin/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/main-pin-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/main-pin-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/mapped/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/mapped/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/mapped-combined/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/mapped-combined/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/mapped-combined-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/mapped-combined-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/mapped-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/mapped-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/output/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/output/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/output-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/output-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pageable/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pageable/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pageable-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pageable-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pin-flatten/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pin-flatten/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pin-flatten-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pin-flatten-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pinned/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pinned/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pinned-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/pinned-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/vision-pack/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/vision-pack/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/vision-pack-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_内存搬运与复用逐项实施/vision-pack-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "df58e0024f742aa4e6b121ea7415340da9c33002107e283c9266100dcc5a8d70"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "a378c85b783631d444a47ba49478f9d0ce597b2e8951d0796cd11d0bb3fa0fc7"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final-bucket/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "2f07cfeaa1f02a8b10912b5f50da5ce963d4c322d1a5164977c4edb339fd356f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final-bucket/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "778f8b4fdca12dbad1a9c3725fe56a3fdc7ea022d214049692d51354956756c9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-final-bucket/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "4c804dcc9ca57c6c0c7134dd1d0005766957dd74e49d7d32e7c646cf45b3aef9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "0d388df9db21999ee60c102ad1a46d045a999f2d21de55966b6b26762c31d9d1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "ec6bac7e53f13249ebce44096dc27e7ab493323ccb128131343953fb19e283fa"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all-bucket/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "6c30b9f731a34422108a2f3e1a893443636d6a62a847cada3a893b10908ebeba"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all-bucket/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "defbe71cb39ffe184e29fcfc7ecf7acd3e9de9cc6e9d496628d51fb4404d58f5"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/changing-full-fused-all-bucket/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "7fe17a548a78d391230dbe5e4dcaa8c5f5bb96bc22bc2e5a44ecbdb35fef0d83"
+  }
+]

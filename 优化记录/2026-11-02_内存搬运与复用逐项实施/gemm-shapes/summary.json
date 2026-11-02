@@ -1,0 +1,2167 @@
+[
+  {
+    "shape": [
+      2560,
+      50,
+      1024,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2560",
+      "50",
+      "1024",
+      "1",
+      "56",
+      "64",
+      "128"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2560,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 50,
+        "gemm_k": 1024,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 0.2848753,
+        "round_ms": [
+          0.28328,
+          0.28605,
+          0.285296
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 56,
+        "gemm_k": 1024,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.309444,
+        "round_ms": [
+          0.31035,
+          0.309462,
+          0.30852
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 64,
+        "gemm_k": 1024,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.3158067,
+        "round_ms": [
+          0.310996,
+          0.320862,
+          0.315562
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 128,
+        "gemm_k": 1024,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.3823813,
+        "round_ms": [
+          0.380688,
+          0.38323,
+          0.383226
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      1024,
+      50,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "1024",
+      "50",
+      "2048",
+      "1",
+      "56",
+      "64",
+      "128"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 1024,
+        "n": 50,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 1024,
+        "gemm_n": 50,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 0.4017594,
+        "round_ms": [
+          0.404916,
+          0.39953,
+          0.400832
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1024,
+        "n": 50,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 1024,
+        "gemm_n": 56,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.435896,
+        "round_ms": [
+          0.437924,
+          0.435408,
+          0.434356
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1024,
+        "n": 50,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 1024,
+        "gemm_n": 64,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.4335259,
+        "round_ms": [
+          0.435988,
+          0.431126,
+          0.433464
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1024,
+        "n": 50,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 1024,
+        "gemm_n": 128,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.5472026,
+        "round_ms": [
+          0.5483299,
+          0.547578,
+          0.5457
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      8192,
+      50,
+      1024,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "8192",
+      "50",
+      "1024",
+      "1",
+      "56",
+      "64",
+      "128"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 8192,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "gemm_m": 8192,
+        "gemm_n": 50,
+        "gemm_k": 1024,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 0.5597167,
+        "round_ms": [
+          0.559862,
+          0.560376,
+          0.558912
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 8192,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "gemm_m": 8192,
+        "gemm_n": 56,
+        "gemm_k": 1024,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.6116326,
+        "round_ms": [
+          0.61242,
+          0.6107579,
+          0.61172
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 8192,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "gemm_m": 8192,
+        "gemm_n": 64,
+        "gemm_k": 1024,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.6143926,
+        "round_ms": [
+          0.614698,
+          0.614706,
+          0.6137739
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 8192,
+        "n": 50,
+        "k": 1024,
+        "batch": 1,
+        "gemm_m": 8192,
+        "gemm_n": 128,
+        "gemm_k": 1024,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.690704,
+        "round_ms": [
+          0.691346,
+          0.689398,
+          0.691368
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      1024,
+      50,
+      4096,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "1024",
+      "50",
+      "4096",
+      "1",
+      "56",
+      "64",
+      "128"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 1024,
+        "n": 50,
+        "k": 4096,
+        "batch": 1,
+        "gemm_m": 1024,
+        "gemm_n": 50,
+        "gemm_k": 4096,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 0.6341674,
+        "round_ms": [
+          0.635336,
+          0.63316,
+          0.634006
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1024,
+        "n": 50,
+        "k": 4096,
+        "batch": 1,
+        "gemm_m": 1024,
+        "gemm_n": 56,
+        "gemm_k": 4096,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.6750839,
+        "round_ms": [
+          0.676906,
+          0.674764,
+          0.673582
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1024,
+        "n": 50,
+        "k": 4096,
+        "batch": 1,
+        "gemm_m": 1024,
+        "gemm_n": 64,
+        "gemm_k": 4096,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.6752693,
+        "round_ms": [
+          0.674998,
+          0.675176,
+          0.675634
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1024,
+        "n": 50,
+        "k": 4096,
+        "batch": 1,
+        "gemm_m": 1024,
+        "gemm_n": 128,
+        "gemm_k": 4096,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.8949206,
+        "round_ms": [
+          0.895298,
+          0.895326,
+          0.894138
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2560,
+      278,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2560",
+      "278",
+      "2048",
+      "1",
+      "288",
+      "320"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2560,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 278,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 1.170436,
+        "round_ms": [
+          1.171846,
+          1.169046,
+          1.170416
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 288,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 1.2637,
+        "round_ms": [
+          1.2664239,
+          1.260502,
+          1.264174
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 320,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 1.3374233,
+        "round_ms": [
+          1.337244,
+          1.338146,
+          1.33688
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      278,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "278",
+      "2048",
+      "1",
+      "288",
+      "320"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 278,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 1.0776948,
+        "round_ms": [
+          1.07977,
+          1.07619,
+          1.077124
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 288,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 1.160684,
+        "round_ms": [
+          1.162096,
+          1.1601961,
+          1.15976
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 320,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 1.2390007,
+        "round_ms": [
+          1.239694,
+          1.238404,
+          1.238904
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      32768,
+      278,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "32768",
+      "278",
+      "2048",
+      "1",
+      "288",
+      "320"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 32768,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 278,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 7.0970674,
+        "round_ms": [
+          7.1094222,
+          7.0892725,
+          7.0925078
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 32768,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 288,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 7.8438315,
+        "round_ms": [
+          7.8460402,
+          7.84376,
+          7.8416948
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 32768,
+        "n": 278,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 320,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 7.9353633,
+        "round_ms": [
+          7.9355683,
+          7.9313822,
+          7.9391379
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      278,
+      16384,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "278",
+      "16384",
+      "1",
+      "288",
+      "320"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 278,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 278,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 9.4076338,
+        "round_ms": [
+          9.4096775,
+          9.3960619,
+          9.41716
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 278,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 288,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 9.6762438,
+        "round_ms": [
+          9.6794395,
+          9.6736603,
+          9.6756315
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 278,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 320,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 10.2561102,
+        "round_ms": [
+          10.2632923,
+          10.257391,
+          10.2476482
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2560,
+      518,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2560",
+      "518",
+      "2048",
+      "1",
+      "528",
+      "576"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2560,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 518,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 2.0142593,
+        "round_ms": [
+          2.0205359,
+          2.00102,
+          2.0212219
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 528,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 2.155,
+        "round_ms": [
+          2.1494501,
+          2.1644499,
+          2.1510999
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 576,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 2.2844002,
+        "round_ms": [
+          2.2824302,
+          2.2942061,
+          2.2765641
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      518,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "518",
+      "2048",
+      "1",
+      "528",
+      "576"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 518,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 1.8623266,
+        "round_ms": [
+          1.8706201,
+          1.864526,
+          1.8518339
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 528,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 1.9762813,
+        "round_ms": [
+          1.966568,
+          1.9753819,
+          1.986894
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 576,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 2.0981946,
+        "round_ms": [
+          2.101114,
+          2.1021419,
+          2.0913281
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      32768,
+      518,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "32768",
+      "518",
+      "2048",
+      "1",
+      "528",
+      "576"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 32768,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 518,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 10.9945412,
+        "round_ms": [
+          11.002038,
+          10.9896755,
+          10.99191
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 32768,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 528,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 12.3972931,
+        "round_ms": [
+          12.4316282,
+          12.3800831,
+          12.380167
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 32768,
+        "n": 518,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 576,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 12.4900923,
+        "round_ms": [
+          12.4897242,
+          12.4882603,
+          12.4922905
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      518,
+      16384,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "518",
+      "16384",
+      "1",
+      "528",
+      "576"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 518,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 518,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 13.9537458,
+        "round_ms": [
+          13.9495516,
+          13.9719906,
+          13.9396944
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 518,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 528,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 14.2560759,
+        "round_ms": [
+          14.2681408,
+          14.2640896,
+          14.2359982
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 518,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 576,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 15.2243805,
+        "round_ms": [
+          15.2398472,
+          15.2183933,
+          15.2149019
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2560,
+      315,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2560",
+      "315",
+      "2048",
+      "1",
+      "320"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2560,
+        "n": 315,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 315,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 1.2754019,
+        "round_ms": [
+          1.277652,
+          1.273322,
+          1.275232
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 315,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 320,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 1.3634027,
+        "round_ms": [
+          1.363494,
+          1.361594,
+          1.3651199
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      315,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "315",
+      "2048",
+      "1",
+      "320"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 315,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 315,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 1.2009706,
+        "round_ms": [
+          1.202116,
+          1.199782,
+          1.201014
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 315,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 320,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 1.2768826,
+        "round_ms": [
+          1.278908,
+          1.276264,
+          1.275476
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      32768,
+      315,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "32768",
+      "315",
+      "2048",
+      "1",
+      "320"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 32768,
+        "n": 315,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 315,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 7.2111983,
+        "round_ms": [
+          7.2118416,
+          7.2114859,
+          7.2102661
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 32768,
+        "n": 315,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 320,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 8.0660334,
+        "round_ms": [
+          8.0651102,
+          8.065546,
+          8.0674438
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      315,
+      16384,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "315",
+      "16384",
+      "1",
+      "320"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 315,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 315,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 10.2745304,
+        "round_ms": [
+          10.2828274,
+          10.27421,
+          10.2665539
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 315,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 320,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 10.431262,
+        "round_ms": [
+          10.4405699,
+          10.43962,
+          10.4135942
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2560,
+      554,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2560",
+      "554",
+      "2048",
+      "1",
+      "560",
+      "576"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2560,
+        "n": 554,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 554,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 2.1165206,
+        "round_ms": [
+          2.108156,
+          2.1122539,
+          2.1291521
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 554,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 560,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 2.2541788,
+        "round_ms": [
+          2.2457881,
+          2.2532361,
+          2.2635121
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2560,
+        "n": 554,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2560,
+        "gemm_n": 576,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 2.3065541,
+        "round_ms": [
+          2.3119221,
+          2.29742,
+          2.3103199
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      554,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "554",
+      "2048",
+      "1",
+      "560",
+      "576"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 554,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 554,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 1.9734421,
+        "round_ms": [
+          1.974014,
+          1.970924,
+          1.9753882
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 554,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 560,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 2.0835574,
+        "round_ms": [
+          2.0770299,
+          2.092468,
+          2.0811741
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 554,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 576,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 2.1259892,
+        "round_ms": [
+          2.1351659,
+          2.122278,
+          2.1205239
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      32768,
+      554,
+      2048,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "32768",
+      "554",
+      "2048",
+      "1",
+      "560",
+      "576"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 32768,
+        "n": 554,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 554,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 11.0835371,
+        "round_ms": [
+          11.0837812,
+          11.0853205,
+          11.0815067
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 32768,
+        "n": 554,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 560,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 12.5565844,
+        "round_ms": [
+          12.5633135,
+          12.5526562,
+          12.5537844
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 32768,
+        "n": 554,
+        "k": 2048,
+        "batch": 1,
+        "gemm_m": 32768,
+        "gemm_n": 576,
+        "gemm_k": 2048,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 12.6164198,
+        "round_ms": [
+          12.6073103,
+          12.6035767,
+          12.6383724
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      554,
+      16384,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "554",
+      "16384",
+      "1",
+      "560",
+      "576"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 554,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 554,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 14.8384361,
+        "round_ms": [
+          14.8104267,
+          14.8482361,
+          14.8566456
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 554,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 560,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 15.0515051,
+        "round_ms": [
+          15.0450649,
+          15.0443497,
+          15.0650988
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 554,
+        "k": 16384,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 576,
+        "gemm_k": 16384,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 15.3754091,
+        "round_ms": [
+          15.3918743,
+          15.3661757,
+          15.3681774
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      3456,
+      256,
+      1152,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "3456",
+      "256",
+      "1152",
+      "1"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 3456,
+        "n": 256,
+        "k": 1152,
+        "batch": 1,
+        "gemm_m": 3456,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 0.6150333,
+        "round_ms": [
+          0.62332,
+          0.616612,
+          0.605168
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "1152",
+      "256",
+      "1152",
+      "1"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 1152,
+        "batch": 1,
+        "gemm_m": 1152,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 0.4518993,
+        "round_ms": [
+          0.453042,
+          0.451594,
+          0.451062
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "4304",
+      "256",
+      "1152",
+      "1",
+      "4352:256:1152:1",
+      "4480:256:1152:1"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 4304,
+        "n": 256,
+        "k": 1152,
+        "batch": 1,
+        "gemm_m": 4304,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 0.736568,
+        "round_ms": [
+          0.737804,
+          0.736236,
+          0.735664
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 4304,
+        "n": 256,
+        "k": 1152,
+        "batch": 1,
+        "gemm_m": 4352,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.84408,
+        "round_ms": [
+          0.843958,
+          0.8428701,
+          0.845412
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 4304,
+        "n": 256,
+        "k": 1152,
+        "batch": 1,
+        "gemm_m": 4480,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 0.862236,
+        "round_ms": [
+          0.863094,
+          0.861498,
+          0.862116
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "1152",
+      "256",
+      "4304",
+      "1",
+      "1152:256:4352:1",
+      "1152:256:4480:1"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 4304,
+        "batch": 1,
+        "gemm_m": 1152,
+        "gemm_n": 256,
+        "gemm_k": 4304,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 1.5089426,
+        "round_ms": [
+          1.5107939,
+          1.507996,
+          1.508038
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 4304,
+        "batch": 1,
+        "gemm_m": 1152,
+        "gemm_n": 256,
+        "gemm_k": 4352,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 1.5323734,
+        "round_ms": [
+          1.52959,
+          1.533748,
+          1.533782
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 4304,
+        "batch": 1,
+        "gemm_m": 1152,
+        "gemm_n": 256,
+        "gemm_k": 4480,
+        "gemm_batch": 1,
+        "variant": "pad",
+        "mean_ms": 1.5767899,
+        "round_ms": [
+          1.57599,
+          1.5762839,
+          1.5780959
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      256,
+      1152,
+      1
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "256",
+      "1152",
+      "1"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 256,
+        "k": 1152,
+        "batch": 1,
+        "gemm_m": 2048,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "baseline",
+        "mean_ms": 0.552846,
+        "round_ms": [
+          0.555626,
+          0.553426,
+          0.549486
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      3456,
+      256,
+      1152,
+      2
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "3456",
+      "256",
+      "1152",
+      "2"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 3456,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 3456,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 2,
+        "variant": "baseline",
+        "mean_ms": 1.2282926,
+        "round_ms": [
+          1.22611,
+          1.225116,
+          1.2336519
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 3456,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 3456,
+        "gemm_n": 512,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "flatten",
+        "mean_ms": 1.1471187,
+        "round_ms": [
+          1.150378,
+          1.139896,
+          1.151082
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      1152,
+      2
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "1152",
+      "256",
+      "1152",
+      "2"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 1152,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 2,
+        "variant": "baseline",
+        "mean_ms": 0.9537579,
+        "round_ms": [
+          0.9572619,
+          0.951166,
+          0.9528459
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 1152,
+        "gemm_n": 512,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "flatten",
+        "mean_ms": 0.8700514,
+        "round_ms": [
+          0.875482,
+          0.8677621,
+          0.86691
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      4304,
+      256,
+      1152,
+      2
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "4304",
+      "256",
+      "1152",
+      "2",
+      "4352:256:1152:2",
+      "4480:256:1152:2"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 4304,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 4304,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 2,
+        "variant": "baseline",
+        "mean_ms": 1.4125305,
+        "round_ms": [
+          1.413534,
+          1.4098599,
+          1.4141979
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 4304,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 4352,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 2,
+        "variant": "pad",
+        "mean_ms": 1.6095995,
+        "round_ms": [
+          1.6080801,
+          1.6115681,
+          1.6091499
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 4304,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 4480,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 2,
+        "variant": "pad",
+        "mean_ms": 1.6198454,
+        "round_ms": [
+          1.6203721,
+          1.6193821,
+          1.6197819
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 4304,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 4304,
+        "gemm_n": 512,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "flatten",
+        "mean_ms": 1.332678,
+        "round_ms": [
+          1.3350279,
+          1.329214,
+          1.333792
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      1152,
+      256,
+      4304,
+      2
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "1152",
+      "256",
+      "4304",
+      "2",
+      "1152:256:4352:2",
+      "1152:256:4480:2"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 4304,
+        "batch": 2,
+        "gemm_m": 1152,
+        "gemm_n": 256,
+        "gemm_k": 4304,
+        "gemm_batch": 2,
+        "variant": "baseline",
+        "mean_ms": 3.3660471,
+        "round_ms": [
+          3.366838,
+          3.36534,
+          3.3659642
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 4304,
+        "batch": 2,
+        "gemm_m": 1152,
+        "gemm_n": 256,
+        "gemm_k": 4352,
+        "gemm_batch": 2,
+        "variant": "pad",
+        "mean_ms": 3.4225159,
+        "round_ms": [
+          3.4233818,
+          3.421854,
+          3.4223123
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 4304,
+        "batch": 2,
+        "gemm_m": 1152,
+        "gemm_n": 256,
+        "gemm_k": 4480,
+        "gemm_batch": 2,
+        "variant": "pad",
+        "mean_ms": 3.5184488,
+        "round_ms": [
+          3.5199761,
+          3.5177841,
+          3.5175862
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 1152,
+        "n": 256,
+        "k": 4304,
+        "batch": 2,
+        "gemm_m": 1152,
+        "gemm_n": 512,
+        "gemm_k": 4304,
+        "gemm_batch": 1,
+        "variant": "flatten",
+        "mean_ms": 3.0586634,
+        "round_ms": [
+          3.060174,
+          3.0572078,
+          3.0586081
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  },
+  {
+    "shape": [
+      2048,
+      256,
+      1152,
+      2
+    ],
+    "command": [
+      "/tmp/pi05-probe-gemm-shapes",
+      "2048",
+      "256",
+      "1152",
+      "2"
+    ],
+    "returncode": 0,
+    "measurements": [
+      {
+        "m": 2048,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 2048,
+        "gemm_n": 256,
+        "gemm_k": 1152,
+        "gemm_batch": 2,
+        "variant": "baseline",
+        "mean_ms": 1.0551673,
+        "round_ms": [
+          1.0555841,
+          1.053808,
+          1.05611
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      },
+      {
+        "m": 2048,
+        "n": 256,
+        "k": 1152,
+        "batch": 2,
+        "gemm_m": 2048,
+        "gemm_n": 512,
+        "gemm_k": 1152,
+        "gemm_batch": 1,
+        "variant": "flatten",
+        "mean_ms": 0.9732606,
+        "round_ms": [
+          0.974526,
+          0.9733559,
+          0.9719
+        ],
+        "relative_peak": 0,
+        "max_abs": 0
+      }
+    ]
+  }
+]

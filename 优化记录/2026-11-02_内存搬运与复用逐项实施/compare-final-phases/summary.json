@@ -1,0 +1,56 @@
+[
+  {
+    "model": "pruned",
+    "mean_ms": {
+      "ms_total": 522.2333862304688,
+      "ms_vision": 108.68915252685547,
+      "ms_inference": 413.21001586914065,
+      "wall_ms": 522.9325827996945
+    },
+    "median_ms": {
+      "ms_total": 522.0336303710938,
+      "ms_vision": 108.71180725097656,
+      "ms_inference": 413.0507507324219,
+      "wall_ms": 522.7432630053954
+    },
+    "p95_wall_ms": 523.694318998605,
+    "error": {
+      "max_abs": 0.06395721435546875,
+      "rmse": 0.021445689722895622,
+      "relative_peak": 0.0006006284966133535
+    },
+    "baseline_relative_peak": 0.0,
+    "phase_mean_ms": {
+      "vision_ms": 108.68915260000001,
+      "prefix_ms": 295.843205,
+      "denoise_ms": 117.32650120000001
+    }
+  },
+  {
+    "model": "full",
+    "mean_ms": {
+      "ms_total": 911.757373046875,
+      "ms_vision": 132.64214477539062,
+      "ms_inference": 778.702783203125,
+      "wall_ms": 912.2510303990566
+    },
+    "median_ms": {
+      "ms_total": 911.9600219726562,
+      "ms_vision": 132.65785217285156,
+      "ms_inference": 778.9348754882812,
+      "wall_ms": 912.4973180005327
+    },
+    "p95_wall_ms": 912.6534147988423,
+    "error": {
+      "max_abs": 0.04351806640625,
+      "rmse": 0.013396469876170158,
+      "relative_peak": 0.0004471158026717603
+    },
+    "baseline_relative_peak": 0.0,
+    "phase_mean_ms": {
+      "vision_ms": 132.6421446,
+      "prefix_ms": 377.243256,
+      "denoise_ms": 401.4156408
+    }
+  }
+]

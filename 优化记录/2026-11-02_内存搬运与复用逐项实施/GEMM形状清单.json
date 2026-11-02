@@ -1,0 +1,2217 @@
+[
+  {
+    "model": "pruned",
+    "phase": "prefix",
+    "m": 2560,
+    "n": 278,
+    "k": 2048,
+    "batch": 1,
+    "count": 18,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      2048,
+      2560,
+      1,
+      1
+    ],
+    "b_ne": [
+      2048,
+      278,
+      1,
+      1
+    ],
+    "out_ne": [
+      2560,
+      278,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      4096,
+      10485760,
+      10485760
+    ],
+    "b_nb": [
+      4,
+      8192,
+      2277376,
+      2277376
+    ],
+    "out_nb": [
+      4,
+      10240,
+      2846720,
+      2846720
+    ],
+    "flops_per_inference": 52470743040,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 2560,
+      "n": 278,
+      "k": 2048,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 2048,
+      "ldb": 2048,
+      "ldc": 2560,
+      "stride_a": 0,
+      "stride_b": 569344,
+      "stride_c": 711680,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "prefix",
+    "m": 2048,
+    "n": 278,
+    "k": 2048,
+    "batch": 1,
+    "count": 17,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      2048,
+      2048,
+      1,
+      1
+    ],
+    "b_ne": [
+      2048,
+      278,
+      1,
+      1
+    ],
+    "out_ne": [
+      2048,
+      278,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      4096,
+      8388608,
+      8388608
+    ],
+    "b_nb": [
+      4,
+      8192,
+      2277376,
+      2277376
+    ],
+    "out_nb": [
+      4,
+      8192,
+      2277376,
+      2277376
+    ],
+    "flops_per_inference": 39644561408,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 2048,
+      "n": 278,
+      "k": 2048,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 2048,
+      "ldb": 2048,
+      "ldc": 2048,
+      "stride_a": 0,
+      "stride_b": 569344,
+      "stride_c": 569344,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "prefix",
+    "m": 32768,
+    "n": 278,
+    "k": 2048,
+    "batch": 1,
+    "count": 17,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      2048,
+      32768,
+      1,
+      1
+    ],
+    "b_ne": [
+      2048,
+      278,
+      1,
+      1
+    ],
+    "out_ne": [
+      32768,
+      278,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      4096,
+      134217728,
+      134217728
+    ],
+    "b_nb": [
+      4,
+      8192,
+      2277376,
+      2277376
+    ],
+    "out_nb": [
+      4,
+      131072,
+      36438016,
+      36438016
+    ],
+    "flops_per_inference": 634312982528,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 32768,
+      "n": 278,
+      "k": 2048,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 2048,
+      "ldb": 2048,
+      "ldc": 32768,
+      "stride_a": 0,
+      "stride_b": 569344,
+      "stride_c": 9109504,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "prefix",
+    "m": 2048,
+    "n": 278,
+    "k": 16384,
+    "batch": 1,
+    "count": 17,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      16384,
+      2048,
+      1,
+      1
+    ],
+    "b_ne": [
+      16384,
+      278,
+      1,
+      1
+    ],
+    "out_ne": [
+      2048,
+      278,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      32768,
+      67108864,
+      67108864
+    ],
+    "b_nb": [
+      4,
+      65536,
+      18219008,
+      18219008
+    ],
+    "out_nb": [
+      4,
+      8192,
+      2277376,
+      2277376
+    ],
+    "flops_per_inference": 317156491264,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 2048,
+      "n": 278,
+      "k": 16384,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 16384,
+      "ldb": 16384,
+      "ldc": 2048,
+      "stride_a": 0,
+      "stride_b": 4554752,
+      "stride_c": 569344,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "denoise",
+    "m": 1024,
+    "n": 50,
+    "k": 32,
+    "batch": 1,
+    "count": 3,
+    "a_type": "f32",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      32,
+      1024,
+      1,
+      1
+    ],
+    "b_ne": [
+      32,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      4,
+      128,
+      131072,
+      131072
+    ],
+    "b_nb": [
+      4,
+      128,
+      6400,
+      6400
+    ],
+    "out_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "flops_per_inference": 9830400,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": null
+  },
+  {
+    "model": "pruned",
+    "phase": "denoise",
+    "m": 2560,
+    "n": 50,
+    "k": 1024,
+    "batch": 1,
+    "count": 54,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1024,
+      2560,
+      1,
+      1
+    ],
+    "b_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      2560,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      2048,
+      5242880,
+      5242880
+    ],
+    "b_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "out_nb": [
+      4,
+      10240,
+      512000,
+      512000
+    ],
+    "flops_per_inference": 14155776000,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 2560,
+      "n": 50,
+      "k": 1024,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1024,
+      "ldb": 1024,
+      "ldc": 2560,
+      "stride_a": 0,
+      "stride_b": 51200,
+      "stride_c": 128000,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "denoise",
+    "m": 1024,
+    "n": 50,
+    "k": 2048,
+    "batch": 1,
+    "count": 54,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      2048,
+      1024,
+      1,
+      1
+    ],
+    "b_ne": [
+      2048,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      4096,
+      4194304,
+      4194304
+    ],
+    "b_nb": [
+      4,
+      8192,
+      409600,
+      409600
+    ],
+    "out_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "flops_per_inference": 11324620800,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 1024,
+      "n": 50,
+      "k": 2048,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 2048,
+      "ldb": 2048,
+      "ldc": 1024,
+      "stride_a": 0,
+      "stride_b": 102400,
+      "stride_c": 51200,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "denoise",
+    "m": 8192,
+    "n": 50,
+    "k": 1024,
+    "batch": 1,
+    "count": 54,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1024,
+      8192,
+      1,
+      1
+    ],
+    "b_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      8192,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      2048,
+      16777216,
+      16777216
+    ],
+    "b_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "out_nb": [
+      4,
+      32768,
+      1638400,
+      1638400
+    ],
+    "flops_per_inference": 45298483200,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 8192,
+      "n": 50,
+      "k": 1024,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1024,
+      "ldb": 1024,
+      "ldc": 8192,
+      "stride_a": 0,
+      "stride_b": 51200,
+      "stride_c": 409600,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "denoise",
+    "m": 1024,
+    "n": 50,
+    "k": 4096,
+    "batch": 1,
+    "count": 54,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      4096,
+      1024,
+      1,
+      1
+    ],
+    "b_ne": [
+      4096,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      8192,
+      8388608,
+      8388608
+    ],
+    "b_nb": [
+      4,
+      16384,
+      819200,
+      819200
+    ],
+    "out_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "flops_per_inference": 22649241600,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 1024,
+      "n": 50,
+      "k": 4096,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 4096,
+      "ldb": 4096,
+      "ldc": 1024,
+      "stride_a": 0,
+      "stride_b": 204800,
+      "stride_c": 51200,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "denoise",
+    "m": 32,
+    "n": 50,
+    "k": 1024,
+    "batch": 1,
+    "count": 3,
+    "a_type": "f32",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1024,
+      32,
+      1,
+      1
+    ],
+    "b_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      32,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      4,
+      4096,
+      131072,
+      131072
+    ],
+    "b_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "out_nb": [
+      4,
+      128,
+      6400,
+      6400
+    ],
+    "flops_per_inference": 9830400,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": null
+  },
+  {
+    "model": "pruned",
+    "phase": "vision",
+    "m": 256,
+    "n": 1152,
+    "k": 588,
+    "batch": 1,
+    "count": 2,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      588,
+      256,
+      1,
+      1
+    ],
+    "b_ne": [
+      588,
+      1152,
+      1,
+      1
+    ],
+    "out_ne": [
+      256,
+      1152,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      1176,
+      301056,
+      301056
+    ],
+    "b_nb": [
+      4,
+      2352,
+      2709504,
+      2709504
+    ],
+    "out_nb": [
+      4,
+      1024,
+      1179648,
+      1179648
+    ],
+    "flops_per_inference": 693633024,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 256,
+      "n": 1152,
+      "k": 588,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 588,
+      "ldb": 588,
+      "ldc": 256,
+      "stride_a": 0,
+      "stride_b": 677376,
+      "stride_c": 294912,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "vision",
+    "m": 3456,
+    "n": 256,
+    "k": 1152,
+    "batch": 1,
+    "count": 30,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1152,
+      3456,
+      1,
+      1
+    ],
+    "b_ne": [
+      1152,
+      256,
+      1,
+      1
+    ],
+    "out_ne": [
+      3456,
+      256,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      2304,
+      7962624,
+      7962624
+    ],
+    "b_nb": [
+      4,
+      4608,
+      1179648,
+      1179648
+    ],
+    "out_nb": [
+      4,
+      13824,
+      3538944,
+      3538944
+    ],
+    "flops_per_inference": 61152952320,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 3456,
+      "n": 256,
+      "k": 1152,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 3456,
+      "stride_a": 0,
+      "stride_b": 294912,
+      "stride_c": 884736,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "vision",
+    "m": 1152,
+    "n": 256,
+    "k": 1152,
+    "batch": 1,
+    "count": 30,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1152,
+      1152,
+      1,
+      1
+    ],
+    "b_ne": [
+      1152,
+      256,
+      1,
+      1
+    ],
+    "out_ne": [
+      1152,
+      256,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      2304,
+      2654208,
+      2654208
+    ],
+    "b_nb": [
+      4,
+      4608,
+      1179648,
+      1179648
+    ],
+    "out_nb": [
+      4,
+      4608,
+      1179648,
+      1179648
+    ],
+    "flops_per_inference": 20384317440,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 1152,
+      "n": 256,
+      "k": 1152,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 1152,
+      "stride_a": 0,
+      "stride_b": 294912,
+      "stride_c": 294912,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "vision",
+    "m": 4304,
+    "n": 256,
+    "k": 1152,
+    "batch": 1,
+    "count": 30,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1152,
+      4304,
+      1,
+      1
+    ],
+    "b_ne": [
+      1152,
+      256,
+      1,
+      1
+    ],
+    "out_ne": [
+      4304,
+      256,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      2304,
+      9916416,
+      9916416
+    ],
+    "b_nb": [
+      4,
+      4608,
+      1179648,
+      1179648
+    ],
+    "out_nb": [
+      4,
+      17216,
+      4407296,
+      4407296
+    ],
+    "flops_per_inference": 76158074880,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 4304,
+      "n": 256,
+      "k": 1152,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 4304,
+      "stride_a": 0,
+      "stride_b": 294912,
+      "stride_c": 1101824,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "vision",
+    "m": 1152,
+    "n": 256,
+    "k": 4304,
+    "batch": 1,
+    "count": 30,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      4304,
+      1152,
+      1,
+      1
+    ],
+    "b_ne": [
+      4304,
+      256,
+      1,
+      1
+    ],
+    "out_ne": [
+      1152,
+      256,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      8608,
+      9916416,
+      9916416
+    ],
+    "b_nb": [
+      4,
+      17216,
+      4407296,
+      4407296
+    ],
+    "out_nb": [
+      4,
+      4608,
+      1179648,
+      1179648
+    ],
+    "flops_per_inference": 76158074880,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 1152,
+      "n": 256,
+      "k": 4304,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 4304,
+      "ldb": 4304,
+      "ldc": 1152,
+      "stride_a": 0,
+      "stride_b": 1101824,
+      "stride_c": 294912,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "pruned",
+    "phase": "vision",
+    "m": 256,
+    "n": 256,
+    "k": 72,
+    "batch": 16,
+    "count": 2,
+    "a_type": "f32",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      72,
+      256,
+      16,
+      1
+    ],
+    "b_ne": [
+      72,
+      256,
+      16,
+      1
+    ],
+    "out_ne": [
+      256,
+      256,
+      16,
+      1
+    ],
+    "a_nb": [
+      4,
+      288,
+      73728,
+      1179648
+    ],
+    "b_nb": [
+      4,
+      288,
+      73728,
+      1179648
+    ],
+    "out_nb": [
+      4,
+      1024,
+      262144,
+      4194304
+    ],
+    "flops_per_inference": 301989888,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": null
+  },
+  {
+    "model": "pruned",
+    "phase": "vision",
+    "m": 72,
+    "n": 256,
+    "k": 256,
+    "batch": 16,
+    "count": 2,
+    "a_type": "f32",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      256,
+      72,
+      16,
+      1
+    ],
+    "b_ne": [
+      256,
+      256,
+      16,
+      1
+    ],
+    "out_ne": [
+      72,
+      256,
+      16,
+      1
+    ],
+    "a_nb": [
+      4,
+      1024,
+      73728,
+      1179648
+    ],
+    "b_nb": [
+      4,
+      1024,
+      262144,
+      4194304
+    ],
+    "out_nb": [
+      4,
+      288,
+      73728,
+      1179648
+    ],
+    "flops_per_inference": 301989888,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": null
+  },
+  {
+    "model": "pruned",
+    "phase": "vision",
+    "m": 2048,
+    "n": 256,
+    "k": 1152,
+    "batch": 1,
+    "count": 2,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1152,
+      2048,
+      1,
+      1
+    ],
+    "b_ne": [
+      1152,
+      256,
+      1,
+      1
+    ],
+    "out_ne": [
+      2048,
+      256,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      2304,
+      4718592,
+      4718592
+    ],
+    "b_nb": [
+      4,
+      4608,
+      1179648,
+      1179648
+    ],
+    "out_nb": [
+      4,
+      8192,
+      2097152,
+      2097152
+    ],
+    "flops_per_inference": 2415919104,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/pruned/shapes.json",
+    "source_sha256": "00dc583b7cad1432b963d35d9fddea700a83a1dda9a1306e87d000e8c5d9c202",
+    "baseline_blas_layout": {
+      "m": 2048,
+      "n": 256,
+      "k": 1152,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 2048,
+      "stride_a": 0,
+      "stride_b": 294912,
+      "stride_c": 524288,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "prefix",
+    "m": 2560,
+    "n": 518,
+    "k": 2048,
+    "batch": 1,
+    "count": 18,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      2048,
+      2560,
+      1,
+      1
+    ],
+    "b_ne": [
+      2048,
+      518,
+      1,
+      1
+    ],
+    "out_ne": [
+      2560,
+      518,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      4096,
+      10485760,
+      10485760
+    ],
+    "b_nb": [
+      4,
+      8192,
+      4243456,
+      4243456
+    ],
+    "out_nb": [
+      4,
+      10240,
+      5304320,
+      5304320
+    ],
+    "flops_per_inference": 97769226240,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 2560,
+      "n": 518,
+      "k": 2048,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 2048,
+      "ldb": 2048,
+      "ldc": 2560,
+      "stride_a": 0,
+      "stride_b": 1060864,
+      "stride_c": 1326080,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "prefix",
+    "m": 2048,
+    "n": 518,
+    "k": 2048,
+    "batch": 1,
+    "count": 17,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      2048,
+      2048,
+      1,
+      1
+    ],
+    "b_ne": [
+      2048,
+      518,
+      1,
+      1
+    ],
+    "out_ne": [
+      2048,
+      518,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      4096,
+      8388608,
+      8388608
+    ],
+    "b_nb": [
+      4,
+      8192,
+      4243456,
+      4243456
+    ],
+    "out_nb": [
+      4,
+      8192,
+      4243456,
+      4243456
+    ],
+    "flops_per_inference": 73870082048,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 2048,
+      "n": 518,
+      "k": 2048,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 2048,
+      "ldb": 2048,
+      "ldc": 2048,
+      "stride_a": 0,
+      "stride_b": 1060864,
+      "stride_c": 1060864,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "prefix",
+    "m": 32768,
+    "n": 518,
+    "k": 2048,
+    "batch": 1,
+    "count": 17,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      2048,
+      32768,
+      1,
+      1
+    ],
+    "b_ne": [
+      2048,
+      518,
+      1,
+      1
+    ],
+    "out_ne": [
+      32768,
+      518,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      4096,
+      134217728,
+      134217728
+    ],
+    "b_nb": [
+      4,
+      8192,
+      4243456,
+      4243456
+    ],
+    "out_nb": [
+      4,
+      131072,
+      67895296,
+      67895296
+    ],
+    "flops_per_inference": 1181921312768,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 32768,
+      "n": 518,
+      "k": 2048,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 2048,
+      "ldb": 2048,
+      "ldc": 32768,
+      "stride_a": 0,
+      "stride_b": 1060864,
+      "stride_c": 16973824,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "prefix",
+    "m": 2048,
+    "n": 518,
+    "k": 16384,
+    "batch": 1,
+    "count": 17,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      16384,
+      2048,
+      1,
+      1
+    ],
+    "b_ne": [
+      16384,
+      518,
+      1,
+      1
+    ],
+    "out_ne": [
+      2048,
+      518,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      32768,
+      67108864,
+      67108864
+    ],
+    "b_nb": [
+      4,
+      65536,
+      33947648,
+      33947648
+    ],
+    "out_nb": [
+      4,
+      8192,
+      4243456,
+      4243456
+    ],
+    "flops_per_inference": 590960656384,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 2048,
+      "n": 518,
+      "k": 16384,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 16384,
+      "ldb": 16384,
+      "ldc": 2048,
+      "stride_a": 0,
+      "stride_b": 8486912,
+      "stride_c": 1060864,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "denoise",
+    "m": 1024,
+    "n": 50,
+    "k": 32,
+    "batch": 1,
+    "count": 10,
+    "a_type": "f32",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      32,
+      1024,
+      1,
+      1
+    ],
+    "b_ne": [
+      32,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      4,
+      128,
+      131072,
+      131072
+    ],
+    "b_nb": [
+      4,
+      128,
+      6400,
+      6400
+    ],
+    "out_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "flops_per_inference": 32768000,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": null
+  },
+  {
+    "model": "full",
+    "phase": "denoise",
+    "m": 2560,
+    "n": 50,
+    "k": 1024,
+    "batch": 1,
+    "count": 180,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1024,
+      2560,
+      1,
+      1
+    ],
+    "b_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      2560,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      2048,
+      5242880,
+      5242880
+    ],
+    "b_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "out_nb": [
+      4,
+      10240,
+      512000,
+      512000
+    ],
+    "flops_per_inference": 47185920000,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 2560,
+      "n": 50,
+      "k": 1024,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1024,
+      "ldb": 1024,
+      "ldc": 2560,
+      "stride_a": 0,
+      "stride_b": 51200,
+      "stride_c": 128000,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "denoise",
+    "m": 1024,
+    "n": 50,
+    "k": 2048,
+    "batch": 1,
+    "count": 180,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      2048,
+      1024,
+      1,
+      1
+    ],
+    "b_ne": [
+      2048,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      4096,
+      4194304,
+      4194304
+    ],
+    "b_nb": [
+      4,
+      8192,
+      409600,
+      409600
+    ],
+    "out_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "flops_per_inference": 37748736000,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 1024,
+      "n": 50,
+      "k": 2048,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 2048,
+      "ldb": 2048,
+      "ldc": 1024,
+      "stride_a": 0,
+      "stride_b": 102400,
+      "stride_c": 51200,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "denoise",
+    "m": 8192,
+    "n": 50,
+    "k": 1024,
+    "batch": 1,
+    "count": 180,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1024,
+      8192,
+      1,
+      1
+    ],
+    "b_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      8192,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      2048,
+      16777216,
+      16777216
+    ],
+    "b_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "out_nb": [
+      4,
+      32768,
+      1638400,
+      1638400
+    ],
+    "flops_per_inference": 150994944000,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 8192,
+      "n": 50,
+      "k": 1024,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1024,
+      "ldb": 1024,
+      "ldc": 8192,
+      "stride_a": 0,
+      "stride_b": 51200,
+      "stride_c": 409600,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "denoise",
+    "m": 1024,
+    "n": 50,
+    "k": 4096,
+    "batch": 1,
+    "count": 180,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      4096,
+      1024,
+      1,
+      1
+    ],
+    "b_ne": [
+      4096,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      8192,
+      8388608,
+      8388608
+    ],
+    "b_nb": [
+      4,
+      16384,
+      819200,
+      819200
+    ],
+    "out_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "flops_per_inference": 75497472000,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 1024,
+      "n": 50,
+      "k": 4096,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 4096,
+      "ldb": 4096,
+      "ldc": 1024,
+      "stride_a": 0,
+      "stride_b": 204800,
+      "stride_c": 51200,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "denoise",
+    "m": 32,
+    "n": 50,
+    "k": 1024,
+    "batch": 1,
+    "count": 10,
+    "a_type": "f32",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1024,
+      32,
+      1,
+      1
+    ],
+    "b_ne": [
+      1024,
+      50,
+      1,
+      1
+    ],
+    "out_ne": [
+      32,
+      50,
+      1,
+      1
+    ],
+    "a_nb": [
+      4,
+      4096,
+      131072,
+      131072
+    ],
+    "b_nb": [
+      4,
+      4096,
+      204800,
+      204800
+    ],
+    "out_nb": [
+      4,
+      128,
+      6400,
+      6400
+    ],
+    "flops_per_inference": 32768000,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": null
+  },
+  {
+    "model": "full",
+    "phase": "vision",
+    "m": 512,
+    "n": 1152,
+    "k": 588,
+    "batch": 1,
+    "count": 1,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      588,
+      512,
+      1,
+      1
+    ],
+    "b_ne": [
+      588,
+      1152,
+      1,
+      1
+    ],
+    "out_ne": [
+      512,
+      1152,
+      1,
+      1
+    ],
+    "a_nb": [
+      2,
+      1176,
+      602112,
+      602112
+    ],
+    "b_nb": [
+      4,
+      2352,
+      2709504,
+      2709504
+    ],
+    "out_nb": [
+      4,
+      2048,
+      2359296,
+      2359296
+    ],
+    "flops_per_inference": 693633024,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 512,
+      "n": 1152,
+      "k": 588,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 588,
+      "ldb": 588,
+      "ldc": 512,
+      "stride_a": 0,
+      "stride_b": 677376,
+      "stride_c": 589824,
+      "b_f32_to_f16": true
+    }
+  },
+  {
+    "model": "full",
+    "phase": "vision",
+    "m": 3456,
+    "n": 256,
+    "k": 1152,
+    "batch": 2,
+    "count": 27,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1152,
+      3456,
+      1,
+      1
+    ],
+    "b_ne": [
+      1152,
+      256,
+      2,
+      1
+    ],
+    "out_ne": [
+      3456,
+      256,
+      2,
+      1
+    ],
+    "a_nb": [
+      2,
+      2304,
+      7962624,
+      7962624
+    ],
+    "b_nb": [
+      4,
+      4608,
+      1179648,
+      2359296
+    ],
+    "out_nb": [
+      4,
+      13824,
+      3538944,
+      7077888
+    ],
+    "flops_per_inference": 110075314176,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 3456,
+      "n": 256,
+      "k": 1152,
+      "batch": 2,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 3456,
+      "stride_a": 0,
+      "stride_b": 294912,
+      "stride_c": 884736,
+      "b_f32_to_f16": true
+    },
+    "flattened_blas_layout": {
+      "m": 3456,
+      "n": 512,
+      "k": 1152,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 3456
+    }
+  },
+  {
+    "model": "full",
+    "phase": "vision",
+    "m": 1152,
+    "n": 256,
+    "k": 1152,
+    "batch": 2,
+    "count": 27,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1152,
+      1152,
+      1,
+      1
+    ],
+    "b_ne": [
+      1152,
+      256,
+      2,
+      1
+    ],
+    "out_ne": [
+      1152,
+      256,
+      2,
+      1
+    ],
+    "a_nb": [
+      2,
+      2304,
+      2654208,
+      2654208
+    ],
+    "b_nb": [
+      4,
+      4608,
+      1179648,
+      2359296
+    ],
+    "out_nb": [
+      4,
+      4608,
+      1179648,
+      2359296
+    ],
+    "flops_per_inference": 36691771392,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 1152,
+      "n": 256,
+      "k": 1152,
+      "batch": 2,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 1152,
+      "stride_a": 0,
+      "stride_b": 294912,
+      "stride_c": 294912,
+      "b_f32_to_f16": true
+    },
+    "flattened_blas_layout": {
+      "m": 1152,
+      "n": 512,
+      "k": 1152,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 1152
+    }
+  },
+  {
+    "model": "full",
+    "phase": "vision",
+    "m": 4304,
+    "n": 256,
+    "k": 1152,
+    "batch": 2,
+    "count": 27,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1152,
+      4304,
+      1,
+      1
+    ],
+    "b_ne": [
+      1152,
+      256,
+      2,
+      1
+    ],
+    "out_ne": [
+      4304,
+      256,
+      2,
+      1
+    ],
+    "a_nb": [
+      2,
+      2304,
+      9916416,
+      9916416
+    ],
+    "b_nb": [
+      4,
+      4608,
+      1179648,
+      2359296
+    ],
+    "out_nb": [
+      4,
+      17216,
+      4407296,
+      8814592
+    ],
+    "flops_per_inference": 137084534784,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 4304,
+      "n": 256,
+      "k": 1152,
+      "batch": 2,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 4304,
+      "stride_a": 0,
+      "stride_b": 294912,
+      "stride_c": 1101824,
+      "b_f32_to_f16": true
+    },
+    "flattened_blas_layout": {
+      "m": 4304,
+      "n": 512,
+      "k": 1152,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 4304
+    }
+  },
+  {
+    "model": "full",
+    "phase": "vision",
+    "m": 1152,
+    "n": 256,
+    "k": 4304,
+    "batch": 2,
+    "count": 27,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      4304,
+      1152,
+      1,
+      1
+    ],
+    "b_ne": [
+      4304,
+      256,
+      2,
+      1
+    ],
+    "out_ne": [
+      1152,
+      256,
+      2,
+      1
+    ],
+    "a_nb": [
+      2,
+      8608,
+      9916416,
+      9916416
+    ],
+    "b_nb": [
+      4,
+      17216,
+      4407296,
+      8814592
+    ],
+    "out_nb": [
+      4,
+      4608,
+      1179648,
+      2359296
+    ],
+    "flops_per_inference": 137084534784,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 1152,
+      "n": 256,
+      "k": 4304,
+      "batch": 2,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 4304,
+      "ldb": 4304,
+      "ldc": 1152,
+      "stride_a": 0,
+      "stride_b": 1101824,
+      "stride_c": 294912,
+      "b_f32_to_f16": true
+    },
+    "flattened_blas_layout": {
+      "m": 1152,
+      "n": 512,
+      "k": 4304,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 4304,
+      "ldb": 4304,
+      "ldc": 1152
+    }
+  },
+  {
+    "model": "full",
+    "phase": "vision",
+    "m": 2048,
+    "n": 256,
+    "k": 1152,
+    "batch": 2,
+    "count": 1,
+    "a_type": "f16",
+    "b_type": "f32",
+    "out_type": "f32",
+    "a_ne": [
+      1152,
+      2048,
+      1,
+      1
+    ],
+    "b_ne": [
+      1152,
+      256,
+      2,
+      1
+    ],
+    "out_ne": [
+      2048,
+      256,
+      2,
+      1
+    ],
+    "a_nb": [
+      2,
+      2304,
+      4718592,
+      4718592
+    ],
+    "b_nb": [
+      4,
+      4608,
+      1179648,
+      2359296
+    ],
+    "out_nb": [
+      4,
+      8192,
+      2097152,
+      4194304
+    ],
+    "flops_per_inference": 2415919104,
+    "source": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_GEMM输出融合/final-phases/full/shapes.json",
+    "source_sha256": "d5fdb11281a874a226815820189bde030d222b4bd15ad8d90c92ed04d7aff3a5",
+    "baseline_blas_layout": {
+      "m": 2048,
+      "n": 256,
+      "k": 1152,
+      "batch": 2,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 2048,
+      "stride_a": 0,
+      "stride_b": 294912,
+      "stride_c": 524288,
+      "b_f32_to_f16": true
+    },
+    "flattened_blas_layout": {
+      "m": 2048,
+      "n": 512,
+      "k": 1152,
+      "batch": 1,
+      "trans_a": "T",
+      "trans_b": "N",
+      "lda": 1152,
+      "ldb": 1152,
+      "ldc": 2048
+    }
+  }
+]

@@ -29,6 +29,7 @@ struct Graph {
     ggml_context * ctx = ggml_init({32*1024*1024, nullptr, true});
     ggml_gallocr_t alloc = nullptr;
     std::vector<ggml_tensor *> inputs;
+    void * mapped_input = nullptr;
 
     ~Graph() {
         if (alloc) ggml_gallocr_free(alloc);
@@ -67,6 +68,9 @@ struct Graph {
             if (std::strcmp(ggml_get_name(t), "mask") == 0)
                 for (size_t i = 0; i < n; ++i)
                     data[i] = (i % (size_t)t->ne[0]) % 7 == 6 ? -INFINITY : 0.0f;
+            if (j==0 && mapped_input) {
+                std::memcpy(mapped_input,data.data(),ggml_nbytes(t));continue;
+            }
             if (t->type == GGML_TYPE_BF16) {
                 std::vector<ggml_bf16_t> packed(n);
                 ggml_fp32_to_bf16_row(data.data(), packed.data(), (int64_t) n);
@@ -81,7 +85,7 @@ struct Graph {
         }
     }
 
-    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs, ggml_tensor * dynamic_scale = nullptr, bool switch_dtype = false, int timed_runs = 0) {
+    std::vector<float> run(ggml_backend_t backend, const std::vector<ggml_tensor *> & outputs, ggml_tensor * dynamic_scale = nullptr, bool switch_dtype = false, int timed_runs = 0, bool rebind_output = false) {
         auto * gf = ggml_new_graph(ctx);
         for (auto * t : outputs) {
             ggml_set_output(t);
@@ -97,10 +101,19 @@ struct Graph {
         }
         alloc = ggml_gallocr_new(ggml_backend_get_default_buffer_type(backend));
         if (!alloc || !ggml_gallocr_alloc_graph(alloc, gf)) return {};
+        auto * target=outputs.front();
+        void * original_data=target->data;
+        auto original_buffer=target->buffer;
+        ggml_backend_buffer_t external[2]={nullptr,nullptr};
+        if(rebind_output) for(auto & buffer:external) buffer=ggml_backend_alloc_buffer(backend,ggml_nbytes(target));
         std::vector<float> result;
         double elapsed_ms = 0;
         // Reuse the allocation and graph: catches stream/lifetime problems too.
-        for (int repeat = 0; repeat < ((dynamic_scale || switch_dtype) ? 9 : 3) + timed_runs; ++repeat) {
+        for (int repeat = 0; repeat < ((dynamic_scale || switch_dtype || rebind_output) ? 9 : 3) + timed_runs; ++repeat) {
+            if(rebind_output) {
+                target->buffer=external[(repeat/3)%2];
+                target->data=ggml_backend_buffer_get_base(target->buffer);
+            }
             if (switch_dtype) inputs[0]->type = repeat/3 == 1 ? GGML_TYPE_BF16 : GGML_TYPE_F16;
             if (dynamic_scale) {
                 float scale = 0.5f * (repeat/3 + 1);
@@ -127,6 +140,8 @@ struct Graph {
         }
         if (timed_runs) std::printf("ATTENTION_BENCH {\"mean_ms\":%.6f,\"runs\":%d,\"graph_bytes\":%zu}\n",
             elapsed_ms/timed_runs,timed_runs,ggml_gallocr_get_buffer_size(alloc,0));
+        target->data=original_data;target->buffer=original_buffer;
+        for(auto buffer:external) if(buffer) ggml_backend_buffer_free(buffer);
         return result;
     }
 };
@@ -212,6 +227,20 @@ std::vector<float> vision(ggml_backend_t backend, ggml_type type) {
     return g.run(backend, {h});
 }
 
+std::vector<float> mapped_input(ggml_backend_t backend, bool mapped) {
+    Graph g;
+    auto * x=g.input(GGML_TYPE_F32,{33,17});
+    ggml_backend_buffer_t buffer=nullptr;
+    if(mapped) {
+        buffer=ggml_backend_musa_mapped_buffer(backend,ggml_nbytes(x),&g.mapped_input);
+        if(!buffer) return {};
+        x->buffer=buffer;x->data=ggml_backend_buffer_get_base(buffer);
+    }
+    auto result=g.run(backend,{ggml_scale(g.ctx,x,0.5f)},nullptr,false,0,true);
+    if(buffer) ggml_backend_buffer_free(buffer);
+    return result;
+}
+
 std::vector<float> vision_epilogue(ggml_backend_t backend, int64_t h, int64_t seq, int64_t batch, bool fused) {
     Graph g;
     auto * x = g.input(GGML_TYPE_F32, {h,seq,batch});
@@ -256,7 +285,7 @@ std::vector<float> action_projection(ggml_backend_t backend, int64_t k, int64_t 
     return g.run(backend,{ggml_mul_mat(g.ctx,a,b)});
 }
 
-std::vector<float> vision_attention(ggml_backend_t backend, bool flash, int64_t heads=4, int64_t nv=2) {
+std::vector<float> vision_attention(ggml_backend_t backend, bool flash, int64_t heads=4, int64_t nv=2, bool force_cast=false) {
     Graph g;
     constexpr int64_t hd=72, seq=256;
     auto * q=g.input(GGML_TYPE_F32, {hd*heads, seq, nv});
@@ -265,8 +294,10 @@ std::vector<float> vision_attention(ggml_backend_t backend, bool flash, int64_t 
     auto view = [&](ggml_tensor * t) {
         return ggml_permute(g.ctx, ggml_reshape_4d(g.ctx,t,hd,heads,seq,nv),0,2,1,3);
     };
+    auto * kview=view(k), * vview=view(v);
+    if(force_cast) { kview=ggml_cast(g.ctx,kview,GGML_TYPE_F16);vview=ggml_cast(g.ctx,vview,GGML_TYPE_F16); }
     auto * out = flash
-        ? vla::flash_attention(g.ctx,view(q),view(k),view(v),nullptr,1.f/std::sqrt(float(hd)))
+        ? vla::flash_attention(g.ctx,view(q),kview,vview,nullptr,1.f/std::sqrt(float(hd)))
         : vla::attention(g.ctx,vla::to_heads(g.ctx,q,hd,heads,seq,nv),
                          vla::to_heads(g.ctx,k,hd,heads,seq,nv),
                          vla::to_heads_v(g.ctx,v,hd,heads,seq,nv),nullptr,
@@ -479,6 +510,12 @@ int main(int argc, char ** argv) {
         ggml_backend_free(cpu);ggml_backend_free(b.handle);
         return ok?0:1;
     }
+    if (argc==2 && std::strcmp(argv[1],"--mapped-io")==0) {
+        const auto ref=mapped_input(cpu,false);
+        ok=compare("rebind_output_graph",GGML_TYPE_F32,ref,mapped_input(b.handle,false),1e-12) && ok;
+        ok=compare("mapped_input_rebind_graph",GGML_TYPE_F32,ref,mapped_input(b.handle,true),1e-12) && ok;
+        ggml_backend_free(cpu);ggml_backend_free(b.handle);return ok?0:1;
+    }
     if (argc == 2 && std::strcmp(argv[1], "--vision-epilogue") == 0) {
         {
             Graph g;
@@ -524,6 +561,15 @@ int main(int argc, char ** argv) {
         ggml_backend_free(cpu);
         ggml_backend_free(b.handle);
         return ok ? 0 : 1;
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--vision-pack") == 0) {
+        if(!vla::musa_vision_pack_enabled()) return 2;
+        for(int64_t batch : {1,2})
+            ok=compare("vision_pack_exact",GGML_TYPE_F16,
+                vision_attention(b.handle,true,16,batch,true),
+                vision_attention(b.handle,true,16,batch,false),1e-12) && ok;
+        ggml_backend_free(cpu);ggml_backend_free(b.handle);
+        return ok?0:1;
     }
     if (argc == 2 && std::strcmp(argv[1], "--vision-sdpa") == 0) {
         for (int64_t batch : {1,2})

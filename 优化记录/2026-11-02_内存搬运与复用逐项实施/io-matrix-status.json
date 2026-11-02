@@ -1,0 +1,58 @@
+[
+  {
+    "stage": "baseline",
+    "returncode": 0
+  },
+  {
+    "stage": "baseline-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "pageable",
+    "returncode": 0
+  },
+  {
+    "stage": "pageable-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "pinned",
+    "returncode": 0
+  },
+  {
+    "stage": "pinned-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "mapped",
+    "returncode": 0
+  },
+  {
+    "stage": "mapped-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "async",
+    "returncode": 0
+  },
+  {
+    "stage": "async-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "direct",
+    "returncode": 0
+  },
+  {
+    "stage": "direct-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "kv",
+    "returncode": 0
+  },
+  {
+    "stage": "kv-phases",
+    "returncode": 0
+  }
+]

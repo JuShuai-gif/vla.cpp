@@ -1,0 +1,41 @@
+{
+  "argv": [
+    "/home/skysi/code/vla.cpp/.venv-converter/bin/python",
+    "/home/skysi/code/vla.cpp/scripts/bench_pi05.py",
+    "--model",
+    "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+    "--out-dir",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-02_\u5185\u5b58\u642c\u8fd0\u4e0e\u590d\u7528\u9010\u9879\u5b9e\u65bd/pin-flatten-phases/full",
+    "--weight-dtype",
+    "f16",
+    "--act-dtype",
+    "f32",
+    "--flash-attn",
+    "--warmup",
+    "3",
+    "--runs",
+    "3",
+    "--reference",
+    "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/validation/musa-f32-actions.npy",
+    "--split-phases"
+  ],
+  "env": {
+    "VLA_MUSA_VISION_SDPA": "1",
+    "VLA_PI05_VISION_QKV": "1",
+    "VLA_MUSA_VISION_EPILOGUE": "all",
+    "VLA_MUSA_VISION_PACK": "1",
+    "VLA_MUSA_ATTN_DIRECT_OUT": "1",
+    "VLA_PI05_HOST_INPUT": "pinned",
+    "VLA_PI05_ASYNC_VISION": "1",
+    "VLA_PI05_VISION_DIRECT": "1",
+    "VLA_PI05_KV_REUSE": "1",
+    "VLA_PI05_PIN_MAIN_INPUT": "1",
+    "VLA_MUSA_FLATTEN_GEMM": "1",
+    "BENCH_RUNS": "3",
+    "BENCH_SPLIT": "1",
+    "VLA_LIBRARY": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "VLA_DEVICE": "0",
+    "VLA_N_THREADS": "4",
+    "VLA_MUSA_GEMMA_ATTN": "fused-all"
+  }
+}

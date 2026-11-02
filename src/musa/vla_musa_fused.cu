@@ -27,7 +27,29 @@ extern void (*ggml_musa_ext_release)(int, void *);
 }
 
 namespace vla {
+bool musa_vision_pack_enabled() {
+#ifdef VLA_MUSA_MUDNN_ATTN
+    static const bool enabled = std::getenv("VLA_MUSA_VISION_SDPA") && std::getenv("VLA_MUSA_VISION_PACK");
+    return enabled;
+#else
+    return false;
+#endif
+}
+bool musa_vision_raw_qkv(const ggml_tensor * q, const ggml_tensor * k, const ggml_tensor * v) {
+    if (!musa_vision_pack_enabled() || !q || !k || !v ||
+        q->ne[0]!=72 || q->ne[1]!=256 || q->ne[2]!=16 || q->ne[3]<1 || q->ne[3]>2 ||
+        !ggml_are_same_shape(q,k) || !ggml_are_same_shape(q,v)) return false;
+    for (const auto * t : {q,k,v}) {
+        if(t->type!=GGML_TYPE_F32 || t->nb[0]!=4 || t->view_offs%16) return false;
+        for(int j=1;j<4;++j) if(t->nb[j]%16 || t->nb[j]!=q->nb[j]) return false;
+    }
+    return true;
+}
 namespace {
+bool gemma_direct_output() {
+    static const bool enabled = std::getenv("VLA_MUSA_ATTN_DIRECT_OUT") != nullptr;
+    return enabled;
+}
 constexpr int WG = 256;
 
 const void * userdata(const ggml_tensor * t) {
@@ -80,7 +102,7 @@ bool vision_sdpa(const ggml_tensor * t) {
     return q->type == GGML_TYPE_F32 && q->ne[0] == 72 && q->ne[1] == 256 && q->ne[2] == 16 &&
         q->ne[3] >= 1 && q->ne[3] <= 2 && q->nb[0] == 4 && q->nb[1]%16 == 0 &&
         q->nb[2]%16 == 0 && q->nb[3]%16 == 0 && q->view_offs%16 == 0 &&
-        dense_f16(k) && dense_f16(v) && ggml_are_same_shape(q,k) && ggml_are_same_shape(k,v) &&
+        ( (dense_f16(k) && dense_f16(v)) || musa_vision_raw_qkv(q,k,v)) && ggml_are_same_shape(q,k) && ggml_are_same_shape(k,v) &&
         params[1] == 0 && params[2] == 0;
 #else
     (void)t; return false;
@@ -270,7 +292,7 @@ struct GemmaSdpa {
         VLA_ATTN_MU(musaMalloc(&q,(size_t)8*256*nq*2));
         VLA_ATTN_MU(musaMalloc(&scores,(size_t)8*nk*nq*4));
         VLA_ATTN_MU(musaMalloc(&probs,(size_t)8*nk*nq*2));
-        VLA_ATTN_MU(musaMalloc(&out,(size_t)8*256*nq*4));
+        if(!gemma_direct_output()) VLA_ATTN_MU(musaMalloc(&out,(size_t)8*256*nq*4));
     }
     ~GemmaSdpa() {
         int old=0;musaGetDevice(&old);musaSetDevice(device);
@@ -340,8 +362,11 @@ bool run_gemma_sdpa(ggml_tensor * t,musaStream_t stream) {
     gemma_probs<<<8*nq,128,0,stream>>>((const float *)s.scores,mask?(const __half *)mask->data:nullptr,(__half *)s.probs,nq,nk,scale);
     VLA_ATTN_BLAS(mublasGemmStridedBatchedEx(s.handle,MUBLAS_OP_N,MUBLAS_OP_N,256,nq,nk,
         &one,v->data,MUSA_R_16F,256,0,s.probs,MUSA_R_16F,nk,nk*nq,
-        &zero,s.out,MUSA_R_32F,256,256*nq,8,MUBLAS_COMPUTE_32F,MUBLAS_GEMM_DEFAULT_TENSOR_OP));
-    gemma_unpack<<<(n4+WG-1)/WG,WG,0,stream>>>((const float4 *)s.out,(float4 *)t->data,nq);
+        &zero,gemma_direct_output()?t->data:s.out,MUSA_R_32F,
+        gemma_direct_output()?2048:256,gemma_direct_output()?256:256*nq,
+        8,MUBLAS_COMPUTE_32F,MUBLAS_GEMM_DEFAULT_TENSOR_OP));
+    if(!gemma_direct_output())
+        gemma_unpack<<<(n4+WG-1)/WG,WG,0,stream>>>((const float4 *)s.out,(float4 *)t->data,nq);
     return true;
 }
 
@@ -371,6 +396,9 @@ struct VisionSdpa {
         VLA_MU_CHECK(musaMalloc(&v,(size_t)batch*16*256*128*2));
         VLA_MU_CHECK(musaMalloc(&out,(size_t)batch*16*256*128*2));
         VLA_MU_CHECK(musaMalloc(&lse,(size_t)batch*16*256*4));
+        // Input padding is immutable. Capture/replay only rewrites the 72 valid columns.
+        for(void * ptr : {q,k,v})
+            VLA_MU_CHECK(musaMemsetAsync(ptr,0,(size_t)batch*16*256*128*2,stream));
     }
     ~VisionSdpa() {
         int old=0;musaGetDevice(&old);musaSetDevice(device);
@@ -394,6 +422,20 @@ __global__ void pad_sdpa(const T * src, __half2 * dst, int batch, size_t s1, siz
         a=load(p[0]);c=load(p[1]);d=load(p[2]);e=load(p[3]);
     }
     dst[2*i]=__floats2half2_rn(a,c); dst[2*i+1]=__floats2half2_rn(d,e);
+}
+
+// Fuse strided Q/K/V reads, F32->F16 conversion and head padding.
+__global__ void pack_vision_qkv(const float * q,const float * k,const float * v,
+        __half2 * qo,__half2 * ko,__half2 * vo,int batch,size_t s1,size_t s2,size_t s3) {
+    const int i=blockIdx.x*blockDim.x+threadIdx.x;
+    if(i>=batch*16*256*18)return;
+    const int d=i%18,token=(i/18)%256,head=(i/(18*256))%16,b=i/(18*256*16);
+    const float * src=blockIdx.y==0?q:(blockIdx.y==1?k:v);
+    __half2 * dst=blockIdx.y==0?qo:(blockIdx.y==1?ko:vo);
+    const float4 x=*(const float4 *)(src+4*d+token*s1+head*s2+b*s3);
+    const int out=d+32*(token+256*(head+16*b));
+    dst[2*out]=__floats2half2_rn(x.x,x.y);
+    dst[2*out+1]=__floats2half2_rn(x.z,x.w);
 }
 
 __global__ void unpack_sdpa(const __half2 * src, float4 * dst, int batch) {
@@ -437,12 +479,18 @@ bool run_vision_sdpa(ggml_tensor * t, musaStream_t stream) {
     auto & s=*it->second;
     const size_t n4=(size_t)batch*16*256*72/4;
     const int packed=batch*16*256*32;
+    if(musa_vision_raw_qkv(q,t->src[1],t->src[2])) {
+        pack_vision_qkv<<<dim3((n4+WG-1)/WG,3),WG,0,stream>>>(
+            (const float *)q->data,(const float *)t->src[1]->data,(const float *)t->src[2]->data,
+            (__half2 *)s.q,(__half2 *)s.k,(__half2 *)s.v,batch,q->nb[1]/4,q->nb[2]/4,q->nb[3]/4);
+    } else {
     pad_sdpa<<<(packed+WG-1)/WG,WG,0,stream>>>((const float *)q->data,(__half2 *)s.q,batch,
         q->nb[1]/4,q->nb[2]/4,q->nb[3]/4);
     for(int j=1;j<=2;++j){
         const auto * a=t->src[j];
         pad_sdpa<<<(packed+WG-1)/WG,WG,0,stream>>>((const __half *)a->data,
             (__half2 *)(j==1?s.k:s.v),batch,a->nb[1]/2,a->nb[2]/2,a->nb[3]/2);
+    }
     }
     VLA_DNN_CHECK(mudnnScaledDotProductAttentionFlashForward(s.handle,s.lse_desc,s.lse,
         s.tensor[0],s.q,s.tensor[1],s.k,s.tensor[2],s.v,s.empty,nullptr,

@@ -1,0 +1,34 @@
+[
+  {
+    "stage": "late-control",
+    "returncode": 0
+  },
+  {
+    "stage": "late-control-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "main-pin",
+    "returncode": 0
+  },
+  {
+    "stage": "main-pin-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "flatten",
+    "returncode": 0
+  },
+  {
+    "stage": "flatten-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "pin-flatten",
+    "returncode": 0
+  },
+  {
+    "stage": "pin-flatten-phases",
+    "returncode": 0
+  }
+]

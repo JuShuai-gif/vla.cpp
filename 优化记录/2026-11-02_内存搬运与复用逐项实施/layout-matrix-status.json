@@ -1,0 +1,42 @@
+[
+  {
+    "stage": "output",
+    "returncode": 0
+  },
+  {
+    "stage": "output-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "vision-pack",
+    "returncode": 0
+  },
+  {
+    "stage": "vision-pack-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "layout",
+    "returncode": 0
+  },
+  {
+    "stage": "layout-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "combined",
+    "returncode": 0
+  },
+  {
+    "stage": "combined-phases",
+    "returncode": 0
+  },
+  {
+    "stage": "combined-kv",
+    "returncode": 0
+  },
+  {
+    "stage": "combined-kv-phases",
+    "returncode": 0
+  }
+]

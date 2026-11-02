@@ -67,12 +67,20 @@ struct Pi05ModelArch : public ModelArchBase {
 
     /// Runs the vision tower + projector on every view in one graph; returns its
     /// F32 [hidden, n_images*n_tokens] output, valid until the next call, or null.
-    const std::vector<ggml_tensor *> * vision_forward(const ImageView* images, int n_images);
+    const std::vector<ggml_tensor *> * vision_forward(const ImageView* images, int n_images, ggml_tensor * destination = nullptr, bool async = false);
     bool read_pruned_images(std::vector<float> & out);
     int64_t vision_keep = 0;
     bool device_prune = false;
     bool musa_backend = false;
     bool input_cache = false;
+    bool async_vision = false, direct_vision = false, pin_main_input = false;
+    int host_input = 0; // 0: original, 1: persistent pageable, 2: pinned, 3: mapped.
+    std::vector<float> pixels_storage, language_storage, noise_storage;
+    ggml_backend_buffer_t pixels_mapped = nullptr;
+    void * mapped_host = nullptr;
+    size_t mapped_bytes = 0;
+    ggml_backend_buffer_t main_host = nullptr;
+    size_t main_host_bytes = 0;
     ggml_backend_buffer_t pixels_host = nullptr;
     size_t pixels_host_bytes = 0;
 
@@ -91,6 +99,8 @@ struct Pi05ModelArch : public ModelArchBase {
         // of a shared output: OpenVINO writes back neither.
         std::vector<ggml_tensor *> emb;
         std::vector<ggml_tensor *> scores;
+        std::vector<void *> original_px, original_emb;
+        std::vector<ggml_backend_buffer_t> original_px_buf, original_emb_buf;
     };
     graph_cache<int64_t, VisIO> vis_graph;
     // Language segment padded up to a multiple of this (0 = exact length), with
@@ -412,7 +422,9 @@ bool load_stats(gguf_reader & g, Pi05ModelArch & m) {
 
 Pi05ModelArch::~Pi05ModelArch() {
     if (backend && input_cache) ggml_backend_synchronize(backend);
+    if (main_host) ggml_backend_buffer_free(main_host);
     if (pixels_host) ggml_backend_buffer_free(pixels_host);
+    if (pixels_mapped) ggml_backend_buffer_free(pixels_mapped);
     if (weight_buf)
         ggml_backend_buffer_free(weight_buf);
     if (ctx_weights)
@@ -507,6 +519,18 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         }
         m->musa_backend = b.is_musa;
         m->input_cache = b.is_musa && env_flag("VLA_PI05_INPUT_CACHE");
+        m->async_vision = b.is_musa && env_flag("VLA_PI05_ASYNC_VISION");
+        m->direct_vision = b.is_musa && env_flag("VLA_PI05_VISION_DIRECT");
+        m->pin_main_input = b.is_musa && env_flag("VLA_PI05_PIN_MAIN_INPUT");
+        const char * host = b.is_musa ? std::getenv("VLA_PI05_HOST_INPUT") : nullptr;
+        m->input_cache = m->input_cache || m->async_vision || m->direct_vision || m->pin_main_input || (host && *host);
+        m->host_input = m->input_cache ? 2 : 0;
+        if (host && *host) {
+            if (std::strcmp(host,"pageable")==0) m->host_input=1;
+            else if (std::strcmp(host,"pinned")==0) m->host_input=2;
+            else if (std::strcmp(host,"mapped")==0) m->host_input=3;
+            else { std::fprintf(stderr,"pi05: unknown VLA_PI05_HOST_INPUT=%s\n",host); return nullptr; }
+        }
         m->device_prune = b.is_musa && !env_flag("VLA_PI05_HOST_PRUNE");
         if (m->device_prune) musa_register_fused_ops();
         if (b.is_musa && !fq.present && !env_flag("VLA_PI05_NO_FUSE")) {
@@ -758,7 +782,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
     return m;
 }
 
-const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView* images, int n_images) {
+const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView* images, int n_images, ggml_tensor * destination, bool async) {
     const int64_t K = vis.n_tokens, grid = vis.image_size/vis.patch_size, S = vis.image_size;
     const ggml_type vt = vis.vit.enc.cfg.act;
     const bool built = vis_graph.ensure(backend, (int64_t) n_images, (size_t) 128*1024*1024,
@@ -835,14 +859,30 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         return vg;
     });
     if (!built) { std::fprintf(stderr, "vla(pi05): vision graph build failed\n"); return nullptr; }
-    const VisIO & vio = vis_graph.io();
+    VisIO & vio = vis_graph.io();
     ggml_cgraph * vg = vis_graph.graph();
+    if (vio.original_px.empty()) {
+        for (auto * t : vio.t_px) { vio.original_px.push_back(t->data); vio.original_px_buf.push_back(t->buffer); }
+        for (auto * t : vio.emb) { vio.original_emb.push_back(t->data); vio.original_emb_buf.push_back(t->buffer); }
+    }
+    size_t output_offset = 0;
+    for (size_t j=0;j<vio.emb.size();++j) {
+        auto * t=vio.emb[j];
+        t->data=vio.original_emb[j];t->buffer=vio.original_emb_buf[j];
+        if (destination) {
+            GGML_ASSERT(t->type==destination->type && ggml_is_contiguous(t) && ggml_is_contiguous(destination));
+            GGML_ASSERT(output_offset+ggml_nbytes(t)<=ggml_nbytes(destination));
+            t->data=(char *)destination->data+output_offset;t->buffer=destination->buffer;
+            output_offset+=ggml_nbytes(t);
+        }
+    }
+    if (destination) GGML_ASSERT(output_offset==ggml_nbytes(destination));
 
     const size_t per_view = (size_t) 3*S*S;
     std::vector<float> chw, px;
     float * pixels = nullptr;
 #ifdef GGML_USE_MUSA
-    if (input_cache) {
+    if (host_input==2) {
         const size_t bytes = per_view*n_images*sizeof(float);
         if (!pixels_host || pixels_host_bytes < bytes) {
             if (pixels_host) ggml_backend_buffer_free(pixels_host);
@@ -851,7 +891,18 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         }
         if (pixels_host) pixels = (float *)ggml_backend_buffer_get_base(pixels_host);
     }
+    if (host_input==3) {
+        const size_t bytes=per_view*n_images*sizeof(float);
+        if (!pixels_mapped || mapped_bytes<bytes) {
+            if (pixels_mapped) ggml_backend_buffer_free(pixels_mapped);
+            pixels_mapped=ggml_backend_musa_mapped_buffer(backend,bytes,&mapped_host);
+            mapped_bytes=pixels_mapped?bytes:0;
+            if (!pixels_mapped) return nullptr;
+        }
+        pixels=(float *)mapped_host;
+    }
 #endif
+    if (!pixels && input_cache) { pixels_storage.resize(per_view*n_images); pixels=pixels_storage.data(); }
     if (!pixels) { px.resize(per_view*n_images); pixels=px.data(); }
     for (int v=0; v<n_images; ++v) {
         if (input_cache) {
@@ -864,13 +915,17 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         }
     }
     size_t off = 0;
-    for (ggml_tensor * t : vio.t_px) {
-        if (input_cache) ggml_backend_tensor_set_async(backend,t,pixels+off,0,ggml_nbytes(t));
+    for (size_t j=0;j<vio.t_px.size();++j) {
+        auto * t=vio.t_px[j];
+        t->data=vio.original_px[j];t->buffer=vio.original_px_buf[j];
+        if (host_input==3) {
+            t->buffer=pixels_mapped;t->data=(char *)ggml_backend_buffer_get_base(pixels_mapped)+off*sizeof(float);
+        } else if (input_cache) ggml_backend_tensor_set_async(backend,t,pixels+off,0,ggml_nbytes(t));
         else ggml_backend_tensor_set(t,pixels+off,0,ggml_nbytes(t));
         off += (size_t) ggml_nelements(t);
     }
     graph_unique_names(vg);
-    if (ggml_backend_graph_compute(backend, vg) != GGML_STATUS_SUCCESS) {
+    if ((async ? ggml_backend_graph_compute_async(backend, vg) : ggml_backend_graph_compute(backend, vg)) != GGML_STATUS_SUCCESS) {
         std::fprintf(stderr, "vla(pi05): vision compute failed\n");
         return nullptr;
     }
@@ -988,7 +1043,9 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     const bool    padded     = lang_bucket > 0;
 
     std::vector<int32_t> lang_ids(in.lang_tokens, in.lang_tokens+n_lang);
-    std::vector<float> lang_rows((size_t) n_lang_g * hidden_pl, 0.0f);
+    std::vector<float> local_language;
+    auto & lang_rows=input_cache?language_storage:local_language;
+    lang_rows.assign((size_t)n_lang_g*hidden_pl,0.0f);
     {
         if (!io.fetch_rows_f32("token_embd.weight", lang_ids, lang_rows.data(), hidden_pl)) return {};
     }
@@ -1118,6 +1175,11 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     });
     if (!built) { std::fprintf(stderr, "vla(pi05): main graph build failed\n"); return {}; }
 
+    // Covers early returns after asynchronous upload/vision submission.
+    struct PendingVision {
+        ggml_backend_t backend; bool active;
+        ~PendingVision() { if(active) ggml_backend_synchronize(backend); }
+    } pending{backend,async_vision};
     MainIO & gio = main_graph.io();
     ggml_cgraph * gf = main_graph.graph();
     ggml_tensor * t_prefix = gio.t_prefix, * t_image_emb = gio.t_img_rows;
@@ -1128,16 +1190,34 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     ggml_tensor * t_prefix_pos = gio.t_prefix_pos, * t_x0 = gio.t_x0;
     ggml_tensor * t_suffix_pos = gio.t_suffix_pos, * x_final = gio.x_final;
 
+    float * main_staging = nullptr;
+#ifdef GGML_USE_MUSA
+    if (pin_main_input) {
+        // Allocate before vision submission; steady-state uploads/readback share one persistent slab.
+        const size_t bytes=(lang_rows.size()+2*(size_t)max_ad*chunk)*sizeof(float);
+        if (!main_host || main_host_bytes<bytes) {
+            if(main_host) ggml_backend_buffer_free(main_host);
+            main_host=ggml_backend_buft_alloc_buffer(ggml_backend_cuda_host_buffer_type(),bytes);
+            main_host_bytes=main_host?bytes:0;
+        }
+        if(!main_host) return {};
+        main_staging=(float *)ggml_backend_buffer_get_base(main_host);
+    }
+#endif
     if (in.precomputed_img_emb) {
         ggml_backend_tensor_set(t_image_emb, in.precomputed_img_emb, 0, ggml_nbytes(t_image_emb));
     } else {
         const auto tv0 = clk::now();
-        const std::vector<ggml_tensor *> * embs = vision_forward(in.images, in.n_images);
+        const bool direct=direct_vision && (!vision_keep || device_prune);
+        const std::vector<ggml_tensor *> * embs = vision_forward(in.images, in.n_images,
+            direct?t_image_emb:nullptr,async_vision && (!vision_keep || device_prune) && !split_phases && !env_flag("VLA_PI05_DUMP_PRUNE"));
         if (!embs) return {};
         if (vision_keep && !device_prune) {
             std::vector<float> selected;
             if (!read_pruned_images(selected)) return {};
             ggml_backend_tensor_set(t_image_emb, selected.data(), 0, selected.size() * sizeof(float));
+        } else if (direct) {
+            // Vision producers already write the main graph input.
         } else if (embs->size() == 1) {
             if(input_cache) ggml_backend_tensor_copy_async(backend,backend,embs->front(),t_image_emb);
             else ggml_backend_tensor_copy(embs->front(),t_image_emb);
@@ -1159,7 +1239,8 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         const float lang_scale = (float) std::sqrt((double) hidden_pl);
         for (float & v : lang_rows) v *= lang_scale;
     }
-    if(input_cache) ggml_backend_tensor_set_async(backend,t_prefix,lang_rows.data(),
+    if(main_staging) std::memcpy(main_staging,lang_rows.data(),lang_rows.size()*sizeof(float));
+    if(input_cache) ggml_backend_tensor_set_async(backend,t_prefix,main_staging?main_staging:lang_rows.data(),
         (size_t)n_img_tokens*t_prefix->nb[1],lang_rows.size()*sizeof(float));
     else ggml_backend_tensor_set(t_prefix,lang_rows.data(),
         (size_t)n_img_tokens*t_prefix->nb[1],lang_rows.size()*sizeof(float));
@@ -1187,11 +1268,16 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     gio.cached_real_prefix = n_prefix;
     }
     // The asynchronous upload must outlive submission and final synchronization.
-    std::vector<float> x0h;
+    std::vector<float> local_noise;
+    auto & x0h=input_cache?noise_storage:local_noise;
     init_noise(in,(size_t)max_ad*chunk,x0h);
-    if(input_cache) ggml_backend_tensor_set_async(backend,t_x0,x0h.data(),0,ggml_nbytes(t_x0));
+    float * noise_staging=main_staging?main_staging+lang_rows.size():nullptr;
+    if(noise_staging) std::memcpy(noise_staging,x0h.data(),ggml_nbytes(t_x0));
+    if(input_cache) ggml_backend_tensor_set_async(backend,t_x0,noise_staging?noise_staging:x0h.data(),0,ggml_nbytes(t_x0));
     else ggml_backend_tensor_set(t_x0,x0h.data(),0,ggml_nbytes(t_x0));
     graph_unique_names(gf);
+    std::vector<float> out((size_t) chunk * max_ad);
+    bool output_ready=false;
     const auto ti0 = clk::now();
     static const bool split_host = env_flag("VLA_PI05_HOST_SPLIT");
     ggml_status st;
@@ -1211,7 +1297,13 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         const auto tp = clk::now();
         if (st == GGML_STATUS_SUCCESS)
             st = run(gio.prefix_nodes, ggml_graph_n_nodes(gf));
-        if (!split_phases) ggml_backend_synchronize(backend);
+        if (!split_phases) {
+            if (async_vision && st==GGML_STATUS_SUCCESS) {
+                ggml_backend_tensor_get_async(backend,x_final,noise_staging?noise_staging+x0h.size():out.data(),0,out.size()*sizeof(float));
+                output_ready=true;
+            }
+            ggml_backend_synchronize(backend);
+        }
         const auto te = clk::now();
         if (split_phases) std::fprintf(stderr, "VLA_PI05_PHASES {\"vision_ms\":%.6f,\"prefix_ms\":%.6f,\"denoise_ms\":%.6f,\"steps\":%d}\n",
                      stats.ms_vision, std::chrono::duration<double, std::milli>(tp-ti0).count(),
@@ -1234,8 +1326,9 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         return {};
     }
 
-    std::vector<float> out((size_t) chunk * max_ad);
-    ggml_backend_tensor_get(x_final, out.data(), 0, out.size()*sizeof(float));
+    pending.active=false;
+    if (output_ready && noise_staging) std::memcpy(out.data(),noise_staging+x0h.size(),out.size()*sizeof(float));
+    if (!output_ready) ggml_backend_tensor_get(x_final, out.data(), 0, out.size()*sizeof(float));
 
     for (int64_t t=0; t<chunk; ++t) {
         float * row = out.data()+(size_t) t * max_ad;

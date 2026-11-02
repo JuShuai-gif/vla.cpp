@@ -19,6 +19,9 @@
 #pragma once
 
 #include "ggml.h"
+#ifdef GGML_USE_MUSA
+#include "musa/vla_musa_ops.h"
+#endif
 
 #include <cstdint>
 
@@ -50,8 +53,12 @@ inline ggml_tensor * attention(ggml_context * C, ggml_tensor * Q, ggml_tensor * 
 // Takes V laid out like Q/K, not the transposed to_heads_v form.
 inline ggml_tensor * flash_attention(ggml_context * C, ggml_tensor * Q, ggml_tensor * K, ggml_tensor * V,
                                      ggml_tensor * mask, float scale) {
-    ggml_tensor * kf = K->type == GGML_TYPE_F16 ? K : ggml_cast(C, K, GGML_TYPE_F16);
-    ggml_tensor * vf = V->type == GGML_TYPE_F16 ? V : ggml_cast(C, V, GGML_TYPE_F16);
+    bool raw_vision = false;
+#ifdef GGML_USE_MUSA
+    raw_vision = !mask && musa_vision_raw_qkv(Q,K,V);
+#endif
+    ggml_tensor * kf = raw_vision || K->type == GGML_TYPE_F16 ? K : ggml_cast(C, K, GGML_TYPE_F16);
+    ggml_tensor * vf = raw_vision || V->type == GGML_TYPE_F16 ? V : ggml_cast(C, V, GGML_TYPE_F16);
 
     ggml_tensor * o = ggml_flash_attn_ext(C, Q, kf, vf, mask, scale, 0.0f, 0.0f);
     ggml_prec_set_acc(o, GGML_PREC_F32);

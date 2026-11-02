@@ -371,6 +371,61 @@ struct vla_musa_op_timer {
         print(f"MUSA: release extension resources with backend streams in {path}")
 
 
+    # Mapped input remains a genuine CUDA/MUSA buffer, with explicit host ownership.
+    path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
+    text = path.read_text()
+    anchor = "    void * dev_ptr = nullptr;\n    std::string name;"
+    replacement = "    void * dev_ptr = nullptr;\n#ifdef GGML_USE_MUSA\n    void * mapped_host = nullptr;\n#endif\n    std::string name;"
+    if replacement not in text:
+        assert text.count(anchor) == 1
+        text = text.replace(anchor, replacement)
+    anchor = "    ~ggml_backend_cuda_buffer_context() {\n        CUDA_CHECK(cudaFree(dev_ptr));"
+    replacement = "    ~ggml_backend_cuda_buffer_context() {\n#ifdef GGML_USE_MUSA\n        if (mapped_host) { CUDA_CHECK(cudaFreeHost(mapped_host)); return; }\n#endif\n        CUDA_CHECK(cudaFree(dev_ptr));"
+    if replacement not in text:
+        assert text.count(anchor) == 1
+        text = text.replace(anchor, replacement)
+    anchor = "static void ggml_backend_cuda_set_tensor_async("
+    addition = """#ifdef GGML_USE_MUSA
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+        ggml_backend_t backend, size_t size, void ** host) {
+    auto * backend_ctx = (ggml_backend_cuda_context *) backend->context;
+    ggml_cuda_set_device(backend_ctx->device);
+    void * ptr = nullptr, * dev = nullptr;
+    auto err = musaHostAlloc(&ptr, size, musaHostAllocMapped);
+    if (err == musaSuccess) err = musaHostGetDevicePointer(&dev, ptr, 0);
+    if (err != musaSuccess) {
+        if (ptr) musaFreeHost(ptr);
+        GGML_LOG_ERROR("%s: %s\\n", __func__, musaGetErrorString(err));
+        return nullptr;
+    }
+    auto * ctx = new ggml_backend_cuda_buffer_context(backend_ctx->device, dev);
+    ctx->mapped_host = ptr; *host = ptr;
+    return ggml_backend_buffer_init(ggml_backend_cuda_buffer_type(backend_ctx->device),
+                                   ggml_backend_cuda_buffer_interface, ctx, size);
+}
+#endif
+
+"""
+    if 'ggml_backend_musa_mapped_buffer(' not in text:
+        assert text.count(anchor) == 1
+        text = text.replace(anchor, addition + anchor)
+    path.write_text(text)
+
+
+    # Batch flattening is an independent opt-in, after dtype/stride normalization.
+    path = root / 'ggml/src/ggml-cuda/ggml-cuda.cu'
+    text = path.read_text()
+    anchor = '    // Theoretically cublasGemmStridedBatchedEx would always work, even for a single matrix.'
+    old_addition = '#ifdef GGML_USE_MUSA\n    // vla.cpp: shared weights and consecutive batches can form one wider GEMM.\n    static const bool flatten_shared = std::getenv("VLA_MUSA_FLATTEN_GEMM") != nullptr;\n    if (flatten_shared && compute_type == GGML_TYPE_F16 && cu_data_type == CUDA_R_32F &&\n        ne02 == 1 && ne03 == 1 && ne12 > 1 && ne13 == 1 &&\n        s12 == s11*ne11 && ne11 <= INT32_MAX/ne12) {\n        CUBLAS_CHECK(cublasGemmEx(cublas_h, CUBLAS_OP_T, CUBLAS_OP_N,\n                ne01, ne11*ne12, ne10,\n                alpha, src0_ptr, cu_data_type_a, s01,\n                       src1_ptr, cu_data_type_b, s11,\n                beta, dst_ptr, cu_data_type, ne0,\n                cu_compute_type, CUBLAS_GEMM_DEFAULT_TENSOR_OP));\n        return;\n    }\n#endif\n'
+    addition = '#ifdef GGML_USE_MUSA\n    // vla.cpp: shared weights and consecutive batches can form one wider GEMM.\n    static const bool flatten_shared = std::getenv("VLA_MUSA_FLATTEN_GEMM") != nullptr;\n    static const bool trace_gemm = std::getenv("VLA_MUSA_TRACE_GEMM") != nullptr;\n    if (trace_gemm) std::fprintf(stderr,\n        "VLA_MUSA_GEMM {\\"m\\":%lld,\\"n\\":%lld,\\"k\\":%lld,\\"batch\\":%lld,"\n        "\\"a_batch\\":%lld,\\"b_outer\\":%lld,\\"compute_type\\":%d,\\"out_type\\":%d,"\n        "\\"lda\\":%lld,\\"ldb\\":%lld,\\"stride_b\\":%lld,\\"flatten_requested\\":%d}\\n",\n        (long long)ne01,(long long)ne11,(long long)ne10,(long long)ne12,\n        (long long)ne02,(long long)ne13,(int)compute_type,(int)cu_data_type,\n        (long long)s01,(long long)s11,(long long)s12,(int)flatten_shared);\n    if (flatten_shared && compute_type == GGML_TYPE_F16 && cu_data_type == CUDA_R_32F &&\n        ne02 == 1 && ne03 == 1 && ne12 > 1 && ne13 == 1 &&\n        s12 == s11*ne11 && ne11 <= INT32_MAX/ne12) {\n        CUBLAS_CHECK(cublasGemmEx(cublas_h, CUBLAS_OP_T, CUBLAS_OP_N,\n                ne01, ne11*ne12, ne10,\n                alpha, src0_ptr, cu_data_type_a, s01,\n                       src1_ptr, cu_data_type_b, s11,\n                beta, dst_ptr, cu_data_type, ne0,\n                cu_compute_type, CUBLAS_GEMM_DEFAULT_TENSOR_OP));\n        return;\n    }\n#endif\n'
+    if addition not in text:
+        if old_addition in text:
+            path.write_text(text.replace(old_addition, addition))
+        else:
+            assert text.count(anchor) == 1
+            path.write_text(text.replace(anchor, addition + anchor))
+
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         raise SystemExit("usage: patch_ggml_musa.py <llama-source-dir>")

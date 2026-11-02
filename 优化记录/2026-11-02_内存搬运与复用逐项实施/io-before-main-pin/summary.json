@@ -1,0 +1,198 @@
+[
+  {
+    "model": "pruned",
+    "samples": [
+      {
+        "iteration": 0,
+        "window_ms": 534.316219,
+        "api_counts": {
+          "musaMemcpyAsync": 5,
+          "musaGetDevice": 3,
+          "musaGraphLaunch": 3,
+          "musaStreamSynchronize": 1
+        },
+        "copies": {
+          "Memcpy HtoD": {
+            "count": 4,
+            "device_us": 58.36000000000001,
+            "bytes_from_export": 1259776
+          },
+          "Memcpy DtoH": {
+            "count": 1,
+            "device_us": 12.64,
+            "bytes_from_export": 6400
+          }
+        },
+        "graph_copy_nodes": {
+          "Memcpy DtoD": {
+            "count": 74,
+            "bytes_from_export": 4202496
+          }
+        },
+        "graph_copy_timing_note": "Node export reuses timestamps/durations across nodes; do not sum as independent GPU copy time.",
+        "host_memcpy_api_ms": 531.933496,
+        "host_sync_ms": 0.01048
+      },
+      {
+        "iteration": 1,
+        "window_ms": 535.82154,
+        "api_counts": {
+          "musaMemcpyAsync": 5,
+          "musaGetDevice": 3,
+          "musaGraphLaunch": 3,
+          "musaStreamSynchronize": 1
+        },
+        "copies": {
+          "Memcpy HtoD": {
+            "count": 4,
+            "device_us": 55.919999999999995,
+            "bytes_from_export": 1259776
+          },
+          "Memcpy DtoH": {
+            "count": 1,
+            "device_us": 12.84,
+            "bytes_from_export": 6400
+          }
+        },
+        "graph_copy_nodes": {
+          "Memcpy DtoD": {
+            "count": 74,
+            "bytes_from_export": 4202496
+          }
+        },
+        "graph_copy_timing_note": "Node export reuses timestamps/durations across nodes; do not sum as independent GPU copy time.",
+        "host_memcpy_api_ms": 533.377057,
+        "host_sync_ms": 0.011441
+      },
+      {
+        "iteration": 2,
+        "window_ms": 534.187058,
+        "api_counts": {
+          "musaMemcpyAsync": 5,
+          "musaGetDevice": 3,
+          "musaGraphLaunch": 3,
+          "musaStreamSynchronize": 1
+        },
+        "copies": {
+          "Memcpy HtoD": {
+            "count": 4,
+            "device_us": 55.56,
+            "bytes_from_export": 1259776
+          },
+          "Memcpy DtoH": {
+            "count": 1,
+            "device_us": 12.48,
+            "bytes_from_export": 6400
+          }
+        },
+        "graph_copy_nodes": {
+          "Memcpy DtoD": {
+            "count": 74,
+            "bytes_from_export": 4202496
+          }
+        },
+        "graph_copy_timing_note": "Node export reuses timestamps/durations across nodes; do not sum as independent GPU copy time.",
+        "host_memcpy_api_ms": 531.769815,
+        "host_sync_ms": 0.01088
+      }
+    ]
+  },
+  {
+    "model": "full",
+    "samples": [
+      {
+        "iteration": 0,
+        "window_ms": 940.825237,
+        "api_counts": {
+          "musaMemcpyAsync": 4,
+          "musaGetDevice": 3,
+          "musaGraphLaunch": 3,
+          "musaStreamSynchronize": 1
+        },
+        "copies": {
+          "Memcpy HtoD": {
+            "count": 3,
+            "device_us": 40.48,
+            "bytes_from_export": 1259776
+          },
+          "Memcpy DtoH": {
+            "count": 1,
+            "device_us": 12.24,
+            "bytes_from_export": 6400
+          }
+        },
+        "graph_copy_nodes": {
+          "Memcpy DtoD": {
+            "count": 325,
+            "bytes_from_export": 12488704
+          }
+        },
+        "graph_copy_timing_note": "Node export reuses timestamps/durations across nodes; do not sum as independent GPU copy time.",
+        "host_memcpy_api_ms": 936.806832,
+        "host_sync_ms": 0.01164
+      },
+      {
+        "iteration": 1,
+        "window_ms": 943.325878,
+        "api_counts": {
+          "musaMemcpyAsync": 4,
+          "musaGetDevice": 3,
+          "musaGraphLaunch": 3,
+          "musaStreamSynchronize": 1
+        },
+        "copies": {
+          "Memcpy HtoD": {
+            "count": 3,
+            "device_us": 40.681,
+            "bytes_from_export": 1259776
+          },
+          "Memcpy DtoH": {
+            "count": 1,
+            "device_us": 12.04,
+            "bytes_from_export": 6400
+          }
+        },
+        "graph_copy_nodes": {
+          "Memcpy DtoD": {
+            "count": 325,
+            "bytes_from_export": 12488704
+          }
+        },
+        "graph_copy_timing_note": "Node export reuses timestamps/durations across nodes; do not sum as independent GPU copy time.",
+        "host_memcpy_api_ms": 939.319234,
+        "host_sync_ms": 0.01152
+      },
+      {
+        "iteration": 2,
+        "window_ms": 960.869496,
+        "api_counts": {
+          "musaMemcpyAsync": 4,
+          "musaGetDevice": 3,
+          "musaGraphLaunch": 3,
+          "musaStreamSynchronize": 1
+        },
+        "copies": {
+          "Memcpy HtoD": {
+            "count": 3,
+            "device_us": 46.08,
+            "bytes_from_export": 1259776
+          },
+          "Memcpy DtoH": {
+            "count": 1,
+            "device_us": 11.48,
+            "bytes_from_export": 6400
+          }
+        },
+        "graph_copy_nodes": {
+          "Memcpy DtoD": {
+            "count": 325,
+            "bytes_from_export": 12488704
+          }
+        },
+        "graph_copy_timing_note": "Node export reuses timestamps/durations across nodes; do not sum as independent GPU copy time.",
+        "host_memcpy_api_ms": 957.000492,
+        "host_sync_ms": 0.01076
+      }
+    ]
+  }
+]

@@ -1,0 +1,193 @@
+{
+  "runtime_source_matches_final_measurements": true,
+  "ctest_passed": 24,
+  "validation": [
+    {
+      "name": "final-pruned",
+      "returncode": 0
+    },
+    {
+      "name": "final-pruned-bucket",
+      "returncode": 0
+    },
+    {
+      "name": "final-full",
+      "returncode": 0
+    },
+    {
+      "name": "final-full-bucket",
+      "returncode": 0
+    },
+    {
+      "name": "lifecycle-final-pruned",
+      "returncode": 0
+    },
+    {
+      "name": "lifecycle-final-full",
+      "returncode": 0
+    },
+    {
+      "name": "lifecycle-host-prune",
+      "returncode": 0
+    },
+    {
+      "name": "full-entry",
+      "returncode": 0
+    },
+    {
+      "name": "entry-exact",
+      "returncode": 0
+    },
+    {
+      "name": "profile-final",
+      "returncode": 0
+    },
+    {
+      "name": "summarize-final",
+      "returncode": 0
+    },
+    {
+      "name": "profile-mapped",
+      "returncode": 0
+    },
+    {
+      "name": "summarize-mapped",
+      "returncode": 0
+    }
+  ],
+  "lifecycle": [
+    {
+      "name": "pageable-pruned",
+      "returncode": 0
+    },
+    {
+      "name": "pageable-full",
+      "returncode": 0
+    },
+    {
+      "name": "pinned-pruned",
+      "returncode": 0
+    },
+    {
+      "name": "pinned-full",
+      "returncode": 0
+    },
+    {
+      "name": "mapped-pruned",
+      "returncode": 0
+    },
+    {
+      "name": "mapped-full",
+      "returncode": 0
+    },
+    {
+      "name": "async-pruned",
+      "returncode": 0
+    },
+    {
+      "name": "async-full",
+      "returncode": 0
+    },
+    {
+      "name": "direct-pruned",
+      "returncode": 0
+    },
+    {
+      "name": "direct-full",
+      "returncode": 0
+    },
+    {
+      "name": "mapped-direct-pruned",
+      "returncode": 0
+    },
+    {
+      "name": "mapped-direct-full",
+      "returncode": 0
+    },
+    {
+      "name": "kv-pruned",
+      "returncode": 0
+    },
+    {
+      "name": "kv-full",
+      "returncode": 0
+    }
+  ],
+  "complete_entry_exact": [
+    {
+      "model": "pi05_cube_merge_cksize50_step3_0929",
+      "act_dtype": "f32",
+      "max_abs": 0.0,
+      "reference": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/full-entry/pi05_cube_merge_cksize50_step3_0929/f32.json",
+      "reference_sha256": "691a433287b215bf301ef7994c4875bb1a188018373759771ca301860a19d56a"
+    },
+    {
+      "model": "pi05_cube_merge_cksize50_step3_0929",
+      "act_dtype": "f16",
+      "max_abs": 0.0,
+      "reference": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/full-entry/pi05_cube_merge_cksize50_step3_0929/f16.json",
+      "reference_sha256": "2d715ed4778a3d0980a03647b2e7d0f16b9246258557750983e48bdfe9942665"
+    },
+    {
+      "model": "cup_cube_joint_061_a800_50k_20261022",
+      "act_dtype": "f32",
+      "max_abs": 0.0,
+      "reference": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/full-entry-fused-all/cup_cube_joint_061_a800_50k_20261022/f32.json",
+      "reference_sha256": "69939b32757b0d06d9593e634f1164e97fb370337f23aaf2b44b8c32128a21cf"
+    },
+    {
+      "model": "cup_cube_joint_061_a800_50k_20261022",
+      "act_dtype": "f16",
+      "max_abs": 0.0,
+      "reference": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/full-entry-fused-all/cup_cube_joint_061_a800_50k_20261022/f16.json",
+      "reference_sha256": "db3502b122ad792e15ad8b929e99eccb9f3a00b6e0061c2056af0ee9185b22c7"
+    }
+  ],
+  "metadata": {
+    "source_commit": "f8533a4444f3bf1d1aa9e6a769e831df194cbddf",
+    "source_diff_sha256": "60d10b800afb1d557d453c71a41ad43122c2b3cf0556f1f5d35f209341d29c05",
+    "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "library_sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "core_sha256": "553ef9d7f598d2b128a543d417487bc34e4510f0728e91fcd04d8c8724d3070a",
+    "backend_sha256": {
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0.25.3": "3eb9f7dcf0398d4a31a4cef225b11e847c847202dcd51c29416c3badd6559a10",
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-cpu.so.0.25.3": "5ecb455569f96e5129e615afed0f17e2f564a5fc0496b15aee3ce29e456b4074",
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0.25.3": "ee09e8d1df9dc585a23fb514d7ba54a57502f30b1f55ae21f90da7b8206d250e"
+    },
+    "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+    "power_profile": "performance",
+    "environment": {
+      "VLA_DEVICE": "0",
+      "VLA_N_THREADS": "4",
+      "VLA_PI05_NO_FUSE": null,
+      "VLA_PI05_NO_PROJ_FUSE": null,
+      "VLA_MUSA_GEMMA_ATTN": "fused-denoise",
+      "VLA_MUSA_VISION_EPILOGUE": "all",
+      "VLA_MUSA_NO_VECTOR_PACK": null,
+      "VLA_MUSA_VISION_SDPA": "1",
+      "VLA_PI05_VISION_QKV": "1",
+      "VLA_PI05_INPUT_CACHE": null,
+      "VLA_MUSA_TRACE_GEMM": null,
+      "VLA_MUSA_FLATTEN_GEMM": null,
+      "VLA_MUSA_ATTN_DIRECT_OUT": "1",
+      "VLA_MUSA_VISION_PACK": "1",
+      "VLA_PI05_PIN_MAIN_INPUT": "1",
+      "VLA_PI05_HOST_INPUT": "pinned",
+      "VLA_PI05_ASYNC_VISION": "1",
+      "VLA_PI05_VISION_DIRECT": "1",
+      "VLA_MUSA_PROFILE_OPS": null,
+      "VLA_PI05_DUMP_GRAPH": null,
+      "VLA_PI05_DUMP_PRUNE": null,
+      "GGML_CUDA_DISABLE_GRAPHS": null,
+      "GGML_MUSA_DISABLE_GRAPHS": null,
+      "VLA_PI05_SPLIT_PHASES": null,
+      "VLA_PI05_HOST_PRUNE": null,
+      "VLA_PI05_NO_PRUNE_FLASH": null,
+      "VLA_PI05_NO_VISION_BATCH": null,
+      "VLA_PI05_NO_SEPARATE_GRAPHS": null,
+      "VLA_PI05_KV_REUSE": "1",
+      "VLA_PI05_NO_KV_REUSE": null,
+      "VLA_MUSA_F32_ATTN_TILE": null
+    }
+  }
+}
