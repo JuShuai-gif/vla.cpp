@@ -1,0 +1,179 @@
+[1/40] Building CXX object CMakeFiles/vla_core.dir/src/modules/siglip_vit.cpp.o
+[2/40] Building CXX object CMakeFiles/vla_core.dir/src/models/gr00tn1d6.cpp.o
+[3/40] Building CXX object CMakeFiles/vla_core.dir/src/models/gr00tn1d5.cpp.o
+[4/40] Building CXX object CMakeFiles/vla_core.dir/src/modules/encoder.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/modules/encoder.cpp:17:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[5/40] Building CXX object CMakeFiles/vla_core.dir/src/models/gr00tn1d7.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/gr00tn1d7.cpp:32:
+In file included from /home/skysi/code/vla.cpp/src/modules/qwen3vl_vit.h:21:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[6/40] Building CXX object CMakeFiles/vla_core.dir/src/models/pi0.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/pi0.cpp:25:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[7/40] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+In file included from /home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:12:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[8/40] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/pi05.cpp:35:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[9/40] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_epilogue.cu.o
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_epilogue.cu:4:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_epilogue.cu:6:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/convert.cuh:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:1453:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:1454:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+6 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_epilogue.cu:4:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_epilogue.cu:6:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/convert.cuh:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:1453:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:1454:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+6 warnings generated when compiling for host.
+[10/40] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_fused.cu.o
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:11:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+3 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:11:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+3 warnings generated when compiling for host.
+[11/40] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[12/40] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[13/40] Linking CXX shared library bin/libggml.so.0.25.3
+[14/40] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[15/40] Linking CXX executable tests/test_dit_common
+[16/40] Linking CXX executable tests/test_qwen3vl_vit
+[17/40] Linking CXX executable tests/test_rope_conventions
+[18/40] Linking CXX executable tests/test_vision_prune
+[19/40] Linking CXX executable tests/test_graph_names
+[20/40] Linking CXX shared library bin/libllama.so.0.5.0
+[21/40] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[22/40] Linking CXX shared library bin/libmtmd.so.0.5.0
+[23/40] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[24/40] Linking CXX shared library bin/libllama-common.so.0.5.0
+[25/40] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[26/40] Linking CXX shared library libvlm_core.so
+[27/40] Building CXX object CMakeFiles/vla_core.dir/src/models/smolvla.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/smolvla.cpp:20:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[28/40] Linking CXX shared library libvla_core.so
+[29/40] Linking CXX shared library libvla.so
+[30/40] Linking CXX executable vlm-server
+[31/40] Linking CXX executable tests/test_config_guard
+[32/40] Linking C executable tests/test_c_api
+[33/40] Linking CXX executable vla-bench
+[34/40] Linking CXX executable tests/vla_predict_check
+[35/40] Linking CXX executable vla-cli
+[36/40] Linking CXX executable vla-server
+[37/40] Linking CXX executable tests/test_prompt
+[38/40] Linking CXX executable tests/test_foldquant_cpu_op
+[39/40] Linking CXX executable tests/test_musa_ops
+[40/40] Linking CXX executable tests/test_foldquant_dequant

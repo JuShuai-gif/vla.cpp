@@ -1,0 +1,30 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "act_dtype": "f32",
+    "max_abs": 0.0,
+    "reference": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/full-entry/pi05_cube_merge_cksize50_step3_0929/f32.json",
+    "reference_sha256": "691a433287b215bf301ef7994c4875bb1a188018373759771ca301860a19d56a"
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "act_dtype": "f16",
+    "max_abs": 0.0,
+    "reference": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/full-entry/pi05_cube_merge_cksize50_step3_0929/f16.json",
+    "reference_sha256": "2d715ed4778a3d0980a03647b2e7d0f16b9246258557750983e48bdfe9942665"
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "act_dtype": "f32",
+    "max_abs": 0.008249282836914062,
+    "reference": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/full-entry-fused-all/cup_cube_joint_061_a800_50k_20261022/f32.json",
+    "reference_sha256": "69939b32757b0d06d9593e634f1164e97fb370337f23aaf2b44b8c32128a21cf"
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "act_dtype": "f16",
+    "max_abs": 0.0,
+    "reference": "/home/skysi/code/vla.cpp/优化记录/2026-11-02_前缀与动作Attention优化/full-entry-fused-all/cup_cube_joint_061_a800_50k_20261022/f16.json",
+    "reference_sha256": "db3502b122ad792e15ad8b929e99eccb9f3a00b6e0061c2056af0ee9185b22c7"
+  }
+]

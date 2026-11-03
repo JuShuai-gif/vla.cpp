@@ -1,0 +1,39 @@
+[1/30] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[2/30] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[3/30] Linking CXX shared library bin/libggml.so.0.25.3
+[4/30] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[5/30] Linking CXX executable tests/test_qwen3vl_vit
+[6/30] Linking CXX executable tests/test_vision_prune
+[7/30] Linking CXX executable tests/test_dit_common
+[8/30] Linking CXX executable tests/test_rope_conventions
+[9/30] Linking CXX executable tests/test_graph_names
+[10/30] Linking CXX shared library libvla_core.so
+[11/30] Linking CXX shared library bin/libllama.so.0.5.0
+[12/30] Linking CXX shared library libvla.so
+[13/30] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[14/30] Linking CXX shared library bin/libllama-common.so.0.5.0
+[15/30] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[16/30] Linking CXX shared library bin/libmtmd.so.0.5.0
+[17/30] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[18/30] Linking CXX shared library libvlm_core.so
+[19/30] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+In file included from /home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:13:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[20/30] Linking CXX executable tests/test_config_guard
+[21/30] Linking CXX executable tests/vla_predict_check
+[22/30] Linking CXX executable vla-bench
+[23/30] Linking C executable tests/test_c_api
+[24/30] Linking CXX executable vla-cli
+[25/30] Linking CXX executable vla-server
+[26/30] Linking CXX executable vlm-server
+[27/30] Linking CXX executable tests/test_prompt
+[28/30] Linking CXX executable tests/test_foldquant_cpu_op
+[29/30] Linking CXX executable tests/test_foldquant_dequant
+[30/30] Linking CXX executable tests/test_musa_ops

@@ -27,6 +27,7 @@
 #pragma once
 
 #include "ggml.h"
+#include "layers/custom_params.h"
 
 #include <cmath>
 #include <cstdint>
@@ -375,6 +376,7 @@ inline ggml_tensor * fused_adarms(ggml_context * C, ggml_tensor * x, ggml_tensor
     GGML_ASSERT(x->type == GGML_TYPE_F32 && x->nb[0] == sizeof(float) && mod->ne[0] == 3 * x->ne[0]);
     ggml_tensor * args[2] = { x, mod };
     ggml_tensor * t = fused_row_out(C, x, out_type, args, 2, fused_adarms_cpu, &spec);
+    custom_parameter_snapshot(t,spec);
     ggml_set_name(t, "fused_adarms");
     return t;
 }
@@ -411,6 +413,7 @@ inline ggml_tensor * fused_res_adarms(ggml_context * C, ggml_tensor * x, ggml_te
     ggml_tensor * args[] = {x, o, gate, mod};
     auto * t = ggml_custom_4d(C, GGML_TYPE_F32, x->ne[0], x->ne[1], 2, 1, args, 4,
                              fused_res_adarms_cpu, GGML_N_TASKS_MAX, (void *) &spec);
+    custom_parameter_snapshot(t,spec);
     ggml_set_name(t, "fused_res_adarms");
     *residual = ggml_view_2d(C, t, x->ne[0], x->ne[1], t->nb[1], 0);
     return ggml_view_2d(C, t, x->ne[0], x->ne[1], t->nb[1], t->nb[2]);
@@ -423,6 +426,7 @@ inline ggml_tensor * fused_bias_adarms(ggml_context * C, ggml_tensor * x, ggml_t
     ggml_tensor * args[] = {x,bias,mod};
     auto * t = ggml_custom_4d(C, GGML_TYPE_F32, x->ne[0], x->ne[1], 2, 1, args, 3,
                              fused_res_adarms_cpu, GGML_N_TASKS_MAX, (void *) &spec);
+    custom_parameter_snapshot(t,spec);
     ggml_set_name(t, "fused_bias_adarms");
     *residual = ggml_view_2d(C,t,x->ne[0],x->ne[1],t->nb[1],0);
     return ggml_view_2d(C,t,x->ne[0],x->ne[1],t->nb[1],t->nb[2]);
@@ -445,8 +449,9 @@ inline ggml_tensor * fused_action_step(ggml_context * C, ggml_tensor * x, ggml_t
     GGML_ASSERT(x->type == GGML_TYPE_F32 && v->type == GGML_TYPE_F32 && b->type == GGML_TYPE_F32);
     GGML_ASSERT(ggml_are_same_shape(x,v) && ggml_nelements(b)==x->ne[0]);
     ggml_tensor * args[]={x,v,b};
-    return ggml_custom_4d(C,GGML_TYPE_F32,x->ne[0],x->ne[1],x->ne[2],x->ne[3],args,3,
+    auto * t=ggml_custom_4d(C,GGML_TYPE_F32,x->ne[0],x->ne[1],x->ne[2],x->ne[3],args,3,
                           fused_action_step_cpu,GGML_N_TASKS_MAX,(void *)&spec);
+    custom_parameter_snapshot(t,spec);return t;
 }
 
 // W [K, N] BF16, x [K, M] BF16 (rows dense), b [N] F32 or null, res [N, M] or

@@ -1,0 +1,40 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp/build-musa-official
+Test project /home/skysi/code/vla.cpp/build-musa-official
+    Start 12: musa_ops
+1/1 Test #12: musa_ops .........................Subprocess aborted***Exception:   9.40 sec
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+musa_ops: backend = MUSA (device 0: M1000)
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-backend.cpp:338: GGML_ASSERT(buf != NULL && "tensor buffer not set") failed
+[New LWP 1564457]
+[New LWP 1564460]
+[New LWP 1564461]
+[New LWP 1564463]
+[New LWP 1564464]
+[New LWP 1564466]
+[New LWP 1564467]
+[New LWP 1564468]
+[New LWP 1564469]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+0x0000ffff8bca9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	../sysdeps/unix/sysv/linux/wait4.c: 没有那个文件或目录.
+#0  0x0000ffff8bca9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	in ../sysdeps/unix/sysv/linux/wait4.c
+#1  0x0000ffff8c0ca3ac in ggml_print_backtrace () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0
+#2  0x0000ffff8c0ca5f8 in ggml_abort () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0
+#3  0x0000ffff8c0e3d60 in ggml_backend_tensor_set () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0
+#4  0x0000000000411d8c in (anonymous namespace)::Graph::upload() ()
+#5  0x00000000004110a4 in (anonymous namespace)::Graph::run(ggml_backend*, std::vector<ggml_tensor*, std::allocator<ggml_tensor*> > const&, ggml_tensor*, bool, int, bool) ()
+#6  0x000000000040d82c in (anonymous namespace)::prefetch_mlp_graph(ggml_backend*, bool) ()
+#7  0x0000000000406fd4 in main ()
+[Inferior 1 (process 1564451) detached]
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   9.41 sec
+
+The following tests FAILED:
+	 12 - musa_ops (Subprocess aborted)
+Errors while running CTest

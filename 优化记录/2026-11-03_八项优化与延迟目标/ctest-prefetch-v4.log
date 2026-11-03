@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp/build-musa-official
+Test project /home/skysi/code/vla.cpp/build-musa-official
+    Start 12: musa_ops
+1/1 Test #12: musa_ops .........................   Passed    7.64 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   7.64 sec

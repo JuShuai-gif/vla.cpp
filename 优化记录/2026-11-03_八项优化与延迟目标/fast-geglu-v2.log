@@ -1,0 +1,4 @@
+fast-geglu-v2 pruned
+{'model': 'pruned', 'wall_ms': 503.4173026251665, 'baseline_relative_peak': 0.00039784080581739545, 'reference_error': {'max_abs': 0.07110214233398438, 'rmse': 0.023670347407460213, 'relative_peak': 0.0006677272031083703}}
+fast-geglu-v2 full
+{'model': 'full', 'wall_ms': 856.9930468729581, 'baseline_relative_peak': 0.00036714962334372103, 'reference_error': {'max_abs': 0.04245758056640625, 'rmse': 0.020932547748088837, 'relative_peak': 0.00043622011435218155}}

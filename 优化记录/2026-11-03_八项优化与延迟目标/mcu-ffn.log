@@ -1,0 +1,60 @@
+==PROF== '/tmp/pi05-gemm-split' started, pid:1579202  
+==PROF== Profiling "1:2:gemmex_nt_512_256x256_f16f32_epilogue_qy2" - 0: Application replay pass 0 
+profiled one GEMM
+==PROF== '/tmp/pi05-gemm-split' exit, exit code(0)  
+==PROF== Disconnected from process 1579202 
+==PROF== '/tmp/pi05-gemm-split' started, pid:1579320  
+==PROF== Profiling "1:2:gemmex_nt_512_256x256_f16f32_epilogue_qy2" - 0: Application replay pass 1 
+profiled one GEMM
+==PROF== '/tmp/pi05-gemm-split' exit, exit code(0)  
+==PROF== Disconnected from process 1579320 
+==PROF== '/tmp/pi05-gemm-split' started, pid:1579345  
+==PROF== Profiling "1:2:gemmex_nt_512_256x256_f16f32_epilogue_qy2" - 0: Application replay pass 2 
+profiled one GEMM
+==PROF== '/tmp/pi05-gemm-split' exit, exit code(0)  
+==PROF== Disconnected from process 1579345 
+==PROF== Capture finished. Path is "/home/skysi/VLA/eight-target-20261103/mcu-ffn.mcu-rep"  
+[1579202] pi05-gemm-split@aibox 
+  gemmex_nt_512_256x256_f16f32_epilogue_qy2 (128, 3, 1)x(512, 1, 1), Context 1, Stream 2, Device 0 
+    Section: GPU Speed Of Light Throughput 
+    ---------------------- ----------- ------------ 
+    Metric Name            Metric Unit Metric Value 
+    ---------------------- ----------- ------------ 
+    Compute(MP) Throughput           %        90.53 
+    L1 Cache Throughput              %        49.63 
+    L2 Cache Throughput              %         8.13 
+    Duration                        ms        10.05 
+    Elapsed Cycles               cycle   15,075,346 
+    MP Active Cycles             cycle   15,051,116 
+    MP Frequency                   Ghz         1.50 
+    ---------------------- ----------- ------------ 
+ 
+ 
+    Section: Memory Workload Analysis 
+    -------------- ----------- ------------ 
+    Metric Name    Metric Unit Metric Value 
+    -------------- ----------- ------------ 
+    L1 Hit Rate              %        10.87 
+    Mem Pipes Busy           %         7.01 
+    -------------- ----------- ------------ 
+ 
+ 
+    Section: Launch Statistics 
+    ------------------------------- --------------- ------------ 
+    Metric Name                         Metric Unit Metric Value 
+    ------------------------------- --------------- ------------ 
+    Block Size                                               512 
+    Grid Size                                                384 
+    Registers Per Thread            register/thread          242 
+    Driver Shared Memory Per Block      Kbyte/block         0.00 
+    Dynamic Shared Memory Per Block      byte/block         0.00 
+    Static Shared Memory Per Block       byte/block     65676.00 
+    Threads                                  thread      196,608 
+    Uses Green Context                                         0 
+    Waves Per MP                                            4.00 
+    # MPs                                                      8 
+    # MPXs                                                     4 
+    Enabled MPX IDs                                          all 
+    ------------------------------- --------------- ------------ 
+ 
+ 

@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp/build-musa-official
+Test project /home/skysi/code/vla.cpp/build-musa-official
+    Start 22: musa_k_rope_direct
+1/1 Test #22: musa_k_rope_direct ...............   Passed    2.87 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   2.87 sec

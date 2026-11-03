@@ -1,0 +1,2 @@
+/usr/bin/ld: /usr/local/musa/lib/libmublasLt.so: undefined reference to `muTensorDescriptorEncode'
+clang-14: error: linker command failed with exit code 1 (use -v to see invocation)

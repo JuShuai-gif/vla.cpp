@@ -1,0 +1,138 @@
+diff --git a/src/models/pi05.cpp b/src/models/pi05.cpp
+index 056b342..dfae2a9 100644
+--- a/src/models/pi05.cpp
++++ b/src/models/pi05.cpp
+@@ -1131,7 +1131,9 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+             else
+                 h = gemma_layer(C, pl.blk[i], h, t_prefix_pos, cfg, n_prefix_g,
+                                 nullptr, nullptr, t_prefix_mask, &cK[i], &cV[i], prefix_act, use_fused_attention(),
+-                                kv_inplace ? &kv[i] : nullptr);
++                                kv_inplace ? &kv[i] : nullptr,
++                                musa_backend && i+1==n_layers && !kv_inplace && pl.blk[i].Wqkv &&
++                                !pl.blk[i].fq_qkv && !pl.blk[i].fq_q && env_flag("VLA_PI05_LAST_KV_ONLY"));
+         }
+         (void) h;
+     }
+diff --git a/src/modules/gemma_expert.h b/src/modules/gemma_expert.h
+index 90e4550..b6c990a 100644
+--- a/src/modules/gemma_expert.h
++++ b/src/modules/gemma_expert.h
+@@ -407,7 +407,7 @@ inline ggml_tensor * gemma_attn(
+         ggml_tensor ** k_out, ggml_tensor ** v_out, ggml_type at, bool flash,
+         ggml_tensor * fq_x = nullptr, ggml_tensor * fq_res = nullptr, KvSlot * kv = nullptr,
+         ggml_tensor * cached_K16 = nullptr, ggml_tensor * cached_V16 = nullptr,
+-        ggml_tensor * fq_xq = nullptr, ggml_tensor * fq_gate = nullptr) {
++        ggml_tensor * fq_xq = nullptr, ggml_tensor * fq_gate = nullptr, bool kv_only = false) {
+     if (kv && !kv->concat_only)
+         return gemma_attn_kv(ctx, w, x_norm, positions, cfg, seq, *kv, mask, at);
+     // FoldQuant: q/k/v share one act node over fq_x (the raw residual stream when
+@@ -421,6 +421,7 @@ inline ggml_tensor * gemma_attn(
+     const int64_t nq  = cfg.n_q_heads;
+     const int64_t nkv = cfg.n_kv_heads;
+     const int64_t qf  = nq * hd;
++    GGML_ASSERT(!kv_only || (w.Wqkv && !w.fq_qkv && !w.fq_q && !kv && !cached_K && !cached_V && k_out && v_out));
+ 
+     if (w.rope_attn.magic == FQ_ROPE_ATTN_MAGIC && w.fq_qkv && w.fq_o && flash && cached_K16 && cached_V16 && !mask &&
+         !k_out && !v_out && (fq_xq || fq_x) && seq * nq > 192) {
+@@ -488,12 +489,15 @@ inline ggml_tensor * gemma_attn(
+         k = fq_gemm(ctx, w.fq_k, xq);
+         v = fq_gemm(ctx, w.fq_v, xq);
+     } else if (w.Wqkv) {
+-        ggml_tensor * qkv = mm_f32(ctx, w.Wqkv, x_norm);
++        auto * weight = kv_only ? ggml_view_2d(ctx,w.Wqkv,w.Wqkv->ne[0],2*cfg.kv_full_dim,
++                                              w.Wqkv->nb[1],qf*w.Wqkv->nb[1]) : w.Wqkv;
++        ggml_tensor * qkv = mm_f32(ctx, weight, x_norm);
+         const size_t  es  = ggml_element_size(qkv);
+-        q = ggml_view_2d(ctx, qkv, qf, seq, qkv->nb[1], 0);
++        q = kv_only ? nullptr : ggml_view_2d(ctx, qkv, qf, seq, qkv->nb[1], 0);
+ #ifdef GGML_USE_MUSA
+-        k = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], qf * es);
+-        v = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (qf + cfg.kv_full_dim) * es);
++        const int64_t start = kv_only ? 0 : qf;
++        k = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], start * es);
++        v = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (start + cfg.kv_full_dim) * es);
+ #else
+         k = ggml_cont(ctx, ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], qf * es));
+         v = ggml_cont(ctx, ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (qf + cfg.kv_full_dim) * es));
+@@ -507,11 +511,11 @@ inline ggml_tensor * gemma_attn(
+     }
+ 
+ #ifdef GGML_USE_MUSA
+-    ggml_tensor * q_h = ggml_view_3d(ctx, q, hd, nq, seq, hd*ggml_element_size(q), q->nb[1], 0);
++    ggml_tensor * q_h = kv_only ? nullptr : ggml_view_3d(ctx, q, hd, nq, seq, hd*ggml_element_size(q), q->nb[1], 0);
+     ggml_tensor * k_h = ggml_view_3d(ctx, k, hd, nkv, seq, hd*ggml_element_size(k), k->nb[1], 0);
+     ggml_tensor * v_h = ggml_view_3d(ctx, v, hd, nkv, seq, hd*ggml_element_size(v), v->nb[1], 0);
+ #else
+-    ggml_tensor * q_h = ggml_reshape_3d(ctx, q, hd, nq,  seq);
++    ggml_tensor * q_h = kv_only ? nullptr : ggml_reshape_3d(ctx, q, hd, nq,  seq);
+     ggml_tensor * k_h = ggml_reshape_3d(ctx, k, hd, nkv, seq);
+     ggml_tensor * v_h = ggml_reshape_3d(ctx, v, hd, nkv, seq);
+ #endif
+@@ -521,7 +525,7 @@ inline ggml_tensor * gemma_attn(
+                              (int) hd, GGML_ROPE_TYPE_NEOX, 0,
+                              cfg.rope_freq_base, 1.f, 0.f, 1.f, 32.f, 1.f);
+     };
+-    ggml_tensor * q_rope = rope_call(q_h);
++    ggml_tensor * q_rope = kv_only ? nullptr : rope_call(q_h);
+     ggml_tensor * k_rope = rope_call(k_h);
+ #ifdef GGML_USE_MUSA
+     if (flash) {
+@@ -537,6 +541,7 @@ inline ggml_tensor * gemma_attn(
+         *k_out = k_rope;
+     if (v_out)
+         *v_out = v_h;
++    if (kv_only) return nullptr;
+ 
+     if (flash && cached_K16 && cached_V16 && !mask) {
+         // Cached prefix (F16, cast once per layer) + this step's keys, without
+@@ -694,7 +699,11 @@ inline ggml_tensor * gemma_layer(
+         const Config & cfg, int64_t seq,
+         ggml_tensor * cached_K, ggml_tensor * cached_V, ggml_tensor * mask,
+         ggml_tensor ** k_out, ggml_tensor ** v_out,
+-        ggml_type at = GGML_TYPE_F32, bool flash = false, KvSlot * kv = nullptr) {
++        ggml_type at = GGML_TYPE_F32, bool flash = false, KvSlot * kv = nullptr, bool kv_only = false) {
++    if (kv_only)
++        return gemma_attn(ctx,w,rms_norm(ctx,x_in,w.ln_in,cfg.rms_eps),positions,cfg,seq,
++                          nullptr,nullptr,mask,k_out,v_out,at,flash,nullptr,nullptr,nullptr,
++                          nullptr,nullptr,nullptr,nullptr,true);
+     if (!kv && gemma_fused(w, at, flash, seq, seq + (cached_K ? cached_K->ne[2] : 0))) {
+         if (w.fq_q) {
+             // As below: the norms ride in the act nodes, the residuals in the o / down epilogues.
+diff --git a/tests/test_musa_ops.cpp b/tests/test_musa_ops.cpp
+index 636cd58..326491f 100644
+--- a/tests/test_musa_ops.cpp
++++ b/tests/test_musa_ops.cpp
+@@ -477,6 +477,23 @@ std::vector<float> res_adarms(ggml_backend_t backend, int64_t h, int64_t rows, g
+     return g.run(backend, {residual, norm});
+ }
+ 
++std::vector<float> last_prefix_kv(ggml_backend_t backend,int64_t seq,bool kv_only) {
++    Graph g;
++    vla::Config cfg;cfg.hidden=2048;cfg.n_q_heads=8;cfg.n_kv_heads=1;
++    cfg.head_dim=cfg.kv_full_dim=256;cfg.rms_eps=1e-6f;cfg.rope_freq_base=10000.f;
++    vla::GemmaLayerW w;
++    w.Wqkv=g.input(GGML_TYPE_F16,{2048,2560});
++    w.Wo=ggml_view_2d(g.ctx,w.Wqkv,2048,2048,w.Wqkv->nb[1],0);
++    w.ln_in=g.input(GGML_TYPE_F32,{2048});
++    auto * x=g.input(GGML_TYPE_F32,{2048,seq});
++    auto * pos=g.input(GGML_TYPE_I32,{seq});
++    ggml_tensor * k=nullptr,*v=nullptr;
++    if(kv_only)vla::gemma_layer(g.ctx,w,x,pos,cfg,seq,nullptr,nullptr,nullptr,&k,&v,GGML_TYPE_F32,true,nullptr,true);
++    else vla::gemma_attn(g.ctx,w,vla::rms_norm(g.ctx,x,w.ln_in,cfg.rms_eps),pos,cfg,seq,
++                        nullptr,nullptr,nullptr,&k,&v,GGML_TYPE_F32,true);
++    return g.run(backend,{k,v});
++}
++
+ std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,int steps,bool fused) {
+     Graph g;
+     auto * wi=g.input(GGML_TYPE_F32,{32,h}),*wo=g.input(GGML_TYPE_F32,{h,32});
+@@ -668,6 +685,9 @@ int main(int argc, char ** argv) {
+         return ok ? 0 : 1;
+     }
+ 
++    for(int64_t seq : {17,278,518})
++        ok=compare("last_prefix_kv_only",GGML_TYPE_F16,
++            last_prefix_kv(b.handle,seq,false),last_prefix_kv(b.handle,seq,true),1e-3) && ok;
+     for(int64_t h : {33,257,1024})
+         for(int64_t rows : {1,50})
+             for(int steps : {3,10})

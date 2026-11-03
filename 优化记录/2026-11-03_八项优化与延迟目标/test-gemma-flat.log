@@ -1,0 +1,53 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+musa_ops: backend = MUSA (device 0: M1000)
+PASS flash_vision_strided_72/f16: 442368 values, max_abs=8.065719e-05 normalized=0.004920793 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 25728 values, max_abs=0.06982613 normalized=0.0006916645 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 25728 values, max_abs=0.07587433 normalized=0.0007185968 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 222336 values, max_abs=0.06897736 normalized=0.0006896056 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 222336 values, max_abs=0.07580476 normalized=0.0007085104 tolerance=0.005
+PASS flash_reuse_kv/f16: 25728 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 25728 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 125952 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 125952 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 218112 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 218112 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_gemma_recapture/f16: 77184 values, max_abs=0.1047401 normalized=0.0006916708 tolerance=0.005

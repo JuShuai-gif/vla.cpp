@@ -1,0 +1,26 @@
+[
+  {
+    "model": "pruned",
+    "profile": "pruned",
+    "timing_ms": {
+      "ms_total": 480.8830261230469,
+      "ms_vision": 0.45184001326560974,
+      "ms_inference": 480.18096923828125
+    },
+    "max_abs": 0
+  },
+  {
+    "model": "full",
+    "profile": "full",
+    "timing_ms": {
+      "ms_total": 777.3111572265625,
+      "ms_vision": 0.5906400084495544,
+      "ms_inference": 775.975830078125
+    },
+    "max_abs": 0
+  },
+  {
+    "stage": "late-k-rope",
+    "returncode": 1
+  }
+]

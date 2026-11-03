@@ -1,0 +1,26 @@
+[
+  {
+    "iteration": 0,
+    "embedding_shape": [
+      512,
+      2048
+    ],
+    "max_abs": 0
+  },
+  {
+    "iteration": 1,
+    "embedding_shape": [
+      512,
+      2048
+    ],
+    "max_abs": 0
+  },
+  {
+    "iteration": 2,
+    "embedding_shape": [
+      512,
+      2048
+    ],
+    "max_abs": 0
+  }
+]

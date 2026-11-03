@@ -116,6 +116,15 @@ if(GGML_MUSA)
         add_test(NAME musa_attention256 COMMAND test_musa_ops --attention256)
         set_tests_properties(musa_attention256 PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
             ENVIRONMENT "VLA_MUSA_GEMMA_ATTN=fused-all")
+        add_test(NAME musa_small_gemm COMMAND test_musa_ops --flash-attn)
+        set_tests_properties(musa_small_gemm PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
+            ENVIRONMENT "VLA_MUSA_SMALL_GEMM=auto;VLA_MUSA_GEGLU_F16=1;VLA_MUSA_GEMMA_ATTN=fused-all;VLA_MUSA_GEMMA_FLAT_QK=all;VLA_MUSA_GEMMA_FLAT_AV=all")
+        add_test(NAME musa_rope_table COMMAND test_musa_ops --flash-attn)
+        set_tests_properties(musa_rope_table PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
+            ENVIRONMENT "VLA_PI05_ROPE_TABLE=1;VLA_PI05_K_ROPE_DIRECT=1;VLA_PI05_KV_DIRECT=1;VLA_MUSA_GEMMA_ATTN=fused-all")
+        add_test(NAME musa_k_rope_direct COMMAND test_musa_ops --flash-attn)
+        set_tests_properties(musa_k_rope_direct PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
+            ENVIRONMENT "VLA_PI05_K_ROPE_DIRECT=1;VLA_PI05_KV_DIRECT=1;VLA_MUSA_GEMMA_ATTN=fused-all")
         add_test(NAME musa_kv_direct COMMAND test_musa_ops --flash-attn)
         set_tests_properties(musa_kv_direct PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
             ENVIRONMENT "VLA_PI05_KV_DIRECT=1;VLA_MUSA_GEMMA_ATTN=fused-all")

@@ -1,4 +1,5 @@
 #include "layers/action_edges.h"
+#include "layers/u8_patch.h"
 // Copyright 2026 VinRobotics
 // SPDX-License-Identifier: Apache-2.0
 
@@ -55,6 +56,10 @@ struct Graph {
                 ggml_backend_tensor_set(t, data.data(), 0, ggml_nbytes(t));
                 continue;
             }
+            if(t->type==GGML_TYPE_I8) {
+                std::vector<uint8_t> raw(n);for(size_t i=0;i<n;++i)raw[i]=(i*37)&255;
+                ggml_backend_tensor_set(t,raw.data(),0,raw.size());continue;
+            }
             std::vector<float> data(n);
             for (size_t i = 0; i < n; ++i)
                 data[i] = ((int) ((i*37 + j*13) % 67) - 33) / 128.0f;
@@ -69,6 +74,14 @@ struct Graph {
             if (std::strcmp(ggml_get_name(t), "mask") == 0)
                 for (size_t i = 0; i < n; ++i)
                     data[i] = (i % (size_t)t->ne[0]) % 7 == 6 ? -INFINITY : 0.0f;
+            if(std::strcmp(ggml_get_name(t),"u8_lut")==0)
+                for(size_t i=0;i<n;++i)data[i]=(i/255.0f-.5f)/.5f;
+            if(std::strcmp(ggml_get_name(t),"u8_chw")==0)
+                for(size_t i=0;i<n;++i) {
+                    const size_t S=t->ne[0],x=i%S,y=i/S%S,c=i/(S*S)%3,v=i/(S*S*3);
+                    const size_t hwc=((v*S+y)*S+x)*3+c;
+                    data[i]=(((hwc*37)&255)/255.0f-.5f)/.5f;
+                }
             if (j==0 && mapped_input) {
                 std::memcpy(mapped_input,data.data(),ggml_nbytes(t));continue;
             }
@@ -182,12 +195,15 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
     ggml_tensor * k = nullptr, * v = nullptr;
     auto * prefix_mask = masked ? g.input(GGML_TYPE_F32, {prefix, prefix}) : nullptr;
     if (prefix_mask) ggml_set_name(prefix_mask, "mask");
+    vla::RopeTableSpec rope_spec;
+    auto * prefix_angles=vla::env_flag("VLA_PI05_ROPE_TABLE")?vla::rope_table(C,pos,cfg.head_dim,rope_spec):nullptr;
     auto * pre = vla::gemma_layer(C, w, x, pos, cfg, prefix, nullptr, nullptr, prefix_mask, &k, &v,
-                                GGML_TYPE_F32, flash);
+                                GGML_TYPE_F32, flash,nullptr,false,prefix_angles);
 
     constexpr int64_t chunk = 50;
     auto * h = g.input(GGML_TYPE_F32, {cfg.hidden, chunk});
     auto * suffix_pos = g.input(GGML_TYPE_I32, {chunk});
+    auto * suffix_angles=vla::env_flag("VLA_PI05_ROPE_TABLE")?vla::rope_table(C,suffix_pos,cfg.head_dim,rope_spec):nullptr;
     auto * suffix_mask = masked ? g.input(GGML_TYPE_F32, {prefix + chunk, chunk}) : nullptr;
     if (suffix_mask) ggml_set_name(suffix_mask, "mask");
     auto * mod = g.input(GGML_TYPE_F32, {3*cfg.hidden});
@@ -203,7 +219,7 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
     for (int step = 0; step < 3; ++step) {
         auto * att = vla::gemma_attn(C, w, adarms(h), suffix_pos, cfg, chunk,
                                     k, v, suffix_mask, nullptr, nullptr, GGML_TYPE_F32, flash,
-                                    nullptr, nullptr, reuse ? &cache : nullptr);
+                                    nullptr, nullptr, reuse ? &cache : nullptr,nullptr,nullptr,nullptr,nullptr,false,suffix_angles);
         h = ggml_add(C, h, ggml_mul(C, att, gate));
         auto * mlp = vla::gemma_mlp(C, w, adarms(h), GGML_TYPE_F32);
         h = ggml_add(C, h, ggml_scale(C, ggml_mul(C, mlp, gate), -0.1f));
@@ -477,6 +493,106 @@ std::vector<float> res_adarms(ggml_backend_t backend, int64_t h, int64_t rows, g
     return g.run(backend, {residual, norm});
 }
 
+#ifdef GGML_USE_MUSA
+std::vector<float> prefetch_mlp_graph(ggml_backend_t backend,bool prefetch) {
+    std::unique_ptr<void,decltype(&vla::musa_weight_prefetch_destroy)> state(
+        vla::musa_weight_prefetch_create(),vla::musa_weight_prefetch_destroy);
+    if(!state)return {};
+    Graph g;vla::GemmaLayerW w;
+    w.Wgu=g.input(GGML_TYPE_F16,{32,128});w.Wdown=g.input(GGML_TYPE_F16,{64,32});
+    auto * next=ggml_view_2d(g.ctx,w.Wgu,32,80,w.Wgu->nb[1],0);
+    auto * x=g.input(GGML_TYPE_F32,{32,17});
+    if(prefetch) {
+        w.prefetch_next=next;w.prefetch_begin.state=state.get();w.prefetch_end.state=state.get();
+        w.prefetch_begin.bytes=ggml_nbytes(next);
+    }
+    for(int i=0;i<3;++i)x=vla::gemma_mlp(g.ctx,w,x,GGML_TYPE_F32);
+    return g.run(backend,{x});
+}
+#endif
+std::vector<float> small_gemm_graph(ggml_backend_t backend,int k,int m,int n,ggml_type type,int tile) {
+    Graph g;auto * w=g.input(GGML_TYPE_F16,{k,m});auto * x=g.input(type,{k,n});
+    ggml_tensor * out=nullptr;
+    if(tile<0) {
+        // CPU's native F16 dot may accumulate in half; reference this kernel's F32 accumulation explicitly.
+        auto * wf=ggml_cast(g.ctx,w,GGML_TYPE_F32);
+        auto * xf=ggml_cast(g.ctx,ggml_cast(g.ctx,x,GGML_TYPE_F16),GGML_TYPE_F32);
+        out=ggml_mul_mat(g.ctx,wf,xf);ggml_mul_mat_set_prec(out,GGML_PREC_F32);
+    } else out=tile?vla::small_gemm(g.ctx,w,x,tile):ggml_mul_mat(g.ctx,w,x);
+    return g.run(backend,{out});
+}
+std::vector<float> u8_patch_graph(ggml_backend_t backend,int nv,bool fused) {
+    Graph g;ggml_tensor * out;
+    vla::U8PatchSpec spec;
+    if(fused) {
+        auto * raw=g.input(GGML_TYPE_I8,{3,224,224,nv});
+        auto * lut=g.input(GGML_TYPE_F16,{256});ggml_set_name(lut,"u8_lut");
+        out=u8_patch(g.ctx,raw,lut,spec);
+    } else {
+        auto * chw=g.input(GGML_TYPE_F32,{224,224,3,nv});ggml_set_name(chw,"u8_chw");
+        auto * w=g.input(GGML_TYPE_F32,{14,14,3,1});
+        out=ggml_im2col(g.ctx,w,chw,14,14,0,0,1,1,true,GGML_TYPE_F16);
+    }
+    return g.run(backend,{out});
+}
+
+bool custom_parameter_replay(ggml_backend_t backend) {
+    Graph g;
+    auto * x=g.input(GGML_TYPE_F32,{32,50}),*v=g.input(GGML_TYPE_F32,{32,50}),*b=g.input(GGML_TYPE_F32,{32});
+    vla::FusedActionStepSpec spec{vla::FUSED_ACTION_STEP_MAGIC,-1.f/3};
+    auto * y=vla::fused_action_step(g.ctx,x,v,b,spec);
+    ggml_set_output(y);auto * graph=ggml_new_graph(g.ctx);ggml_build_forward_expand(graph,y);
+    g.alloc=ggml_gallocr_new(ggml_backend_get_default_buffer_type(backend));
+    if(!ggml_gallocr_alloc_graph(g.alloc,graph))return false;
+    bool ok=true;
+    for(int repeat=0;repeat<9;++repeat) {
+        spec.dt=repeat/3==1?-.1f:-1.f/3;
+        vla::custom_parameter_snapshot(y,spec);
+        g.upload();
+        if(ggml_backend_graph_compute(backend,graph)!=GGML_STATUS_SUCCESS)return false;
+        std::vector<float> got(1600),ref(1600);
+        ggml_backend_tensor_get(y,got.data(),0,got.size()*4);
+        auto value=[](int i,int j){return ((i*37+j*13)%67-33)/128.f;};
+        for(int i=0;i<1600;++i) {
+            volatile float velocity=value(i,1)+value(i%32,2);
+            volatile float step=velocity*spec.dt;
+            ref[i]=value(i,0)+step;
+        }
+        ok=compare("custom_dt_graph_replay",GGML_TYPE_F32,ref,got,1e-6)&&ok;
+    }
+    return ok;
+}
+
+std::vector<float> cached_rope_graph(ggml_backend_t backend,int64_t heads,int64_t seq,ggml_type type,bool cached) {
+    Graph g;constexpr int64_t h=256;
+    auto * raw=g.input(GGML_TYPE_F32,{h,heads+2,seq});
+    ggml_set_name(raw,"attention_values");
+    auto * pos=g.input(GGML_TYPE_I32,{seq});
+    auto * x=ggml_view_3d(g.ctx,raw,h,heads,seq,raw->nb[1],raw->nb[2],h*4);
+    vla::RopeTableSpec spec;
+    auto * y=cached ? vla::rope_apply(g.ctx,x,vla::rope_table(g.ctx,pos,h,spec)) :
+        ggml_rope_ext(g.ctx,x,pos,nullptr,h,GGML_ROPE_TYPE_NEOX,0,10000.f,1.f,0.f,1.f,32.f,1.f);
+    if(type==GGML_TYPE_F16)y=cached?vla::retype(y,type):ggml_cast(g.ctx,y,type);
+    return g.run(backend,{y});
+}
+
+std::vector<float> last_prefix_kv(ggml_backend_t backend,int64_t seq,bool kv_only) {
+    Graph g;
+    vla::Config cfg;cfg.hidden=2048;cfg.n_q_heads=8;cfg.n_kv_heads=1;
+    cfg.head_dim=cfg.kv_full_dim=256;cfg.rms_eps=1e-6f;cfg.rope_freq_base=10000.f;
+    vla::GemmaLayerW w;
+    w.Wqkv=g.input(GGML_TYPE_F16,{2048,2560});
+    w.Wo=ggml_view_2d(g.ctx,w.Wqkv,2048,2048,w.Wqkv->nb[1],0);
+    w.ln_in=g.input(GGML_TYPE_F32,{2048});
+    auto * x=g.input(GGML_TYPE_F32,{2048,seq});
+    auto * pos=g.input(GGML_TYPE_I32,{seq});
+    ggml_tensor * k=nullptr,*v=nullptr;
+    if(kv_only)vla::gemma_layer(g.ctx,w,x,pos,cfg,seq,nullptr,nullptr,nullptr,&k,&v,GGML_TYPE_F32,true,nullptr,true);
+    else vla::gemma_attn(g.ctx,w,vla::rms_norm(g.ctx,x,w.ln_in,cfg.rms_eps),pos,cfg,seq,
+                        nullptr,nullptr,nullptr,&k,&v,GGML_TYPE_F32,true);
+    return g.run(backend,{k,v});
+}
+
 std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,int steps,bool fused) {
     Graph g;
     auto * wi=g.input(GGML_TYPE_F32,{32,h}),*wo=g.input(GGML_TYPE_F32,{h,32});
@@ -668,6 +784,37 @@ int main(int argc, char ** argv) {
         return ok ? 0 : 1;
     }
 
+#ifdef GGML_USE_MUSA
+    ok=compare("multi_layer_prefetch_graph_replay",GGML_TYPE_F32,
+               prefetch_mlp_graph(b.handle,false),prefetch_mlp_graph(b.handle,true),1e-12) && ok;
+#endif
+    for(int nv:{1,2})
+        ok=compare("u8_lut_patch_all_values",GGML_TYPE_F16,u8_patch_graph(b.handle,nv,false),
+                   u8_patch_graph(b.handle,nv,true),1e-12) && ok;
+#ifdef GGML_USE_MUSA
+    if(vla::musa_small_gemm_supported())
+#endif
+    for(auto type:{GGML_TYPE_F32,GGML_TYPE_F16}) {
+        for(int n:{1,17,50,64})for(int tile:{32,64})
+            ok=compare("small_gemm_cpu",GGML_TYPE_F32,
+                small_gemm_graph(cpu,128,64,n,type,-1),small_gemm_graph(b.handle,128,64,n,type,tile),1e-5) && ok;
+        for(auto shape:{std::make_pair(1024,2560),std::make_pair(2048,1024),
+                        std::make_pair(1024,8192),std::make_pair(4096,1024)})
+            for(int tile:{32,64})
+                ok=compare("small_gemm_real_shape",GGML_TYPE_F32,
+                    small_gemm_graph(b.handle,shape.first,shape.second,50,type,0),
+                    small_gemm_graph(b.handle,shape.first,shape.second,50,type,tile),1e-5) && ok;
+    }
+    ok=custom_parameter_replay(b.handle)&&ok;
+    for(int64_t heads : {1,8})
+        for(int64_t seq : {17,50,278,518})
+            for(auto type : {GGML_TYPE_F32,GGML_TYPE_F16})
+                ok=compare("cached_rope_strided",type,
+                    cached_rope_graph(b.handle,heads,seq,type,false),
+                    cached_rope_graph(b.handle,heads,seq,type,true),type==GGML_TYPE_F32?1e-6:1e-3) && ok;
+    for(int64_t seq : {17,278,518})
+        ok=compare("last_prefix_kv_only",GGML_TYPE_F16,
+            last_prefix_kv(b.handle,seq,false),last_prefix_kv(b.handle,seq,true),1e-3) && ok;
     for(int64_t h : {33,257,1024})
         for(int64_t rows : {1,50})
             for(int steps : {3,10})

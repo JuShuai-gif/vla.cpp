@@ -1,0 +1,1165 @@
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+[New Thread 0xffffdc8df120 (LWP 1559584)]
+[New Thread 0xffffdc0cf120 (LWP 1559585)]
+[New Thread 0xffffdb8bf120 (LWP 1559586)]
+[New Thread 0xffffdb0af120 (LWP 1559587)]
+[New Thread 0xffffda89f120 (LWP 1559588)]
+[New Thread 0xffffda08f120 (LWP 1559589)]
+[New Thread 0xffffd987f120 (LWP 1559590)]
+[New Thread 0xffffd906f120 (LWP 1559591)]
+[New Thread 0xffffd885f120 (LWP 1559592)]
+[New Thread 0xffffd804f120 (LWP 1559593)]
+[New Thread 0xffffd783f120 (LWP 1559594)]
+[New Thread 0xffff14b55120 (LWP 1559664)]
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+[Detaching after vfork from child process 1559667]
+[Detaching after vfork from child process 1559668]
+[Detaching after vfork from child process 1559675]
+[Detaching after vfork from child process 1559676]
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=3 real_state=7 real_action=7 max_len=64 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): visual token pruning 256 -> 136 per image (attention, spatial order)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+[New Thread 0xffff1253f120 (LWP 1559679)]
+[New Thread 0xffff11d2f120 (LWP 1559680)]
+[New Thread 0xffff1151f120 (LWP 1559681)]
+[New Thread 0xffff10d0f120 (LWP 1559682)]
+[New Thread 0xffff05099120 (LWP 1559688)]
+[New Thread 0xffff04889120 (LWP 1559689)]
+[New Thread 0xfffef7fff120 (LWP 1559806)]
+[New Thread 0xfffef77ef120 (LWP 1559810)]
+[New Thread 0xfffef6dde120 (LWP 1559811)]
+[New Thread 0xfffef65ce120 (LWP 1559812)]
+[New Thread 0xfffef5dbe120 (LWP 1559813)]
+[New Thread 0xfffef55ae120 (LWP 1559814)]
+[New Thread 0xfffef4d9e120 (LWP 1559815)]
+[New Thread 0xfffef458e120 (LWP 1559816)]
+[New Thread 0xfffef3d7e120 (LWP 1559817)]
+[New Thread 0xfffef356e120 (LWP 1559818)]
+[New Thread 0xfffef2d5e120 (LWP 1559819)]
+[New Thread 0xfffef254e120 (LWP 1559820)]
+[New Thread 0xfffef1d3e120 (LWP 1559821)]
+[New Thread 0xfffef152e120 (LWP 1559822)]
+[New Thread 0xfffef0d1e120 (LWP 1559823)]
+[New Thread 0xfffef050e120 (LWP 1559824)]
+[New Thread 0xfffeefcfe120 (LWP 1559825)]
+[New Thread 0xfffeef4ee120 (LWP 1559826)]
+[New Thread 0xfffeeecde120 (LWP 1559827)]
+[New Thread 0xfffeee4ce120 (LWP 1559828)]
+[New Thread 0xfffeedcbe120 (LWP 1559829)]
+[New Thread 0xfffeed4ae120 (LWP 1559830)]
+[New Thread 0xfffeecc9e120 (LWP 1559831)]
+[New Thread 0xfffeec48e120 (LWP 1559832)]
+[New Thread 0xfffeebc7e120 (LWP 1559833)]
+[New Thread 0xfffeeb46e120 (LWP 1559834)]
+[New Thread 0xfffeeac5e120 (LWP 1559835)]
+[New Thread 0xfffeea44e120 (LWP 1559836)]
+[New Thread 0xfffee9c3e120 (LWP 1559837)]
+[New Thread 0xfffee942e120 (LWP 1559838)]
+[New Thread 0xfffee8c1e120 (LWP 1559839)]
+[New Thread 0xfffee840e120 (LWP 1559840)]
+[New Thread 0xfffee7bfe120 (LWP 1559841)]
+[New Thread 0xfffee73ee120 (LWP 1559842)]
+[New Thread 0xfffee6bde120 (LWP 1559843)]
+[New Thread 0xfffee63ce120 (LWP 1559844)]
+[New Thread 0xfffee5bbe120 (LWP 1559845)]
+[New Thread 0xfffee53ae120 (LWP 1559846)]
+[New Thread 0xfffee4b9e120 (LWP 1559847)]
+[New Thread 0xfffee438e120 (LWP 1559848)]
+[New Thread 0xfffee3b7e120 (LWP 1559849)]
+[New Thread 0xfffee336e120 (LWP 1559850)]
+[New Thread 0xfffee2b5e120 (LWP 1559851)]
+[New Thread 0xfffee234e120 (LWP 1559852)]
+[New Thread 0xfffee1b3e120 (LWP 1559853)]
+[New Thread 0xfffee132e120 (LWP 1559854)]
+[New Thread 0xfffee0b1e120 (LWP 1559855)]
+[New Thread 0xfffee030e120 (LWP 1559856)]
+[New Thread 0xfffedfafe120 (LWP 1559857)]
+[New Thread 0xfffedf2ee120 (LWP 1559858)]
+[New Thread 0xfffedeade120 (LWP 1559859)]
+[New Thread 0xfffede2ce120 (LWP 1559860)]
+[New Thread 0xfffeddabe120 (LWP 1559861)]
+[New Thread 0xfffedd2ae120 (LWP 1559862)]
+[New Thread 0xfffedca9e120 (LWP 1559863)]
+[New Thread 0xfffedc28e120 (LWP 1559864)]
+[New Thread 0xfffedba7e120 (LWP 1559865)]
+[New Thread 0xfffedb26e120 (LWP 1559866)]
+[New Thread 0xfffedaa58120 (LWP 1559867)]
+[New Thread 0xfffeda248120 (LWP 1559868)]
+[New Thread 0xfffed9a28120 (LWP 1559869)]
+[New Thread 0xfffed9218120 (LWP 1559870)]
+[New Thread 0xfffed89f8120 (LWP 1559871)]
+[New Thread 0xfffed81e8120 (LWP 1559872)]
+[New Thread 0xfffed79c8120 (LWP 1559873)]
+[New Thread 0xfffed71b8120 (LWP 1559874)]
+[New Thread 0xfffed6998120 (LWP 1559875)]
+[New Thread 0xfffed6188120 (LWP 1559876)]
+vla(pi05): resident weights = 4.71 GiB
+[New Thread 0xfffed5968120 (LWP 1559884)]
+[New Thread 0xfffed5158120 (LWP 1559885)]
+vla(pi05): model loaded (n_threads=4)
+
+Thread 1 "python" received signal SIGSEGV, Segmentation fault.
+0x0000ffffd17cf73c in vla::(anonymous namespace)::forward(ggml_tensor*, void*, void*) () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0
+
+Thread 89 (Thread 0xfffed5158120 (LWP 1559885) "python"):
+#0  0x0000fffff7dc23cc in sched_yield () at ../sysdeps/unix/syscall-template.S:120
+#1  0x0000ffffc2b467ec in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#2  0x0000ffffc2bc08b8 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#3  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#4  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#5  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 88 (Thread 0xfffed5968120 (LWP 1559884) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf404664) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf404664) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf404664, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf404608, cond=0xaaaaaf404638) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf404638, mutex=0xaaaaaf404608) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbe864 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffc2bc0c24 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#8  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#9  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#10 0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 87 (Thread 0xfffed6188120 (LWP 1559876) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf3727e0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf3727e0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf3727e0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf372788, cond=0xaaaaaf3727b8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf3727b8, mutex=0xaaaaaf372788) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 86 (Thread 0xfffed6998120 (LWP 1559875) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf372770) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf372770) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf372770, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf372718, cond=0xaaaaaf372748) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf372748, mutex=0xaaaaaf372718) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 85 (Thread 0xfffed71b8120 (LWP 1559874) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf326080) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf326080) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf326080, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf326028, cond=0xaaaaaf326058) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf326058, mutex=0xaaaaaf326028) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 84 (Thread 0xfffed79c8120 (LWP 1559873) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf326010) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf326010) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf326010, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf325fb8, cond=0xaaaaaf325fe8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf325fe8, mutex=0xaaaaaf325fb8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 83 (Thread 0xfffed81e8120 (LWP 1559872) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf2d9980) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf2d9980) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf2d9980, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf2d9928, cond=0xaaaaaf2d9958) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf2d9958, mutex=0xaaaaaf2d9928) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 82 (Thread 0xfffed89f8120 (LWP 1559871) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf2d9910) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf2d9910) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf2d9910, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf2d98b8, cond=0xaaaaaf2d98e8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf2d98e8, mutex=0xaaaaaf2d98b8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 81 (Thread 0xfffed9218120 (LWP 1559870) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf28d220) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf28d220) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf28d220, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf28d1c8, cond=0xaaaaaf28d1f8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf28d1f8, mutex=0xaaaaaf28d1c8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 80 (Thread 0xfffed9a28120 (LWP 1559869) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf28d1b0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf28d1b0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf28d1b0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf28d158, cond=0xaaaaaf28d188) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf28d188, mutex=0xaaaaaf28d158) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 79 (Thread 0xfffeda248120 (LWP 1559868) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf240660) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf240660) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf240660, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf240608, cond=0xaaaaaf240638) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf240638, mutex=0xaaaaaf240608) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 78 (Thread 0xfffedaa58120 (LWP 1559867) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf2405f0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf2405f0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf2405f0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf240598, cond=0xaaaaaf2405c8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf2405c8, mutex=0xaaaaaf240598) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 77 (Thread 0xfffedb26e120 (LWP 1559866) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf1f3f00) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf1f3f00) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf1f3f00, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf1f3ea8, cond=0xaaaaaf1f3ed8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf1f3ed8, mutex=0xaaaaaf1f3ea8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 76 (Thread 0xfffedba7e120 (LWP 1559865) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf1f3e90) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf1f3e90) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf1f3e90, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf1f3e38, cond=0xaaaaaf1f3e68) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf1f3e68, mutex=0xaaaaaf1f3e38) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 75 (Thread 0xfffedc28e120 (LWP 1559864) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf1a7710) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf1a7710) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf1a7710, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf1a76b8, cond=0xaaaaaf1a76e8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf1a76e8, mutex=0xaaaaaf1a76b8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 74 (Thread 0xfffedca9e120 (LWP 1559863) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf1a76a0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf1a76a0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf1a76a0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf1a7648, cond=0xaaaaaf1a7678) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf1a7678, mutex=0xaaaaaf1a7648) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 73 (Thread 0xfffedd2ae120 (LWP 1559862) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf15ac50) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf15ac50) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf15ac50, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf15abf8, cond=0xaaaaaf15ac28) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf15ac28, mutex=0xaaaaaf15abf8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 72 (Thread 0xfffeddabe120 (LWP 1559861) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf15abe0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf15abe0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf15abe0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf15ab88, cond=0xaaaaaf15abb8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf15abb8, mutex=0xaaaaaf15ab88) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 71 (Thread 0xfffede2ce120 (LWP 1559860) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf10e4f0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf10e4f0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf10e4f0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf10e498, cond=0xaaaaaf10e4c8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf10e4c8, mutex=0xaaaaaf10e498) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 70 (Thread 0xfffedeade120 (LWP 1559859) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf10e480) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf10e480) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf10e480, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf10e428, cond=0xaaaaaf10e458) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf10e458, mutex=0xaaaaaf10e428) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 69 (Thread 0xfffedf2ee120 (LWP 1559858) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf0c1df0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf0c1df0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf0c1df0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf0c1d98, cond=0xaaaaaf0c1dc8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf0c1dc8, mutex=0xaaaaaf0c1d98) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 68 (Thread 0xfffedfafe120 (LWP 1559857) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf0c1d80) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf0c1d80) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf0c1d80, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf0c1d28, cond=0xaaaaaf0c1d58) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf0c1d58, mutex=0xaaaaaf0c1d28) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 67 (Thread 0xfffee030e120 (LWP 1559856) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf075690) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf075690) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf075690, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf075638, cond=0xaaaaaf075668) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf075668, mutex=0xaaaaaf075638) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 66 (Thread 0xfffee0b1e120 (LWP 1559855) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf075620) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf075620) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf075620, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf0755c8, cond=0xaaaaaf0755f8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf0755f8, mutex=0xaaaaaf0755c8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 65 (Thread 0xfffee132e120 (LWP 1559854) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf028f90) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf028f90) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf028f90, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf028f38, cond=0xaaaaaf028f68) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf028f68, mutex=0xaaaaaf028f38) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 64 (Thread 0xfffee1b3e120 (LWP 1559853) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaf028f20) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaf028f20) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaf028f20, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaf028ec8, cond=0xaaaaaf028ef8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaf028ef8, mutex=0xaaaaaf028ec8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 63 (Thread 0xfffee234e120 (LWP 1559852) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaefdc800) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaefdc800) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaefdc800, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaefdc7a8, cond=0xaaaaaefdc7d8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaefdc7d8, mutex=0xaaaaaefdc7a8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 62 (Thread 0xfffee2b5e120 (LWP 1559851) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaefdc790) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaefdc790) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaefdc790, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaefdc738, cond=0xaaaaaefdc768) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaefdc768, mutex=0xaaaaaefdc738) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 61 (Thread 0xfffee336e120 (LWP 1559850) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaef8ffe0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaef8ffe0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaef8ffe0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaef8ff88, cond=0xaaaaaef8ffb8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaef8ffb8, mutex=0xaaaaaef8ff88) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 60 (Thread 0xfffee3b7e120 (LWP 1559849) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaef8ff70) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaef8ff70) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaef8ff70, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaef8ff18, cond=0xaaaaaef8ff48) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaef8ff48, mutex=0xaaaaaef8ff18) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 59 (Thread 0xfffee438e120 (LWP 1559848) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaef43850) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaef43850) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaef43850, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaef437f8, cond=0xaaaaaef43828) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaef43828, mutex=0xaaaaaef437f8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 58 (Thread 0xfffee4b9e120 (LWP 1559847) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaef437e0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaef437e0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaef437e0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaef43788, cond=0xaaaaaef437b8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaef437b8, mutex=0xaaaaaef43788) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 57 (Thread 0xfffee53ae120 (LWP 1559846) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeef7150) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeef7150) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeef7150, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeef70f8, cond=0xaaaaaeef7128) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeef7128, mutex=0xaaaaaeef70f8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 56 (Thread 0xfffee5bbe120 (LWP 1559845) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeef70e0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeef70e0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeef70e0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeef7088, cond=0xaaaaaeef70b8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeef70b8, mutex=0xaaaaaeef7088) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 55 (Thread 0xfffee63ce120 (LWP 1559844) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeeaa9a0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeeaa9a0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeeaa9a0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeeaa948, cond=0xaaaaaeeaa978) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeeaa978, mutex=0xaaaaaeeaa948) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 54 (Thread 0xfffee6bde120 (LWP 1559843) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeeaa930) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeeaa930) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeeaa930, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeeaa8d8, cond=0xaaaaaeeaa908) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeeaa908, mutex=0xaaaaaeeaa8d8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 53 (Thread 0xfffee73ee120 (LWP 1559842) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaee5e160) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaee5e160) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaee5e160, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaee5e108, cond=0xaaaaaee5e138) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaee5e138, mutex=0xaaaaaee5e108) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 52 (Thread 0xfffee7bfe120 (LWP 1559841) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaee5e0f0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaee5e0f0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaee5e0f0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaee5e098, cond=0xaaaaaee5e0c8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaee5e0c8, mutex=0xaaaaaee5e098) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 51 (Thread 0xfffee840e120 (LWP 1559840) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaee11a00) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaee11a00) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaee11a00, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaee119a8, cond=0xaaaaaee119d8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaee119d8, mutex=0xaaaaaee119a8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 50 (Thread 0xfffee8c1e120 (LWP 1559839) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaee11990) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaee11990) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaee11990, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaee11938, cond=0xaaaaaee11968) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaee11968, mutex=0xaaaaaee11938) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 49 (Thread 0xfffee942e120 (LWP 1559838) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaedc5300) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaedc5300) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaedc5300, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaedc52a8, cond=0xaaaaaedc52d8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaedc52d8, mutex=0xaaaaaedc52a8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 48 (Thread 0xfffee9c3e120 (LWP 1559837) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaedc5290) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaedc5290) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaedc5290, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaedc5238, cond=0xaaaaaedc5268) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaedc5268, mutex=0xaaaaaedc5238) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 47 (Thread 0xfffeea44e120 (LWP 1559836) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaed78b40) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaed78b40) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaed78b40, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaed78ae8, cond=0xaaaaaed78b18) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaed78b18, mutex=0xaaaaaed78ae8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 46 (Thread 0xfffeeac5e120 (LWP 1559835) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaed78ad0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaed78ad0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaed78ad0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaed78a78, cond=0xaaaaaed78aa8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaed78aa8, mutex=0xaaaaaed78a78) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 45 (Thread 0xfffeeb46e120 (LWP 1559834) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaed2c320) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaed2c320) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaed2c320, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaed2c2c8, cond=0xaaaaaed2c2f8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaed2c2f8, mutex=0xaaaaaed2c2c8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 44 (Thread 0xfffeebc7e120 (LWP 1559833) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaed2c2b0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaed2c2b0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaed2c2b0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaed2c258, cond=0xaaaaaed2c288) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaed2c288, mutex=0xaaaaaed2c258) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 43 (Thread 0xfffeec48e120 (LWP 1559832) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaecdfc20) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaecdfc20) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaecdfc20, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaecdfbc8, cond=0xaaaaaecdfbf8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaecdfbf8, mutex=0xaaaaaecdfbc8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 42 (Thread 0xfffeecc9e120 (LWP 1559831) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaecdfbb0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaecdfbb0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaecdfbb0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaecdfb58, cond=0xaaaaaecdfb88) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaecdfb88, mutex=0xaaaaaecdfb58) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 41 (Thread 0xfffeed4ae120 (LWP 1559830) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaec93310) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaec93310) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaec93310, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaec932b8, cond=0xaaaaaec932e8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaec932e8, mutex=0xaaaaaec932b8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 40 (Thread 0xfffeedcbe120 (LWP 1559829) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaec932a0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaec932a0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaec932a0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaec93248, cond=0xaaaaaec93278) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaec93278, mutex=0xaaaaaec93248) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 39 (Thread 0xfffeee4ce120 (LWP 1559828) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaec46c30) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaec46c30) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaec46c30, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaec46bd8, cond=0xaaaaaec46c08) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaec46c08, mutex=0xaaaaaec46bd8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 38 (Thread 0xfffeeecde120 (LWP 1559827) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaec46bc0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaec46bc0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaec46bc0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaec46b68, cond=0xaaaaaec46b98) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaec46b98, mutex=0xaaaaaec46b68) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 37 (Thread 0xfffeef4ee120 (LWP 1559826) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaebfa410) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaebfa410) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaebfa410, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaebfa3b8, cond=0xaaaaaebfa3e8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaebfa3e8, mutex=0xaaaaaebfa3b8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 36 (Thread 0xfffeefcfe120 (LWP 1559825) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaebfa3a0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaebfa3a0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaebfa3a0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaebfa348, cond=0xaaaaaebfa378) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaebfa378, mutex=0xaaaaaebfa348) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 35 (Thread 0xfffef050e120 (LWP 1559824) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaebadd10) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaebadd10) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaebadd10, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaebadcb8, cond=0xaaaaaebadce8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaebadce8, mutex=0xaaaaaebadcb8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 34 (Thread 0xfffef0d1e120 (LWP 1559823) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaebadca0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaebadca0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaebadca0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaebadc48, cond=0xaaaaaebadc78) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaebadc78, mutex=0xaaaaaebadc48) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 33 (Thread 0xfffef152e120 (LWP 1559822) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeb614f0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeb614f0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeb614f0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeb61498, cond=0xaaaaaeb614c8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeb614c8, mutex=0xaaaaaeb61498) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 32 (Thread 0xfffef1d3e120 (LWP 1559821) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeb61480) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeb61480) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeb61480, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeb61428, cond=0xaaaaaeb61458) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeb61458, mutex=0xaaaaaeb61428) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 31 (Thread 0xfffef254e120 (LWP 1559820) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeb14d90) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeb14d90) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeb14d90, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeb14d38, cond=0xaaaaaeb14d68) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeb14d68, mutex=0xaaaaaeb14d38) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 30 (Thread 0xfffef2d5e120 (LWP 1559819) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeb14d20) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeb14d20) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeb14d20, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeb14cc8, cond=0xaaaaaeb14cf8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeb14cf8, mutex=0xaaaaaeb14cc8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 29 (Thread 0xfffef356e120 (LWP 1559818) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeac8550) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeac8550) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeac8550, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeac84f8, cond=0xaaaaaeac8528) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeac8528, mutex=0xaaaaaeac84f8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 28 (Thread 0xfffef3d7e120 (LWP 1559817) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaeac84e0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaeac84e0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaeac84e0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaeac8488, cond=0xaaaaaeac84b8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaeac84b8, mutex=0xaaaaaeac8488) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 27 (Thread 0xfffef458e120 (LWP 1559816) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaea7be70) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaea7be70) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaea7be70, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaea7be18, cond=0xaaaaaea7be48) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaea7be48, mutex=0xaaaaaea7be18) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 26 (Thread 0xfffef4d9e120 (LWP 1559815) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaaea7be00) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaaea7be00) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaaea7be00, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaaea7bda8, cond=0xaaaaaea7bdd8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaaea7bdd8, mutex=0xaaaaaea7bda8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 25 (Thread 0xfffef55ae120 (LWP 1559814) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae61e6c0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae61e6c0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae61e6c0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae61e668, cond=0xaaaaae61e698) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae61e698, mutex=0xaaaaae61e668) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 24 (Thread 0xfffef5dbe120 (LWP 1559813) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae61e650) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae61e650) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae61e650, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae61e5f8, cond=0xaaaaae61e628) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae61e628, mutex=0xaaaaae61e5f8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 23 (Thread 0xfffef65ce120 (LWP 1559812) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae5d1f70) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae5d1f70) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae5d1f70, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae5d1f18, cond=0xaaaaae5d1f48) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae5d1f48, mutex=0xaaaaae5d1f18) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 22 (Thread 0xfffef6dde120 (LWP 1559811) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae5d1f00) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae5d1f00) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae5d1f00, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae5d1ea8, cond=0xaaaaae5d1ed8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae5d1ed8, mutex=0xaaaaae5d1ea8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 21 (Thread 0xfffef77ef120 (LWP 1559810) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae573ac0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae573ac0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae573ac0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae573a68, cond=0xaaaaae573a98) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae573a98, mutex=0xaaaaae573a68) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 20 (Thread 0xfffef7fff120 (LWP 1559806) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae573a50) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae573a50) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae573a50, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae5739f8, cond=0xaaaaae573a28) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae573a28, mutex=0xaaaaae5739f8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 19 (Thread 0xffff04889120 (LWP 1559689) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae5246c4) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae5246c4) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae5246c4, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae524668, cond=0xaaaaae524698) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae524698, mutex=0xaaaaae524668) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 18 (Thread 0xffff05099120 (LWP 1559688) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae524654) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae524654) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae524654, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae5245f8, cond=0xaaaaae524628) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae524628, mutex=0xaaaaae5245f8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 17 (Thread 0xffff10d0f120 (LWP 1559682) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae3db160) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae3db160) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae3db160, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae3db108, cond=0xaaaaae3db138) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae3db138, mutex=0xaaaaae3db108) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 16 (Thread 0xffff1151f120 (LWP 1559681) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae3db0f0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae3db0f0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae3db0f0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae3db098, cond=0xaaaaae3db0c8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae3db0c8, mutex=0xaaaaae3db098) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 15 (Thread 0xffff11d2f120 (LWP 1559680) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae377d40) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae377d40) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae377d40, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae377ce8, cond=0xaaaaae377d18) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae377d18, mutex=0xaaaaae377ce8) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bbf2cc in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 14 (Thread 0xffff1253f120 (LWP 1559679) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xaaaaae377cd0) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xaaaaae377cd0) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xaaaaae377cd0, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xaaaaae377c78, cond=0xaaaaae377ca8) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xaaaaae377ca8, mutex=0xaaaaae377c78) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bc0f74 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 13 (Thread 0xffff14b55120 (LWP 1559664) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xffffc36b1f60) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xffffc36b1f60) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xffffc36b1f60, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xffffc36b1f08, cond=0xffffc36b1f38) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xffffc36b1f38, mutex=0xffffc36b1f08) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000ffffd6760d3c in std::condition_variable::wait(std::unique_lock<std::mutex>&) () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#6  0x0000ffffc2bd6910 in ?? () from /lib/aarch64-linux-gnu/libmusa.so.1
+#7  0x0000ffffd67929cc in ?? () from /lib/aarch64-linux-gnu/libstdc++.so.6
+#8  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#9  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 12 (Thread 0xffffd783f120 (LWP 1559594) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f0a168 <thread_status+1384>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f0a168 <thread_status+1384>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f0a168 <thread_status+1384>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f0a110 <thread_status+1296>, cond=0xfffff5f0a140 <thread_status+1344>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f0a140 <thread_status+1344>, mutex=0xfffff5f0a110 <thread_status+1296>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 11 (Thread 0xffffd804f120 (LWP 1559593) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f0a0e8 <thread_status+1256>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f0a0e8 <thread_status+1256>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f0a0e8 <thread_status+1256>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f0a090 <thread_status+1168>, cond=0xfffff5f0a0c0 <thread_status+1216>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f0a0c0 <thread_status+1216>, mutex=0xfffff5f0a090 <thread_status+1168>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 10 (Thread 0xffffd885f120 (LWP 1559592) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f0a068 <thread_status+1128>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f0a068 <thread_status+1128>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f0a068 <thread_status+1128>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f0a010 <thread_status+1040>, cond=0xfffff5f0a040 <thread_status+1088>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f0a040 <thread_status+1088>, mutex=0xfffff5f0a010 <thread_status+1040>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 9 (Thread 0xffffd906f120 (LWP 1559591) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f09fe8 <thread_status+1000>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f09fe8 <thread_status+1000>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f09fe8 <thread_status+1000>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f09f90 <thread_status+912>, cond=0xfffff5f09fc0 <thread_status+960>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f09fc0 <thread_status+960>, mutex=0xfffff5f09f90 <thread_status+912>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 8 (Thread 0xffffd987f120 (LWP 1559590) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f09f68 <thread_status+872>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f09f68 <thread_status+872>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f09f68 <thread_status+872>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f09f10 <thread_status+784>, cond=0xfffff5f09f40 <thread_status+832>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f09f40 <thread_status+832>, mutex=0xfffff5f09f10 <thread_status+784>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 7 (Thread 0xffffda08f120 (LWP 1559589) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f09ee8 <thread_status+744>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f09ee8 <thread_status+744>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f09ee8 <thread_status+744>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f09e90 <thread_status+656>, cond=0xfffff5f09ec0 <thread_status+704>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f09ec0 <thread_status+704>, mutex=0xfffff5f09e90 <thread_status+656>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 6 (Thread 0xffffda89f120 (LWP 1559588) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f09e68 <thread_status+616>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f09e68 <thread_status+616>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f09e68 <thread_status+616>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f09e10 <thread_status+528>, cond=0xfffff5f09e40 <thread_status+576>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f09e40 <thread_status+576>, mutex=0xfffff5f09e10 <thread_status+528>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 5 (Thread 0xffffdb0af120 (LWP 1559587) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f09de8 <thread_status+488>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f09de8 <thread_status+488>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f09de8 <thread_status+488>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f09d90 <thread_status+400>, cond=0xfffff5f09dc0 <thread_status+448>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f09dc0 <thread_status+448>, mutex=0xfffff5f09d90 <thread_status+400>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 4 (Thread 0xffffdb8bf120 (LWP 1559586) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f09d68 <thread_status+360>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f09d68 <thread_status+360>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f09d68 <thread_status+360>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f09d10 <thread_status+272>, cond=0xfffff5f09d40 <thread_status+320>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f09d40 <thread_status+320>, mutex=0xfffff5f09d10 <thread_status+272>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 3 (Thread 0xffffdc0cf120 (LWP 1559585) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f09ce8 <thread_status+232>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f09ce8 <thread_status+232>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f09ce8 <thread_status+232>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f09c90 <thread_status+144>, cond=0xfffff5f09cc0 <thread_status+192>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f09cc0 <thread_status+192>, mutex=0xfffff5f09c90 <thread_status+144>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 2 (Thread 0xffffdc8df120 (LWP 1559584) "python"):
+#0  __futex_abstimed_wait_common64 (private=0, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xfffff5f09c68 <thread_status+104>) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=0, abstime=0x0, clockid=0, expected=0, futex_word=0xfffff5f09c68 <thread_status+104>) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xfffff5f09c68 <thread_status+104>, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=private@entry=0) at ./nptl/futex-internal.c:139
+#3  0x0000fffff7d6f6c4 in __pthread_cond_wait_common (abstime=0x0, clockid=0, mutex=0xfffff5f09c10 <thread_status+16>, cond=0xfffff5f09c40 <thread_status+64>) at ./nptl/pthread_cond_wait.c:503
+#4  ___pthread_cond_wait (cond=0xfffff5f09c40 <thread_status+64>, mutex=0xfffff5f09c10 <thread_status+16>) at ./nptl/pthread_cond_wait.c:627
+#5  0x0000fffff4d4f69c in blas_thread_server () from /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/../../numpy.libs/libscipy_openblas64_-128b20d9.so
+#6  0x0000fffff7d703c8 in start_thread (arg=0x80e960) at ./nptl/pthread_create.c:442
+#7  0x0000fffff7dd9fdc in thread_start () at ../sysdeps/unix/sysv/linux/aarch64/clone.S:79
+
+Thread 1 (Thread 0xfffff7ff5420 (LWP 1559582) "python"):
+#0  0x0000ffffd17cf73c in vla::(anonymous namespace)::forward(ggml_tensor*, void*, void*) () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0
+#1  0x0000ffffd11a6ff8 in ggml_cuda_graph_evaluate_and_capture(ggml_backend_cuda_context*, ggml_cgraph*, bool, bool, void const*) () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0
+#2  0x0000ffffd11a431c in ggml_backend_cuda_graph_compute(ggml_backend*, ggml_cgraph*) () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0
+#3  0x0000ffffd69a55fc in vla::Pi05ModelArch::predict(vla::Inputs const&) () from /home/skysi/code/vla.cpp/build-musa-official/libvla_core.so
+#4  0x0000ffffd6a81560 in vla_predict () from /home/skysi/code/vla.cpp/build-musa-official/libvla.so
+#5  0x0000fffff6ae6e10 in ?? () from /lib/aarch64-linux-gnu/libffi.so.8
+#6  0x0000fffff6ae3a94 in ?? () from /lib/aarch64-linux-gnu/libffi.so.8
+#7  0x0000fffff7c12198 in ?? () from /usr/lib/python3.10/lib-dynload/_ctypes.cpython-310-aarch64-linux-gnu.so
+#8  0x0000fffff7c10944 in ?? () from /usr/lib/python3.10/lib-dynload/_ctypes.cpython-310-aarch64-linux-gnu.so
+#9  0x0000aaaaaab99a70 in _PyObject_MakeTpCall ()
+#10 0x0000aaaaaab90f18 in _PyEval_EvalFrameDefault ()
+#11 0x0000aaaaaabb2d38 in ?? ()
+#12 0x0000aaaaaab8d3f0 in _PyEval_EvalFrameDefault ()
+#13 0x0000aaaaaac889f0 in ?? ()
+#14 0x0000aaaaaac88874 in PyEval_EvalCode ()
+#15 0x0000aaaaaacbcdec in ?? ()
+#16 0x0000aaaaaacb5318 in ?? ()
+#17 0x0000aaaaaacbca9c in ?? ()
+#18 0x0000aaaaaacbbb34 in _PyRun_SimpleFileObject ()
+#19 0x0000aaaaaacbb700 in _PyRun_AnyFileObject ()
+#20 0x0000aaaaaacabf00 in Py_RunMain ()
+#21 0x0000aaaaaac78a08 in Py_BytesMain ()
+#22 0x0000fffff7d17400 in __libc_start_call_main (main=main@entry=0xaaaaaac789e0, argc=argc@entry=17, argv=argv@entry=0xfffffffff578) at ../sysdeps/nptl/libc_start_call_main.h:58
+#23 0x0000fffff7d174d8 in __libc_start_main_impl (main=0xaaaaaac789e0, argc=17, argv=0xfffffffff578, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=<optimized out>) at ../csu/libc-start.c:392
+#24 0x0000aaaaaac788f0 in _start ()

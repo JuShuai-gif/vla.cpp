@@ -1,0 +1,104 @@
+{
+  "created_at": "2026-11-03T17:35:43.645609+08:00",
+  "code_base": "2c271b0",
+  "git_head_before_final_commit": "2c271b01b88b5c1a651209f77c895c04b2b959cc",
+  "artifacts": [
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+      "bytes": 14560,
+      "sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/libvla_core.so",
+      "bytes": 1882240,
+      "sha256": "17595b65c33e227680b2563e61e6cdd9cc97ecede87aee5a7523c88a1aa04077"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0",
+      "bytes": 89876608,
+      "sha256": "806af24690392426de871675bc47512e0cf4664a2a82edfa538953a3eb695d39"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/scripts/pi05_musa_profiles.json",
+      "bytes": 1678,
+      "sha256": "462fb232df56944c0fea2a3c113229c1b79de66e9897346c5cb8d6dfac3ff208"
+    },
+    {
+      "path": "/home/skysi/code/vla.cpp/scripts/run_pi05.py",
+      "bytes": 9012,
+      "sha256": "282cd6383d83ff3f93a7ba7deb685cf6b2c2d9d4c87c170e3863aedb73cff5a1"
+    },
+    {
+      "path": "/home/skysi/VLA/eight-target-20261103/mcu-ffn.mcu-rep",
+      "bytes": 61440,
+      "sha256": "22daa42bfbe5f964b8e1658ea44d9899044651f2639287b6fce6b52abbf8fdff"
+    },
+    {
+      "path": "/home/skysi/VLA/eight-target-20261103/mcu-small-down.mcu-rep",
+      "bytes": 61440,
+      "sha256": "9df796fa23e67baaab677e1b9c9a235b64381fa69783b0958159aaa92f21f4a0"
+    },
+    {
+      "path": "/home/skysi/VLA/eight-target-20261103/mcu-small-gateup.mcu-rep",
+      "bytes": 61440,
+      "sha256": "985d464dd28ff2dba83f2617f8b772815521dbca97f16e29c6a744b71549b9ed"
+    },
+    {
+      "path": "/home/skysi/VLA/eight-target-20261103/candidate/full.msys-rep",
+      "bytes": 7950336,
+      "sha256": "53199cd5c277102bb70ff3710c983d80660cc032a104df60c1b5b9b526ed8318"
+    },
+    {
+      "path": "/home/skysi/VLA/eight-target-20261103/candidate/pruned.msys-rep",
+      "bytes": 3334144,
+      "sha256": "e3637e3f4862073ed06a3e38d2b3af18ae859156ae20da7fcc68d1c696ed7370"
+    }
+  ],
+  "accepted_report_metadata": {
+    "source_commit": "2c271b01b88b5c1a651209f77c895c04b2b959cc",
+    "source_diff_sha256": "988001c580c3b89e8941b68f54459ce21a8e963b165da2dce356b6f7914a1b05",
+    "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "library_sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "core_sha256": "17595b65c33e227680b2563e61e6cdd9cc97ecede87aee5a7523c88a1aa04077",
+    "backend_sha256": {
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0.25.3": "3eb9f7dcf0398d4a31a4cef225b11e847c847202dcd51c29416c3badd6559a10",
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-cpu.so.0.25.3": "5ecb455569f96e5129e615afed0f17e2f564a5fc0496b15aee3ce29e456b4074",
+      "/home/skysi/code/vla.cpp/build-musa-official/bin/libggml-musa.so.0.25.3": "806af24690392426de871675bc47512e0cf4664a2a82edfa538953a3eb695d39"
+    },
+    "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+    "power_profile": "performance",
+    "environment": {
+      "VLA_DEVICE": "0",
+      "VLA_N_THREADS": "4",
+      "VLA_PI05_NO_FUSE": null,
+      "VLA_PI05_NO_PROJ_FUSE": null,
+      "VLA_MUSA_GEMMA_ATTN": "fused-denoise",
+      "VLA_MUSA_VISION_EPILOGUE": "all",
+      "VLA_MUSA_NO_VECTOR_PACK": null,
+      "VLA_MUSA_VISION_SDPA": "1",
+      "VLA_PI05_VISION_QKV": "1",
+      "VLA_PI05_INPUT_CACHE": null,
+      "VLA_MUSA_TRACE_GEMM": null,
+      "VLA_MUSA_FLATTEN_GEMM": null,
+      "VLA_MUSA_ATTN_DIRECT_OUT": "1",
+      "VLA_MUSA_VISION_PACK": "1",
+      "VLA_PI05_PIN_MAIN_INPUT": "1",
+      "VLA_PI05_HOST_INPUT": "pinned",
+      "VLA_PI05_ASYNC_VISION": "1",
+      "VLA_PI05_VISION_DIRECT": "1",
+      "VLA_MUSA_PROFILE_OPS": null,
+      "VLA_PI05_DUMP_GRAPH": null,
+      "VLA_PI05_DUMP_PRUNE": null,
+      "GGML_CUDA_DISABLE_GRAPHS": null,
+      "GGML_MUSA_DISABLE_GRAPHS": null,
+      "VLA_PI05_SPLIT_PHASES": null,
+      "VLA_PI05_HOST_PRUNE": null,
+      "VLA_PI05_NO_PRUNE_FLASH": null,
+      "VLA_PI05_NO_VISION_BATCH": null,
+      "VLA_PI05_NO_SEPARATE_GRAPHS": null,
+      "VLA_PI05_KV_REUSE": "1",
+      "VLA_PI05_NO_KV_REUSE": null,
+      "VLA_MUSA_F32_ATTN_TILE": null
+    }
+  }
+}

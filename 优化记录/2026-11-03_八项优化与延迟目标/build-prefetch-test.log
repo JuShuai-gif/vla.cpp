@@ -1,0 +1,14 @@
+[1/2] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+In file included from /home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:13:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:497:20: warning: unused function 'prefetch_mlp_graph' [-Wunused-function]
+std::vector<float> prefetch_mlp_graph(ggml_backend_t backend,bool prefetch) {
+                   ^
+2 warnings generated.
+[2/2] Linking CXX executable tests/test_musa_ops

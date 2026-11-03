@@ -79,21 +79,38 @@ def main():
     ap.add_argument("--act-dtype", choices=("f32", "f16"), default="f32")
     ap.add_argument("--flash-attn", action="store_true", help="Enable compiled FlashAttention kernels")
     ap.add_argument("--no-fuse", action="store_true", help="Disable MUSA expert fusion for A/B checks")
+    ap.add_argument("--musa-optimized", action="store_true", help="Use the validated M1000 F16-weight/F32-activation/FA profile; detect pruned/full from GGUF")
     ap.add_argument("--warmup", type=int, default=0, help="Resident warmup predictions; use 2 to exercise Graph replay")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--output", required=True, type=Path)
     args = ap.parse_args()
     if args.warmup < 0:
         ap.error("--warmup must be nonnegative")
+    if args.musa_optimized and (args.device == "cpu" or args.no_fuse):
+        ap.error("--musa-optimized requires a MUSA device and enabled fusion")
     os.environ["VLA_DEVICE"] = args.device
     if args.no_fuse:
         os.environ["VLA_PI05_NO_FUSE"] = "1"
     os.environ.setdefault("VLA_N_THREADS", "4")
-    os.environ.setdefault("VLA_LIBRARY", str(REPO / "build-musa-m1000/libvla.so"))
-    import vla_cpp
+    build = "build-musa-official" if args.musa_optimized else "build-musa-m1000"
+    os.environ.setdefault("VLA_LIBRARY", str(REPO / build / "libvla.so"))
     reader = gguf.GGUFReader(str(args.model))
     if reader.fields["general.architecture"].contents() != "pi05":
         raise ValueError("Expected a pi05 GGUF")
+    optimized_profile = None
+    if args.musa_optimized:
+        field = reader.fields.get("pi05.vision_token_prune")
+        optimized_profile = "pruned" if field is not None and int(field.contents()) > 0 else "full"
+        profiles = json.loads((REPO / "scripts/pi05_musa_profiles.json").read_text())
+        inactive = {"VLA_PI05_K_ROPE_DIRECT", "VLA_PI05_PREFIX_GAMMA_FOLD", "VLA_PI05_PREFETCH_KIB",
+                    "VLA_MUSA_GEGLU_FAST", "VLA_PI05_F16_PART", "VLA_MUSA_FLATTEN_GEMM",
+                    "GGML_CUDA_DISABLE_GRAPHS", "VLA_PI05_NO_SEPARATE_GRAPHS",
+                    "VLA_PI05_NO_VISION_BATCH", "VLA_PI05_NO_PROJ_FUSE", "VLA_PI05_NO_FUSE"}
+        for key in set().union(*(x.keys() for x in profiles.values())) | inactive:
+            os.environ.pop(key, None)
+        os.environ.update(profiles[optimized_profile])
+        args.weight_dtype, args.act_dtype, args.flash_attn = "f16", "f32", True
+    import vla_cpp
     cameras = reader.fields["pi05.camera_keys"].contents()
     provided = {}
     for item in args.image:
@@ -137,6 +154,8 @@ def main():
                       "denormalized": bool(cfg.denormalized),
                       "actions": actions[:, :cfg.real_action_dim].tolist(),
                       "timing_ms": {k: float(getattr(st, k)) for k in ("ms_total", "ms_vision", "ms_inference")}}
+    if optimized_profile is not None:
+        result["musa_optimized_profile"] = optimized_profile
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     print(f"Saved {len(result['actions'])} x {len(state)} actions to {args.output}; cameras={cameras}")

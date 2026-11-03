@@ -1,0 +1,32 @@
+[
+  {
+    "model": "pruned",
+    "wall_ms": 514.0390450018458,
+    "baseline_relative_peak": 0.0002970821806229651,
+    "reference_error": {
+      "max_abs": 0.093536376953125,
+      "rmse": 0.029724668711423874,
+      "relative_peak": 0.0008784093079157174
+    },
+    "phases": {
+      "vision_ms": 108.72354299999999,
+      "prefix_ms": 291.5100762,
+      "denoise_ms": 112.8055992
+    }
+  },
+  {
+    "model": "full",
+    "wall_ms": 885.8848203963134,
+    "baseline_relative_peak": 0.0002128903433913365,
+    "reference_error": {
+      "max_abs": 0.0457000732421875,
+      "rmse": 0.01618010364472866,
+      "relative_peak": 0.00046953430864959955
+    },
+    "phases": {
+      "vision_ms": 132.7348418,
+      "prefix_ms": 367.0838122,
+      "denoise_ms": 385.1198686
+    }
+  }
+]

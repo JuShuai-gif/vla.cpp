@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/usr/bin/powerprofilesctl", line 8, in <module>
+    from gi.repository import Gio, GLib
+ModuleNotFoundError: No module named 'gi'
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp/优化记录/2026-11-03_八项优化与延迟目标/run_bench.py", line 6, in <module>
+    assert subprocess.check_output(['powerprofilesctl','get'],text=True).strip()=='performance'
+  File "/usr/lib/python3.10/subprocess.py", line 421, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+  File "/usr/lib/python3.10/subprocess.py", line 526, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['powerprofilesctl', 'get']' returned non-zero exit status 1.

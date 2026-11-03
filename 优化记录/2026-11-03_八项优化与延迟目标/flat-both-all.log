@@ -1,0 +1,4 @@
+flat-both-all pruned
+{'model': 'pruned', 'wall_ms': 498.3825955023349, 'baseline_relative_peak': 0.0, 'reference_error': {'max_abs': 0.06395721435546875, 'rmse': 0.021445689722895622, 'relative_peak': 0.0006006284966133535}}
+flat-both-all full
+{'model': 'full', 'wall_ms': 831.7426805024297, 'baseline_relative_peak': 0.0, 'reference_error': {'max_abs': 0.0415191650390625, 'rmse': 0.013398037292063236, 'relative_peak': 0.0004265785973984748}}

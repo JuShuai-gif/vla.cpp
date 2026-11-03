@@ -28,6 +28,7 @@
 #include "gguf_reader.h"
 #include "scratch_ctx.h"
 #include "layers/embed.h"
+#include "layers/u8_patch.h"
 #include "layers/linear.h"
 #include "modules/preprocess.h"
 #include "modules/prompt.h"
@@ -74,6 +75,7 @@ struct Pi05ModelArch : public ModelArchBase {
     bool device_prune = false;
     bool musa_backend = false;
     bool input_cache = false;
+    std::vector<void *> prefetch_states;
     bool async_vision = false, direct_vision = false, pin_main_input = false;
     int host_input = 0; // 0: original, 1: persistent pageable, 2: pinned, 3: mapped.
     std::vector<float> pixels_storage, language_storage, noise_storage;
@@ -119,6 +121,9 @@ struct Pi05ModelArch : public ModelArchBase {
     FusedResAdarmsSpec    res_adarms_spec;
     FusedResAdarmsSpec    input_adarms_spec{FUSED_BIAS_ADARMS_MAGIC,1e-6f};
     FusedActionStepSpec   action_step_spec;
+    RopeTableSpec         rope_table_spec;
+    U8PatchSpec           u8_patch_spec;
+    ggml_tensor *         u8_lut = nullptr;
     FusedActionLinearSpec action_in_spec{FUSED_ACTION_LINEAR_MAGIC,1},action_out_spec;
     bool                 fuse_res_adarms = false;
     bool                 fuse_cross_adarms = false;
@@ -238,7 +243,7 @@ ggml_tensor * build_expert_layer(
         ggml_type at = GGML_TYPE_F32, const FusedAdarmsSpec * fa = nullptr, const FusedGateResSpec * fg = nullptr,
         KvSlot * kv = nullptr, const FqExpertIn * fqx = nullptr,
         const FusedResAdarmsSpec * fr = nullptr, ggml_tensor * xn_ready = nullptr,
-        ggml_tensor * next_mod = nullptr, ggml_tensor ** next_norm = nullptr) {
+        ggml_tensor * next_mod = nullptr, ggml_tensor ** next_norm = nullptr, ggml_tensor * angles = nullptr) {
     const int64_t h = cfg.expert_h;
     if (fqx && w.act_mod_qkv.has_shift && w.act_mod_gu.has_shift && w.fq_o && w.fq_down) {
         // FoldQuant on SYCL: each adaRMS rides in its act node (rms * (1 + scale)
@@ -270,7 +275,8 @@ ggml_tensor * build_expert_layer(
         // out * gate + x reading the GEMM output in whatever type it has.
         ggml_tensor * xn = xn_ready ? xn_ready : fused_adarms(ctx, x_in, mod_attn, at, *fa);
         ggml_tensor * o  = gemma_attn(ctx, w, xn, positions, cfg, seq, cached_K, cached_V, mask,
-                                      nullptr, nullptr, at, use_fused_attention(), nullptr, nullptr, kv);
+                                      nullptr, nullptr, at, use_fused_attention(), nullptr, nullptr, kv,
+                                      nullptr,nullptr,nullptr,nullptr,false,angles);
         ggml_tensor * h1 = nullptr;
         ggml_tensor * xm = nullptr;
         if (fr && at == GGML_TYPE_F32)
@@ -394,12 +400,14 @@ bool bake_adarms(gguf_reader & g, Pi05ModelArch & m) {
         ggml_backend_tensor_get(mods[k], table.data()+k*3*h, 0, ggml_nbytes(mods[k]));
 
     const size_t n_slot = m.fq_fast ? (size_t) ns*nj : 0;
-    ggml_init_params p = { (1 + 2*n_slot)*ggml_tensor_overhead(), nullptr, true };
+    ggml_init_params p = { (2 + 2*n_slot)*ggml_tensor_overhead(), nullptr, true };
     m.ctx_const = ggml_init(p);
     if (!m.ctx_const) {
         std::fprintf(stderr, "vla(pi05): ggml_init(ctx_const) failed\n");
         return false;
     }
+    m.u8_lut = ggml_new_tensor_1d(m.ctx_const,GGML_TYPE_F16,256);
+    m.u8_patch_spec.patch=m.vis.patch_size;
     m.ada_mod   = ggml_new_tensor_3d(m.ctx_const, GGML_TYPE_F32, 3*h, nj, ns);
     m.ada_scale1.resize(n_slot);
     m.ada_shift.resize(n_slot);
@@ -412,6 +420,9 @@ bool bake_adarms(gguf_reader & g, Pi05ModelArch & m) {
         std::fprintf(stderr, "vla(pi05): alloc_weights(adaRMS table) failed\n");
         return false;
     }
+    ggml_fp16_t lut[256];
+    for(int i=0;i<256;++i)lut[i]=ggml_fp32_to_fp16((i/255.0f-0.5f)/0.5f);
+    ggml_backend_tensor_set(m.u8_lut,lut,0,sizeof(lut));
     ggml_backend_tensor_set(m.ada_mod, table.data(), 0, ggml_nbytes(m.ada_mod));
     std::vector<float> scale1((size_t) h);
     for (size_t k=0; k<n_slot; ++k) {
@@ -443,7 +454,10 @@ bool load_stats(gguf_reader & g, Pi05ModelArch & m) {
 }
 
 Pi05ModelArch::~Pi05ModelArch() {
-    if (backend && input_cache) ggml_backend_synchronize(backend);
+    if (backend && (input_cache || !prefetch_states.empty())) ggml_backend_synchronize(backend);
+#ifdef GGML_USE_MUSA
+    for(auto * state:prefetch_states)musa_weight_prefetch_destroy(state);
+#endif
     if (main_host) ggml_backend_buffer_free(main_host);
     if (pixels_host) ggml_backend_buffer_free(pixels_host);
     if (pixels_mapped) ggml_backend_buffer_free(pixels_mapped);
@@ -545,6 +559,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         m->res_adarms_spec.eps = cfg.rms_eps;
         m->input_adarms_spec.eps = cfg.rms_eps;
         m->action_step_spec.dt = -1.f/(float)cfg.num_steps;
+        m->rope_table_spec.base=cfg.rope_freq_base;
         m->action_in_spec.eps=m->action_out_spec.eps=cfg.rms_eps;
         m->action_out_spec.dt=m->action_step_spec.dt;
         m->input_cache = b.is_musa && env_flag("VLA_PI05_INPUT_CACHE");
@@ -815,6 +830,44 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
     if (!L.upload(m->backend, &m->weight_buf))
         return nullptr;
 
+    if(m->musa_backend && env_flag("VLA_PI05_PREFIX_GAMMA_FOLD")) {
+        for(auto & w:m->pl.blk) {
+            for(auto pair:{std::make_pair(&w.ln_in,w.Wqkv),std::make_pair(&w.ln_post,w.Wgu)}) {
+                auto * gamma=*pair.first;auto * weight=pair.second;
+                if(!gamma || !weight || gamma->type!=GGML_TYPE_F32 || weight->type!=GGML_TYPE_F16 ||
+                   !ggml_is_contiguous(weight) || gamma->ne[0]!=weight->ne[0])continue;
+                std::vector<float> g(ggml_nelements(gamma));
+                std::vector<ggml_fp16_t> values(ggml_nelements(weight));
+                ggml_backend_tensor_get(gamma,g.data(),0,ggml_nbytes(gamma));
+                ggml_backend_tensor_get(weight,values.data(),0,ggml_nbytes(weight));
+                for(size_t i=0;i<values.size();++i)
+                    values[i]=ggml_fp32_to_fp16(ggml_fp16_to_fp32(values[i])*g[i%g.size()]);
+                ggml_backend_tensor_set(weight,values.data(),0,ggml_nbytes(weight));
+                *pair.first=nullptr;
+            }
+        }
+    }
+
+#ifdef GGML_USE_MUSA
+    if(m->musa_backend) {
+        const char * value=std::getenv("VLA_PI05_PREFETCH_KIB");
+        const long kib=value?std::strtol(value,nullptr,10):0;
+        if(kib>0 && kib<=16384) {
+            for(auto * layers:{&m->pl.blk,&m->ex_layers}) {
+                for(size_t i=0;i+1<layers->size();++i) {
+                    auto & w=(*layers)[i];auto * next=(*layers)[i+1].Wqkv;
+                    if(!next || next->type!=GGML_TYPE_F16 || !w.Wgu || !w.Wdown)continue;
+                    void * state=musa_weight_prefetch_create();
+                    if(!state)return nullptr;
+                    m->prefetch_states.push_back(state);w.prefetch_next=next;
+                    w.prefetch_begin.state=state;w.prefetch_end.state=state;
+                    w.prefetch_begin.bytes=std::min(size_t(kib)*1024,ggml_nbytes(next));
+                }
+            }
+        }
+    }
+#endif
+
     std::printf("vla(pi05): resident weights = %.2f GiB\n",
                 ggml_backend_buffer_get_size(m->weight_buf)/(1024.0*1024.0*1024.0));
 
@@ -827,18 +880,28 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
 const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView* images, int n_images, ggml_tensor * destination, bool async) {
     const int64_t K = vis.n_tokens, grid = vis.image_size/vis.patch_size, S = vis.image_size;
     const ggml_type vt = vis.vit.enc.cfg.act;
-    const bool built = vis_graph.ensure(backend, (int64_t) n_images, (size_t) 128*1024*1024,
+    bool raw_u8=musa_backend && env_flag("VLA_PI05_U8_PATCH") && host_input!=3;
+    for(int v=0;v<n_images;++v)raw_u8=raw_u8 && images[v].format==PixelFormat::U8;
+    const bool built = vis_graph.ensure(backend, raw_u8 ? -(int64_t)n_images : (int64_t)n_images, (size_t) 128*1024*1024,
                                         [&](ggml_context * VC, VisIO & vio) -> ggml_cgraph * {
         // Tower + PaliGemma projector (linear, optional bias) over nv views of
         // pixels: F32 [hidden, nv*K]. The patch embed (conv_2d) runs in F32, the
         // tower in vt.
         auto tower = [&](ggml_tensor * px, int64_t nv) {
-            ggml_tensor * x = vis.vit.embed_conv(VC, px, vis.patch_size, grid);   // [hidden, K, nv]
+            ggml_tensor * x = nullptr;
+            if(raw_u8) {
+                auto * patches=u8_patch(VC,px,u8_lut,u8_patch_spec);
+                patches=ggml_reshape_2d(VC,patches,patches->ne[0],K*nv);
+                auto * pw=ggml_cast(VC,ggml_reshape_2d(VC,vis.vit.patch_w,3*vis.patch_size*vis.patch_size,vis.vit.enc.cfg.hidden),GGML_TYPE_F16);
+                x=ggml_mul_mat(VC,pw,patches);
+                x=ggml_reshape_3d(VC,x,x->ne[0],K,nv);
+                x=ggml_add(VC,ggml_add(VC,x,vis.vit.patch_b),vis.vit.pos);
+            } else x = vis.vit.embed_conv(VC, px, vis.patch_size, grid);   // [hidden, K, nv]
             if (vis.vit.enc.cfg.fused)   // the fused blocks take the views as nv*K rows
                 x = ggml_reshape_2d(VC, x, x->ne[0], K * nv);
             ggml_tensor * h = as_type(VC, x, vt);
             if (vision_keep) {
-                GGML_ASSERT(nv == 1 && vt == GGML_TYPE_F32 && !vis.vit.enc.cfg.fused);
+                GGML_ASSERT(vt == GGML_TYPE_F32 && !vis.vit.enc.cfg.fused);
                 const auto & enc = vis.vit.enc;
                 for (size_t i = 0; i < enc.blk.size(); ++i) {
                     const auto & w = enc.blk[i];
@@ -846,9 +909,12 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
                     const bool last = i + 1 == enc.blk.size();
                     h = enc.block(VC, w, h, K, nv, last ? &aw : nullptr);
                     if (last) {
-                        auto * scores = vision_patch_scores(VC, aw);
-                        ggml_set_output(scores);
-                        vio.scores.push_back(scores);
+                        for(int v=0;v<nv;++v) {
+                            auto * view=nv==1?aw:ggml_view_3d(VC,aw,aw->ne[0],aw->ne[1],aw->ne[2],
+                                                             aw->nb[1],aw->nb[2],v*aw->nb[3]);
+                            auto * scores=vision_patch_scores(VC,view);
+                            ggml_set_output(scores);vio.scores.push_back(scores);
+                        }
                     }
                 }
                 h = layer_norm(VC, h, vis.vit.post_ln_w, vis.vit.post_ln_b, enc.cfg.ln_eps);
@@ -859,13 +925,20 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
             if (vis.proj_b)
                 proj = ggml_add(VC, proj, vis.proj_b);
             proj = as_type(VC, proj, GGML_TYPE_F32);
-            if (musa_backend && nv > 1 && !vis.vit.enc.cfg.fused)
+            if (musa_backend && nv > 1 && !vis.vit.enc.cfg.fused && !env_flag("VLA_PI05_VISION_NO_OUT_COPY"))
                 proj = ggml_reshape_2d(VC, proj, proj->ne[0], K*nv);
             if (proj->op == GGML_OP_VIEW || proj->op == GGML_OP_RESHAPE)
                 proj = ggml_cont(VC, proj);
             if (vision_keep && device_prune) {
-                proj = vision_keep_rows(VC, proj, vio.scores.back(), (int)vision_keep);
-                if (env_flag("VLA_PI05_DUMP_PRUNE")) ggml_set_output(proj->src[1]);
+                ggml_tensor * last=nullptr;
+                for(int v=0;v<nv;++v) {
+                    auto * view=nv==1?proj:ggml_view_2d(VC,proj,proj->ne[0],K,proj->nb[1],
+                                                       (size_t)v*K*proj->nb[1]);
+                    last=vision_keep_rows(VC,view,vio.scores[vio.scores.size()-nv+v],(int)vision_keep);
+                    if(env_flag("VLA_PI05_DUMP_PRUNE"))ggml_set_output(last->src[1]);
+                    ggml_set_output(last);vio.emb.push_back(last);
+                }
+                return last;
             }
             ggml_set_output(proj);
             vio.emb.push_back(proj);
@@ -873,7 +946,8 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         };
         ggml_cgraph * vg = ggml_new_graph_custom(VC, 8192, false);
         auto new_px = [&](int64_t nv) {
-            ggml_tensor * t = ggml_new_tensor_4d(VC, GGML_TYPE_F32, S, S, 3, nv);
+            ggml_tensor * t = raw_u8 ? ggml_new_tensor_4d(VC,GGML_TYPE_I8,3,S,S,nv)
+                                    : ggml_new_tensor_4d(VC,GGML_TYPE_F32,S,S,3,nv);
             ggml_set_input(t);
             vio.t_px.push_back(t);
             return t;
@@ -883,19 +957,21 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         vio.scores.clear();
         bool batch_views = vis.vit.enc.cfg.fused || n_images == 1;
 #ifdef GGML_USE_MUSA
-        batch_views = batch_views || (musa_backend && !vision_keep && vis.vit.enc.cfg.gemm_act==GGML_TYPE_F32 && !env_flag("VLA_PI05_NO_VISION_BATCH"));
+        batch_views = batch_views || (musa_backend && (!vision_keep || (device_prune && env_flag("VLA_PI05_PRUNED_BATCH"))) &&
+            vis.vit.enc.cfg.gemm_act==GGML_TYPE_F32 && !env_flag("VLA_PI05_NO_VISION_BATCH"));
 #endif
         if (batch_views) {
             // The fused blocks take every view in one pass (nv * K rows per GEMM).
-            ggml_build_forward_expand(vg, tower(new_px(n_images), n_images));
+            tower(new_px(n_images),n_images);
         } else {
             // The per-op tower one view at a time (oneDNN's SDPA batches only
             // BF16), an input and an output per view: no CONCAT. Not views of
             // one input: OpenVINO translates a view of a graph input as the
             // whole input.
             for (int v=0; v<n_images; ++v)
-                ggml_build_forward_expand(vg, tower(new_px(1), 1));
+                tower(new_px(1),1);
         }
+        for(auto * emb:vio.emb)ggml_build_forward_expand(vg,emb);
         for (auto * scores : vio.scores) ggml_build_forward_expand(vg, scores);
         dump_pi05_graph("vision", vg, 0, ggml_graph_n_nodes(vg));
         return vg;
@@ -921,6 +997,33 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
     if (destination) GGML_ASSERT(output_offset==ggml_nbytes(destination));
 
     const size_t per_view = (size_t) 3*S*S;
+    if(raw_u8) {
+        const size_t bytes=per_view*n_images;
+        uint8_t * raw=nullptr;
+#ifdef GGML_USE_MUSA
+        if(host_input==2) {
+            if(!pixels_host || pixels_host_bytes<bytes) {
+                if(pixels_host)ggml_backend_buffer_free(pixels_host);
+                pixels_host=ggml_backend_buft_alloc_buffer(ggml_backend_cuda_host_buffer_type(),bytes);
+                pixels_host_bytes=pixels_host?bytes:0;
+            }
+            if(pixels_host)raw=(uint8_t *)ggml_backend_buffer_get_base(pixels_host);
+        }
+#endif
+        if(!raw){pixels_storage.resize((bytes+3)/4);raw=(uint8_t *)pixels_storage.data();}
+        for(int v=0;v<n_images;++v) {
+            if(!view_ok("pi05",images[v],S))return nullptr;
+            std::memcpy(raw+v*per_view,images[v].data,per_view);
+        }
+        size_t byte_off=0;
+        for(size_t j=0;j<vio.t_px.size();++j) {
+            auto * t=vio.t_px[j];t->data=vio.original_px[j];t->buffer=vio.original_px_buf[j];
+            if(input_cache)ggml_backend_tensor_set_async(backend,t,raw+byte_off,0,ggml_nbytes(t));
+            else ggml_backend_tensor_set(t,raw+byte_off,0,ggml_nbytes(t));
+            byte_off+=ggml_nbytes(t);
+        }
+    } else {
+
     std::vector<float> chw, px;
     float * pixels = nullptr;
 #ifdef GGML_USE_MUSA
@@ -965,6 +1068,7 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         } else if (input_cache) ggml_backend_tensor_set_async(backend,t,pixels+off,0,ggml_nbytes(t));
         else ggml_backend_tensor_set(t,pixels+off,0,ggml_nbytes(t));
         off += (size_t) ggml_nelements(t);
+    }
     }
     graph_unique_names(vg);
     if ((async ? ggml_backend_graph_compute_async(backend, vg) : ggml_backend_graph_compute(backend, vg)) != GGML_STATUS_SUCCESS) {
@@ -1110,6 +1214,11 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     ggml_tensor * t_x0        = ggml_new_tensor_2d(C, GGML_TYPE_F32, max_ad, chunk);           ggml_set_input(t_x0);
     ggml_tensor * t_suffix_pos= ggml_new_tensor_1d(C, GGML_TYPE_I32, n_suf);                   ggml_set_input(t_suffix_pos);
 
+    ggml_tensor * prefix_angles=nullptr,*suffix_angles=nullptr;
+    if(musa_backend && env_flag("VLA_PI05_ROPE_TABLE") && musa_register_fused_ops()) {
+        prefix_angles=rope_table(C,t_prefix_pos,cfg.head_dim,rope_table_spec);
+        suffix_angles=rope_table(C,t_suffix_pos,cfg.head_dim,rope_table_spec);
+    }
     ggml_tensor * prefix_embs = as_type(C, t_prefix, prefix_act);
 
     std::vector<ggml_tensor *> cK(n_layers), cV(n_layers);
@@ -1131,7 +1240,9 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
             else
                 h = gemma_layer(C, pl.blk[i], h, t_prefix_pos, cfg, n_prefix_g,
                                 nullptr, nullptr, t_prefix_mask, &cK[i], &cV[i], prefix_act, use_fused_attention(),
-                                kv_inplace ? &kv[i] : nullptr);
+                                kv_inplace ? &kv[i] : nullptr,
+                                musa_backend && i+1==n_layers && !kv_inplace && pl.blk[i].Wqkv &&
+                                !pl.blk[i].fq_qkv && !pl.blk[i].fq_q && env_flag("VLA_PI05_LAST_KV_ONLY"),prefix_angles);
         }
         (void) h;
     }
@@ -1196,7 +1307,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
                                    kv_inplace ? &kv[i] : (concat_cache.empty() ? nullptr : &concat_cache[i]), kv16 ? &fqx : nullptr,
                                    fuse_res_adarms ? &res_adarms_spec : nullptr, next_norm,
                                    cross && i+1<n_layers ? mod(2*(i+1)) : nullptr,
-                                   cross ? &next_norm : nullptr);
+                                   cross ? &next_norm : nullptr,suffix_angles);
         }
 
         ggml_tensor * h_final = build_adarms(C, h, mod(2*n_layers), hidden_ex, cfg.rms_eps, nullptr);

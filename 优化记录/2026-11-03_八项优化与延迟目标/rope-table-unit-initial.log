@@ -1,0 +1,714 @@
+Start testing: Nov 03 12:43 CST
+----------------------------------------------------------
+12/27 Testing: musa_ops
+12/27 Test: musa_ops
+Command: "/home/skysi/code/vla.cpp/build-musa-official/tests/test_musa_ops"
+Directory: /home/skysi/code/vla.cpp/build-musa-official/tests
+"musa_ops" start time: Nov 03 12:43 CST
+Output:
+----------------------------------------------------------
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+musa_ops: backend = MUSA (device 0: M1000)
+PASS cached_rope_strided/f32: 13056 values, max_abs=0 normalized=0 tolerance=1e-06
+PASS cached_rope_strided/f16: 13056 values, max_abs=0 normalized=0 tolerance=0.001
+PASS cached_rope_strided/f32: 38400 values, max_abs=0 normalized=0 tolerance=1e-06
+PASS cached_rope_strided/f16: 38400 values, max_abs=0.0009765625 normalized=0.0003900156 tolerance=0.001
+PASS cached_rope_strided/f32: 213504 values, max_abs=0 normalized=0 tolerance=1e-06
+PASS cached_rope_strided/f16: 213504 values, max_abs=0.0009765625 normalized=0.0003900156 tolerance=0.001
+PASS cached_rope_strided/f32: 397824 values, max_abs=0 normalized=0 tolerance=1e-06
+PASS cached_rope_strided/f16: 397824 values, max_abs=0.001953125 normalized=0.0007794232 tolerance=0.001
+PASS cached_rope_strided/f32: 104448 values, max_abs=0 normalized=0 tolerance=1e-06
+PASS cached_rope_strided/f16: 104448 values, max_abs=0 normalized=0 tolerance=0.001
+PASS cached_rope_strided/f32: 307200 values, max_abs=0 normalized=0 tolerance=1e-06
+PASS cached_rope_strided/f16: 307200 values, max_abs=0.001953125 normalized=0.0007794232 tolerance=0.001
+PASS cached_rope_strided/f32: 1708032 values, max_abs=0 normalized=0 tolerance=1e-06
+PASS cached_rope_strided/f16: 1708032 values, max_abs=0.001953125 normalized=0.0007794232 tolerance=0.001
+PASS cached_rope_strided/f32: 3182592 values, max_abs=0 normalized=0 tolerance=1e-06
+PASS cached_rope_strided/f16: 3182592 values, max_abs=0.001953125 normalized=0.0007794232 tolerance=0.001
+PASS last_prefix_kv_only/f16: 26112 values, max_abs=0 normalized=0 tolerance=0.001
+PASS last_prefix_kv_only/f16: 427008 values, max_abs=0 normalized=0 tolerance=0.001
+PASS last_prefix_kv_only/f16: 795648 values, max_abs=0 normalized=0 tolerance=0.001
+PASS action_linear_musa/f32: 294 values, max_abs=0 normalized=0 tolerance=1e-05
+PASS action_linear_musa/f32: 294 values, max_abs=0 normalized=0 tolerance=1e-05
+PASS action_linear_musa/f32: 14700 values, max_abs=3.576279e-07 normalized=1.422306e-07 tolerance=1e-05
+PASS action_linear_musa/f32: 14700 values, max_abs=3.576279e-07 normalized=1.422306e-07 tolerance=1e-05
+PASS action_linear_musa/f32: 1638 values, max_abs=0 normalized=0 tolerance=1e-05
+PASS action_linear_musa/f32: 1638 values, max_abs=0 normalized=0 tolerance=1e-05
+PASS action_linear_musa/f32: 81900 values, max_abs=1.192093e-06 normalized=2.319886e-07 tolerance=1e-05
+PASS action_linear_musa/f32: 81900 values, max_abs=4.768372e-07 normalized=1.605609e-07 tolerance=1e-05
+PASS action_linear_musa/f32: 6240 values, max_abs=7.629395e-05 normalized=2.631361e-06 tolerance=1e-05
+PASS action_linear_musa/f32: 6240 values, max_abs=2.288818e-05 normalized=2.663174e-06 tolerance=1e-05
+PASS action_linear_musa/f32: 312000 values, max_abs=7.629395e-05 normalized=2.457168e-06 tolerance=1e-05
+PASS action_linear_musa/f32: 312000 values, max_abs=2.288818e-05 normalized=2.432108e-06 tolerance=1e-05
+PASS action_edges_exact/f32: 9 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 9 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 450 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 450 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 288 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 288 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 14400 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 14400 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 2313 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 2313 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 115650 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 115650 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 9216 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 9216 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 460800 values, maggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+x_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 460800 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 9225 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 9225 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 461250 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS action_edges_exact/f32: 461250 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 36864 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 36864 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 614400 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 614400 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 36873 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 36873 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 614550 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 614550 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 147456 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 147456 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 2457600 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS geglu_direct_half_exact/f16: 2457600 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_exact/f32: 6 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 6 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS res_adarms_exact/f32: 6 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 6 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS res_adarms_exact/f32: 300 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 300 values, max_abs=1.192093e-07 normalized=9.657523e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 300 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 300 values, max_abs=1.192093e-07 normalized=9.657523e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 198 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 198 values, max_abs=1.490116e-08 normalized=8.459076e-09 tolerance=3e-06
+PASS res_adarms_exact/f32: 198 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 198 values, max_abs=1.490116e-08 normalized=8.459076e-09 tolerance=3e-06
+PASS res_adarms_exact/f32: 9900 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 9900 values, max_abs=2.384186e-07 normalized=8.834807e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 9900 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 9900 values, max_abs=2.384186e-07 normalized=8.834807e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 1542 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 1542 values, max_abs=1.192093e-07 normalized=6.676163e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 1542 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 1542 values, max_abs=1.192093e-07 normalized=6.676163e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 77100 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 77100 values, max_abs=3.576279e-07 normalized=1.594317e-07 tolerance=3e-06
+PASS res_adarms_exact/f32: 77100 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 77100 values, max_abs=3.576279e-07 normalized=1.594317e-07 tolerance=3e-06
+PASS res_adarms_exact/f32: 6144 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 6144 values, max_abs=5.960464e-08 normalized=3.125721e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 6144 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 6144 values, max_abs=5.960464e-08 normalized=3.125721e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 307200 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 307200 values, max_abs=3.576279e-07 normalized=1.572463eggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+-07 tolerance=3e-06
+PASS res_adarms_exact/f32: 307200 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 307200 values, max_abs=3.576279e-07 normalized=1.572463e-07 tolerance=3e-06
+PASS res_adarms_exact/f32: 6150 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 6150 values, max_abs=1.192093e-07 normalized=6.445884e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 6150 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 6150 values, max_abs=1.192093e-07 normalized=6.445884e-08 tolerance=3e-06
+PASS res_adarms_exact/f32: 307500 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 307500 values, max_abs=3.576279e-07 normalized=1.346442e-07 tolerance=3e-06
+PASS res_adarms_exact/f32: 307500 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS res_adarms_cpu/f32: 307500 values, max_abs=3.576279e-07 normalized=1.346442e-07 tolerance=3e-06
+PASS graph_source_dtype_switch/bf16: 28800 values, max_abs=0.002075195 normalized=0.0007000206 tolerance=0.01
+PASS stable_vision_keep/f32: 111 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS stable_vision_keep/f32: 888 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS stable_vision_keep/f32: 1887 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS stable_vision_keep/f32: 111 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS stable_vision_keep/f32: 14208 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS stable_vision_keep/f32: 28416 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS merged_geglu_rows/f32: 36873 values, max_abs=4.768372e-07 normalized=1.907349e-08 tolerance=2e-06
+PASS merged_geglu_rows/f32: 36873 values, max_abs=4.768372e-07 normalized=1.59569e-08 tolerance=2e-06
+PASS merged_geglu_rows/f16: 36873 values, max_abs=0 normalized=0 tolerance=0.002
+PASS merged_geglu_rows/f16: 36873 values, max_abs=0 normalized=0 tolerance=0.002
+PASS f16_native_gemm_rms/f16: 15147 values, max_abs=0.0004882812 normalized=8.300133e-05 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 6 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 6 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 6 values, max_abs=0 normalized=0 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 300 values, max_abs=1.192093e-07 normalized=1.010522e-07 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 300 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 300 values, max_abs=0 normalized=0 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 198 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 198 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 198 values, max_abs=0 normalized=0 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 9900 values, max_abs=2.384186e-07 normalized=1.051781e-07 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 9900 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 9900 values, max_abs=0 normalized=0 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 1542 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 1542 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 1542 values, max_abs=0 normalized=0 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 77100 values, max_abs=4.768372e-07 normalized=2.016255e-07 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 77100 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 77100 values, max_abs=0.0009765625 normalized=0.0004128819 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 6144 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 6144 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 6144 values, max_abs=0 normalized=0 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 307200 values, max_abs=2.384186e-07 normalized=1.086624e-07 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 307200 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 307200 values, max_abs=0 normalized=0 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 6150 values, max_abs=ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+0 normalized=0 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 6150 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 6150 values, max_abs=0 normalized=0 tolerance=0.002
+PASS fused_expert_vs_cpu/f32: 307500 values, max_abs=2.384186e-07 normalized=9.919695e-08 tolerance=3e-06
+PASS fused_expert_vs_musa/f32: 307500 values, max_abs=0 normalized=0 tolerance=3e-06
+PASS f16_fused_expert/f16: 307500 values, max_abs=0.0009765625 normalized=0.0004063905 tolerance=0.002
+PASS segmented weights above 4 GiB
+PASS action_input_f32/f32: 21504 values, max_abs=0 normalized=0 tolerance=2e-05
+PASS action_output_f32/f32: 672 values, max_abs=0 normalized=0 tolerance=2e-05
+PASS action_input_f32/f32: 153600 values, max_abs=0 normalized=0 tolerance=2e-05
+PASS action_output_f32/f32: 4800 values, max_abs=0 normalized=0 tolerance=2e-05
+PASS action_input_f32/f32: 156672 values, max_abs=0 normalized=0 tolerance=2e-05
+PASS action_output_f32/f32: 4896 values, max_abs=0 normalized=0 tolerance=2e-05
+PASS visual_patch_scores/f32: 768 values, max_abs=0 normalized=0 tolerance=2e-05
+PASS softmax_1/f32: 72 values, max_abs=0 normalized=0 tolerance=2e-05
+PASS softmax_1_mask/f32: 72 values, max_abs=0 normalized=0 tolerance=2e-05
+PASS softmax_32/f32: 2304 values, max_abs=3.72529e-09 normalized=1.172536e-07 tolerance=2e-05
+PASS softmax_32_mask/f32: 2304 values, max_abs=3.72529e-09 normalized=1.026011e-07 tolerance=2e-05
+PASS softmax_51/f32: 3672 values, max_abs=5.587935e-09 normalized=2.802809e-07 tolerance=2e-05
+PASS softmax_51_mask/f32: 3672 values, max_abs=5.587935e-09 normalized=2.418455e-07 tolerance=2e-05
+PASS softmax_256/f32: 18432 values, max_abs=6.984919e-10 normalized=1.759427e-07 tolerance=2e-05
+PASS softmax_256_mask/f32: 18432 values, max_abs=9.313226e-10 normalized=2.015856e-07 tolerance=2e-05
+PASS softmax_579/f32: 41688 values, max_abs=3.49246e-10 normalized=1.989792e-07 tolerance=2e-05
+PASS softmax_579_mask/f32: 41688 values, max_abs=4.656613e-10 normalized=2.277244e-07 tolerance=2e-05
+PASS softmax_8192/f32: 589824 values, max_abs=2.182787e-11 normalized=1.759631e-07 tolerance=2e-05
+PASS softmax_8192_mask/f32: 589824 values, max_abs=4.365575e-11 normalized=3.016627e-07 tolerance=2e-05
+PASS softmax_32769/f32: 2359368 values, max_abs=7.275958e-12 normalized=2.34625e-07 tolerance=2e-05
+PASS softmax_32769_mask/f32: 2359368 values, max_abs=7.275958e-12 normalized=2.011092e-07 tolerance=2e-05
+PASS vision/f32: 393216 values, max_abs=0.002549887 normalized=0.0008767911 tolerance=0.002
+PASS gemma_1/f32: 19584 values, max_abs=0.0009021759 normalized=1.00186e-05 tolerance=0.002
+PASS gemma_17/f32: 25728 values, max_abs=0.000951767 normalized=9.427004e-06 tolerance=0.002
+PASS gemma_merged_vs_cpu/f32: 25728 values, max_abs=0.0009536743 normalized=9.445895e-06 tolerance=0.002
+PASS gemma_merged_vs_musa/f32: 25728 values, max_abs=1.525879e-05 normalized=1.511341e-07 tolerance=0.002
+PASS gemma_529/f32: 222336 values, max_abs=0.0008583069 normalized=8.580649e-06 tolerance=0.002
+PASS vision/f16: 393216 values, max_abs=0.005046368 normalized=0.001735218 tolerance=0.005
+PASS gemma_1/f16: 19584 values, max_abs=0.2792053 normalized=0.00309977 tolerance=0.005
+PASS gemma_17/f16: 25728 values, max_abs=0.2606506 normalized=0.002578555 tolerance=0.005
+PASS gemma_merged_vs_cpu/f16: 25728 values, max_abs=0.2606506 normalized=0.002578555 tolerance=0.005
+PASS gemma_merged_vs_musa/f16: 25728 values, max_abs=0 normalized=0 tolerance=0.005
+PASS gemma_529/f16: 222336 values, max_abs=0.2318344 normalized=0.002314737 tolerance=0.005
+PASS vision/bf16: 393216 values, max_abs=0.01190519 normalized=0.004096411 tolerance=0.01
+PASS gemma_1/bf16: 19584 values, max_abs=0.04190838 normalized=0.0004650636 tolerance=0.01
+PASS gemma_17/bf16: 25728 values, max_abs=0.09724045 normalized=0.0009641274 tolerance=0.01
+PASS gemma_merged_vs_cpu/bf16: 25728 values, max_abs=0.09724045 normalized=0.0009641274 tolerance=0.01
+PASS gemma_merged_vs_musa/bf16: 25728 values, max_abs=0 normalized=0 tolerance=0.01
+PASS gemma_529/bf16: 222336 values, max_abs=0.03638458 normalized=0.0003641297 tolerance=0.01
+<end of output>
+Test time =   6.94 sec
+----------------------------------------------------------
+Test Passed.
+"musa_ops" end time: Nov 03 12:43 CST
+"musa_ops" time elapsed: 00:00:06
+----------------------------------------------------------
+
+22/27 Testing: musa_rope_table
+22/27 Test: musa_rope_table
+Command: "/home/skysi/code/vla.cpp/build-musa-official/tests/test_musa_ops" "--flash-attn"
+Directory: /home/skysi/code/vla.cpp/build-musa-official/tests
+"musa_rope_table" start time: Nov 03 12:43 CST
+Output:
+----------------------------------------------------------
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+musa_ops: backend = MUSA (device 0: M1000)
+PASS flash_vision_strided_72/f16: 442368 values, max_abs=8.065719e-05 normalized=0.004920793 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 25728 values, max_abs=0.07074738 normalized=0.0007007899 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 25728 values, max_abs=0.07587433 normalized=0.0007185968 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 222336 values, max_abs=0.06885147 normalized=0.0006883471 tolerance=0.005
+PASS flash_gemma_vs_unfused/f16: 222336 values, max_abs=0.07555278 normalized=0.0007061553 tolerance=0.005
+PASS flash_reuse_kv/f16: 25728 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 25728 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 125952 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 125952 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 218112 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_reuse_kv/f16: 218112 values, max_abs=0 normalized=0 tolerance=1e-12
+PASS flash_gemma_recapture/f16: 77184 values, max_abs=0.1061211 normalized=0.0007007899 tolerance=0.005
+<end of output>
+Test time =   2.91 sec
+----------------------------------------------------------
+Test Passed.
+"musa_rope_table" end time: Nov 03 12:43 CST
+"musa_rope_table" time elapsed: 00:00:02
+----------------------------------------------------------
+
+End testing: Nov 03 12:43 CST

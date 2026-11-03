@@ -1,0 +1,6 @@
+{"m":32768,"n":518,"k":2048,"mode":0,"split":1,"ms":9.9950924,"max_abs":0,"relative_peak":0}
+{"m":32768,"n":518,"k":2048,"mode":1,"split":1,"ms":9.9978456,"max_abs":0,"relative_peak":0}
+{"m":32768,"n":518,"k":2048,"mode":1,"split":2,"ms":9.9892340,"max_abs":0,"relative_peak":0}
+{"m":32768,"n":518,"k":2048,"mode":1,"split":4,"ms":9.9647703,"max_abs":0,"relative_peak":0}
+{"m":32768,"n":518,"k":2048,"mode":1,"split":8,"ms":9.9486895,"max_abs":0,"relative_peak":0}
+{"m":32768,"n":518,"k":2048,"mode":2,"split":1,"ms":9.8809481,"max_abs":0.000244140625,"relative_peak":0.000290475997}

@@ -1,0 +1,42 @@
+[
+  {
+    "name": "candidate-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "candidate-pruned-bucket",
+    "returncode": 0
+  },
+  {
+    "name": "candidate-lifecycle-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "candidate-full",
+    "returncode": 0
+  },
+  {
+    "name": "candidate-full-bucket",
+    "returncode": 0
+  },
+  {
+    "name": "candidate-lifecycle-full",
+    "returncode": 0
+  },
+  {
+    "name": "candidate-full-entry",
+    "returncode": 0
+  },
+  {
+    "name": "candidate-entry-reuse",
+    "returncode": 0
+  },
+  {
+    "name": "candidate-profile",
+    "returncode": 0
+  },
+  {
+    "name": "candidate-summarize",
+    "returncode": 0
+  }
+]

@@ -1,0 +1,15 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp/build-musa-official
+Test project /home/skysi/code/vla.cpp/build-musa-official
+    Start 12: musa_ops
+1/1 Test #12: musa_ops .........................***Exception: SegFault  1.75 sec
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   1.76 sec
+
+The following tests FAILED:
+	 12 - musa_ops (SEGFAULT)
+Errors while running CTest

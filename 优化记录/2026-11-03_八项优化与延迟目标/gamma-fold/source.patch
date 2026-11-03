@@ -1,0 +1,876 @@
+diff --git a/src/layers/action_edges.h b/src/layers/action_edges.h
+index 9c70d28..19c2007 100644
+--- a/src/layers/action_edges.h
++++ b/src/layers/action_edges.h
+@@ -1,5 +1,6 @@
+ #pragma once
+ #include "ggml.h"
++#include "layers/custom_params.h"
+ #include <cmath>
+ #include <vector>
+ namespace vla {
+@@ -51,6 +52,7 @@ inline ggml_tensor * fused_action_linear(ggml_context * C,ggml_tensor * w,ggml_t
+     ggml_tensor * args[]={w,x,b,mod,noise};
+     auto * t=ggml_custom_4d(C,GGML_TYPE_F32,w->ne[1],x->ne[1],spec.input?2:1,1,args,
+                            spec.input?4:5,action_linear_cpu,GGML_N_TASKS_MAX,(void *)&spec);
++    custom_parameter_snapshot(t,spec);
+     ggml_set_name(t,spec.input?"action_in_linear_adarms":"action_out_adarms_linear_step");
+     if(!spec.input)return t;
+     GGML_ASSERT(residual);
+diff --git a/src/layers/custom_params.h b/src/layers/custom_params.h
+new file mode 100644
+index 0000000..bded360
+--- /dev/null
++++ b/src/layers/custom_params.h
+@@ -0,0 +1,15 @@
++#pragma once
++#include "ggml.h"
++#include <cstring>
++#include <type_traits>
++namespace vla {
++// ggml CUSTOM stores callback/task/userdata in the first 24 bytes. Graph
++// compatibility must also see constants behind userdata, even at reused addresses.
++template<class Spec>
++inline void custom_parameter_snapshot(ggml_tensor * t,const Spec & spec) {
++    static_assert(std::is_trivially_copyable<Spec>::value,"custom constants must be trivially copyable");
++    static_assert(32+sizeof(Spec)<=sizeof(t->op_params),"custom constants exceed reserved params");
++    GGML_ASSERT(t->op==GGML_OP_CUSTOM);
++    std::memcpy((char *)t->op_params+32,&spec,sizeof(spec));
++}
++}
+diff --git a/src/layers/fused_ew.h b/src/layers/fused_ew.h
+index b55e0c8..c794384 100644
+--- a/src/layers/fused_ew.h
++++ b/src/layers/fused_ew.h
+@@ -27,6 +27,7 @@
+ #pragma once
+ 
+ #include "ggml.h"
++#include "layers/custom_params.h"
+ 
+ #include <cmath>
+ #include <cstdint>
+@@ -375,6 +376,7 @@ inline ggml_tensor * fused_adarms(ggml_context * C, ggml_tensor * x, ggml_tensor
+     GGML_ASSERT(x->type == GGML_TYPE_F32 && x->nb[0] == sizeof(float) && mod->ne[0] == 3 * x->ne[0]);
+     ggml_tensor * args[2] = { x, mod };
+     ggml_tensor * t = fused_row_out(C, x, out_type, args, 2, fused_adarms_cpu, &spec);
++    custom_parameter_snapshot(t,spec);
+     ggml_set_name(t, "fused_adarms");
+     return t;
+ }
+@@ -411,6 +413,7 @@ inline ggml_tensor * fused_res_adarms(ggml_context * C, ggml_tensor * x, ggml_te
+     ggml_tensor * args[] = {x, o, gate, mod};
+     auto * t = ggml_custom_4d(C, GGML_TYPE_F32, x->ne[0], x->ne[1], 2, 1, args, 4,
+                              fused_res_adarms_cpu, GGML_N_TASKS_MAX, (void *) &spec);
++    custom_parameter_snapshot(t,spec);
+     ggml_set_name(t, "fused_res_adarms");
+     *residual = ggml_view_2d(C, t, x->ne[0], x->ne[1], t->nb[1], 0);
+     return ggml_view_2d(C, t, x->ne[0], x->ne[1], t->nb[1], t->nb[2]);
+@@ -423,6 +426,7 @@ inline ggml_tensor * fused_bias_adarms(ggml_context * C, ggml_tensor * x, ggml_t
+     ggml_tensor * args[] = {x,bias,mod};
+     auto * t = ggml_custom_4d(C, GGML_TYPE_F32, x->ne[0], x->ne[1], 2, 1, args, 3,
+                              fused_res_adarms_cpu, GGML_N_TASKS_MAX, (void *) &spec);
++    custom_parameter_snapshot(t,spec);
+     ggml_set_name(t, "fused_bias_adarms");
+     *residual = ggml_view_2d(C,t,x->ne[0],x->ne[1],t->nb[1],0);
+     return ggml_view_2d(C,t,x->ne[0],x->ne[1],t->nb[1],t->nb[2]);
+@@ -445,8 +449,9 @@ inline ggml_tensor * fused_action_step(ggml_context * C, ggml_tensor * x, ggml_t
+     GGML_ASSERT(x->type == GGML_TYPE_F32 && v->type == GGML_TYPE_F32 && b->type == GGML_TYPE_F32);
+     GGML_ASSERT(ggml_are_same_shape(x,v) && ggml_nelements(b)==x->ne[0]);
+     ggml_tensor * args[]={x,v,b};
+-    return ggml_custom_4d(C,GGML_TYPE_F32,x->ne[0],x->ne[1],x->ne[2],x->ne[3],args,3,
++    auto * t=ggml_custom_4d(C,GGML_TYPE_F32,x->ne[0],x->ne[1],x->ne[2],x->ne[3],args,3,
+                           fused_action_step_cpu,GGML_N_TASKS_MAX,(void *)&spec);
++    custom_parameter_snapshot(t,spec);return t;
+ }
+ 
+ // W [K, N] BF16, x [K, M] BF16 (rows dense), b [N] F32 or null, res [N, M] or
+diff --git a/src/layers/rope_table.h b/src/layers/rope_table.h
+new file mode 100644
+index 0000000..2cf4c4b
+--- /dev/null
++++ b/src/layers/rope_table.h
+@@ -0,0 +1,56 @@
++#pragma once
++#include "ggml.h"
++#include "layers/custom_params.h"
++#include <cmath>
++#include <cstring>
++namespace vla {
++constexpr uint32_t ROPE_TABLE_MAGIC=0x42545052, ROPE_APPLY_MAGIC=0x50415052;
++struct RopeTableSpec {uint32_t magic=ROPE_TABLE_MAGIC;float base=10000.f;};
++inline bool rope_table_is_apply(const ggml_tensor * t) {
++    if(t->op!=GGML_OP_CUSTOM)return false;
++    struct Params {void * fun;int tasks;void * userdata;} p;
++    std::memcpy(&p,t->op_params,sizeof(p));
++    uint32_t magic=0;if(p.userdata)std::memcpy(&magic,p.userdata,sizeof(magic));
++    return magic==ROPE_APPLY_MAGIC;
++}
++inline void rope_table_cpu(ggml_tensor * t,int ith,int nth,void * ud) {
++    const auto & spec=*(const RopeTableSpec *)ud;
++    const auto * pos=(const int32_t *)t->src[0]->data;auto * dst=(float *)t->data;
++    const int h=t->ne[0];const float scale=std::pow(spec.base,-2.f/h);
++    for(int64_t i=ith;i<ggml_nelements(t)/2;i+=nth) {
++        const int row=i/(h/2),j=i%(h/2);
++        const float theta=pos[row]*std::pow(scale,(float)j);
++        dst[2*i]=std::cos(theta);dst[2*i+1]=std::sin(theta);
++    }
++}
++inline void rope_apply_cpu(ggml_tensor * t,int ith,int nth,void *) {
++    const auto * x=t->src[0];const auto * table=(const float *)t->src[1]->data;
++    const int h=t->ne[0],heads=t->ne[1];
++    for(int64_t row=ith;row<heads*t->ne[2];row+=nth) {
++        const int pos=row/heads,head=row%heads;
++        const auto * a=(const float *)((const char *)x->data+pos*x->nb[2]+head*x->nb[1]);
++        auto * out=(char *)t->data+pos*t->nb[2]+head*t->nb[1];
++        for(int j=0;j<h/2;++j) {
++            const float c=table[pos*h+2*j],s=table[pos*h+2*j+1];
++            const float v0=a[j]*c-a[j+h/2]*s,v1=a[j]*s+a[j+h/2]*c;
++            if(t->type==GGML_TYPE_F16){((ggml_fp16_t *)out)[j]=ggml_fp32_to_fp16(v0);((ggml_fp16_t *)out)[j+h/2]=ggml_fp32_to_fp16(v1);}
++            else {((float *)out)[j]=v0;((float *)out)[j+h/2]=v1;}
++        }
++    }
++}
++inline ggml_tensor * rope_table(ggml_context * C,ggml_tensor * positions,int64_t h,const RopeTableSpec & spec) {
++    GGML_ASSERT(positions->type==GGML_TYPE_I32 && ggml_is_contiguous(positions) && h>0 && h%2==0);
++    GGML_ASSERT(spec.base>0 && std::isfinite(spec.base));
++    ggml_tensor * args[]={positions};
++    auto * t=ggml_custom_4d(C,GGML_TYPE_F32,h,positions->ne[0],1,1,args,1,rope_table_cpu,GGML_N_TASKS_MAX,(void *)&spec);
++    custom_parameter_snapshot(t,spec);return t;
++}
++inline ggml_tensor * rope_apply(ggml_context * C,ggml_tensor * x,ggml_tensor * table) {
++    GGML_ASSERT(x->type==GGML_TYPE_F32 && x->ne[3]==1 && x->nb[0]==4);
++    GGML_ASSERT(table->type==GGML_TYPE_F32 && table->ne[0]==x->ne[0] && table->ne[1]==x->ne[2]);
++    static const uint32_t spec=ROPE_APPLY_MAGIC;
++    ggml_tensor * args[]={x,table};
++    return ggml_custom_4d(C,GGML_TYPE_F32,x->ne[0],x->ne[1],x->ne[2],1,args,2,
++                          rope_apply_cpu,GGML_N_TASKS_MAX,(void *)&spec);
++}
++}
+diff --git a/src/layers/u8_patch.h b/src/layers/u8_patch.h
+new file mode 100644
+index 0000000..f1c6d53
+--- /dev/null
++++ b/src/layers/u8_patch.h
+@@ -0,0 +1,30 @@
++// Copyright 2026 VinRobotics
++// SPDX-License-Identifier: Apache-2.0
++#pragma once
++#include "ggml.h"
++#include "layers/custom_params.h"
++#include <cstdint>
++namespace vla {
++constexpr uint32_t U8_PATCH_MAGIC=0x38505455;
++struct U8PatchSpec {uint32_t magic=U8_PATCH_MAGIC;int patch=14;};
++inline void u8_patch_cpu(ggml_tensor * t,int ith,int nth,void * ud) {
++ const int ps=((const U8PatchSpec *)ud)->patch,S=t->src[0]->ne[1],grid=S/ps,pd=3*ps*ps;
++ const auto * x=(const uint8_t *)t->src[0]->data;const auto * lut=(const ggml_fp16_t *)t->src[1]->data;
++ auto * y=(ggml_fp16_t *)t->data;
++ for(int64_t i=ith;i<ggml_nelements(t);i+=nth) {
++  const int p=i%pd,tok=i/pd%(grid*grid),v=i/(pd*grid*grid);
++  const int ch=p/(ps*ps),py=p/ps%ps,px=p%ps;
++  const int iy=(tok/grid)*ps+py,ix=(tok%grid)*ps+px;
++  y[i]=lut[x[((int64_t)v*S*S+iy*S+ix)*3+ch]];
++ }
++}
++inline ggml_tensor * u8_patch(ggml_context * C,ggml_tensor * image,ggml_tensor * lut,const U8PatchSpec & spec) {
++ GGML_ASSERT(image->type==GGML_TYPE_I8 && ggml_is_contiguous(image) && image->ne[0]==3 &&
++             image->ne[1]==image->ne[2] && image->ne[1]%spec.patch==0);
++ GGML_ASSERT(lut->type==GGML_TYPE_F16 && ggml_is_contiguous(lut) && ggml_nelements(lut)==256);
++ int64_t grid=image->ne[1]/spec.patch;ggml_tensor * args[]={image,lut};
++ auto * t=ggml_custom_4d(C,GGML_TYPE_F16,3*spec.patch*spec.patch,grid*grid,image->ne[3],1,
++                        args,2,u8_patch_cpu,GGML_N_TASKS_MAX,(void *)&spec);
++ custom_parameter_snapshot(t,spec);return t;
++}
++}
+diff --git a/src/models/pi05.cpp b/src/models/pi05.cpp
+index 056b342..57391aa 100644
+--- a/src/models/pi05.cpp
++++ b/src/models/pi05.cpp
+@@ -28,6 +28,7 @@
+ #include "gguf_reader.h"
+ #include "scratch_ctx.h"
+ #include "layers/embed.h"
++#include "layers/u8_patch.h"
+ #include "layers/linear.h"
+ #include "modules/preprocess.h"
+ #include "modules/prompt.h"
+@@ -119,6 +120,9 @@ struct Pi05ModelArch : public ModelArchBase {
+     FusedResAdarmsSpec    res_adarms_spec;
+     FusedResAdarmsSpec    input_adarms_spec{FUSED_BIAS_ADARMS_MAGIC,1e-6f};
+     FusedActionStepSpec   action_step_spec;
++    RopeTableSpec         rope_table_spec;
++    U8PatchSpec           u8_patch_spec;
++    ggml_tensor *         u8_lut = nullptr;
+     FusedActionLinearSpec action_in_spec{FUSED_ACTION_LINEAR_MAGIC,1},action_out_spec;
+     bool                 fuse_res_adarms = false;
+     bool                 fuse_cross_adarms = false;
+@@ -238,7 +242,7 @@ ggml_tensor * build_expert_layer(
+         ggml_type at = GGML_TYPE_F32, const FusedAdarmsSpec * fa = nullptr, const FusedGateResSpec * fg = nullptr,
+         KvSlot * kv = nullptr, const FqExpertIn * fqx = nullptr,
+         const FusedResAdarmsSpec * fr = nullptr, ggml_tensor * xn_ready = nullptr,
+-        ggml_tensor * next_mod = nullptr, ggml_tensor ** next_norm = nullptr) {
++        ggml_tensor * next_mod = nullptr, ggml_tensor ** next_norm = nullptr, ggml_tensor * angles = nullptr) {
+     const int64_t h = cfg.expert_h;
+     if (fqx && w.act_mod_qkv.has_shift && w.act_mod_gu.has_shift && w.fq_o && w.fq_down) {
+         // FoldQuant on SYCL: each adaRMS rides in its act node (rms * (1 + scale)
+@@ -270,7 +274,8 @@ ggml_tensor * build_expert_layer(
+         // out * gate + x reading the GEMM output in whatever type it has.
+         ggml_tensor * xn = xn_ready ? xn_ready : fused_adarms(ctx, x_in, mod_attn, at, *fa);
+         ggml_tensor * o  = gemma_attn(ctx, w, xn, positions, cfg, seq, cached_K, cached_V, mask,
+-                                      nullptr, nullptr, at, use_fused_attention(), nullptr, nullptr, kv);
++                                      nullptr, nullptr, at, use_fused_attention(), nullptr, nullptr, kv,
++                                      nullptr,nullptr,nullptr,nullptr,false,angles);
+         ggml_tensor * h1 = nullptr;
+         ggml_tensor * xm = nullptr;
+         if (fr && at == GGML_TYPE_F32)
+@@ -394,12 +399,14 @@ bool bake_adarms(gguf_reader & g, Pi05ModelArch & m) {
+         ggml_backend_tensor_get(mods[k], table.data()+k*3*h, 0, ggml_nbytes(mods[k]));
+ 
+     const size_t n_slot = m.fq_fast ? (size_t) ns*nj : 0;
+-    ggml_init_params p = { (1 + 2*n_slot)*ggml_tensor_overhead(), nullptr, true };
++    ggml_init_params p = { (2 + 2*n_slot)*ggml_tensor_overhead(), nullptr, true };
+     m.ctx_const = ggml_init(p);
+     if (!m.ctx_const) {
+         std::fprintf(stderr, "vla(pi05): ggml_init(ctx_const) failed\n");
+         return false;
+     }
++    m.u8_lut = ggml_new_tensor_1d(m.ctx_const,GGML_TYPE_F16,256);
++    m.u8_patch_spec.patch=m.vis.patch_size;
+     m.ada_mod   = ggml_new_tensor_3d(m.ctx_const, GGML_TYPE_F32, 3*h, nj, ns);
+     m.ada_scale1.resize(n_slot);
+     m.ada_shift.resize(n_slot);
+@@ -412,6 +419,9 @@ bool bake_adarms(gguf_reader & g, Pi05ModelArch & m) {
+         std::fprintf(stderr, "vla(pi05): alloc_weights(adaRMS table) failed\n");
+         return false;
+     }
++    ggml_fp16_t lut[256];
++    for(int i=0;i<256;++i)lut[i]=ggml_fp32_to_fp16((i/255.0f-0.5f)/0.5f);
++    ggml_backend_tensor_set(m.u8_lut,lut,0,sizeof(lut));
+     ggml_backend_tensor_set(m.ada_mod, table.data(), 0, ggml_nbytes(m.ada_mod));
+     std::vector<float> scale1((size_t) h);
+     for (size_t k=0; k<n_slot; ++k) {
+@@ -545,6 +555,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+         m->res_adarms_spec.eps = cfg.rms_eps;
+         m->input_adarms_spec.eps = cfg.rms_eps;
+         m->action_step_spec.dt = -1.f/(float)cfg.num_steps;
++        m->rope_table_spec.base=cfg.rope_freq_base;
+         m->action_in_spec.eps=m->action_out_spec.eps=cfg.rms_eps;
+         m->action_out_spec.dt=m->action_step_spec.dt;
+         m->input_cache = b.is_musa && env_flag("VLA_PI05_INPUT_CACHE");
+@@ -815,6 +826,24 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+     if (!L.upload(m->backend, &m->weight_buf))
+         return nullptr;
+ 
++    if(m->musa_backend && env_flag("VLA_PI05_PREFIX_GAMMA_FOLD")) {
++        for(auto & w:m->pl.blk) {
++            for(auto pair:{std::make_pair(&w.ln_in,w.Wqkv),std::make_pair(&w.ln_post,w.Wgu)}) {
++                auto * gamma=*pair.first;auto * weight=pair.second;
++                if(!gamma || !weight || gamma->type!=GGML_TYPE_F32 || weight->type!=GGML_TYPE_F16 ||
++                   !ggml_is_contiguous(weight) || gamma->ne[0]!=weight->ne[0])continue;
++                std::vector<float> g(ggml_nelements(gamma));
++                std::vector<ggml_fp16_t> values(ggml_nelements(weight));
++                ggml_backend_tensor_get(gamma,g.data(),0,ggml_nbytes(gamma));
++                ggml_backend_tensor_get(weight,values.data(),0,ggml_nbytes(weight));
++                for(size_t i=0;i<values.size();++i)
++                    values[i]=ggml_fp32_to_fp16(ggml_fp16_to_fp32(values[i])*g[i%g.size()]);
++                ggml_backend_tensor_set(weight,values.data(),0,ggml_nbytes(weight));
++                *pair.first=nullptr;
++            }
++        }
++    }
++
+     std::printf("vla(pi05): resident weights = %.2f GiB\n",
+                 ggml_backend_buffer_get_size(m->weight_buf)/(1024.0*1024.0*1024.0));
+ 
+@@ -827,13 +856,23 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView* images, int n_images, ggml_tensor * destination, bool async) {
+     const int64_t K = vis.n_tokens, grid = vis.image_size/vis.patch_size, S = vis.image_size;
+     const ggml_type vt = vis.vit.enc.cfg.act;
+-    const bool built = vis_graph.ensure(backend, (int64_t) n_images, (size_t) 128*1024*1024,
++    bool raw_u8=musa_backend && env_flag("VLA_PI05_U8_PATCH") && host_input!=3;
++    for(int v=0;v<n_images;++v)raw_u8=raw_u8 && images[v].format==PixelFormat::U8;
++    const bool built = vis_graph.ensure(backend, raw_u8 ? -(int64_t)n_images : (int64_t)n_images, (size_t) 128*1024*1024,
+                                         [&](ggml_context * VC, VisIO & vio) -> ggml_cgraph * {
+         // Tower + PaliGemma projector (linear, optional bias) over nv views of
+         // pixels: F32 [hidden, nv*K]. The patch embed (conv_2d) runs in F32, the
+         // tower in vt.
+         auto tower = [&](ggml_tensor * px, int64_t nv) {
+-            ggml_tensor * x = vis.vit.embed_conv(VC, px, vis.patch_size, grid);   // [hidden, K, nv]
++            ggml_tensor * x = nullptr;
++            if(raw_u8) {
++                auto * patches=u8_patch(VC,px,u8_lut,u8_patch_spec);
++                patches=ggml_reshape_2d(VC,patches,patches->ne[0],K*nv);
++                auto * pw=ggml_cast(VC,ggml_reshape_2d(VC,vis.vit.patch_w,3*vis.patch_size*vis.patch_size,vis.vit.enc.cfg.hidden),GGML_TYPE_F16);
++                x=ggml_mul_mat(VC,pw,patches);
++                x=ggml_reshape_3d(VC,x,x->ne[0],K,nv);
++                x=ggml_add(VC,ggml_add(VC,x,vis.vit.patch_b),vis.vit.pos);
++            } else x = vis.vit.embed_conv(VC, px, vis.patch_size, grid);   // [hidden, K, nv]
+             if (vis.vit.enc.cfg.fused)   // the fused blocks take the views as nv*K rows
+                 x = ggml_reshape_2d(VC, x, x->ne[0], K * nv);
+             ggml_tensor * h = as_type(VC, x, vt);
+@@ -859,7 +898,7 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+             if (vis.proj_b)
+                 proj = ggml_add(VC, proj, vis.proj_b);
+             proj = as_type(VC, proj, GGML_TYPE_F32);
+-            if (musa_backend && nv > 1 && !vis.vit.enc.cfg.fused)
++            if (musa_backend && nv > 1 && !vis.vit.enc.cfg.fused && !env_flag("VLA_PI05_VISION_NO_OUT_COPY"))
+                 proj = ggml_reshape_2d(VC, proj, proj->ne[0], K*nv);
+             if (proj->op == GGML_OP_VIEW || proj->op == GGML_OP_RESHAPE)
+                 proj = ggml_cont(VC, proj);
+@@ -873,7 +912,8 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+         };
+         ggml_cgraph * vg = ggml_new_graph_custom(VC, 8192, false);
+         auto new_px = [&](int64_t nv) {
+-            ggml_tensor * t = ggml_new_tensor_4d(VC, GGML_TYPE_F32, S, S, 3, nv);
++            ggml_tensor * t = raw_u8 ? ggml_new_tensor_4d(VC,GGML_TYPE_I8,3,S,S,nv)
++                                    : ggml_new_tensor_4d(VC,GGML_TYPE_F32,S,S,3,nv);
+             ggml_set_input(t);
+             vio.t_px.push_back(t);
+             return t;
+@@ -921,6 +961,33 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+     if (destination) GGML_ASSERT(output_offset==ggml_nbytes(destination));
+ 
+     const size_t per_view = (size_t) 3*S*S;
++    if(raw_u8) {
++        const size_t bytes=per_view*n_images;
++        uint8_t * raw=nullptr;
++#ifdef GGML_USE_MUSA
++        if(host_input==2) {
++            if(!pixels_host || pixels_host_bytes<bytes) {
++                if(pixels_host)ggml_backend_buffer_free(pixels_host);
++                pixels_host=ggml_backend_buft_alloc_buffer(ggml_backend_cuda_host_buffer_type(),bytes);
++                pixels_host_bytes=pixels_host?bytes:0;
++            }
++            if(pixels_host)raw=(uint8_t *)ggml_backend_buffer_get_base(pixels_host);
++        }
++#endif
++        if(!raw){pixels_storage.resize((bytes+3)/4);raw=(uint8_t *)pixels_storage.data();}
++        for(int v=0;v<n_images;++v) {
++            if(!view_ok("pi05",images[v],S))return nullptr;
++            std::memcpy(raw+v*per_view,images[v].data,per_view);
++        }
++        size_t byte_off=0;
++        for(size_t j=0;j<vio.t_px.size();++j) {
++            auto * t=vio.t_px[j];t->data=vio.original_px[j];t->buffer=vio.original_px_buf[j];
++            if(input_cache)ggml_backend_tensor_set_async(backend,t,raw+byte_off,0,ggml_nbytes(t));
++            else ggml_backend_tensor_set(t,raw+byte_off,0,ggml_nbytes(t));
++            byte_off+=ggml_nbytes(t);
++        }
++    } else {
++
+     std::vector<float> chw, px;
+     float * pixels = nullptr;
+ #ifdef GGML_USE_MUSA
+@@ -966,6 +1033,7 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+         else ggml_backend_tensor_set(t,pixels+off,0,ggml_nbytes(t));
+         off += (size_t) ggml_nelements(t);
+     }
++    }
+     graph_unique_names(vg);
+     if ((async ? ggml_backend_graph_compute_async(backend, vg) : ggml_backend_graph_compute(backend, vg)) != GGML_STATUS_SUCCESS) {
+         std::fprintf(stderr, "vla(pi05): vision compute failed\n");
+@@ -1110,6 +1178,11 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+     ggml_tensor * t_x0        = ggml_new_tensor_2d(C, GGML_TYPE_F32, max_ad, chunk);           ggml_set_input(t_x0);
+     ggml_tensor * t_suffix_pos= ggml_new_tensor_1d(C, GGML_TYPE_I32, n_suf);                   ggml_set_input(t_suffix_pos);
+ 
++    ggml_tensor * prefix_angles=nullptr,*suffix_angles=nullptr;
++    if(musa_backend && env_flag("VLA_PI05_ROPE_TABLE") && musa_register_fused_ops()) {
++        prefix_angles=rope_table(C,t_prefix_pos,cfg.head_dim,rope_table_spec);
++        suffix_angles=rope_table(C,t_suffix_pos,cfg.head_dim,rope_table_spec);
++    }
+     ggml_tensor * prefix_embs = as_type(C, t_prefix, prefix_act);
+ 
+     std::vector<ggml_tensor *> cK(n_layers), cV(n_layers);
+@@ -1131,7 +1204,9 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+             else
+                 h = gemma_layer(C, pl.blk[i], h, t_prefix_pos, cfg, n_prefix_g,
+                                 nullptr, nullptr, t_prefix_mask, &cK[i], &cV[i], prefix_act, use_fused_attention(),
+-                                kv_inplace ? &kv[i] : nullptr);
++                                kv_inplace ? &kv[i] : nullptr,
++                                musa_backend && i+1==n_layers && !kv_inplace && pl.blk[i].Wqkv &&
++                                !pl.blk[i].fq_qkv && !pl.blk[i].fq_q && env_flag("VLA_PI05_LAST_KV_ONLY"),prefix_angles);
+         }
+         (void) h;
+     }
+@@ -1196,7 +1271,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+                                    kv_inplace ? &kv[i] : (concat_cache.empty() ? nullptr : &concat_cache[i]), kv16 ? &fqx : nullptr,
+                                    fuse_res_adarms ? &res_adarms_spec : nullptr, next_norm,
+                                    cross && i+1<n_layers ? mod(2*(i+1)) : nullptr,
+-                                   cross ? &next_norm : nullptr);
++                                   cross ? &next_norm : nullptr,suffix_angles);
+         }
+ 
+         ggml_tensor * h_final = build_adarms(C, h, mod(2*n_layers), hidden_ex, cfg.rms_eps, nullptr);
+diff --git a/src/modules/gemma_expert.h b/src/modules/gemma_expert.h
+index 90e4550..80bd6e0 100644
+--- a/src/modules/gemma_expert.h
++++ b/src/modules/gemma_expert.h
+@@ -19,6 +19,7 @@
+ #pragma once
+ 
+ #include "act_dtype.h"
++#include "layers/rope_table.h"
+ #include "backend.h"
+ #include "env_flag.h"
+ #include "gguf_reader.h"
+@@ -407,7 +408,7 @@ inline ggml_tensor * gemma_attn(
+         ggml_tensor ** k_out, ggml_tensor ** v_out, ggml_type at, bool flash,
+         ggml_tensor * fq_x = nullptr, ggml_tensor * fq_res = nullptr, KvSlot * kv = nullptr,
+         ggml_tensor * cached_K16 = nullptr, ggml_tensor * cached_V16 = nullptr,
+-        ggml_tensor * fq_xq = nullptr, ggml_tensor * fq_gate = nullptr) {
++        ggml_tensor * fq_xq = nullptr, ggml_tensor * fq_gate = nullptr, bool kv_only = false, ggml_tensor * angles = nullptr) {
+     if (kv && !kv->concat_only)
+         return gemma_attn_kv(ctx, w, x_norm, positions, cfg, seq, *kv, mask, at);
+     // FoldQuant: q/k/v share one act node over fq_x (the raw residual stream when
+@@ -421,6 +422,7 @@ inline ggml_tensor * gemma_attn(
+     const int64_t nq  = cfg.n_q_heads;
+     const int64_t nkv = cfg.n_kv_heads;
+     const int64_t qf  = nq * hd;
++    GGML_ASSERT(!kv_only || (w.Wqkv && !w.fq_qkv && !w.fq_q && !kv && !cached_K && !cached_V && k_out && v_out));
+ 
+     if (w.rope_attn.magic == FQ_ROPE_ATTN_MAGIC && w.fq_qkv && w.fq_o && flash && cached_K16 && cached_V16 && !mask &&
+         !k_out && !v_out && (fq_xq || fq_x) && seq * nq > 192) {
+@@ -488,12 +490,15 @@ inline ggml_tensor * gemma_attn(
+         k = fq_gemm(ctx, w.fq_k, xq);
+         v = fq_gemm(ctx, w.fq_v, xq);
+     } else if (w.Wqkv) {
+-        ggml_tensor * qkv = mm_f32(ctx, w.Wqkv, x_norm);
++        auto * weight = kv_only ? ggml_view_2d(ctx,w.Wqkv,w.Wqkv->ne[0],2*cfg.kv_full_dim,
++                                              w.Wqkv->nb[1],qf*w.Wqkv->nb[1]) : w.Wqkv;
++        ggml_tensor * qkv = mm_f32(ctx, weight, x_norm);
+         const size_t  es  = ggml_element_size(qkv);
+-        q = ggml_view_2d(ctx, qkv, qf, seq, qkv->nb[1], 0);
++        q = kv_only ? nullptr : ggml_view_2d(ctx, qkv, qf, seq, qkv->nb[1], 0);
+ #ifdef GGML_USE_MUSA
+-        k = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], qf * es);
+-        v = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (qf + cfg.kv_full_dim) * es);
++        const int64_t start = kv_only ? 0 : qf;
++        k = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], start * es);
++        v = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (start + cfg.kv_full_dim) * es);
+ #else
+         k = ggml_cont(ctx, ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], qf * es));
+         v = ggml_cont(ctx, ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (qf + cfg.kv_full_dim) * es));
+@@ -507,28 +512,30 @@ inline ggml_tensor * gemma_attn(
+     }
+ 
+ #ifdef GGML_USE_MUSA
+-    ggml_tensor * q_h = ggml_view_3d(ctx, q, hd, nq, seq, hd*ggml_element_size(q), q->nb[1], 0);
++    ggml_tensor * q_h = kv_only ? nullptr : ggml_view_3d(ctx, q, hd, nq, seq, hd*ggml_element_size(q), q->nb[1], 0);
+     ggml_tensor * k_h = ggml_view_3d(ctx, k, hd, nkv, seq, hd*ggml_element_size(k), k->nb[1], 0);
+     ggml_tensor * v_h = ggml_view_3d(ctx, v, hd, nkv, seq, hd*ggml_element_size(v), v->nb[1], 0);
+ #else
+-    ggml_tensor * q_h = ggml_reshape_3d(ctx, q, hd, nq,  seq);
++    ggml_tensor * q_h = kv_only ? nullptr : ggml_reshape_3d(ctx, q, hd, nq,  seq);
+     ggml_tensor * k_h = ggml_reshape_3d(ctx, k, hd, nkv, seq);
+     ggml_tensor * v_h = ggml_reshape_3d(ctx, v, hd, nkv, seq);
+ #endif
+ 
+     auto rope_call = [&](ggml_tensor * t) {
++        if(angles)return rope_apply(ctx,t,angles);
+         return ggml_rope_ext(ctx, t, positions, nullptr,
+                              (int) hd, GGML_ROPE_TYPE_NEOX, 0,
+                              cfg.rope_freq_base, 1.f, 0.f, 1.f, 32.f, 1.f);
+     };
+-    ggml_tensor * q_rope = rope_call(q_h);
++    ggml_tensor * q_rope = kv_only ? nullptr : rope_call(q_h);
+     ggml_tensor * k_rope = rope_call(k_h);
+ #ifdef GGML_USE_MUSA
+     if (flash) {
+         // Convert each prefix once, before caching/concatenation. The FA kernel
+         // already consumes F16 K/V; this avoids recasting the whole prefix at
+         // every denoising step and halves the concatenation traffic.
+-        k_rope = as_type(ctx, k_rope, GGML_TYPE_F16);
++        k_rope = env_flag("VLA_PI05_K_ROPE_DIRECT") ? retype(k_rope,GGML_TYPE_F16) :
++                                                      as_type(ctx,k_rope,GGML_TYPE_F16);
+         v_h = as_type(ctx, v_h, GGML_TYPE_F16);
+     }
+ #endif
+@@ -537,6 +544,7 @@ inline ggml_tensor * gemma_attn(
+         *k_out = k_rope;
+     if (v_out)
+         *v_out = v_h;
++    if (kv_only) return nullptr;
+ 
+     if (flash && cached_K16 && cached_V16 && !mask) {
+         // Cached prefix (F16, cast once per layer) + this step's keys, without
+@@ -572,7 +580,12 @@ inline ggml_tensor * gemma_attn(
+                 ggml_are_same_shape(suffix, suffix->src[0]))
+                 source = suffix->src[0];
+ #endif
+-            auto * write = ggml_cpy(ctx, source, tail);
++            ggml_tensor * write;
++            if (env_flag("VLA_PI05_K_ROPE_DIRECT") && (suffix->op==GGML_OP_ROPE || rope_table_is_apply(suffix)) &&
++                suffix->type==GGML_TYPE_F16 && !suffix->view_src) {
++                write=write_rows(suffix,buffer,prefix->ne[2]);
++                add_dep(write,tail);
++            } else write=ggml_cpy(ctx,source,tail);
+             auto * read = ggml_view_tensor(ctx, buffer);
+             // suffix depends on the previous step, so earlier reads finish before this write.
+             add_dep(read, write);
+@@ -694,7 +707,11 @@ inline ggml_tensor * gemma_layer(
+         const Config & cfg, int64_t seq,
+         ggml_tensor * cached_K, ggml_tensor * cached_V, ggml_tensor * mask,
+         ggml_tensor ** k_out, ggml_tensor ** v_out,
+-        ggml_type at = GGML_TYPE_F32, bool flash = false, KvSlot * kv = nullptr) {
++        ggml_type at = GGML_TYPE_F32, bool flash = false, KvSlot * kv = nullptr, bool kv_only = false, ggml_tensor * angles = nullptr) {
++    if (kv_only)
++        return gemma_attn(ctx,w,rms_norm(ctx,x_in,w.ln_in,cfg.rms_eps),positions,cfg,seq,
++                          nullptr,nullptr,mask,k_out,v_out,at,flash,nullptr,nullptr,nullptr,
++                          nullptr,nullptr,nullptr,nullptr,true,angles);
+     if (!kv && gemma_fused(w, at, flash, seq, seq + (cached_K ? cached_K->ne[2] : 0))) {
+         if (w.fq_q) {
+             // As below: the norms ride in the act nodes, the residuals in the o / down epilogues.
+@@ -715,7 +732,7 @@ inline ggml_tensor * gemma_layer(
+                      cached_K, cached_V, mask, k_out, v_out, at, flash, x_in, x_in)
+         : ggml_add(ctx, x_in,
+             gemma_attn(ctx, w, fq_in ? nullptr : rms_norm(ctx, x_in, w.ln_in, cfg.rms_eps), positions, cfg, seq,
+-                       cached_K, cached_V, mask, k_out, v_out, at, flash, x_in, nullptr, kv));
++                       cached_K, cached_V, mask, k_out, v_out, at, flash, x_in, nullptr, kv,nullptr,nullptr,nullptr,nullptr,false,angles));
+     ggml_tensor * x_norm_mlp = (w.fq_gate || w.fq_gu) ? nullptr : rms_norm(ctx, h1, w.ln_post, cfg.rms_eps);
+     return w.fq_down ? gemma_mlp(ctx, w, x_norm_mlp, at, h1, h1)
+                      : ggml_add(ctx, h1, gemma_mlp(ctx, w, x_norm_mlp, at, h1));
+diff --git a/src/musa/vla_musa_epilogue.cu b/src/musa/vla_musa_epilogue.cu
+index 23ddf86..dd86a51 100644
+--- a/src/musa/vla_musa_epilogue.cu
++++ b/src/musa/vla_musa_epilogue.cu
+@@ -1,11 +1,54 @@
++#include <type_traits>
+ // Copyright 2026 VinRobotics
+ // SPDX-License-Identifier: Apache-2.0
+ #include "musa/vla_musa_ops.h"
++#include "layers/rope_table.h"
++#include "ggml-cuda/convert.cuh"
+ #include "ggml-cuda/unary.cuh"
+ 
+ namespace vla {
+ namespace {
+ constexpr int WG = 256;
++__global__ void make_rope_table(const int32_t * pos,float * table,int h,int rows,float scale) {
++    const int i=blockIdx.x*blockDim.x+threadIdx.x;
++    if(i>=h/2*rows)return;
++    const int row=i/(h/2),j=i%(h/2);
++    const float theta=pos[row]*powf(scale,(float)j);
++    table[2*i]=cosf(theta);table[2*i+1]=sinf(theta);
++}
++template<typename D>
++__global__ void apply_rope_table(const float * x,const float * table,D * dst,int h,int heads,int rows,
++                                size_t stride_head,size_t stride_row) {
++    const int i=blockIdx.x*blockDim.x+threadIdx.x;
++    if(i>=h/2*heads*rows)return;
++    const int j=i%(h/2),row=i/(h/2),head=row%heads,pos=row/heads;
++    const float * src=x+pos*stride_row+head*stride_head;
++    const float c=table[pos*h+2*j],s=table[pos*h+2*j+1];
++    const float x0=src[j],x1=src[j+h/2];
++    if constexpr (std::is_same<D,half>::value) {
++        const float y0=__fmaf_rn(x0,c,-__fmul_rn(x1,s));
++        const float y1=__fmaf_rn(x0,s,__fmul_rn(x1,c));
++        dst[row*h+j]=__float2half_rn(y0);
++        dst[row*h+j+h/2]=__float2half_rn(y1);
++    } else {
++        dst[row*h+j]=x0*c-x1*s;
++        dst[row*h+j+h/2]=x0*s+x1*c;
++    }
++}
++__global__ void fast_geglu(const float * x,half * y,int h,int n,bool swapped) {
++    const int i=blockIdx.x*blockDim.x+threadIdx.x;
++    if(i>=n)return;
++    const int c=i%h,r=i/h;
++    const float g=x[2*r*h+c+(swapped?h:0)],u=x[2*r*h+c+(swapped?0:h)];
++    y[i]=__float2half(ggml_cuda_op_gelu_single(g)*u);
++}
++__global__ void pack_u8_patch(const uint8_t * x,const half * lut,half * y,int ps,int S,int n) {
++    const int i=blockIdx.x*blockDim.x+threadIdx.x;
++    if(i>=n)return;
++    const int grid=S/ps,pd=3*ps*ps,p=i%pd,tok=i/pd%(grid*grid),v=i/(pd*grid*grid);
++    const int ch=p/(ps*ps),iy=(tok/grid)*ps+p/ps%ps,ix=(tok%grid)*ps+p%ps;
++    y[i]=lut[x[(v*S*S+iy*S+ix)*3+ch]];
++}
+ template<bool Gelu>
+ __global__ void vision_epilogue(const float * x, const float * bias, const float * residual,
+                                float * dst, int h) {
+@@ -18,6 +61,16 @@ __global__ void vision_epilogue(const float * x, const float * bias, const float
+     else dst[i] = __fadd_rn(residual[i], v);
+ }
+ }
++void musa_geglu_fast_forward(ggml_tensor * t,void * stream_ptr) {
++    const int n=ggml_nelements(t);const bool swapped=((const int32_t *)t->op_params)[1]!=0;
++    fast_geglu<<<(n+WG-1)/WG,WG,0,(musaStream_t)stream_ptr>>>((const float *)t->src[0]->data,
++        (half *)t->data,t->ne[0],n,swapped);
++}
++void musa_u8_patch_forward(ggml_tensor * t,int patch,void * stream_ptr) {
++    const int n=ggml_nelements(t);
++    pack_u8_patch<<<(n+WG-1)/WG,WG,0,(musaStream_t)stream_ptr>>>((const uint8_t *)t->src[0]->data,
++        (const half *)t->src[1]->data,(half *)t->data,patch,t->src[0]->ne[1],n);
++}
+ void musa_vision_epilogue(ggml_tensor * t, bool gelu, void * stream_ptr) {
+     const int h = (int)t->ne[0];
+     const dim3 grid((h+WG-1)/WG,ggml_nrows(t));
+@@ -27,4 +80,26 @@ void musa_vision_epilogue(ggml_tensor * t, bool gelu, void * stream_ptr) {
+     if (gelu) vision_epilogue<true><<<grid,WG,0,stream>>>(x,bias,nullptr,(float *)t->data,h);
+     else vision_epilogue<false><<<grid,WG,0,stream>>>(x,bias,(const float *)t->src[2]->data,(float *)t->data,h);
+ }
++void musa_cached_rope_forward(ggml_tensor * t,void * stream_ptr) {
++    const auto stream=(musaStream_t)stream_ptr;
++    struct Params {void * fun;int tasks;void * userdata;} p;
++    std::memcpy(&p,t->op_params,sizeof(p));
++    uint32_t magic;std::memcpy(&magic,p.userdata,sizeof(magic));
++    const int h=t->ne[0];
++    if(magic==ROPE_TABLE_MAGIC) {
++        const auto & spec=*(const RopeTableSpec *)p.userdata;
++        const float scale=powf(spec.base,-2.f/h);
++        const int n=h/2*t->ne[1];
++        make_rope_table<<<(n+WG-1)/WG,WG,0,stream>>>((const int32_t *)t->src[0]->data,
++            (float *)t->data,h,t->ne[1],scale);
++    } else {
++        const auto * x=t->src[0];const int n=h/2*t->ne[1]*t->ne[2];
++        if(t->type==GGML_TYPE_F16)
++            apply_rope_table<<<(n+WG-1)/WG,WG,0,stream>>>((const float *)x->data,
++                (const float *)t->src[1]->data,(half *)t->data,h,t->ne[1],t->ne[2],x->nb[1]/4,x->nb[2]/4);
++        else
++            apply_rope_table<<<(n+WG-1)/WG,WG,0,stream>>>((const float *)x->data,
++                (const float *)t->src[1]->data,(float *)t->data,h,t->ne[1],t->ne[2],x->nb[1]/4,x->nb[2]/4);
++    }
++}
+ } // namespace vla
+diff --git a/src/musa/vla_musa_fused.cu b/src/musa/vla_musa_fused.cu
+index 4f99b6a..1d4991f 100644
+--- a/src/musa/vla_musa_fused.cu
++++ b/src/musa/vla_musa_fused.cu
+@@ -3,6 +3,8 @@
+ // F32 expert adaRMS and gated residuals, on the graph's own MUSA stream.
+ #include "layers/fused_ew.h"
+ #include "layers/action_edges.h"
++#include "layers/rope_table.h"
++#include "layers/u8_patch.h"
+ #include "layers/fused_ops.h"
+ #include "modules/vision_prune.h"
+ #include <cassert>
+@@ -163,6 +165,24 @@ bool supports(const ggml_tensor * t) {
+         return t->type == GGML_TYPE_I32 && dense_f32(t->src[0]) &&
+                ggml_is_vector(t->src[0]) && t->src[0]->ne[0] <= WG &&
+                t->ne[0] > 0 && t->ne[0] <= t->src[0]->ne[0];
++    if(m==U8_PATCH_MAGIC) {
++        const int ps=((const U8PatchSpec *)userdata(t))->patch;
++        const auto * x=t->src[0];
++        return dense_f16(t) && x && x->type==GGML_TYPE_I8 && ggml_is_contiguous(x) &&
++               x->ne[0]==3 && x->ne[1]==x->ne[2] && ps>0 && x->ne[1]%ps==0 &&
++               t->ne[0]==3*ps*ps && t->ne[1]==(x->ne[1]/ps)*(x->ne[1]/ps) &&
++               t->ne[2]==x->ne[3] && t->ne[3]==1 && dense_f16(t->src[1]) && ggml_nelements(t->src[1])==256;
++    }
++    if(m==ROPE_TABLE_MAGIC)
++        return dense_f32(t) && t->ne[0]>0 && t->ne[0]%2==0 && t->ne[2]==1 && t->ne[3]==1 &&
++               t->src[0] && t->src[0]->type==GGML_TYPE_I32 && ggml_is_contiguous(t->src[0]) &&
++               ggml_is_vector(t->src[0]) && t->src[0]->ne[0]==t->ne[1];
++    if(m==ROPE_APPLY_MAGIC)
++        return (dense_f32(t)||dense_f16(t)) && t->src[0]->type==GGML_TYPE_F32 &&
++               ggml_are_same_shape(t,t->src[0]) && t->ne[0]>0 && t->ne[0]%2==0 && t->ne[3]==1 &&
++               t->src[0]->nb[0]==4 && dense_f32(t->src[1]) &&
++               t->src[1]->ne[0]==t->ne[0] && t->src[1]->ne[1]==t->ne[2] &&
++               t->src[1]->ne[2]==1 && t->src[1]->ne[3]==1;
+     if(m==FUSED_ACTION_LINEAR_MAGIC) {
+         const auto & s=*(const FusedActionLinearSpec *)userdata(t);
+         for(int i=0;i<(s.input?4:5);++i)if(!dense_f32(t->src[i]))return false;
+@@ -648,6 +668,10 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
+         float eps;
+         std::memcpy(&eps, t->op_params, sizeof(eps));
+         adarms<<<ggml_nrows(t), WG, 0, stream>>>((const __half *) x, nullptr, (__half *) t->data, h, eps);
++    } else if(magic(t)==U8_PATCH_MAGIC) {
++        musa_u8_patch_forward(t,((const U8PatchSpec *)userdata(t))->patch,stream_ptr);
++    } else if(magic(t)==ROPE_TABLE_MAGIC || magic(t)==ROPE_APPLY_MAGIC) {
++        musa_cached_rope_forward(t,stream_ptr);
+     } else if(magic(t)==FUSED_ACTION_LINEAR_MAGIC) {
+         const auto & s=*(const FusedActionLinearSpec *)userdata(t);
+         const auto * w=t->src[0]; const int hidden=s.input?w->ne[1]:w->ne[0];
+diff --git a/src/musa/vla_musa_ops.h b/src/musa/vla_musa_ops.h
+index 6ed1463..dd14710 100644
+--- a/src/musa/vla_musa_ops.h
++++ b/src/musa/vla_musa_ops.h
+@@ -16,6 +16,9 @@ bool musa_register_fused_ops();
+ bool musa_vision_pack_enabled();
+ bool musa_vision_raw_qkv(const ggml_tensor * q, const ggml_tensor * k, const ggml_tensor * v);
+ void musa_vision_epilogue(ggml_tensor * t, bool gelu, void * stream);
++void musa_geglu_fast_forward(ggml_tensor * t,void * stream);
++void musa_u8_patch_forward(ggml_tensor * t,int patch,void * stream);
++void musa_cached_rope_forward(ggml_tensor * t,void * stream);
+ #else
+ inline bool musa_register_fused_ops() { return false; }
+ #endif
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 1755c5b..ac358ac 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -116,6 +116,12 @@ if(GGML_MUSA)
+         add_test(NAME musa_attention256 COMMAND test_musa_ops --attention256)
+         set_tests_properties(musa_attention256 PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
+             ENVIRONMENT "VLA_MUSA_GEMMA_ATTN=fused-all")
++        add_test(NAME musa_rope_table COMMAND test_musa_ops --flash-attn)
++        set_tests_properties(musa_rope_table PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
++            ENVIRONMENT "VLA_PI05_ROPE_TABLE=1;VLA_PI05_K_ROPE_DIRECT=1;VLA_PI05_KV_DIRECT=1;VLA_MUSA_GEMMA_ATTN=fused-all")
++        add_test(NAME musa_k_rope_direct COMMAND test_musa_ops --flash-attn)
++        set_tests_properties(musa_k_rope_direct PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
++            ENVIRONMENT "VLA_PI05_K_ROPE_DIRECT=1;VLA_PI05_KV_DIRECT=1;VLA_MUSA_GEMMA_ATTN=fused-all")
+         add_test(NAME musa_kv_direct COMMAND test_musa_ops --flash-attn)
+         set_tests_properties(musa_kv_direct PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
+             ENVIRONMENT "VLA_PI05_KV_DIRECT=1;VLA_MUSA_GEMMA_ATTN=fused-all")
+diff --git a/tests/test_musa_ops.cpp b/tests/test_musa_ops.cpp
+index 636cd58..2b159a7 100644
+--- a/tests/test_musa_ops.cpp
++++ b/tests/test_musa_ops.cpp
+@@ -1,4 +1,5 @@
+ #include "layers/action_edges.h"
++#include "layers/u8_patch.h"
+ // Copyright 2026 VinRobotics
+ // SPDX-License-Identifier: Apache-2.0
+ 
+@@ -55,6 +56,10 @@ struct Graph {
+                 ggml_backend_tensor_set(t, data.data(), 0, ggml_nbytes(t));
+                 continue;
+             }
++            if(t->type==GGML_TYPE_I8) {
++                std::vector<uint8_t> raw(n);for(size_t i=0;i<n;++i)raw[i]=(i*37)&255;
++                ggml_backend_tensor_set(t,raw.data(),0,raw.size());continue;
++            }
+             std::vector<float> data(n);
+             for (size_t i = 0; i < n; ++i)
+                 data[i] = ((int) ((i*37 + j*13) % 67) - 33) / 128.0f;
+@@ -69,6 +74,14 @@ struct Graph {
+             if (std::strcmp(ggml_get_name(t), "mask") == 0)
+                 for (size_t i = 0; i < n; ++i)
+                     data[i] = (i % (size_t)t->ne[0]) % 7 == 6 ? -INFINITY : 0.0f;
++            if(std::strcmp(ggml_get_name(t),"u8_lut")==0)
++                for(size_t i=0;i<n;++i)data[i]=(i/255.0f-.5f)/.5f;
++            if(std::strcmp(ggml_get_name(t),"u8_chw")==0)
++                for(size_t i=0;i<n;++i) {
++                    const size_t S=t->ne[0],x=i%S,y=i/S%S,c=i/(S*S)%3,v=i/(S*S*3);
++                    const size_t hwc=((v*S+y)*S+x)*3+c;
++                    data[i]=(((hwc*37)&255)/255.0f-.5f)/.5f;
++                }
+             if (j==0 && mapped_input) {
+                 std::memcpy(mapped_input,data.data(),ggml_nbytes(t));continue;
+             }
+@@ -182,12 +195,15 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
+     ggml_tensor * k = nullptr, * v = nullptr;
+     auto * prefix_mask = masked ? g.input(GGML_TYPE_F32, {prefix, prefix}) : nullptr;
+     if (prefix_mask) ggml_set_name(prefix_mask, "mask");
++    vla::RopeTableSpec rope_spec;
++    auto * prefix_angles=vla::env_flag("VLA_PI05_ROPE_TABLE")?vla::rope_table(C,pos,cfg.head_dim,rope_spec):nullptr;
+     auto * pre = vla::gemma_layer(C, w, x, pos, cfg, prefix, nullptr, nullptr, prefix_mask, &k, &v,
+-                                GGML_TYPE_F32, flash);
++                                GGML_TYPE_F32, flash,nullptr,false,prefix_angles);
+ 
+     constexpr int64_t chunk = 50;
+     auto * h = g.input(GGML_TYPE_F32, {cfg.hidden, chunk});
+     auto * suffix_pos = g.input(GGML_TYPE_I32, {chunk});
++    auto * suffix_angles=vla::env_flag("VLA_PI05_ROPE_TABLE")?vla::rope_table(C,suffix_pos,cfg.head_dim,rope_spec):nullptr;
+     auto * suffix_mask = masked ? g.input(GGML_TYPE_F32, {prefix + chunk, chunk}) : nullptr;
+     if (suffix_mask) ggml_set_name(suffix_mask, "mask");
+     auto * mod = g.input(GGML_TYPE_F32, {3*cfg.hidden});
+@@ -203,7 +219,7 @@ std::vector<float> gemma(ggml_backend_t backend, ggml_type type, int64_t prefix,
+     for (int step = 0; step < 3; ++step) {
+         auto * att = vla::gemma_attn(C, w, adarms(h), suffix_pos, cfg, chunk,
+                                     k, v, suffix_mask, nullptr, nullptr, GGML_TYPE_F32, flash,
+-                                    nullptr, nullptr, reuse ? &cache : nullptr);
++                                    nullptr, nullptr, reuse ? &cache : nullptr,nullptr,nullptr,nullptr,nullptr,false,suffix_angles);
+         h = ggml_add(C, h, ggml_mul(C, att, gate));
+         auto * mlp = vla::gemma_mlp(C, w, adarms(h), GGML_TYPE_F32);
+         h = ggml_add(C, h, ggml_scale(C, ggml_mul(C, mlp, gate), -0.1f));
+@@ -477,6 +493,78 @@ std::vector<float> res_adarms(ggml_backend_t backend, int64_t h, int64_t rows, g
+     return g.run(backend, {residual, norm});
+ }
+ 
++std::vector<float> u8_patch_graph(ggml_backend_t backend,int nv,bool fused) {
++    Graph g;ggml_tensor * out;
++    vla::U8PatchSpec spec;
++    if(fused) {
++        auto * raw=g.input(GGML_TYPE_I8,{3,224,224,nv});
++        auto * lut=g.input(GGML_TYPE_F16,{256});ggml_set_name(lut,"u8_lut");
++        out=u8_patch(g.ctx,raw,lut,spec);
++    } else {
++        auto * chw=g.input(GGML_TYPE_F32,{224,224,3,nv});ggml_set_name(chw,"u8_chw");
++        auto * w=g.input(GGML_TYPE_F32,{14,14,3,1});
++        out=ggml_im2col(g.ctx,w,chw,14,14,0,0,1,1,true,GGML_TYPE_F16);
++    }
++    return g.run(backend,{out});
++}
++
++bool custom_parameter_replay(ggml_backend_t backend) {
++    Graph g;
++    auto * x=g.input(GGML_TYPE_F32,{32,50}),*v=g.input(GGML_TYPE_F32,{32,50}),*b=g.input(GGML_TYPE_F32,{32});
++    vla::FusedActionStepSpec spec{vla::FUSED_ACTION_STEP_MAGIC,-1.f/3};
++    auto * y=vla::fused_action_step(g.ctx,x,v,b,spec);
++    ggml_set_output(y);auto * graph=ggml_new_graph(g.ctx);ggml_build_forward_expand(graph,y);
++    g.alloc=ggml_gallocr_new(ggml_backend_get_default_buffer_type(backend));
++    if(!ggml_gallocr_alloc_graph(g.alloc,graph))return false;
++    bool ok=true;
++    for(int repeat=0;repeat<9;++repeat) {
++        spec.dt=repeat/3==1?-.1f:-1.f/3;
++        vla::custom_parameter_snapshot(y,spec);
++        g.upload();
++        if(ggml_backend_graph_compute(backend,graph)!=GGML_STATUS_SUCCESS)return false;
++        std::vector<float> got(1600),ref(1600);
++        ggml_backend_tensor_get(y,got.data(),0,got.size()*4);
++        auto value=[](int i,int j){return ((i*37+j*13)%67-33)/128.f;};
++        for(int i=0;i<1600;++i) {
++            volatile float velocity=value(i,1)+value(i%32,2);
++            volatile float step=velocity*spec.dt;
++            ref[i]=value(i,0)+step;
++        }
++        ok=compare("custom_dt_graph_replay",GGML_TYPE_F32,ref,got,1e-6)&&ok;
++    }
++    return ok;
++}
++
++std::vector<float> cached_rope_graph(ggml_backend_t backend,int64_t heads,int64_t seq,ggml_type type,bool cached) {
++    Graph g;constexpr int64_t h=256;
++    auto * raw=g.input(GGML_TYPE_F32,{h,heads+2,seq});
++    ggml_set_name(raw,"attention_values");
++    auto * pos=g.input(GGML_TYPE_I32,{seq});
++    auto * x=ggml_view_3d(g.ctx,raw,h,heads,seq,raw->nb[1],raw->nb[2],h*4);
++    vla::RopeTableSpec spec;
++    auto * y=cached ? vla::rope_apply(g.ctx,x,vla::rope_table(g.ctx,pos,h,spec)) :
++        ggml_rope_ext(g.ctx,x,pos,nullptr,h,GGML_ROPE_TYPE_NEOX,0,10000.f,1.f,0.f,1.f,32.f,1.f);
++    if(type==GGML_TYPE_F16)y=cached?vla::retype(y,type):ggml_cast(g.ctx,y,type);
++    return g.run(backend,{y});
++}
++
++std::vector<float> last_prefix_kv(ggml_backend_t backend,int64_t seq,bool kv_only) {
++    Graph g;
++    vla::Config cfg;cfg.hidden=2048;cfg.n_q_heads=8;cfg.n_kv_heads=1;
++    cfg.head_dim=cfg.kv_full_dim=256;cfg.rms_eps=1e-6f;cfg.rope_freq_base=10000.f;
++    vla::GemmaLayerW w;
++    w.Wqkv=g.input(GGML_TYPE_F16,{2048,2560});
++    w.Wo=ggml_view_2d(g.ctx,w.Wqkv,2048,2048,w.Wqkv->nb[1],0);
++    w.ln_in=g.input(GGML_TYPE_F32,{2048});
++    auto * x=g.input(GGML_TYPE_F32,{2048,seq});
++    auto * pos=g.input(GGML_TYPE_I32,{seq});
++    ggml_tensor * k=nullptr,*v=nullptr;
++    if(kv_only)vla::gemma_layer(g.ctx,w,x,pos,cfg,seq,nullptr,nullptr,nullptr,&k,&v,GGML_TYPE_F32,true,nullptr,true);
++    else vla::gemma_attn(g.ctx,w,vla::rms_norm(g.ctx,x,w.ln_in,cfg.rms_eps),pos,cfg,seq,
++                        nullptr,nullptr,nullptr,&k,&v,GGML_TYPE_F32,true);
++    return g.run(backend,{k,v});
++}
++
+ std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,int steps,bool fused) {
+     Graph g;
+     auto * wi=g.input(GGML_TYPE_F32,{32,h}),*wo=g.input(GGML_TYPE_F32,{h,32});
+@@ -668,6 +756,19 @@ int main(int argc, char ** argv) {
+         return ok ? 0 : 1;
+     }
+ 
++    for(int nv:{1,2})
++        ok=compare("u8_lut_patch_all_values",GGML_TYPE_F16,u8_patch_graph(b.handle,nv,false),
++                   u8_patch_graph(b.handle,nv,true),0.0) && ok;
++    ok=custom_parameter_replay(b.handle)&&ok;
++    for(int64_t heads : {1,8})
++        for(int64_t seq : {17,50,278,518})
++            for(auto type : {GGML_TYPE_F32,GGML_TYPE_F16})
++                ok=compare("cached_rope_strided",type,
++                    cached_rope_graph(b.handle,heads,seq,type,false),
++                    cached_rope_graph(b.handle,heads,seq,type,true),type==GGML_TYPE_F32?1e-6:1e-3) && ok;
++    for(int64_t seq : {17,278,518})
++        ok=compare("last_prefix_kv_only",GGML_TYPE_F16,
++            last_prefix_kv(b.handle,seq,false),last_prefix_kv(b.handle,seq,true),1e-3) && ok;
+     for(int64_t h : {33,257,1024})
+         for(int64_t rows : {1,50})
+             for(int steps : {3,10})

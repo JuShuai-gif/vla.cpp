@@ -1,3 +1,4 @@
+#include "layers/weight_prefetch.h"
 // Copyright 2026 VinRobotics
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +20,7 @@
 #pragma once
 
 #include "act_dtype.h"
+#include "layers/rope_table.h"
 #include "backend.h"
 #include "env_flag.h"
 #include "gguf_reader.h"
@@ -43,6 +45,8 @@
 namespace vla {
 
 struct GemmaLayerW {
+    ggml_tensor * prefetch_next=nullptr;
+    WeightPrefetchSpec prefetch_begin,prefetch_end{WEIGHT_PREFETCH_MAGIC,1};
     ggml_tensor * ln_in   = nullptr;
     ggml_tensor * Wq      = nullptr;
     ggml_tensor * Wk      = nullptr;
@@ -407,7 +411,7 @@ inline ggml_tensor * gemma_attn(
         ggml_tensor ** k_out, ggml_tensor ** v_out, ggml_type at, bool flash,
         ggml_tensor * fq_x = nullptr, ggml_tensor * fq_res = nullptr, KvSlot * kv = nullptr,
         ggml_tensor * cached_K16 = nullptr, ggml_tensor * cached_V16 = nullptr,
-        ggml_tensor * fq_xq = nullptr, ggml_tensor * fq_gate = nullptr) {
+        ggml_tensor * fq_xq = nullptr, ggml_tensor * fq_gate = nullptr, bool kv_only = false, ggml_tensor * angles = nullptr) {
     if (kv && !kv->concat_only)
         return gemma_attn_kv(ctx, w, x_norm, positions, cfg, seq, *kv, mask, at);
     // FoldQuant: q/k/v share one act node over fq_x (the raw residual stream when
@@ -421,6 +425,7 @@ inline ggml_tensor * gemma_attn(
     const int64_t nq  = cfg.n_q_heads;
     const int64_t nkv = cfg.n_kv_heads;
     const int64_t qf  = nq * hd;
+    GGML_ASSERT(!kv_only || (w.Wqkv && !w.fq_qkv && !w.fq_q && !kv && !cached_K && !cached_V && k_out && v_out));
 
     if (w.rope_attn.magic == FQ_ROPE_ATTN_MAGIC && w.fq_qkv && w.fq_o && flash && cached_K16 && cached_V16 && !mask &&
         !k_out && !v_out && (fq_xq || fq_x) && seq * nq > 192) {
@@ -488,12 +493,15 @@ inline ggml_tensor * gemma_attn(
         k = fq_gemm(ctx, w.fq_k, xq);
         v = fq_gemm(ctx, w.fq_v, xq);
     } else if (w.Wqkv) {
-        ggml_tensor * qkv = mm_f32(ctx, w.Wqkv, x_norm);
+        auto * weight = kv_only ? ggml_view_2d(ctx,w.Wqkv,w.Wqkv->ne[0],2*cfg.kv_full_dim,
+                                              w.Wqkv->nb[1],qf*w.Wqkv->nb[1]) : w.Wqkv;
+        ggml_tensor * qkv = mm_f32(ctx, weight, x_norm);
         const size_t  es  = ggml_element_size(qkv);
-        q = ggml_view_2d(ctx, qkv, qf, seq, qkv->nb[1], 0);
+        q = kv_only ? nullptr : ggml_view_2d(ctx, qkv, qf, seq, qkv->nb[1], 0);
 #ifdef GGML_USE_MUSA
-        k = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], qf * es);
-        v = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (qf + cfg.kv_full_dim) * es);
+        const int64_t start = kv_only ? 0 : qf;
+        k = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], start * es);
+        v = ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (start + cfg.kv_full_dim) * es);
 #else
         k = ggml_cont(ctx, ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], qf * es));
         v = ggml_cont(ctx, ggml_view_2d(ctx, qkv, cfg.kv_full_dim, seq, qkv->nb[1], (qf + cfg.kv_full_dim) * es));
@@ -507,28 +515,30 @@ inline ggml_tensor * gemma_attn(
     }
 
 #ifdef GGML_USE_MUSA
-    ggml_tensor * q_h = ggml_view_3d(ctx, q, hd, nq, seq, hd*ggml_element_size(q), q->nb[1], 0);
+    ggml_tensor * q_h = kv_only ? nullptr : ggml_view_3d(ctx, q, hd, nq, seq, hd*ggml_element_size(q), q->nb[1], 0);
     ggml_tensor * k_h = ggml_view_3d(ctx, k, hd, nkv, seq, hd*ggml_element_size(k), k->nb[1], 0);
     ggml_tensor * v_h = ggml_view_3d(ctx, v, hd, nkv, seq, hd*ggml_element_size(v), v->nb[1], 0);
 #else
-    ggml_tensor * q_h = ggml_reshape_3d(ctx, q, hd, nq,  seq);
+    ggml_tensor * q_h = kv_only ? nullptr : ggml_reshape_3d(ctx, q, hd, nq,  seq);
     ggml_tensor * k_h = ggml_reshape_3d(ctx, k, hd, nkv, seq);
     ggml_tensor * v_h = ggml_reshape_3d(ctx, v, hd, nkv, seq);
 #endif
 
     auto rope_call = [&](ggml_tensor * t) {
+        if(angles)return rope_apply(ctx,t,angles);
         return ggml_rope_ext(ctx, t, positions, nullptr,
                              (int) hd, GGML_ROPE_TYPE_NEOX, 0,
                              cfg.rope_freq_base, 1.f, 0.f, 1.f, 32.f, 1.f);
     };
-    ggml_tensor * q_rope = rope_call(q_h);
+    ggml_tensor * q_rope = kv_only ? nullptr : rope_call(q_h);
     ggml_tensor * k_rope = rope_call(k_h);
 #ifdef GGML_USE_MUSA
     if (flash) {
         // Convert each prefix once, before caching/concatenation. The FA kernel
         // already consumes F16 K/V; this avoids recasting the whole prefix at
         // every denoising step and halves the concatenation traffic.
-        k_rope = as_type(ctx, k_rope, GGML_TYPE_F16);
+        k_rope = env_flag("VLA_PI05_K_ROPE_DIRECT") ? retype(k_rope,GGML_TYPE_F16) :
+                                                      as_type(ctx,k_rope,GGML_TYPE_F16);
         v_h = as_type(ctx, v_h, GGML_TYPE_F16);
     }
 #endif
@@ -537,6 +547,7 @@ inline ggml_tensor * gemma_attn(
         *k_out = k_rope;
     if (v_out)
         *v_out = v_h;
+    if (kv_only) return nullptr;
 
     if (flash && cached_K16 && cached_V16 && !mask) {
         // Cached prefix (F16, cast once per layer) + this step's keys, without
@@ -572,7 +583,12 @@ inline ggml_tensor * gemma_attn(
                 ggml_are_same_shape(suffix, suffix->src[0]))
                 source = suffix->src[0];
 #endif
-            auto * write = ggml_cpy(ctx, source, tail);
+            ggml_tensor * write;
+            if (env_flag("VLA_PI05_K_ROPE_DIRECT") && (suffix->op==GGML_OP_ROPE || rope_table_is_apply(suffix)) &&
+                suffix->type==GGML_TYPE_F16 && !suffix->view_src) {
+                write=write_rows(suffix,buffer,prefix->ne[2]);
+                add_dep(write,tail);
+            } else write=ggml_cpy(ctx,source,tail);
             auto * read = ggml_view_tensor(ctx, buffer);
             // suffix depends on the previous step, so earlier reads finish before this write.
             add_dep(read, write);
@@ -652,8 +668,15 @@ inline ggml_tensor * gemma_mlp(ggml_context * ctx, const GemmaLayerW & w, ggml_t
             if (env_flag("VLA_MUSA_GEGLU_F16") && at == GGML_TYPE_F32 &&
                 w.Wdown->type == GGML_TYPE_F16 && w.Wdown->buffer &&
                 !ggml_backend_buffer_is_host(w.Wdown->buffer))
-                return ggml_mul_mat(ctx, w.Wdown, retype(inter, GGML_TYPE_F16));
-            return mm_act(ctx, w.Wdown, inter, at);
+                retype(inter,GGML_TYPE_F16);
+            if(w.prefetch_next) {
+                auto * fork=weight_prefetch(ctx,inter,w.prefetch_next,w.prefetch_begin);
+                auto * out=at==GGML_TYPE_F32 && fork->type==GGML_TYPE_F16 ?
+                    mm_f32(ctx,w.Wdown,fork) : mm_act(ctx,w.Wdown,fork,at);
+                return weight_prefetch(ctx,out,fork,w.prefetch_end);
+            }
+            return at==GGML_TYPE_F32 && inter->type==GGML_TYPE_F16 ?
+                mm_f32(ctx,w.Wdown,inter) : mm_act(ctx,w.Wdown,inter,at);
         }
 #endif
         const int64_t n  = gu->ne[0] / 2;
@@ -694,7 +717,11 @@ inline ggml_tensor * gemma_layer(
         const Config & cfg, int64_t seq,
         ggml_tensor * cached_K, ggml_tensor * cached_V, ggml_tensor * mask,
         ggml_tensor ** k_out, ggml_tensor ** v_out,
-        ggml_type at = GGML_TYPE_F32, bool flash = false, KvSlot * kv = nullptr) {
+        ggml_type at = GGML_TYPE_F32, bool flash = false, KvSlot * kv = nullptr, bool kv_only = false, ggml_tensor * angles = nullptr) {
+    if (kv_only)
+        return gemma_attn(ctx,w,rms_norm(ctx,x_in,w.ln_in,cfg.rms_eps),positions,cfg,seq,
+                          nullptr,nullptr,mask,k_out,v_out,at,flash,nullptr,nullptr,nullptr,
+                          nullptr,nullptr,nullptr,nullptr,true,angles);
     if (!kv && gemma_fused(w, at, flash, seq, seq + (cached_K ? cached_K->ne[2] : 0))) {
         if (w.fq_q) {
             // As below: the norms ride in the act nodes, the residuals in the o / down epilogues.
@@ -715,7 +742,7 @@ inline ggml_tensor * gemma_layer(
                      cached_K, cached_V, mask, k_out, v_out, at, flash, x_in, x_in)
         : ggml_add(ctx, x_in,
             gemma_attn(ctx, w, fq_in ? nullptr : rms_norm(ctx, x_in, w.ln_in, cfg.rms_eps), positions, cfg, seq,
-                       cached_K, cached_V, mask, k_out, v_out, at, flash, x_in, nullptr, kv));
+                       cached_K, cached_V, mask, k_out, v_out, at, flash, x_in, nullptr, kv,nullptr,nullptr,nullptr,nullptr,false,angles));
     ggml_tensor * x_norm_mlp = (w.fq_gate || w.fq_gu) ? nullptr : rms_norm(ctx, h1, w.ln_post, cfg.rms_eps);
     return w.fq_down ? gemma_mlp(ctx, w, x_norm_mlp, at, h1, h1)
                      : ggml_add(ctx, h1, gemma_mlp(ctx, w, x_norm_mlp, at, h1));

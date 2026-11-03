@@ -1,0 +1,68 @@
+[
+  {
+    "variant": "baseline",
+    "model": "pruned",
+    "samples": 30,
+    "mean_ms": 511.47810546681285,
+    "p95_ms": 512.1128302947909,
+    "round_means": [
+      511.6436667992578,
+      511.3125441343679
+    ]
+  },
+  {
+    "variant": "baseline",
+    "model": "full",
+    "samples": 30,
+    "mean_ms": 880.2986988336974,
+    "p95_ms": 885.2938606432872,
+    "round_means": [
+      881.0623884666711,
+      879.5350092007235
+    ]
+  },
+  {
+    "variant": "before-small",
+    "model": "pruned",
+    "samples": 30,
+    "mean_ms": 485.582739765717,
+    "p95_ms": 486.380479606305,
+    "round_means": [
+      485.4710647991548,
+      485.69441473227926
+    ]
+  },
+  {
+    "variant": "before-small",
+    "model": "full",
+    "samples": 30,
+    "mean_ms": 833.407882633522,
+    "p95_ms": 838.482678350556,
+    "round_means": [
+      829.6017986664083,
+      837.2139666006357
+    ]
+  },
+  {
+    "variant": "candidate",
+    "model": "pruned",
+    "samples": 30,
+    "mean_ms": 467.92657980016276,
+    "p95_ms": 471.3629304547794,
+    "round_means": [
+      469.07855420043535,
+      466.77460539989016
+    ]
+  },
+  {
+    "variant": "candidate",
+    "model": "full",
+    "samples": 30,
+    "mean_ms": 770.5234885327324,
+    "p95_ms": 771.171007052908,
+    "round_means": [
+      770.292719064552,
+      770.7542580009127
+    ]
+  }
+]

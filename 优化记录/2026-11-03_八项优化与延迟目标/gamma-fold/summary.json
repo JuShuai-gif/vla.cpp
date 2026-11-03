@@ -1,0 +1,22 @@
+[
+  {
+    "model": "pruned",
+    "wall_ms": 501.5989938729035,
+    "baseline_relative_peak": 0.00030385193531401455,
+    "reference_error": {
+      "max_abs": 0.09601593017578125,
+      "rmse": 0.029304973781108856,
+      "relative_peak": 0.0009016950498335063
+    }
+  },
+  {
+    "model": "full",
+    "wall_ms": 858.2682556261716,
+    "baseline_relative_peak": 0.0005649118684232235,
+    "reference_error": {
+      "max_abs": 0.04534912109375,
+      "rmse": 0.012810315936803818,
+      "relative_peak": 0.00046592854778282344
+    }
+  }
+]

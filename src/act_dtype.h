@@ -43,6 +43,7 @@
 
 #include "ggml.h"
 #include "layers/fused_ops.h"
+#include "layers/small_gemm.h"
 
 #include <cstddef>
 
@@ -86,6 +87,7 @@ inline ggml_tensor * mul_mat_t(ggml_context * C, ggml_tensor * a, ggml_tensor * 
 // Those run the stock matmul at F32 and rejoin the activation stream after,
 // which is exactly what they did before the BF16 path existed.
 inline ggml_tensor * mm_act(ggml_context * C, ggml_tensor * w, ggml_tensor * x, ggml_type at) {
+    if(at==GGML_TYPE_F32)if(auto * out=maybe_small_gemm(C,w,x))return out;
     // F32 activations with the CUDA fused ops on: the BF16-weight GEMM runs
     // through gemm_exact (bit-identical to ggml's cuBLAS call, often faster).
     if (at == GGML_TYPE_F32 && fused_ops_for(w))
@@ -147,6 +149,7 @@ inline void add_dep(ggml_tensor * node, ggml_tensor * dep, int first_free = 5) {
 // writes F32 directly where a kernel takes that pairing (src/sycl/vla_sycl_bf16.cpp),
 // rather than a BF16 result and a cast. Elsewhere, mm_act and a cast.
 inline ggml_tensor * mm_f32(ggml_context * C, ggml_tensor * w, ggml_tensor * x) {
+    if(auto * out=maybe_small_gemm(C,w,x))return out;
 #ifdef GGML_USE_MUSA
     if (w->type == GGML_TYPE_F16 && x->type == GGML_TYPE_F16)
         return ggml_mul_mat(C, w, x);

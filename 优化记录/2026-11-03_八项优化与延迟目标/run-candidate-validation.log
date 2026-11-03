@@ -1,0 +1,10 @@
+candidate-pruned
+candidate-pruned-bucket
+candidate-lifecycle-pruned
+candidate-full
+candidate-full-bucket
+candidate-lifecycle-full
+candidate-full-entry
+candidate-entry-reuse
+candidate-profile
+candidate-summarize

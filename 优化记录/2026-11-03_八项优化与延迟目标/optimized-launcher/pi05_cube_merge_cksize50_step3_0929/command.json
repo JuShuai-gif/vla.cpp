@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/home/skysi/code/vla.cpp/.venv-converter/bin/python",
+    "/home/skysi/code/vla.cpp/scripts/run_pi05.py",
+    "--model",
+    "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+    "--image",
+    "top=/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/top-480x640.png",
+    "--image",
+    "wrist=/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/validation/wrist-480x640.png",
+    "--text",
+    "pick up the cube",
+    "--state",
+    "7.539384841918945,72.60015869140625,-66.07098388671875,2.209120273590088,58.785526275634766,0.7304090261459351,73.93515014648438",
+    "--weight-dtype",
+    "f16",
+    "--act-dtype",
+    "f32",
+    "--flash-attn",
+    "--warmup",
+    "2",
+    "--seed",
+    "0",
+    "--output",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-03_\u516b\u9879\u4f18\u5316\u4e0e\u5ef6\u8fdf\u76ee\u6807/optimized-launcher/pi05_cube_merge_cksize50_step3_0929/f32.json",
+    "--musa-optimized"
+  ],
+  "env_profile": "--musa-optimized (clean VLA_/GGML_ environment)"
+}

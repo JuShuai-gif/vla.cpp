@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "late-k-rope-v2",
+    "returncode": 0
+  },
+  {
+    "stage": "late-prefetch64",
+    "returncode": 0
+  },
+  {
+    "stage": "late-prefetch4096",
+    "returncode": 0
+  },
+  {
+    "stage": "selected-split",
+    "returncode": 0
+  },
+  {
+    "stage": "mcu-small-down",
+    "returncode": 0
+  },
+  {
+    "stage": "mcu-small-gateup",
+    "returncode": 0
+  }
+]

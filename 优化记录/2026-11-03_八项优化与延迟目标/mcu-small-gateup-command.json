@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/usr/bin/mcu",
+    "--dump-mode",
+    "normal",
+    "-o",
+    "/home/skysi/VLA/eight-target-20261103/mcu-small-gateup",
+    "/tmp/pi05-small-once",
+    "8192",
+    "50",
+    "1024",
+    "1"
+  ]
+}

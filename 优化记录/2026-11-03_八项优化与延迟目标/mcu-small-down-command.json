@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/usr/bin/mcu",
+    "--dump-mode",
+    "normal",
+    "-o",
+    "/home/skysi/VLA/eight-target-20261103/mcu-small-down",
+    "/tmp/pi05-small-once",
+    "1024",
+    "50",
+    "4096",
+    "1"
+  ]
+}

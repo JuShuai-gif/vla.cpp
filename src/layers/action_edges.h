@@ -1,5 +1,6 @@
 #pragma once
 #include "ggml.h"
+#include "layers/custom_params.h"
 #include <cmath>
 #include <vector>
 namespace vla {
@@ -51,6 +52,7 @@ inline ggml_tensor * fused_action_linear(ggml_context * C,ggml_tensor * w,ggml_t
     ggml_tensor * args[]={w,x,b,mod,noise};
     auto * t=ggml_custom_4d(C,GGML_TYPE_F32,w->ne[1],x->ne[1],spec.input?2:1,1,args,
                            spec.input?4:5,action_linear_cpu,GGML_N_TASKS_MAX,(void *)&spec);
+    custom_parameter_snapshot(t,spec);
     ggml_set_name(t,spec.input?"action_in_linear_adarms":"action_out_adarms_linear_step");
     if(!spec.input)return t;
     GGML_ASSERT(residual);

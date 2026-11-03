@@ -1,0 +1,18 @@
+[
+  {
+    "name": "random-baseline-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "random-baseline-full",
+    "returncode": 0
+  },
+  {
+    "name": "random-selected-pruned",
+    "returncode": 0
+  },
+  {
+    "name": "random-selected-full",
+    "returncode": 0
+  }
+]

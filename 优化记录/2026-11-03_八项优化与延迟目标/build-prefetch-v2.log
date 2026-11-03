@@ -1,0 +1,45 @@
+[1/15] Building CXX object CMakeFiles/vla_core.dir/src/models/pi0.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/pi0.cpp:25:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[2/15] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+In file included from /home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:13:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:497:20: warning: unused function 'prefetch_mlp_graph' [-Wunused-function]
+std::vector<float> prefetch_mlp_graph(ggml_backend_t backend,bool prefetch) {
+                   ^
+2 warnings generated.
+[3/15] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/pi05.cpp:36:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[4/15] Linking CXX shared library libvla_core.so
+[5/15] Linking CXX shared library libvla.so
+[6/15] Linking CXX executable tests/test_config_guard
+[7/15] Linking C executable tests/test_c_api
+[8/15] Linking CXX executable vla-bench
+[9/15] Linking CXX executable tests/test_prompt
+[10/15] Linking CXX executable tests/test_foldquant_cpu_op
+[11/15] Linking CXX executable vla-cli
+[12/15] Linking CXX executable tests/vla_predict_check
+[13/15] Linking CXX executable vla-server
+[14/15] Linking CXX executable tests/test_foldquant_dequant
+[15/15] Linking CXX executable tests/test_musa_ops

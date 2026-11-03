@@ -1,0 +1,7 @@
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp/scripts/bench_pi05.py", line 18, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+[Inferior 1 (process 1558868) exited with code 01]
