@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // F32 expert adaRMS and gated residuals, on the graph's own MUSA stream.
 #include "layers/fused_ew.h"
+#include "layers/action_edges.h"
 #include "layers/fused_ops.h"
 #include "modules/vision_prune.h"
 #include <cassert>
@@ -162,6 +163,25 @@ bool supports(const ggml_tensor * t) {
         return t->type == GGML_TYPE_I32 && dense_f32(t->src[0]) &&
                ggml_is_vector(t->src[0]) && t->src[0]->ne[0] <= WG &&
                t->ne[0] > 0 && t->ne[0] <= t->src[0]->ne[0];
+    if(m==FUSED_ACTION_LINEAR_MAGIC) {
+        const auto & s=*(const FusedActionLinearSpec *)userdata(t);
+        for(int i=0;i<(s.input?4:5);++i)if(!dense_f32(t->src[i]))return false;
+        const auto * w=t->src[0],* x=t->src[1];
+        return (s.input?w->ne[1]:w->ne[0])<=4096 && dense_f32(t) && w->ne[0]==x->ne[0] && w->ne[2]==1 && w->ne[3]==1 &&
+               x->ne[2]==1 && x->ne[3]==1 && t->ne[0]==w->ne[1] && t->ne[1]==x->ne[1] &&
+               t->ne[2]==(s.input?2:1) && t->ne[3]==1;
+    }
+    if (m == FUSED_ACTION_STEP_MAGIC)
+        return dense_f32(t) && dense_f32(t->src[0]) && dense_f32(t->src[1]) &&
+               ggml_are_same_shape(t,t->src[0]) && ggml_are_same_shape(t,t->src[1]) &&
+               dense_f32(t->src[2]) && ggml_nelements(t->src[2])==t->ne[0];
+    if (m == FUSED_BIAS_ADARMS_MAGIC) {
+        const auto * x=t->src[0];
+        return dense_f32(t) && dense_f32(x) && dense_f32(t->src[1]) && dense_f32(t->src[2]) &&
+               x->ne[2]==1 && x->ne[3]==1 && t->ne[0]==x->ne[0] && t->ne[1]==x->ne[1] &&
+               t->ne[2]==2 && t->ne[3]==1 && ggml_nelements(t->src[1])==x->ne[0] &&
+               ggml_nelements(t->src[2])==3*x->ne[0];
+    }
     if (m == FUSED_RES_ADARMS_MAGIC) {
         const auto * x = t->src[0]; const auto * o = t->src[1];
         return dense_f32(t) && dense_f32(x) && (dense_f32(o) || dense_f16(o)) &&
@@ -216,7 +236,7 @@ __global__ void gateres(const float * x, const T * o, const float * mod,
     if (col < h) dst[i] = x[i] + load(o[i])*mod[2*h + col];
 }
 
-template<typename T>
+template<typename T, bool Bias=false>
 __global__ void res_adarms(const float * x, const T * o, const float * gate,
                           const float * mod, float * dst, int h, int rows, float eps) {
     const int tid = threadIdx.x;
@@ -224,7 +244,7 @@ __global__ void res_adarms(const float * x, const T * o, const float * gate,
     __shared__ float sums[WG];
     float sum = 0.f;
     for (int i = tid; i < h; i += WG) {
-        const float a = x[row+i] + load(o[row+i])*gate[2*h+i];
+        const float a = Bias ? x[row+i]+load(o[i]) : x[row+i] + load(o[row+i])*gate[2*h+i];
         dst[row+i] = a;
         sum += a*a;
     }
@@ -242,6 +262,45 @@ __global__ void res_adarms(const float * x, const T * o, const float * gate,
     }
 }
 
+template<bool Input>
+__global__ void action_linear_kernel(const float * w,const float * x,const float * b,
+        const float * mod,const float * noise,float * y,int h,int cols,int outputs,int rows,float eps,float dt) {
+    const int row=blockIdx.x,tid=threadIdx.x;
+    extern __shared__ float shared[];
+    float * values=shared,* sums=shared+h;
+    float sum=0;
+    for(int i=tid;i<h;i+=WG) {
+        float v;
+        if(Input) {
+            v=0;for(int j=0;j<cols;++j)v=__fmaf_rn(w[(size_t)i*cols+j],x[(size_t)row*cols+j],v);
+            v+=b[i];y[(size_t)row*h+i]=v;
+        } else v=x[(size_t)row*h+i];
+        values[i]=v;sum+=v*v;
+    }
+    sums[tid]=sum;__syncthreads();
+    for(int stride=WG/2;stride;stride/=2){if(tid<stride)sums[tid]+=sums[tid+stride];__syncthreads();}
+    const float inv=rsqrtf(sums[0]/h+eps);
+    for(int i=tid;i<h;i+=WG) {
+        const float n=values[i]*inv;
+        values[i]=(n+n*mod[i])+mod[h+i];
+        if(Input)y[(size_t)h*rows+(size_t)row*h+i]=values[i];
+    }
+    __syncthreads();
+    if(!Input)for(int o=tid;o<outputs;o+=WG) {
+        float v=0;for(int i=0;i<h;++i)v=__fmaf_rn(w[(size_t)o*h+i],values[i],v);
+        const float velocity=v+b[o],step=velocity*dt;
+        y[(size_t)row*outputs+o]=noise[(size_t)row*outputs+o]+step;
+    }
+}
+__global__ void action_step(const float * x, const float * v, const float * b,
+                            float * out, size_t count, int h, float dt) {
+    const size_t i=(size_t)blockIdx.x*blockDim.x+threadIdx.x;
+    if(i<count) {
+        const float velocity=v[i]+b[i%h];
+        const float step=velocity*dt;
+        out[i]=x[i]+step;
+    }
+}
 template<typename S, typename D>
 __global__ void merged_geglu(const S * src, D * dst, int h, bool swapped) {
     const int col = blockIdx.x*blockDim.x + threadIdx.x;
@@ -589,6 +648,26 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
         float eps;
         std::memcpy(&eps, t->op_params, sizeof(eps));
         adarms<<<ggml_nrows(t), WG, 0, stream>>>((const __half *) x, nullptr, (__half *) t->data, h, eps);
+    } else if(magic(t)==FUSED_ACTION_LINEAR_MAGIC) {
+        const auto & s=*(const FusedActionLinearSpec *)userdata(t);
+        const auto * w=t->src[0]; const int hidden=s.input?w->ne[1]:w->ne[0];
+        const size_t smem=(hidden+WG)*sizeof(float);
+        if(s.input)action_linear_kernel<true><<<t->ne[1],WG,smem,stream>>>(
+            (const float *)w->data,(const float *)t->src[1]->data,(const float *)t->src[2]->data,
+            (const float *)t->src[3]->data,nullptr,(float *)t->data,hidden,w->ne[0],w->ne[1],t->ne[1],s.eps,s.dt);
+        else action_linear_kernel<false><<<t->ne[1],WG,smem,stream>>>(
+            (const float *)w->data,(const float *)t->src[1]->data,(const float *)t->src[2]->data,
+            (const float *)t->src[3]->data,(const float *)t->src[4]->data,(float *)t->data,
+            hidden,w->ne[0],w->ne[1],t->ne[1],s.eps,s.dt);
+    } else if (magic(t) == FUSED_ACTION_STEP_MAGIC) {
+        const auto & spec=*(const FusedActionStepSpec *)userdata(t);
+        action_step<<<(ggml_nelements(t)+WG-1)/WG,WG,0,stream>>>(x,
+            (const float *)t->src[1]->data,(const float *)t->src[2]->data,
+            (float *)t->data,ggml_nelements(t),h,spec.dt);
+    } else if (magic(t) == FUSED_BIAS_ADARMS_MAGIC) {
+        const auto & spec=*(const FusedResAdarmsSpec *)userdata(t);
+        res_adarms<float,true><<<t->ne[1],WG,0,stream>>>(x,(const float *)t->src[1]->data,
+            nullptr,(const float *)t->src[2]->data,(float *)t->data,h,t->ne[1],spec.eps);
     } else if (magic(t) == FUSED_RES_ADARMS_MAGIC) {
         const auto & spec = *(const FusedResAdarmsSpec *) userdata(t);
         if (t->src[1]->type == GGML_TYPE_F16)

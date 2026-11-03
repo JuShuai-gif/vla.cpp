@@ -1,0 +1,14 @@
+[
+  {
+    "part": "vision",
+    "returncode": 1
+  },
+  {
+    "part": "prefix",
+    "returncode": 0
+  },
+  {
+    "part": "expert",
+    "returncode": 0
+  }
+]

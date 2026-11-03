@@ -1,0 +1,17 @@
+[
+  "/usr/local/musa/bin/mcc",
+  "-O3",
+  "-x",
+  "musa",
+  "-mtgpu",
+  "-ffp-contract=off",
+  "--cuda-gpu-arch=mp_22",
+  "-I/usr/local/musa/include",
+  "-L/usr/local/musa/lib",
+  "-Wl,-rpath,/usr/local/musa/lib",
+  "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-03_FlashRT\u5269\u4f59\u4f18\u5316\u9010\u9879\u9a8c\u6536/probe_remaining.cu",
+  "-lmublas",
+  "-lmusart",
+  "-o",
+  "/tmp/pi05-probe-remaining-tuned"
+]

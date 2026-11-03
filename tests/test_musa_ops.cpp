@@ -1,3 +1,4 @@
+#include "layers/action_edges.h"
 // Copyright 2026 VinRobotics
 // SPDX-License-Identifier: Apache-2.0
 
@@ -476,6 +477,47 @@ std::vector<float> res_adarms(ggml_backend_t backend, int64_t h, int64_t rows, g
     return g.run(backend, {residual, norm});
 }
 
+std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,int steps,bool fused) {
+    Graph g;
+    auto * wi=g.input(GGML_TYPE_F32,{32,h}),*wo=g.input(GGML_TYPE_F32,{h,32});
+    auto * x=g.input(GGML_TYPE_F32,{32,rows}),*bi=g.input(GGML_TYPE_F32,{h}),*bo=g.input(GGML_TYPE_F32,{32});
+    auto * mi=g.input(GGML_TYPE_F32,{3*h}),*mo=g.input(GGML_TYPE_F32,{3*h});
+    vla::FusedActionLinearSpec in{vla::FUSED_ACTION_LINEAR_MAGIC,1,1e-6f,-1.f/steps};
+    vla::FusedActionLinearSpec out{vla::FUSED_ACTION_LINEAR_MAGIC,0,1e-6f,-1.f/steps};
+    ggml_tensor * hidden=nullptr,*norm=nullptr,*y=nullptr;
+    auto adarms=[&](ggml_tensor * a,ggml_tensor * m) {
+        auto * n=ggml_rms_norm(g.ctx,a,1e-6f);
+        auto * scale=ggml_view_1d(g.ctx,m,h,0),*shift=ggml_view_1d(g.ctx,m,h,h*4);
+        return ggml_add(g.ctx,ggml_add(g.ctx,n,ggml_mul(g.ctx,n,scale)),shift);
+    };
+    if(fused) {
+        norm=vla::fused_action_linear(g.ctx,wi,x,bi,mi,nullptr,in,&hidden);
+        y=vla::fused_action_linear(g.ctx,wo,hidden,bo,mo,x,out);
+    } else {
+        hidden=ggml_add(g.ctx,ggml_mul_mat(g.ctx,wi,x),bi);
+        norm=adarms(hidden,mi);
+        y=ggml_add(g.ctx,x,ggml_scale(g.ctx,ggml_add(g.ctx,ggml_mul_mat(g.ctx,wo,adarms(hidden,mo)),bo),out.dt));
+    }
+    return g.run(backend,{hidden,norm,y});
+}
+
+std::vector<float> action_edges(ggml_backend_t backend, int64_t h, int64_t rows, int steps, bool direct) {
+    Graph g;
+    auto * x=g.input(GGML_TYPE_F32,{h,rows});
+    auto * b=g.input(GGML_TYPE_F32,{h});
+    auto * mod=g.input(GGML_TYPE_F32,{3*h});
+    vla::FusedResAdarmsSpec spec{vla::FUSED_BIAS_ADARMS_MAGIC,1e-6f};
+    vla::FusedAdarmsSpec old;
+    vla::FusedActionStepSpec step{vla::FUSED_ACTION_STEP_MAGIC,-1.f/steps};
+    ggml_tensor * res=nullptr;
+    ggml_tensor * norm=nullptr;
+    if(direct) norm=vla::fused_bias_adarms(g.ctx,x,b,mod,spec,&res);
+    else { res=ggml_add(g.ctx,x,b);norm=vla::fused_adarms(g.ctx,res,mod,GGML_TYPE_F32,old); }
+    auto * y=direct ? vla::fused_action_step(g.ctx,x,norm,b,step) :
+                     ggml_add(g.ctx,x,ggml_scale(g.ctx,ggml_add(g.ctx,norm,b),step.dt));
+    return g.run(backend,{res,norm,y});
+}
+
 std::vector<float> geglu_direct_half(ggml_backend_t backend, int64_t h, int64_t rows, bool direct, bool swapped) {
     Graph g;
     auto * x = g.input(GGML_TYPE_F32, {2*h, rows});
@@ -626,6 +668,18 @@ int main(int argc, char ** argv) {
         return ok ? 0 : 1;
     }
 
+    for(int64_t h : {33,257,1024})
+        for(int64_t rows : {1,50})
+            for(int steps : {3,10})
+                ok=compare("action_linear_musa",GGML_TYPE_F32,
+                    action_linear(b.handle,h,rows,steps,false),
+                    action_linear(b.handle,h,rows,steps,true),1e-5) && ok;
+    for (int64_t h : {1,32,257,1024,1025})
+        for (int64_t rows : {1,50})
+            for (int steps : {3,10})
+                ok=compare("action_edges_exact",GGML_TYPE_F32,
+                    action_edges(b.handle,h,rows,steps,false),
+                    action_edges(b.handle,h,rows,steps,true),1e-12) && ok;
     for (int64_t h : {4096, 4097, 16384})
         for (int64_t rows : {3, 50})
             for (bool swapped : {false, true})

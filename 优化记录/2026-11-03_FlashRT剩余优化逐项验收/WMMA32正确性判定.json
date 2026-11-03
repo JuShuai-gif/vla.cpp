@@ -1,0 +1,45 @@
+{
+  "command": [
+    "/tmp/pi05-probe-mma32",
+    "8192",
+    "50",
+    "1024",
+    "1"
+  ],
+  "measurements": [
+    {
+      "m": 8192,
+      "n": 50,
+      "k": 1024,
+      "glu": 1,
+      "mode": 0,
+      "mean_ms": 0.6345487,
+      "relative_peak": 0,
+      "max_abs": 0,
+      "round_ms": [
+        0.635726,
+        0.634016,
+        0.633904
+      ]
+    },
+    {
+      "m": 8192,
+      "n": 50,
+      "k": 1024,
+      "glu": 1,
+      "mode": 1,
+      "mean_ms": 0.3998587,
+      "relative_peak": 198873.851,
+      "max_abs": 279.749804,
+      "round_ms": [
+        0.400604,
+        0.398986,
+        0.399986
+      ]
+    }
+  ],
+  "numerical_threshold": 0.001,
+  "numerical_pass": false,
+  "adopted": false,
+  "reason": "32x32 首次原型数值严重错误，停止进一步性能/整网测试；不能将较低计时当作有效收益。"
+}

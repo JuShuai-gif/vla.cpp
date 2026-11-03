@@ -161,17 +161,25 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
         return fused_bias_res(C, mm_exact(C, w.Wfc2, g), w.bfc2, h1);
     }
 
+    auto matmul = [&](ggml_tensor * w, ggml_tensor * in) {
+        return cfg.gemm_act==GGML_TYPE_F16 ?
+            as_type(C,mm_act(C,w,as_type(C,in,GGML_TYPE_F16),GGML_TYPE_F16),GGML_TYPE_F32) :
+            ggml_mul_mat(C,w,in);
+    };
+    auto projected = [&](ggml_tensor * w, ggml_tensor * b, ggml_tensor * in) {
+        return cfg.gemm_act==GGML_TYPE_F16 ? ggml_add(C,matmul(w,in),b) : linear(C,w,b,in);
+    };
     ggml_tensor * n1 = layer_norm(C, x, w.ln1w, w.ln1b, cfg.ln_eps);
     ggml_tensor * q, * k, * v;
     if (cfg.merge_qkv) {
-        auto * qkv = linear(C, w.Wqkv, w.bqkv, n1);
+        auto * qkv = projected(w.Wqkv,w.bqkv,n1);
         auto part = [&](int index) {
             return ggml_view_3d(C, qkv, cfg.hidden, seq, nv, qkv->nb[1], qkv->nb[2],
                                index*cfg.hidden*ggml_element_size(qkv));
         };
         q=part(0); k=part(1); v=part(2);
     } else {
-        q=linear(C,w.Wq,w.bq,n1); k=linear(C,w.Wk,w.bk,n1); v=linear(C,w.Wv,w.bv,n1);
+        q=projected(w.Wq,w.bq,n1); k=projected(w.Wk,w.bk,n1); v=projected(w.Wv,w.bv,n1);
     }
 
     ggml_tensor * att;
@@ -219,15 +227,17 @@ ggml_tensor * EncStack::block(ggml_context * C, const EncBlockW & w, ggml_tensor
         auto add_residual = [&](ggml_tensor * y, ggml_tensor * bias, ggml_tensor * r) {
             return (epilogue & 2) ? fused_bias_res(C, y, bias, r) : ggml_add(C, r, ggml_add(C, y, bias));
         };
-        auto * h1 = add_residual(ggml_mul_mat(C, w.Wo, att), w.bo, x);
+        auto * h1 = add_residual(matmul(w.Wo,att), w.bo, x);
         auto * n2 = layer_norm(C, h1, w.ln2w, w.ln2b, cfg.ln_eps);
-        auto * up = ggml_mul_mat(C, w.Wfc1, n2);
+        auto * up = matmul(w.Wfc1,n2);
         auto * act = (epilogue & 1) ? fused_bias_gelu(C, up, w.bfc1) : ggml_gelu(C, ggml_add(C, up, w.bfc1));
-        return add_residual(ggml_mul_mat(C, w.Wfc2, act), w.bfc2, h1);
+        return add_residual(matmul(w.Wfc2,act), w.bfc2, h1);
     }
 #endif
-    ggml_tensor * h1 = ggml_add(C, x, linear(C, w.Wo, w.bo, att));
+    ggml_tensor * h1 = ggml_add(C, x, projected(w.Wo,w.bo,att));
     ggml_tensor * n2 = layer_norm(C, h1, w.ln2w, w.ln2b, cfg.ln_eps);
+    if(cfg.gemm_act==GGML_TYPE_F16)
+        return ggml_add(C,h1,projected(w.Wfc2,w.bfc2,ggml_gelu(C,projected(w.Wfc1,w.bfc1,n2))));
     return ggml_add(C, h1, ffn_gelu(C, w.Wfc1, w.bfc1, w.Wfc2, w.bfc2, n2));
 }
 

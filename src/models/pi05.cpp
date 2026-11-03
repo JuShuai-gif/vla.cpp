@@ -1,3 +1,4 @@
+#include "layers/action_edges.h"
 // Copyright 2026 VinRobotics
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -109,13 +110,18 @@ struct Pi05ModelArch : public ModelArchBase {
     // Activation dtype of the GEMMs (--act-dtype bf16 on CUDA/SYCL). The expert's
     // residual stream, its adaRMS gating and the flow-matching state stay F32.
     ggml_type             act_type    = GGML_TYPE_F32;
+    ggml_type             prefix_act = GGML_TYPE_F32, expert_act = GGML_TYPE_F32;
     // The expert's adaRMS and gated residuals as single fused nodes
     // (layers/fused_ew.h). Only where a backend claims them: SYCL and MUSA.
     bool                  fused_ew    = false;
     FusedAdarmsSpec       adarms_spec;
     FusedGateResSpec      gateres_spec;
     FusedResAdarmsSpec    res_adarms_spec;
+    FusedResAdarmsSpec    input_adarms_spec{FUSED_BIAS_ADARMS_MAGIC,1e-6f};
+    FusedActionStepSpec   action_step_spec;
+    FusedActionLinearSpec action_in_spec{FUSED_ACTION_LINEAR_MAGIC,1},action_out_spec;
     bool                 fuse_res_adarms = false;
+    bool                 fuse_cross_adarms = false;
     // K/V written in place into per-layer F16 buffers, q|k|v and gate|up GEMMs
     // fused (modules/gemma_expert.h: KvSlot, gemma_declare_float). SYCL's fused
     // attention only; VLA_PI05_NO_KV_INPLACE=1 keeps the concat graph.
@@ -231,7 +237,8 @@ ggml_tensor * build_expert_layer(
         ggml_tensor * cached_K, ggml_tensor * cached_V, ggml_tensor * mask = nullptr,
         ggml_type at = GGML_TYPE_F32, const FusedAdarmsSpec * fa = nullptr, const FusedGateResSpec * fg = nullptr,
         KvSlot * kv = nullptr, const FqExpertIn * fqx = nullptr,
-        const FusedResAdarmsSpec * fr = nullptr) {
+        const FusedResAdarmsSpec * fr = nullptr, ggml_tensor * xn_ready = nullptr,
+        ggml_tensor * next_mod = nullptr, ggml_tensor ** next_norm = nullptr) {
     const int64_t h = cfg.expert_h;
     if (fqx && w.act_mod_qkv.has_shift && w.act_mod_gu.has_shift && w.fq_o && w.fq_down) {
         // FoldQuant on SYCL: each adaRMS rides in its act node (rms * (1 + scale)
@@ -261,7 +268,7 @@ ggml_tensor * build_expert_layer(
     if (fa && fg && !w.fq_q && !w.fq_qkv && !w.fq_gate && !w.fq_gu) {
         // One node per chain: adaRMS straight into the GEMMs' input type, and
         // out * gate + x reading the GEMM output in whatever type it has.
-        ggml_tensor * xn = fused_adarms(ctx, x_in, mod_attn, at, *fa);
+        ggml_tensor * xn = xn_ready ? xn_ready : fused_adarms(ctx, x_in, mod_attn, at, *fa);
         ggml_tensor * o  = gemma_attn(ctx, w, xn, positions, cfg, seq, cached_K, cached_V, mask,
                                       nullptr, nullptr, at, use_fused_attention(), nullptr, nullptr, kv);
         ggml_tensor * h1 = nullptr;
@@ -272,7 +279,13 @@ ggml_tensor * build_expert_layer(
             h1 = fused_gateres(ctx, x_in, o, mod_attn, *fg);
             xm = fused_adarms(ctx, h1, mod_ffn, at, *fa);
         }
-        return fused_gateres(ctx, h1, gemma_mlp(ctx, w, xm, at), mod_ffn, *fg);
+        auto * mlp = gemma_mlp(ctx, w, xm, at);
+        if (fr && at == GGML_TYPE_F32 && next_mod && next_norm) {
+            ggml_tensor * result = nullptr;
+            *next_norm = fused_res_adarms(ctx, h1, mlp, mod_ffn, next_mod, *fr, &result);
+            return result;
+        }
+        return fused_gateres(ctx, h1, mlp, mod_ffn, *fg);
     }
 
     if (!mask && !kv && gemma_fused(w, at, use_fused_attention(), seq, seq + (cached_K ? cached_K->ne[2] : 0))) {
@@ -528,7 +541,12 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         }
         m->musa_backend = b.is_musa;
         m->fuse_res_adarms = b.is_musa && env_flag("VLA_PI05_RES_ADARMS");
+        m->fuse_cross_adarms = b.is_musa && env_flag("VLA_PI05_CROSS_ADARMS");
         m->res_adarms_spec.eps = cfg.rms_eps;
+        m->input_adarms_spec.eps = cfg.rms_eps;
+        m->action_step_spec.dt = -1.f/(float)cfg.num_steps;
+        m->action_in_spec.eps=m->action_out_spec.eps=cfg.rms_eps;
+        m->action_out_spec.dt=m->action_step_spec.dt;
         m->input_cache = b.is_musa && env_flag("VLA_PI05_INPUT_CACHE");
         m->async_vision = b.is_musa && env_flag("VLA_PI05_ASYNC_VISION");
         m->direct_vision = b.is_musa && env_flag("VLA_PI05_VISION_DIRECT");
@@ -589,6 +607,18 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
             m->fused_ops = enable_fused_ops("pi05", b.is_cuda);
     }
 
+    m->prefix_act=m->expert_act=m->act_type;
+    const char * part_env=std::getenv("VLA_PI05_F16_PART");
+    const std::string f16_part=part_env ? part_env : "";
+    if(!f16_part.empty()) {
+        if(!is_musa || m->matmul_type!=GGML_TYPE_F16 || !m->fused_ew ||
+           (f16_part!="vision" && f16_part!="prefix" && f16_part!="expert")) {
+            std::fprintf(stderr,"pi05: F16_PART needs MUSA F16 weights, fusion, and vision/prefix/expert\n");
+            return nullptr;
+        }
+        if(f16_part=="prefix")m->prefix_act=GGML_TYPE_F16;
+        if(f16_part=="expert")m->expert_act=GGML_TYPE_F16;
+    }
     // The SigLIP tower is now bundled in the ckpt GGUF; mmproj_path is ignored.
     (void) mmproj_path;
     if (!m->vis.load(g, cfg.n_img))
@@ -687,6 +717,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         m->vis.vit.enc.cfg.int8 = false;
         m->vis.vit.enc.cfg.act = GGML_TYPE_F32;
     }
+    if(f16_part=="vision")m->vis.vit.enc.cfg.gemm_act=GGML_TYPE_F16;
 #ifdef GGML_USE_MUSA
     m->vis.vit.enc.cfg.merge_qkv = m->musa_backend && env_flag("VLA_PI05_VISION_QKV") &&
         !m->vis.vit.enc.cfg.fused && !m->fused_ops && m->vis.vit.enc.cfg.act == GGML_TYPE_F32;
@@ -852,7 +883,7 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         vio.scores.clear();
         bool batch_views = vis.vit.enc.cfg.fused || n_images == 1;
 #ifdef GGML_USE_MUSA
-        batch_views = batch_views || (musa_backend && !vision_keep && !env_flag("VLA_PI05_NO_VISION_BATCH"));
+        batch_views = batch_views || (musa_backend && !vision_keep && vis.vit.enc.cfg.gemm_act==GGML_TYPE_F32 && !env_flag("VLA_PI05_NO_VISION_BATCH"));
 #endif
         if (batch_views) {
             // The fused blocks take every view in one pass (nv * K rows per GEMM).
@@ -1079,7 +1110,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
     ggml_tensor * t_x0        = ggml_new_tensor_2d(C, GGML_TYPE_F32, max_ad, chunk);           ggml_set_input(t_x0);
     ggml_tensor * t_suffix_pos= ggml_new_tensor_1d(C, GGML_TYPE_I32, n_suf);                   ggml_set_input(t_suffix_pos);
 
-    ggml_tensor * prefix_embs = as_type(C, t_prefix, act_type);
+    ggml_tensor * prefix_embs = as_type(C, t_prefix, prefix_act);
 
     std::vector<ggml_tensor *> cK(n_layers), cV(n_layers);
     std::vector<KvSlot>        kv(kv_inplace ? n_layers : 0);
@@ -1095,11 +1126,11 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         ggml_tensor * h = prefix_embs;
         for (int64_t i=0; i<n_layers; ++i) {
             if (kv_inplace && pl.blk[i].q_qkv && !env_flag("VLA_PI05_NO_Q8_FUSE"))
-                h = gemma_layer_q8(C, pl.blk[i], h, t_prefix_pos, cfg, n_prefix_g, kv[i], t_prefix_mask, act_type,
+                h = gemma_layer_q8(C, pl.blk[i], h, t_prefix_pos, cfg, n_prefix_g, kv[i], t_prefix_mask, prefix_act,
                                    pl.rms_spec);
             else
                 h = gemma_layer(C, pl.blk[i], h, t_prefix_pos, cfg, n_prefix_g,
-                                nullptr, nullptr, t_prefix_mask, &cK[i], &cV[i], act_type, use_fused_attention(),
+                                nullptr, nullptr, t_prefix_mask, &cK[i], &cV[i], prefix_act, use_fused_attention(),
                                 kv_inplace ? &kv[i] : nullptr);
         }
         (void) h;
@@ -1142,23 +1173,40 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
             return ggml_view_1d(C, ada_mod, 3*hidden_ex, step*ada_mod->nb[2]+j*ada_mod->nb[1]);
         };
 
-        ggml_tensor * h = ggml_add(C, ggml_mul_mat(C, W_ain, x_t), b_ain);
+        auto * input_proj = ggml_mul_mat(C,W_ain,x_t);
+        ggml_tensor * h = nullptr;
+        ggml_tensor * input_norm = nullptr;
+        const bool edges = musa_backend && fused_ew && expert_act == GGML_TYPE_F32 && env_flag("VLA_PI05_ACTION_EDGES");
+        const bool linear_edges=musa_backend && fused_ew && expert_act==GGML_TYPE_F32 && env_flag("VLA_PI05_ACTION_LINEAR");
+        if(linear_edges) input_norm=fused_action_linear(C,W_ain,x_t,b_ain,mod(0),nullptr,action_in_spec,&h);
+        else if(edges) input_norm=fused_bias_adarms(C,input_proj,b_ain,mod(0),input_adarms_spec,&h);
+        else h=ggml_add(C,input_proj,b_ain);
+        const bool cross = fuse_cross_adarms && fuse_res_adarms && fused_ew && expert_act == GGML_TYPE_F32;
+        ggml_tensor * next_norm = input_norm;
         for (int64_t i=0; i<n_layers; ++i) {
+            if(i && !cross) next_norm=nullptr;
             FqExpertIn fqx;
             if (kv16) {
                 const size_t k = (size_t) step*(2*n_layers+1) + (size_t) (2*i);
                 fqx = { ada_scale1[k], ada_shift[k], ada_scale1[k+1], ada_shift[k+1], cK16[i], cV16[i] };
             }
             h = build_expert_layer(C, ex_layers[i], h, t_suffix_pos, mod(2*i), mod(2*i+1), cfg, n_suf,
-                                   cK[i], cV[i], t_suffix_mask, act_type,
+                                   cK[i], cV[i], t_suffix_mask, expert_act,
                                    fused_ew ? &adarms_spec : nullptr, fused_ew ? &gateres_spec : nullptr,
                                    kv_inplace ? &kv[i] : (concat_cache.empty() ? nullptr : &concat_cache[i]), kv16 ? &fqx : nullptr,
-                                   fuse_res_adarms ? &res_adarms_spec : nullptr);
+                                   fuse_res_adarms ? &res_adarms_spec : nullptr, next_norm,
+                                   cross && i+1<n_layers ? mod(2*(i+1)) : nullptr,
+                                   cross ? &next_norm : nullptr);
         }
 
         ggml_tensor * h_final = build_adarms(C, h, mod(2*n_layers), hidden_ex, cfg.rms_eps, nullptr);
-        ggml_tensor * v_t = ggml_add(C, ggml_mul_mat(C, W_aout, h_final), b_aout);
-        x_t = ggml_add(C, x_t, ggml_scale(C, v_t, dt));
+        auto * velocity = ggml_mul_mat(C,W_aout,h_final);
+        if(linear_edges) x_t=fused_action_linear(C,W_aout,h,b_aout,mod(2*n_layers),x_t,action_out_spec);
+        else if(edges) x_t=fused_action_step(C,x_t,velocity,b_aout,action_step_spec);
+        else {
+            ggml_tensor * v_t=ggml_add(C,velocity,b_aout);
+            x_t=ggml_add(C,x_t,ggml_scale(C,v_t,dt));
+        }
     }
     ggml_tensor * x_final = x_t;
     ggml_set_output(x_final);

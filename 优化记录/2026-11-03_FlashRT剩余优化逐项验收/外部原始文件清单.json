@@ -1,0 +1,542 @@
+[
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/baseline/full.json",
+    "bytes": 23126392,
+    "sha256": "af7d14a56d925700836401a9fde8bae096a29595a6cf03ab74afc34b92d40488"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/baseline/full.msys-rep",
+    "bytes": 7839744,
+    "sha256": "028e17f5271686e622b47ad8108b95bc567317e96e9b6b3bc098d5d96ce954fe"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/baseline/pruned.json",
+    "bytes": 10962502,
+    "sha256": "1984199a402eb15c5ffd8dc017aff2942b2cdd643983e789553f78d6c0575428"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/baseline/pruned.msys-rep",
+    "bytes": 3715072,
+    "sha256": "853cb07f77cdfa87710593a065c56f5401eed9e96edaae9bb4b2f1104f1d6711"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/final/full.json",
+    "bytes": 21065188,
+    "sha256": "9660e266747b843c7255a8a73cea0df0f657b636091b4c30f4c22aa6e333a756"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/final/full.msys-rep",
+    "bytes": 7176192,
+    "sha256": "36cabfe81afd7a7c48f950f97f39f02436222f9ad299f14af769fd2f94aa6dd7"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/final/pruned.json",
+    "bytes": 10677946,
+    "sha256": "983bde6d1b8a0476722b44a38d33f7de76f0769ba56690be1993453e7042edb2"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/final/pruned.msys-rep",
+    "bytes": 3624960,
+    "sha256": "c892dd3443c2eda766b9f0bc99705e14a62bdab6d591b8a10432d030d5b32b8b"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/失败转储/core_2026-11-03_10:30:59.597_aibox_1405088.mudmp",
+    "bytes": 13084,
+    "sha256": "89da6d5af8836157ef0d9fd8ee0d12af2eb71fb3574ecf655be4f6fae3120256"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/失败转储/core_2026-11-03_10:31:03.000_aibox_1405133.mudmp",
+    "bytes": 12649,
+    "sha256": "1dc7b5268aad6b1e24be1a9c2d15aa3dd35fe552a4922f970b25eded2104125f"
+  },
+  {
+    "path": "/home/skysi/VLA/flashrt-rest-20261103/失败转储/core_2026-11-03_10:31:06.854_aibox_1405262.mudmp",
+    "bytes": 12796,
+    "sha256": "981a70b4a2fada934e4acb2e813adfd82eddfd448816a6ad73a954e396651dd0"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/action-linear/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "f89971f9c4c9813c0b1528104090f44e216c277c34185a27f657ab4822ce7d29"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/action-linear/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "ff97ad0071dbe739c60df436467defedc6cd3c9d480bb7b00ce77ac02417632d"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/baseline/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/baseline/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/baseline-r1/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/baseline-r1/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/baseline-r2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/baseline-r2/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-full/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "f89971f9c4c9813c0b1528104090f44e216c277c34185a27f657ab4822ce7d29"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-full/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "99bdc0ba90a8fb87cbcb039b50853030895dc4ce613cfa39f4401fd2e559b21d"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-full/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "22f4fbf15208fc3f7be0472980779589cf2eac279bf3eddc342c50769762af42"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-0.npy",
+    "bytes": 6528,
+    "sha256": "9cbd3c812aaa221566ab8689cd4a17d8d266ac849e3a124a8ccb5caa89283f60"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-1.npy",
+    "bytes": 6528,
+    "sha256": "ebaa9c7c1fc0322d2d2ad4ff5f897b042a563c69c19bb591c2de35b29afc1c58"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-full-bucket/cup_cube_joint_061_a800_50k_20261022-2.npy",
+    "bytes": 6528,
+    "sha256": "c78907ad7bff0126b6bdcbdd5b4067009cc9119c3ae2641d04f05a12453e719a"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "df58e0024f742aa4e6b121ea7415340da9c33002107e283c9266100dcc5a8d70"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-pruned/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "a378c85b783631d444a47ba49478f9d0ce597b2e8951d0796cd11d0bb3fa0fc7"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-0.npy",
+    "bytes": 6528,
+    "sha256": "2f07cfeaa1f02a8b10912b5f50da5ce963d4c322d1a5164977c4edb339fd356f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-1.npy",
+    "bytes": 6528,
+    "sha256": "778f8b4fdca12dbad1a9c3725fe56a3fdc7ea022d214049692d51354956756c9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/changing-final-pruned-bucket/pi05_cube_merge_cksize50_step3_0929-2.npy",
+    "bytes": 6528,
+    "sha256": "4c804dcc9ca57c6c0c7134dd1d0005766957dd74e49d7d32e7c646cf45b3aef9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/combined/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/combined/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/cross/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/cross/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/edges/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/edges/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/exact-r1/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/exact-r1/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/exact-r2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/exact-r2/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/f16-all-full/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ae7cd4804260009dd715f49d231e3483386b52716f55df3e6a0c8e88ba20c6df"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/f16-all-pruned/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "533282494dd715b7651d8fc293da4a9c34ffb9cee3dfa2b8f43eae7ea78233be"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/f16-expert/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "6460de716cc6ad86da15eb32245ef9455575c019e9ce3db8d44654faeac9cf92"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/f16-expert/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "e0b64a39560e92f6253a147081c1c6bcb3f831bf3e468bff860f21331e3dba11"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/f16-prefix/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "658d99f2495c2aa580d085993d3ff01dc6bfe412fa391665c6e5884fe803cf6c"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/f16-prefix/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "8cf16e069c8f5019555863b073885bd6ad9a0bfbdf6a43d175bd7c33db85e83f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/f16-vision-v2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "b801776dfb9f979772c109012b5c2f6029f120fce046f20b87ba9a3fdcec47a0"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/f16-vision-v2/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "37d6516b52046ffaa1882d8ffd25770f64029c09b7634961d676050610b6d505"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/final-baseline-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/final-baseline-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/final-selected-phases/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "f89971f9c4c9813c0b1528104090f44e216c277c34185a27f657ab4822ce7d29"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/final-selected-phases/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/io-baseline/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "ac6fb3afbc67160a40392e2267c560528969b5b0e66b1967d53eab1416c1348f"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/io-baseline/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/io-final/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "f89971f9c4c9813c0b1528104090f44e216c277c34185a27f657ab4822ce7d29"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/io-final/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/lifecycle-final/cup_cube_joint_061_a800_50k_20261022/actions.npy",
+    "bytes": 6528,
+    "sha256": "f89971f9c4c9813c0b1528104090f44e216c277c34185a27f657ab4822ce7d29"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/lifecycle-final/pi05_cube_merge_cksize50_step3_0929/actions.npy",
+    "bytes": 6528,
+    "sha256": "028a3f7439c11b82a8a93cc5b8dd393e5327c174b6f27ae1ae5f20226c25502b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/linear-cross/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "f89971f9c4c9813c0b1528104090f44e216c277c34185a27f657ab4822ce7d29"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/linear-cross/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "ff97ad0071dbe739c60df436467defedc6cd3c9d480bb7b00ce77ac02417632d"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/linear-r1/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "f89971f9c4c9813c0b1528104090f44e216c277c34185a27f657ab4822ce7d29"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/linear-r1/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "ff97ad0071dbe739c60df436467defedc6cd3c9d480bb7b00ce77ac02417632d"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/linear-r2/full/actions.npy",
+    "bytes": 6528,
+    "sha256": "f89971f9c4c9813c0b1528104090f44e216c277c34185a27f657ab4822ce7d29"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/linear-r2/pruned/actions.npy",
+    "bytes": 6528,
+    "sha256": "ff97ad0071dbe739c60df436467defedc6cd3c9d480bb7b00ce77ac02417632d"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/0.npy",
+    "bytes": 6528,
+    "sha256": "2b545cc6cf3a484a9f586331fbd3c1049ee8f9de900382d30b30b210980c4686"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/1.npy",
+    "bytes": 6528,
+    "sha256": "e1e80da979654ca90a183e5ce89a89aa075b7bf6677ba962ad764d3747bff462"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/2.npy",
+    "bytes": 6528,
+    "sha256": "8f4addaf7a426abc731e52acf6f81693303db306d33a2d1aa9c90b80378957dd"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/3.npy",
+    "bytes": 6528,
+    "sha256": "82a14950decf79a8793af31aa3f657975fc9bd8c76c54e2c602ae4494cddf313"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/4.npy",
+    "bytes": 6528,
+    "sha256": "fda04453ef86f847e67e1bb97ba7acf172e4374c52fab95debe70916b486a1c9"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/5.npy",
+    "bytes": 6528,
+    "sha256": "82202747f5016be927d26fd655a858b296c277961016a252e23dca42a18e772b"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/6.npy",
+    "bytes": 6528,
+    "sha256": "a4719eca7a490f59f4ac9263417069561f78059127f2a774bdc92b6b38d4d64d"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/7.npy",
+    "bytes": 6528,
+    "sha256": "043568f5bef96db01dcc9d53da4ba2025ca774129a8d29fdbb2381eaf97a63f1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/8.npy",
+    "bytes": 6528,
+    "sha256": "7181c4017ea146e124a57a7ddf219d5471ab13293f834c1a908e1b11f605d122"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/full/9.npy",
+    "bytes": 6528,
+    "sha256": "7ce20a5dfca59c262b3ef931d4195f1384ceb105243959dc417e9bde672905b3"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/0.npy",
+    "bytes": 6528,
+    "sha256": "9e4100b6d25ed09aa37ff1b80d86fd043aea755041290e9b2cfe5d2d2d78a492"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/1.npy",
+    "bytes": 6528,
+    "sha256": "3e8d9325ab7e17f0cbb9358b696bce6687c1e90bb065106901332f3ece9019d4"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/2.npy",
+    "bytes": 6528,
+    "sha256": "92806f301b2c6410884ba276ec2a6b5926690d7541abcbfd458b31ff4ca818bb"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/3.npy",
+    "bytes": 6528,
+    "sha256": "dd028cbe5bcd3fd215fbd35414e2fa93c574016650f2034c7985b8df9a06187e"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/4.npy",
+    "bytes": 6528,
+    "sha256": "0da4676cc3072cbc3705bc1a53599f3d0d059ba38c3751a05174db0e56205425"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/5.npy",
+    "bytes": 6528,
+    "sha256": "2ee553cc3757c267c9e916a551bc41f541d0d50a1c37f66e5f0aacd00f4691cd"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/6.npy",
+    "bytes": 6528,
+    "sha256": "31a39ac2b0a003d087896a80f27cd57de85fd0917445d81ec31c32d60923255c"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/7.npy",
+    "bytes": 6528,
+    "sha256": "20291f7304a195ecd4daacc680c9977dbdee02ede9dacf53d21bf80deb543f9d"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/8.npy",
+    "bytes": 6528,
+    "sha256": "e31510a66ef5712596f5b4049d57d01770cee51cc8d22172ca7a679ba627737c"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-baseline/pruned/9.npy",
+    "bytes": 6528,
+    "sha256": "93b42f57ae39cca93fbfb7fa584b6b5a497ab3211a4059b6a98cb9319fc7e89e"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/0.npy",
+    "bytes": 6528,
+    "sha256": "c3eeaf481f04b337ffa332b7473df77b9568da6ee1e22388461e223e2e41d3d1"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/1.npy",
+    "bytes": 6528,
+    "sha256": "c1f3337ef7bbbf6ee992c973ea9523e074a7eb0bf00678e1de8d5074ad40586c"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/2.npy",
+    "bytes": 6528,
+    "sha256": "46fc6aad16677d690337a406f7f5cbe5d8ac2f1f7ea044aea51dec4d792018ce"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/3.npy",
+    "bytes": 6528,
+    "sha256": "b1eddc930b97f1f81b9826db25841037adc1c5781811637e18c743edd4523af6"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/4.npy",
+    "bytes": 6528,
+    "sha256": "8b7d1ede51239e20586b132eae469e0a2b8521f3340abc9420748bf14e19cf27"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/5.npy",
+    "bytes": 6528,
+    "sha256": "0cd03dc8889be5b79d23fa822dea879a59f7025ed6ec3e5e945b81dfaa2f49c6"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/6.npy",
+    "bytes": 6528,
+    "sha256": "668560838eefc4b59d15f060e66c2578e4e8d35e0c8fce46d7cfa2ef8e4ca497"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/7.npy",
+    "bytes": 6528,
+    "sha256": "8b82d847c90397d8384caed9dae0d5df26d137ba2f0a846aef7996439d1acc75"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/8.npy",
+    "bytes": 6528,
+    "sha256": "6fe0fd347efa1c1d21cc71110cb69ecc77017c01b749ec544ef4738faac44a92"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/full/9.npy",
+    "bytes": 6528,
+    "sha256": "9559ecaeb0b3b8676cf87b904b19132cfacc05a5aee1d76218fc0a796ff334a7"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/0.npy",
+    "bytes": 6528,
+    "sha256": "9e4100b6d25ed09aa37ff1b80d86fd043aea755041290e9b2cfe5d2d2d78a492"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/1.npy",
+    "bytes": 6528,
+    "sha256": "3e8d9325ab7e17f0cbb9358b696bce6687c1e90bb065106901332f3ece9019d4"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/2.npy",
+    "bytes": 6528,
+    "sha256": "92806f301b2c6410884ba276ec2a6b5926690d7541abcbfd458b31ff4ca818bb"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/3.npy",
+    "bytes": 6528,
+    "sha256": "dd028cbe5bcd3fd215fbd35414e2fa93c574016650f2034c7985b8df9a06187e"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/4.npy",
+    "bytes": 6528,
+    "sha256": "0da4676cc3072cbc3705bc1a53599f3d0d059ba38c3751a05174db0e56205425"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/5.npy",
+    "bytes": 6528,
+    "sha256": "2ee553cc3757c267c9e916a551bc41f541d0d50a1c37f66e5f0aacd00f4691cd"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/6.npy",
+    "bytes": 6528,
+    "sha256": "31a39ac2b0a003d087896a80f27cd57de85fd0917445d81ec31c32d60923255c"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/7.npy",
+    "bytes": 6528,
+    "sha256": "20291f7304a195ecd4daacc680c9977dbdee02ede9dacf53d21bf80deb543f9d"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/8.npy",
+    "bytes": 6528,
+    "sha256": "e31510a66ef5712596f5b4049d57d01770cee51cc8d22172ca7a679ba627737c"
+  },
+  {
+    "path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_FlashRT剩余优化逐项验收/random-selected/pruned/9.npy",
+    "bytes": 6528,
+    "sha256": "93b42f57ae39cca93fbfb7fa584b6b5a497ab3211a4059b6a98cb9319fc7e89e"
+  },
+  {
+    "path": "/tmp/pi05-probe-mma32",
+    "bytes": 53512,
+    "sha256": "389e2a659481c8663ce6f00ddbd0742bbef80d4cb5d824a300235fcdf15e4a80"
+  },
+  {
+    "path": "/tmp/pi05-probe-remaining",
+    "bytes": 53520,
+    "sha256": "f25986890c7a3748c22626e8dc046cf9210f5cef979a0cf15365795fb0a693e0"
+  },
+  {
+    "path": "/tmp/pi05-probe-remaining-tuned",
+    "bytes": 53520,
+    "sha256": "f1b46d0440f7c43c44d2f4cba9e67cf376bc8557e81994e899a5f159cc0624d2"
+  }
+]

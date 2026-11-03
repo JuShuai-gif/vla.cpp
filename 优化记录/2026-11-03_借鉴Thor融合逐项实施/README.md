@@ -43,3 +43,5 @@ source 优化记录/2026-11-03_借鉴Thor融合逐项实施/推荐环境.sh prun
 源码基线 ae77ed3；本轮 patch、库和后端 SHA256 在 源码与构建校验.json，原始样本在各 stage/report.json，完整环境在 command.json。新开关未加入旧 bench 元数据白名单，以 command.json 为完整环境证据。日志、图节点及 patch 的 .gz 归档随 Git；.npy 和 msys 原始报告保留服务器，路径/大小/SHA256 见 外部原始文件清单.json。
 
 仅在 M1000/MP22、当前 MUSA SDK/模型上进行数值与性能回归，没有验证真实机器人任务成功率。没有同步到 Mac。
+
+续轮已执行这里列出的剩余候选并按模型完成取舍，最新配置见 [FlashRT剩余候选验收](../2026-11-03_FlashRT剩余优化逐项验收/README.md)。

@@ -1,0 +1,5 @@
+{
+  "source": "src/layers/action_edges.h",
+  "sha256": "424324346eefd3ec5eddfc8b6673e135ec3c35d5a196ba4a36fcb125fd2a8e8a",
+  "note": "早期 action-linear 的 source.patch 不含当时尚未进入索引的新头文件；还原原型时需同时使用此文件。后续测量已通过 git add -N 纳入源码差异。"
+}

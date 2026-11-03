@@ -38,6 +38,9 @@
 
 namespace vla {
 
+constexpr uint32_t FUSED_BIAS_ADARMS_MAGIC = 0x41494241;
+constexpr uint32_t FUSED_ACTION_STEP_MAGIC = 0x50545341;
+struct FusedActionStepSpec { uint32_t magic = FUSED_ACTION_STEP_MAGIC; float dt = 0; };
 constexpr uint32_t FUSED_RES_ADARMS_MAGIC = 0x4e524147; // "GARN"
 constexpr uint32_t FUSED_ADARMS_MAGIC = 0x534d5241;  // "ARMS"
 constexpr uint32_t FUSED_GATERES_MAGIC = 0x53455247; // "GRES"
@@ -212,17 +215,19 @@ inline void fused_gateres_cpu(ggml_tensor * dst, int ith, int nth, void *) {
 inline void fused_res_adarms_cpu(ggml_tensor * dst, int ith, int nth, void * ud) {
     const auto & spec = *static_cast<const FusedResAdarmsSpec *>(ud);
     const auto * x = dst->src[0]; const auto * o = dst->src[1];
-    const float * gate = (const float *) dst->src[2]->data;
-    const float * mod = (const float *) dst->src[3]->data;
+    const bool bias = spec.magic == FUSED_BIAS_ADARMS_MAGIC;
+    const float * gate = bias ? nullptr : (const float *) dst->src[2]->data;
+    const float * mod = (const float *) dst->src[bias ? 2 : 3]->data;
     const int64_t h = x->ne[0], rows = x->ne[1];
     auto * residual = (float *) dst->data;
     auto * normalized = residual + h*rows;
     for (int64_t r = ith; r < rows; r += nth) {
         const auto * xr = (const float *) ((const char *) x->data + r*x->nb[1]);
-        const auto * yr = (const char *) o->data + r*o->nb[1];
+        const auto * yr = (const char *) o->data + (bias ? 0 : r*o->nb[1]);
         double sum = 0;
         for (int64_t i = 0; i < h; ++i) {
-            const float a = xr[i] + fused_load(o, yr, i)*gate[2*h+i];
+            const float a = bias ? xr[i] + fused_load(o, yr, i) :
+                                   xr[i] + fused_load(o, yr, i)*gate[2*h+i];
             residual[r*h+i] = a;
             sum += (double) a*a;
         }
@@ -409,6 +414,39 @@ inline ggml_tensor * fused_res_adarms(ggml_context * C, ggml_tensor * x, ggml_te
     ggml_set_name(t, "fused_res_adarms");
     *residual = ggml_view_2d(C, t, x->ne[0], x->ne[1], t->nb[1], 0);
     return ggml_view_2d(C, t, x->ne[0], x->ne[1], t->nb[1], t->nb[2]);
+}
+
+inline ggml_tensor * fused_bias_adarms(ggml_context * C, ggml_tensor * x, ggml_tensor * bias,
+        ggml_tensor * mod, const FusedResAdarmsSpec & spec, ggml_tensor ** residual) {
+    GGML_ASSERT(spec.magic == FUSED_BIAS_ADARMS_MAGIC && x->type == GGML_TYPE_F32);
+    GGML_ASSERT(x->ne[2] == 1 && x->ne[3] == 1 && ggml_nelements(bias) == x->ne[0]);
+    ggml_tensor * args[] = {x,bias,mod};
+    auto * t = ggml_custom_4d(C, GGML_TYPE_F32, x->ne[0], x->ne[1], 2, 1, args, 3,
+                             fused_res_adarms_cpu, GGML_N_TASKS_MAX, (void *) &spec);
+    ggml_set_name(t, "fused_bias_adarms");
+    *residual = ggml_view_2d(C,t,x->ne[0],x->ne[1],t->nb[1],0);
+    return ggml_view_2d(C,t,x->ne[0],x->ne[1],t->nb[1],t->nb[2]);
+}
+
+inline void fused_action_step_cpu(ggml_tensor * dst, int ith, int nth, void * ud) {
+    const auto & spec = *static_cast<const FusedActionStepSpec *>(ud);
+    auto * out = (float *) dst->data;
+    const auto * x = (const float *) dst->src[0]->data;
+    const auto * v = (const float *) dst->src[1]->data;
+    const auto * b = (const float *) dst->src[2]->data;
+    for (int64_t i=ith;i<ggml_nelements(dst);i+=nth) {
+        const float velocity = v[i]+b[i%dst->ne[0]];
+        const float step = velocity*spec.dt;
+        out[i]=x[i]+step;
+    }
+}
+inline ggml_tensor * fused_action_step(ggml_context * C, ggml_tensor * x, ggml_tensor * v,
+                                      ggml_tensor * b, const FusedActionStepSpec & spec) {
+    GGML_ASSERT(x->type == GGML_TYPE_F32 && v->type == GGML_TYPE_F32 && b->type == GGML_TYPE_F32);
+    GGML_ASSERT(ggml_are_same_shape(x,v) && ggml_nelements(b)==x->ne[0]);
+    ggml_tensor * args[]={x,v,b};
+    return ggml_custom_4d(C,GGML_TYPE_F32,x->ne[0],x->ne[1],x->ne[2],x->ne[3],args,3,
+                          fused_action_step_cpu,GGML_N_TASKS_MAX,(void *)&spec);
 }
 
 // W [K, N] BF16, x [K, M] BF16 (rows dense), b [N] F32 or null, res [N, M] or

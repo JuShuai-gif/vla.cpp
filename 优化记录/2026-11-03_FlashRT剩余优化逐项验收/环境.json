@@ -1,0 +1,8 @@
+{
+  "baseline_commit": "d262af8c6cc47fe61eb17eb570481bbad9d9b281",
+  "power_profile": "performance",
+  "uname": "Linux aibox 6.6.10 #1 SMP PREEMPT Thu Jul  9 05:35:20 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux",
+  "musa_sdk_path": "/usr/local/musa-5.1.0",
+  "mcc": "clang version 14.0.0 (git@sh-code.mthreads.com:sw/mtcc.git 61c54cd8e5c72ef146656c7beee1889a837ed7bc)\nmcc version 5.1.0\nTarget: aarch64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /usr/local/musa/bin\n",
+  "lt_header_sha256": "ce7fa8dae940972199f4d971d043bfbe76e7577125e572a005b11f59f4e7534f"
+}

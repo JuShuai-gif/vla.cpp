@@ -55,6 +55,7 @@ struct EncCfg {
     // Activation dtype for the GEMMs (mm_act); F32 is the classic graph. The
     // input must already be in this type (cast the patch embedding).
     ggml_type act = GGML_TYPE_F32;
+    ggml_type gemm_act = GGML_TYPE_F32; // MUSA experiment: narrow GEMM outputs, keep residual/norm F32.
     // Reduced-precision act on a backend that claims layers/fused_ew.h nodes:
     // GEMMs take bias, GELU and residual as epilogue, q|k|v is one GEMM, and
     // attention reads its output directly. Set before declare().
