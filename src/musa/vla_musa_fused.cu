@@ -139,7 +139,9 @@ bool supports(const ggml_tensor * t) {
     if (tiled_attention(t)) return true;
     if (t->op == GGML_OP_GLU && ggml_get_glu_op(t) == GGML_GLU_OP_GEGLU && !t->src[1])
         return (dense_f16(t) || dense_f32(t)) && ggml_is_contiguous(t->src[0]) &&
-               t->src[0]->type == t->type && t->src[0]->ne[0] == 2*t->ne[0];
+               (t->src[0]->type == t->type ||
+                (t->src[0]->type == GGML_TYPE_F32 && t->type == GGML_TYPE_F16)) &&
+               t->src[0]->ne[0] == 2*t->ne[0];
     if (t->op == GGML_OP_MUL_MAT && dense_f16(t) && dense_f16(t->src[0]) && dense_f16(t->src[1]))
         return t->ne[2] == 1 && t->ne[3] == 1 && t->src[0]->ne[2] == 1 && t->src[0]->ne[3] == 1;
     if (t->op == GGML_OP_RMS_NORM)
@@ -160,6 +162,14 @@ bool supports(const ggml_tensor * t) {
         return t->type == GGML_TYPE_I32 && dense_f32(t->src[0]) &&
                ggml_is_vector(t->src[0]) && t->src[0]->ne[0] <= WG &&
                t->ne[0] > 0 && t->ne[0] <= t->src[0]->ne[0];
+    if (m == FUSED_RES_ADARMS_MAGIC) {
+        const auto * x = t->src[0]; const auto * o = t->src[1];
+        return dense_f32(t) && dense_f32(x) && (dense_f32(o) || dense_f16(o)) &&
+               ggml_are_same_shape(x, o) && x->ne[2] == 1 && x->ne[3] == 1 &&
+               t->ne[0] == x->ne[0] && t->ne[1] == x->ne[1] && t->ne[2] == 2 && t->ne[3] == 1 &&
+               dense_f32(t->src[2]) && dense_f32(t->src[3]) &&
+               ggml_nelements(t->src[2]) == 3*x->ne[0] && ggml_nelements(t->src[3]) == 3*x->ne[0];
+    }
     if (m != FUSED_ADARMS_MAGIC && m != FUSED_GATERES_MAGIC) return false;
     const auto * x = t->src[0];
     const auto * mod = t->src[m == FUSED_ADARMS_MAGIC ? 1 : 2];
@@ -207,14 +217,40 @@ __global__ void gateres(const float * x, const T * o, const float * mod,
 }
 
 template<typename T>
-__global__ void merged_geglu(const T * src, T * dst, int h, bool swapped) {
+__global__ void res_adarms(const float * x, const T * o, const float * gate,
+                          const float * mod, float * dst, int h, int rows, float eps) {
+    const int tid = threadIdx.x;
+    const size_t row = (size_t) blockIdx.x*h;
+    __shared__ float sums[WG];
+    float sum = 0.f;
+    for (int i = tid; i < h; i += WG) {
+        const float a = x[row+i] + load(o[row+i])*gate[2*h+i];
+        dst[row+i] = a;
+        sum += a*a;
+    }
+    sums[tid] = sum;
+    __syncthreads();
+    // Match the existing AdaRMS reduction tree and arithmetic order exactly.
+    for (int stride = WG/2; stride; stride /= 2) {
+        if (tid < stride) sums[tid] += sums[tid+stride];
+        __syncthreads();
+    }
+    const float inv = rsqrtf(sums[0]/h + eps);
+    for (int i = tid; i < h; i += WG) {
+        const float n = dst[row+i]*inv;
+        dst[(size_t) h*rows+row+i] = (n + n*mod[i]) + mod[h+i];
+    }
+}
+
+template<typename S, typename D>
+__global__ void merged_geglu(const S * src, D * dst, int h, bool swapped) {
     const int col = blockIdx.x*blockDim.x + threadIdx.x;
     const size_t row = (size_t) blockIdx.y*h;
     if (col >= h) return;
     const float g = load(src[2*row + col + (swapped ? h : 0)]);
     const float u = load(src[2*row + col + (swapped ? 0 : h)]);
     const float gelu = 0.5f*g*(1.0f+tanhf(0.7978845608028654f*g*(1.0f+0.044715f*g*g)));
-    dst[row+col] = store<T>(gelu*u);
+    dst[row+col] = store<D>(gelu*u);
 }
 
 
@@ -533,7 +569,9 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
     } else if (t->op == GGML_OP_GLU) {
         const dim3 grid((h+WG-1)/WG, ggml_nrows(t));
         const bool swapped = ((const int32_t *) t->op_params)[1] != 0;
-        if (t->type == GGML_TYPE_F16)
+        if (t->type == GGML_TYPE_F16 && t->src[0]->type == GGML_TYPE_F32)
+            merged_geglu<<<grid, WG, 0, stream>>>(x, (__half *)t->data, h, swapped);
+        else if (t->type == GGML_TYPE_F16)
             merged_geglu<<<grid, WG, 0, stream>>>((const __half *)x, (__half *)t->data, h, swapped);
         else merged_geglu<<<grid, WG, 0, stream>>>(x, (float *)t->data, h, swapped);
     } else if (t->op == GGML_OP_MUL_MAT) {
@@ -551,6 +589,16 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
         float eps;
         std::memcpy(&eps, t->op_params, sizeof(eps));
         adarms<<<ggml_nrows(t), WG, 0, stream>>>((const __half *) x, nullptr, (__half *) t->data, h, eps);
+    } else if (magic(t) == FUSED_RES_ADARMS_MAGIC) {
+        const auto & spec = *(const FusedResAdarmsSpec *) userdata(t);
+        if (t->src[1]->type == GGML_TYPE_F16)
+            res_adarms<<<t->ne[1], WG, 0, stream>>>(x, (const __half *) t->src[1]->data,
+                (const float *) t->src[2]->data, (const float *) t->src[3]->data,
+                (float *) t->data, h, t->ne[1], spec.eps);
+        else
+            res_adarms<<<t->ne[1], WG, 0, stream>>>(x, (const float *) t->src[1]->data,
+                (const float *) t->src[2]->data, (const float *) t->src[3]->data,
+                (float *) t->data, h, t->ne[1], spec.eps);
     } else if (magic(t) == FUSED_ADARMS_MAGIC) {
         const auto & spec = *(const FusedAdarmsSpec *) userdata(t);
         if (t->type == GGML_TYPE_F16)

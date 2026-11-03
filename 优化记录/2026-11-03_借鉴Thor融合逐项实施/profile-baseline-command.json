@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/home/skysi/code/vla.cpp/.venv-converter/bin/python",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-03_\u501f\u9274Thor\u878d\u5408\u9010\u9879\u5b9e\u65bd/profile_io.py",
+    "baseline"
+  ],
+  "env": {
+    "VLA_DEVICE": "0",
+    "VLA_N_THREADS": "4",
+    "VLA_MUSA_VISION_SDPA": "1",
+    "VLA_PI05_VISION_QKV": "1",
+    "VLA_MUSA_VISION_EPILOGUE": "all"
+  }
+}

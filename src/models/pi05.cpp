@@ -114,6 +114,8 @@ struct Pi05ModelArch : public ModelArchBase {
     bool                  fused_ew    = false;
     FusedAdarmsSpec       adarms_spec;
     FusedGateResSpec      gateres_spec;
+    FusedResAdarmsSpec    res_adarms_spec;
+    bool                 fuse_res_adarms = false;
     // K/V written in place into per-layer F16 buffers, q|k|v and gate|up GEMMs
     // fused (modules/gemma_expert.h: KvSlot, gemma_declare_float). SYCL's fused
     // attention only; VLA_PI05_NO_KV_INPLACE=1 keeps the concat graph.
@@ -228,7 +230,8 @@ ggml_tensor * build_expert_layer(
         const Config & cfg, int64_t seq,
         ggml_tensor * cached_K, ggml_tensor * cached_V, ggml_tensor * mask = nullptr,
         ggml_type at = GGML_TYPE_F32, const FusedAdarmsSpec * fa = nullptr, const FusedGateResSpec * fg = nullptr,
-        KvSlot * kv = nullptr, const FqExpertIn * fqx = nullptr) {
+        KvSlot * kv = nullptr, const FqExpertIn * fqx = nullptr,
+        const FusedResAdarmsSpec * fr = nullptr) {
     const int64_t h = cfg.expert_h;
     if (fqx && w.act_mod_qkv.has_shift && w.act_mod_gu.has_shift && w.fq_o && w.fq_down) {
         // FoldQuant on SYCL: each adaRMS rides in its act node (rms * (1 + scale)
@@ -261,8 +264,14 @@ ggml_tensor * build_expert_layer(
         ggml_tensor * xn = fused_adarms(ctx, x_in, mod_attn, at, *fa);
         ggml_tensor * o  = gemma_attn(ctx, w, xn, positions, cfg, seq, cached_K, cached_V, mask,
                                       nullptr, nullptr, at, use_fused_attention(), nullptr, nullptr, kv);
-        ggml_tensor * h1 = fused_gateres(ctx, x_in, o, mod_attn, *fg);
-        ggml_tensor * xm = fused_adarms(ctx, h1, mod_ffn, at, *fa);
+        ggml_tensor * h1 = nullptr;
+        ggml_tensor * xm = nullptr;
+        if (fr && at == GGML_TYPE_F32)
+            xm = fused_res_adarms(ctx, x_in, o, mod_attn, mod_ffn, *fr, &h1);
+        else {
+            h1 = fused_gateres(ctx, x_in, o, mod_attn, *fg);
+            xm = fused_adarms(ctx, h1, mod_ffn, at, *fa);
+        }
         return fused_gateres(ctx, h1, gemma_mlp(ctx, w, xm, at), mod_ffn, *fg);
     }
 
@@ -518,6 +527,8 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
                 std::printf("vla(pi05): fused expert elementwise ops on (VLA_PI05_NO_FUSE=1 to disable)\n");
         }
         m->musa_backend = b.is_musa;
+        m->fuse_res_adarms = b.is_musa && env_flag("VLA_PI05_RES_ADARMS");
+        m->res_adarms_spec.eps = cfg.rms_eps;
         m->input_cache = b.is_musa && env_flag("VLA_PI05_INPUT_CACHE");
         m->async_vision = b.is_musa && env_flag("VLA_PI05_ASYNC_VISION");
         m->direct_vision = b.is_musa && env_flag("VLA_PI05_VISION_DIRECT");
@@ -1141,7 +1152,8 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
             h = build_expert_layer(C, ex_layers[i], h, t_suffix_pos, mod(2*i), mod(2*i+1), cfg, n_suf,
                                    cK[i], cV[i], t_suffix_mask, act_type,
                                    fused_ew ? &adarms_spec : nullptr, fused_ew ? &gateres_spec : nullptr,
-                                   kv_inplace ? &kv[i] : (concat_cache.empty() ? nullptr : &concat_cache[i]), kv16 ? &fqx : nullptr);
+                                   kv_inplace ? &kv[i] : (concat_cache.empty() ? nullptr : &concat_cache[i]), kv16 ? &fqx : nullptr,
+                                   fuse_res_adarms ? &res_adarms_spec : nullptr);
         }
 
         ggml_tensor * h_final = build_adarms(C, h, mod(2*n_layers), hidden_ex, cfg.rms_eps, nullptr);

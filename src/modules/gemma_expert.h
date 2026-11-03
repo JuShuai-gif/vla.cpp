@@ -562,7 +562,17 @@ inline ggml_tensor * gemma_attn(
             GGML_ASSERT(ggml_is_contiguous(buffer) && buffer->type == suffix->type);
             auto * tail = ggml_view_3d(ctx, buffer, suffix->ne[0], suffix->ne[1], suffix->ne[2],
                                       buffer->nb[1], buffer->nb[2], prefix->ne[2]*buffer->nb[2]);
-            auto * write = ggml_cpy(ctx, suffix, tail);
+            auto * source = suffix;
+#ifdef GGML_USE_MUSA
+            // Cast straight into the retained tail. Preserve the exact F32->F16
+            // rounding, but do not materialize a temporary and copy it again.
+            if (env_flag("VLA_PI05_KV_DIRECT") && suffix->op == GGML_OP_CPY &&
+                suffix->src[1] == suffix && suffix->type == GGML_TYPE_F16 &&
+                suffix->src[0]->type == GGML_TYPE_F32 &&
+                ggml_are_same_shape(suffix, suffix->src[0]))
+                source = suffix->src[0];
+#endif
+            auto * write = ggml_cpy(ctx, source, tail);
             auto * read = ggml_view_tensor(ctx, buffer);
             // suffix depends on the previous step, so earlier reads finish before this write.
             add_dep(read, write);
@@ -635,8 +645,16 @@ inline ggml_tensor * gemma_mlp(ggml_context * ctx, const GemmaLayerW & w, ggml_t
         // Read gate|up directly from the merged GEMM, like FlashRT's merged
         // gated activation path. Avoid two CONT copies before GEGLU.
         if (w.Wgu && w.Wdown && !w.fq_down && !w.q_down &&
-            (gu->type == GGML_TYPE_F32 || gu->type == GGML_TYPE_F16))
-            return mm_act(ctx, w.Wdown, ggml_geglu(ctx, gu), at);
+            (gu->type == GGML_TYPE_F32 || gu->type == GGML_TYPE_F16)) {
+            auto * inter = ggml_geglu(ctx, gu);
+            // The MUSA F16-weight GEMM already narrows F32 activations to F16.
+            // Write that representation directly; keep the GEMM output F32.
+            if (env_flag("VLA_MUSA_GEGLU_F16") && at == GGML_TYPE_F32 &&
+                w.Wdown->type == GGML_TYPE_F16 && w.Wdown->buffer &&
+                !ggml_backend_buffer_is_host(w.Wdown->buffer))
+                return ggml_mul_mat(ctx, w.Wdown, retype(inter, GGML_TYPE_F16));
+            return mm_act(ctx, w.Wdown, inter, at);
+        }
 #endif
         const int64_t n  = gu->ne[0] / 2;
         gate = ggml_view_2d(ctx, gu, n, gu->ne[1], gu->nb[1], 0);

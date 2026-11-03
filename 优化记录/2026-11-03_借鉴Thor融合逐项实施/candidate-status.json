@@ -1,0 +1,37 @@
+[
+  {
+    "name": "control",
+    "flags": [],
+    "returncode": 0
+  },
+  {
+    "name": "kv-direct",
+    "flags": [
+      "VLA_PI05_KV_DIRECT=1"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "geglu-f16",
+    "flags": [
+      "VLA_MUSA_GEGLU_F16=1"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "res-adarms",
+    "flags": [
+      "VLA_PI05_RES_ADARMS=1"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "combined",
+    "flags": [
+      "VLA_PI05_KV_DIRECT=1",
+      "VLA_MUSA_GEGLU_F16=1",
+      "VLA_PI05_RES_ADARMS=1"
+    ],
+    "returncode": 0
+  }
+]

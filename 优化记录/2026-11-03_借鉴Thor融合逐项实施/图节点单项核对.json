@@ -1,0 +1,82 @@
+[
+  {
+    "stage": "control",
+    "model": "pruned",
+    "cpy": 216,
+    "custom": 308,
+    "res_adarms": 0,
+    "glu_f16": 0
+  },
+  {
+    "stage": "control",
+    "model": "full",
+    "cpy": 720,
+    "custom": 801,
+    "res_adarms": 0,
+    "glu_f16": 0
+  },
+  {
+    "stage": "kv-direct",
+    "model": "pruned",
+    "cpy": 144,
+    "custom": 308,
+    "res_adarms": 0,
+    "glu_f16": 0
+  },
+  {
+    "stage": "kv-direct",
+    "model": "full",
+    "cpy": 396,
+    "custom": 801,
+    "res_adarms": 0,
+    "glu_f16": 0
+  },
+  {
+    "stage": "geglu-f16",
+    "model": "pruned",
+    "cpy": 216,
+    "custom": 308,
+    "res_adarms": 0,
+    "glu_f16": 71
+  },
+  {
+    "stage": "geglu-f16",
+    "model": "full",
+    "cpy": 720,
+    "custom": 801,
+    "res_adarms": 0,
+    "glu_f16": 197
+  },
+  {
+    "stage": "res-adarms",
+    "model": "pruned",
+    "cpy": 216,
+    "custom": 254,
+    "res_adarms": 54,
+    "glu_f16": 0
+  },
+  {
+    "stage": "res-adarms",
+    "model": "full",
+    "cpy": 720,
+    "custom": 621,
+    "res_adarms": 180,
+    "glu_f16": 0
+  },
+  {
+    "stage": "combined",
+    "model": "pruned",
+    "cpy": 144,
+    "custom": 254,
+    "res_adarms": 54,
+    "glu_f16": 71
+  },
+  {
+    "stage": "combined",
+    "model": "full",
+    "cpy": 396,
+    "custom": 621,
+    "res_adarms": 180,
+    "glu_f16": 197
+  }
+]

@@ -38,6 +38,7 @@
 
 namespace vla {
 
+constexpr uint32_t FUSED_RES_ADARMS_MAGIC = 0x4e524147; // "GARN"
 constexpr uint32_t FUSED_ADARMS_MAGIC = 0x534d5241;  // "ARMS"
 constexpr uint32_t FUSED_GATERES_MAGIC = 0x53455247; // "GRES"
 constexpr uint32_t FUSED_GEGLU_MAGIC   = 0x554c4547; // "GELU"
@@ -74,6 +75,12 @@ inline int64_t q8_rows(const ggml_tensor * blob, int64_t K) {
 struct FusedAdarmsSpec {
     uint32_t magic = FUSED_ADARMS_MAGIC;
     float    eps   = 1e-6f;
+};
+
+// Two contiguous F32 planes: gated residual, then its FFN AdaRMS.
+struct FusedResAdarmsSpec {
+    uint32_t magic = FUSED_RES_ADARMS_MAGIC;
+    float eps = 1e-6f;
 };
 
 // out[r, i] = x[r, i] + o[r, i] * gate[i]; x F32, o F32 or BF16, out F32.
@@ -199,6 +206,31 @@ inline void fused_gateres_cpu(ggml_tensor * dst, int ith, int nth, void *) {
         const char *  orow = (const char *) o->data + r * o->nb[1];
         float * dr = (float *) ((char *) dst->data + r * dst->nb[1]);
         for (int64_t i = 0; i < h; ++i) dr[i] = xr[i] + fused_load(o, orow, i) * mod[2 * h + i];
+    }
+}
+
+inline void fused_res_adarms_cpu(ggml_tensor * dst, int ith, int nth, void * ud) {
+    const auto & spec = *static_cast<const FusedResAdarmsSpec *>(ud);
+    const auto * x = dst->src[0]; const auto * o = dst->src[1];
+    const float * gate = (const float *) dst->src[2]->data;
+    const float * mod = (const float *) dst->src[3]->data;
+    const int64_t h = x->ne[0], rows = x->ne[1];
+    auto * residual = (float *) dst->data;
+    auto * normalized = residual + h*rows;
+    for (int64_t r = ith; r < rows; r += nth) {
+        const auto * xr = (const float *) ((const char *) x->data + r*x->nb[1]);
+        const auto * yr = (const char *) o->data + r*o->nb[1];
+        double sum = 0;
+        for (int64_t i = 0; i < h; ++i) {
+            const float a = xr[i] + fused_load(o, yr, i)*gate[2*h+i];
+            residual[r*h+i] = a;
+            sum += (double) a*a;
+        }
+        const float inv = 1.f/std::sqrt((float) (sum/h) + spec.eps);
+        for (int64_t i = 0; i < h; ++i) {
+            const float n = residual[r*h+i]*inv;
+            normalized[r*h+i] = (n + n*mod[i]) + mod[h+i];
+        }
     }
 }
 
@@ -362,6 +394,21 @@ inline ggml_tensor * fused_gateres(ggml_context * C, ggml_tensor * x, ggml_tenso
                                      fused_gateres_cpu, GGML_N_TASKS_MAX, (void *) &spec);
     ggml_set_name(t, "fused_gateres");
     return t;
+}
+
+// MUSA F32 activation path. Both outputs own storage in the custom node;
+// no hidden writes to an input, so graph allocation and replay remain valid.
+inline ggml_tensor * fused_res_adarms(ggml_context * C, ggml_tensor * x, ggml_tensor * o,
+        ggml_tensor * gate, ggml_tensor * mod, const FusedResAdarmsSpec & spec, ggml_tensor ** residual) {
+    GGML_ASSERT(x->type == GGML_TYPE_F32 && ggml_are_same_shape(x, o));
+    GGML_ASSERT(x->ne[2] == 1 && x->ne[3] == 1);
+    GGML_ASSERT(gate->ne[0] == 3*x->ne[0] && mod->ne[0] == 3*x->ne[0]);
+    ggml_tensor * args[] = {x, o, gate, mod};
+    auto * t = ggml_custom_4d(C, GGML_TYPE_F32, x->ne[0], x->ne[1], 2, 1, args, 4,
+                             fused_res_adarms_cpu, GGML_N_TASKS_MAX, (void *) &spec);
+    ggml_set_name(t, "fused_res_adarms");
+    *residual = ggml_view_2d(C, t, x->ne[0], x->ne[1], t->nb[1], 0);
+    return ggml_view_2d(C, t, x->ne[0], x->ne[1], t->nb[1], t->nb[2]);
 }
 
 // W [K, N] BF16, x [K, M] BF16 (rows dense), b [N] F32 or null, res [N, M] or

@@ -459,6 +459,32 @@ std::vector<float> merged_glu(ggml_backend_t backend, ggml_type type, bool nativ
     return g.run(backend, {y});
 }
 
+std::vector<float> res_adarms(ggml_backend_t backend, int64_t h, int64_t rows, ggml_type type, bool fused) {
+    Graph g;
+    auto * x = g.input(GGML_TYPE_F32, {h, rows});
+    auto * o = g.input(type, {h, rows});
+    auto * gate = g.input(GGML_TYPE_F32, {3*h});
+    auto * mod = g.input(GGML_TYPE_F32, {3*h});
+    vla::FusedAdarmsSpec a; vla::FusedGateResSpec b; vla::FusedResAdarmsSpec c;
+    ggml_tensor * residual = nullptr;
+    ggml_tensor * norm = nullptr;
+    if (fused) norm = vla::fused_res_adarms(g.ctx, x, o, gate, mod, c, &residual);
+    else {
+        residual = vla::fused_gateres(g.ctx, x, o, gate, b);
+        norm = vla::fused_adarms(g.ctx, residual, mod, GGML_TYPE_F32, a);
+    }
+    return g.run(backend, {residual, norm});
+}
+
+std::vector<float> geglu_direct_half(ggml_backend_t backend, int64_t h, int64_t rows, bool direct, bool swapped) {
+    Graph g;
+    auto * x = g.input(GGML_TYPE_F32, {2*h, rows});
+    ggml_set_name(x, "geglu_values");
+    auto * y = swapped ? ggml_geglu_swapped(g.ctx, x) : ggml_geglu(g.ctx, x);
+    y = direct ? vla::retype(y, GGML_TYPE_F16) : ggml_cast(g.ctx, y, GGML_TYPE_F16);
+    return g.run(backend, {y});
+}
+
 std::vector<float> merged_glu_reference(ggml_type type, bool swapped) {
     // Independent float tanh reference: ggml CPU GELU can use an F16 lookup table.
     constexpr int h = 4097, rows = 3;
@@ -599,6 +625,22 @@ int main(int argc, char ** argv) {
         ggml_backend_free(b.handle);
         return ok ? 0 : 1;
     }
+
+    for (int64_t h : {4096, 4097, 16384})
+        for (int64_t rows : {3, 50})
+            for (bool swapped : {false, true})
+                ok = compare("geglu_direct_half_exact", GGML_TYPE_F16,
+                    geglu_direct_half(b.handle, h, rows, false, swapped),
+                    geglu_direct_half(b.handle, h, rows, true, swapped), 1e-12) && ok;
+    for (int64_t h : {1, 33, 257, 1024, 1025})
+        for (int64_t rows : {1, 50})
+            for (auto type : {GGML_TYPE_F32, GGML_TYPE_F16}) {
+                const auto got = res_adarms(b.handle, h, rows, type, true);
+                ok = compare("res_adarms_exact", GGML_TYPE_F32,
+                    res_adarms(b.handle, h, rows, type, false), got, 1e-12) && ok;
+                ok = compare("res_adarms_cpu", GGML_TYPE_F32,
+                    res_adarms(cpu, h, rows, type, false), got, 3e-6) && ok;
+            }
 
     ok = compare("graph_source_dtype_switch", GGML_TYPE_BF16,
                  graph_source_dtype(cpu), graph_source_dtype(b.handle)) && ok;

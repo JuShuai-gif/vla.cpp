@@ -116,6 +116,9 @@ if(GGML_MUSA)
         add_test(NAME musa_attention256 COMMAND test_musa_ops --attention256)
         set_tests_properties(musa_attention256 PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
             ENVIRONMENT "VLA_MUSA_GEMMA_ATTN=fused-all")
+        add_test(NAME musa_kv_direct COMMAND test_musa_ops --flash-attn)
+        set_tests_properties(musa_kv_direct PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
+            ENVIRONMENT "VLA_PI05_KV_DIRECT=1;VLA_MUSA_GEMMA_ATTN=fused-all")
         add_test(NAME musa_flash_attn COMMAND test_musa_ops --flash-attn)
         set_tests_properties(musa_flash_attn PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
     endif()
