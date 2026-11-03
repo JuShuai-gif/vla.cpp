@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp/优化记录/2026-11-03_四项深化与MCU热点优化/run_focused_mcu.py", line 21, in <module>
+    valid='No kernels were profiled'not in raw and '==ERROR=='not in raw and re.search(r'(?m)^  .* \\([^()]*\\)x\\(',raw)is not None
+  File "/usr/lib/python3.10/re.py", line 200, in search
+    return _compile(pattern, flags).search(string)
+  File "/usr/lib/python3.10/re.py", line 303, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "/usr/lib/python3.10/sre_compile.py", line 788, in compile
+    p = sre_parse.parse(p, flags)
+  File "/usr/lib/python3.10/sre_parse.py", line 955, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+  File "/usr/lib/python3.10/sre_parse.py", line 444, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+  File "/usr/lib/python3.10/sre_parse.py", line 843, in _parse
+    raise source.error("missing ), unterminated subpattern",
+re.error: missing ), unterminated subpattern at position 25

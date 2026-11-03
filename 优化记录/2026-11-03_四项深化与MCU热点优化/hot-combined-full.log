@@ -1,0 +1,10 @@
+==PROF== '/home/skysi/code/vla.cpp/.venv-converter/bin/python' started, pid:45769  
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp/优化记录/2026-11-03_四项深化与MCU热点优化/bench_real.py", line 28, in <module>
+    marker=ctypes.CDLL(os.environ['PROFILE_MARKERS'])
+  File "/usr/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: /tmp/pi05-r2-markers.so: cannot open shared object file: No such file or directory
+==ERROR== The application returned an error code (1).  
+==PROF== Capture finished. Path is "/home/skysi/VLA/four-deep-20261103/hot-combined-full.mcu-rep"  
+==WARNING== No kernels were profiled.  

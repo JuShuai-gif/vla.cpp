@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "/usr/bin/mcu",
+    "--dump-mode",
+    "normal",
+    "--kernel-name",
+    "regex:gemma_tiled_256",
+    "-o",
+    "/home/skysi/VLA/four-deep-20261103/focus-attention-all-parallel",
+    "/home/skysi/code/vla.cpp/build-musa-official/tests/test_musa_ops",
+    "--attention256"
+  ],
+  "env": {
+    "VLA_MUSA_GEMMA_TILED": "all-parallel",
+    "GGML_CUDA_DISABLE_GRAPHS": "1",
+    "VLA_DEVICE": "0"
+  }
+}

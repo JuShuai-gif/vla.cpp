@@ -1,0 +1,58 @@
+[
+  {
+    "stage": "norm-pack",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 477.5419396249845,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "norm-pack",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 767.8385544998605,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "pipe-1",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 480.0686959999325,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "pipe-1",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 777.787853500115,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "pipe-4",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 477.7430492499093,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "pipe-4",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 772.3044092500686,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "pipe-8",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 479.01287524996405,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "pipe-8",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 779.596864499922,
+    "reference_relative_peak": 0.0
+  }
+]

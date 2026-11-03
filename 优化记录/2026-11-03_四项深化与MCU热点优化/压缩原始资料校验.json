@@ -1,0 +1,82 @@
+[
+  {
+    "original_path": "/home/skysi/VLA/four-deep-20261103/baseline-full.json",
+    "original_bytes": 11635036,
+    "original_sha256": "9b2a9645a1dedee33b3162db924a9effe2cad7e0f4d7ff4893cbac6ad4a8432b",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/原始报告/baseline-full.json.gz",
+    "archive_bytes": 426165,
+    "archive_sha256": "3e2dd2f24ce02e4b3ef459f5cf348ee0f34f0ccb260b228796d49a1885aafd11"
+  },
+  {
+    "original_path": "/home/skysi/VLA/four-deep-20261103/baseline-pruned.json",
+    "original_bytes": 4963716,
+    "original_sha256": "37211872799cace9786235dabc3bfc1849aba94457d8a43eafd301fd0c7c2872",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/原始报告/baseline-pruned.json.gz",
+    "archive_bytes": 195255,
+    "archive_sha256": "aa0e910189843ed085c138396e30de759cab40ffa2a81ae4d220f3303a13eb7b"
+  },
+  {
+    "original_path": "/home/skysi/VLA/four-deep-20261103/selected-msys-full.json",
+    "original_bytes": 10421702,
+    "original_sha256": "ca2d14524542d4db8f771f92b22f2fb9ba6d24afd98f61c814367d6d3d6fffc4",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/原始报告/selected-msys-full.json.gz",
+    "archive_bytes": 421414,
+    "archive_sha256": "561d3060aeb548353d42d9c1be4a7c2d4ead45e56474484c01e95eb4966baacf"
+  },
+  {
+    "original_path": "/home/skysi/VLA/four-deep-20261103/selected-msys-pruned.json",
+    "original_bytes": 4551133,
+    "original_sha256": "0eb2a64bee143a42d3f54e1f4570854a42fe244b4ddb66db6818cff712250b32",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/原始报告/selected-msys-pruned.json.gz",
+    "archive_bytes": 194644,
+    "archive_sha256": "b77568434461d5686997800a4d2bcb83081e5cd2d66b09d7384931345a5cb4a4"
+  },
+  {
+    "original_path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_四项深化与MCU热点优化/focus-attention-all-parallel.log",
+    "original_bytes": 907283,
+    "original_sha256": "0e1a692fb731fe8e47e9dd96636ff4c2316b9bde1ede649fdf2672cf0ff0bf3d",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/focus-attention-all-parallel.log.gz",
+    "archive_bytes": 19338,
+    "archive_sha256": "673c00f6ed59c87591bac39eaf2d3fc9abf53cbb9741f6f01b54b433a882acc0"
+  },
+  {
+    "original_path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_四项深化与MCU热点优化/focus-attention-all.log",
+    "original_bytes": 908570,
+    "original_sha256": "dcccf23dee8309af9e52510a1bff06eb68cb4fafafc7bd585f0d15d1a2f2d242",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/focus-attention-all.log.gz",
+    "archive_bytes": 19582,
+    "archive_sha256": "384400f83d69a77f672426a44f566dffb8f716d68fd5b048c0855509b00aa6db"
+  },
+  {
+    "original_path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_四项深化与MCU热点优化/hot-combined-r2-full.log",
+    "original_bytes": 6581785,
+    "original_sha256": "130e4137011d1917b855fa5e1a8e8d79dcfe8538e0aa81086664d6cd9df7e6aa",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/hot-combined-r2-full.log.gz",
+    "archive_bytes": 160031,
+    "archive_sha256": "597df12d0f7e877349bd95e4c46040aed8e2e278a599cdb78ba4c49233e8b234"
+  },
+  {
+    "original_path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_四项深化与MCU热点优化/hot-combined-r2-pruned.log",
+    "original_bytes": 2006336,
+    "original_sha256": "3fbd093486542cdaa6f0a77c5fd0ec1a0deabdb98d841f9d1576be262bc26f3b",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/hot-combined-r2-pruned.log.gz",
+    "archive_bytes": 53545,
+    "archive_sha256": "6f16aff14e2e639ae8dc2d15ad4f28c939cc79e309af68ceee1318791acbde5d"
+  },
+  {
+    "original_path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_四项深化与MCU热点优化/mcu-full.log",
+    "original_bytes": 25467002,
+    "original_sha256": "49a353f28a288b138c3f2013887c55b5ecd8f908140c52888cca0d2a105eb782",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/mcu-full.log.gz",
+    "archive_bytes": 842521,
+    "archive_sha256": "75434780dd2e3b4906933104b7de387e6f3606aee2a107ce768b47aacd8f7a98"
+  },
+  {
+    "original_path": "/home/skysi/code/vla.cpp/优化记录/2026-11-03_四项深化与MCU热点优化/mcu-pruned.log",
+    "original_bytes": 10279105,
+    "original_sha256": "063aff39f4f702895e3625404f5427772ecbe6a972ac0683073c0c53c0cf9d85",
+    "archive_path": "优化记录/2026-11-03_四项深化与MCU热点优化/mcu-pruned.log.gz",
+    "archive_bytes": 350217,
+    "archive_sha256": "8d853c34123321f6307519723dbdf173daa368e33ab81489621e93f8cacdb9cf"
+  }
+]

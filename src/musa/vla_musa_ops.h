@@ -20,6 +20,7 @@ bool musa_vision_pack_enabled();
 bool musa_vision_raw_qkv(const ggml_tensor * q, const ggml_tensor * k, const ggml_tensor * v);
 void musa_vision_epilogue(ggml_tensor * t, bool gelu, void * stream);
 void musa_geglu_fast_forward(ggml_tensor * t,void * stream);
+void musa_f32_patch_forward(ggml_tensor * t,int patch,void * stream);
 void musa_u8_patch_forward(ggml_tensor * t,int patch,void * stream);
 void musa_cached_rope_forward(ggml_tensor * t,void * stream);
 #else

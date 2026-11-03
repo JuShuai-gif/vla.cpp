@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "control-f32",
+    "model": "pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "control-f32",
+    "model": "full",
+    "returncode": 0
+  },
+  {
+    "stage": "f32-patch",
+    "model": "pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "f32-patch",
+    "model": "full",
+    "returncode": 0
+  }
+]

@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp/build-musa-official
+Test project /home/skysi/code/vla.cpp/build-musa-official
+    Start 30: musa_packed_norm
+1/1 Test #30: musa_packed_norm .................   Passed    1.85 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   1.85 sec

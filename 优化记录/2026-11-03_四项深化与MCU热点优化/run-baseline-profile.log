@@ -1,0 +1,13 @@
+START baseline-pruned
+END baseline-pruned 0
+START msys-pruned
+END msys-pruned 0
+START mcu-pruned
+END mcu-pruned 0
+START baseline-full
+END baseline-full 0
+START msys-full
+END msys-full 0
+START mcu-full
+END mcu-full 0
+BASELINE PROFILE COMPLETE

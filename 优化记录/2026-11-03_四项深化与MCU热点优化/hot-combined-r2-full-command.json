@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "/usr/bin/mcu",
+    "--dump-mode",
+    "normal",
+    "--kernel-name",
+    "regex:(small_gemm_kernel|packed_norm_kernel|packed_geglu_kernel|vision_scores_kernel|vla_r2_begin|vla_r2_end)",
+    "-o",
+    "/home/skysi/VLA/four-deep-20261103/hot-combined-r2-full",
+    "/home/skysi/code/vla.cpp/.venv-converter/bin/python",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-03_\u56db\u9879\u6df1\u5316\u4e0eMCU\u70ed\u70b9\u4f18\u5316/bench_real.py",
+    "full",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-03_\u56db\u9879\u6df1\u5316\u4e0eMCU\u70ed\u70b9\u4f18\u5316/mcu-hot-combined-r2-full"
+  ],
+  "env": {
+    "BENCH_CONFIG": "combined-pipe4-env.json",
+    "BENCH_WARMUP": "1",
+    "BENCH_RUNS": "1",
+    "GGML_CUDA_DISABLE_GRAPHS": "1",
+    "PROFILE_MARKERS": "/home/skysi/VLA/four-deep-20261103/profile_markers.so"
+  }
+}

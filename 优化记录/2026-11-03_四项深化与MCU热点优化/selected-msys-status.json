@@ -1,0 +1,12 @@
+[
+  {
+    "stage": "selected-msys-pruned",
+    "returncode": 0,
+    "kernel_count": 1664
+  },
+  {
+    "stage": "selected-msys-full",
+    "returncode": 0,
+    "kernel_count": 4042
+  }
+]

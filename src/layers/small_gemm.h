@@ -9,7 +9,7 @@
 #include <cstdlib>
 namespace vla {
 constexpr uint32_t SMALL_GEMM_MAGIC=0x4d47534d,SMALL_PACK_MAGIC=0x4b50534d;
-struct SmallGemmSpec {uint32_t magic=SMALL_GEMM_MAGIC;int tile=32;};
+struct SmallGemmSpec {uint32_t magic=SMALL_GEMM_MAGIC;int tile=32;int pipeline=0;};
 inline void small_pack_cpu(ggml_tensor * t,int ith,int nth,void *) {
  const auto * x=t->src[0];auto * y=(ggml_fp16_t *)t->data;const int64_t n=ggml_nelements(x);
  for(int64_t i=ith;i<ggml_nelements(t);i+=nth)
@@ -31,9 +31,20 @@ inline ggml_tensor * small_gemm(ggml_context * C,ggml_tensor * w,ggml_tensor * x
              w->ne[0]%16==0 && w->ne[1]%tile==0 && x->ne[1]>0 && x->ne[1]<=64 &&
              w->ne[2]==1 && w->ne[3]==1 && x->ne[2]==1 && x->ne[3]==1 && (tile==32 || tile==64));
  static const uint32_t pack=SMALL_PACK_MAGIC;ggml_tensor * inputs[]={x};
- auto * padded=ggml_custom_4d(C,GGML_TYPE_F16,x->ne[0],64,1,1,inputs,1,small_pack_cpu,GGML_N_TASKS_MAX,(void *)&pack);
- static const SmallGemmSpec s32{SMALL_GEMM_MAGIC,32},s64{SMALL_GEMM_MAGIC,64};
- const auto & spec=tile==64?s64:s32;ggml_tensor * args[]={w,padded};
+ size_t view_offset=0;std::memcpy(&view_offset,x->op_params,sizeof(view_offset));
+ auto * padded=x->op==GGML_OP_VIEW && x->type==GGML_TYPE_F16 && view_offset==0 &&
+  x->src[0] && x->src[0]->type==GGML_TYPE_F16 && ggml_is_contiguous(x->src[0]) &&
+  x->src[0]->ne[0]==x->ne[0] && x->src[0]->ne[1]==64 &&
+  x->src[0]->ne[2]==1 && x->src[0]->ne[3]==1 ? x->src[0] :
+  ggml_custom_4d(C,GGML_TYPE_F16,x->ne[0],64,1,1,inputs,1,small_pack_cpu,GGML_N_TASKS_MAX,(void *)&pack);
+ static const SmallGemmSpec specs[2][2]={
+  {{SMALL_GEMM_MAGIC,32,0},{SMALL_GEMM_MAGIC,32,4}},
+  {{SMALL_GEMM_MAGIC,64,0},{SMALL_GEMM_MAGIC,64,4}}};
+ const char * value=std::getenv("VLA_MUSA_SMALL_PIPE");
+ const bool shape=value && std::strcmp(value,"shape")==0;
+ const bool unroll=value && (std::strcmp(value,"4")==0 ||
+                           (shape && !(w->ne[0]==1024 && w->ne[1]==8192)));
+ const auto & spec=specs[tile==64][unroll?1:0];ggml_tensor * args[]={w,padded};
  auto * out=ggml_custom_4d(C,GGML_TYPE_F32,w->ne[1],x->ne[1],1,1,args,2,small_gemm_cpu,GGML_N_TASKS_MAX,(void *)&spec);
  custom_parameter_snapshot(out,spec);return out;
 }

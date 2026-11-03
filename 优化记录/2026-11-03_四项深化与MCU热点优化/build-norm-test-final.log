@@ -1,0 +1,21 @@
+[1/2] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+In file included from /home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:1:
+In file included from /home/skysi/code/vla.cpp/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:564:39: warning: 'ggml_mul_mat_set_prec' is deprecated: use ggml_prec_set_acc() instead [-Wdeprecated-declarations]
+        out=ggml_mul_mat(g.ctx,wf,xf);ggml_mul_mat_set_prec(out,GGML_PREC_F32);
+                                      ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml.h:1489:5: note: 'ggml_mul_mat_set_prec' has been explicitly marked deprecated here
+    GGML_DEPRECATED(GGML_API void ggml_mul_mat_set_prec(
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml.h:192:61: note: expanded from macro 'GGML_DEPRECATED'
+#    define GGML_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+                                                            ^
+2 warnings generated.
+[2/2] Linking CXX executable tests/test_musa_ops

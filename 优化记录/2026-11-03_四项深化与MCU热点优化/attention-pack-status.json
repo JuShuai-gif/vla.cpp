@@ -1,0 +1,65 @@
+[
+  {
+    "stage": "geglu-pack",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 476.6010455000469,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "geglu-pack",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 772.3925992499971,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "prune-mean",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 467.78789287498057,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "tiled-denoise",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 569.5953667499793,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "tiled-denoise",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 1219.9468018750395,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "tiled-all",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 661.5633637499059,
+    "reference_relative_peak": 0.0009509333758614957
+  },
+  {
+    "stage": "tiled-all",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 1549.913667875046,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "pack-combined",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 460.8615270000769,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "pack-combined",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 759.4791649999593,
+    "reference_relative_peak": 0.0
+  }
+]

@@ -5,15 +5,43 @@
 #include <cmath>
 #include <cstdint>
 #include <cstring>
+#include <cstdlib>
 #include <numeric>
 #include <stdexcept>
 #include <vector>
 
 namespace vla {
 
+constexpr uint32_t VISION_SCORE_MAGIC=0x5350564du;
+inline void vision_scores_cpu(ggml_tensor * t,int ith,int nth,void *) {
+ const auto * a=(const float *)t->src[0]->data;auto * out=(float *)t->data;
+ for(int k=ith;k<256;k+=nth) {
+  double sum=0;
+  for(int q=0;q<256;++q) {
+   double heads=0;for(int h=0;h<16;++h)heads+=a[k+256*(q+256*h)];
+   sum+=(float)(heads/16);
+  }
+  out[k]=(float)(sum/256);
+ }
+}
+inline ggml_tensor * fused_vision_scores(ggml_context * C,ggml_tensor * attention) {
+ GGML_ASSERT(attention->type==GGML_TYPE_F32 && ggml_is_contiguous(attention) &&
+             attention->ne[0]==256 && attention->ne[1]==256 &&
+             attention->ne[2]==16 && attention->ne[3]==1);
+ static const uint32_t magic=VISION_SCORE_MAGIC;ggml_tensor * args[]={attention};
+ return ggml_custom_4d(C,GGML_TYPE_F32,256,1,1,1,args,1,vision_scores_cpu,
+                       GGML_N_TASKS_MAX,(void *)&magic);
+}
+
 // Attention is [key, query, head]. Match VisPruner: mean(head), then mean(query).
 inline ggml_tensor * vision_patch_scores(ggml_context * C, ggml_tensor * attention) {
     GGML_ASSERT(attention->ne[3] == 1);
+#ifdef GGML_USE_MUSA
+    if(std::getenv("VLA_PI05_PRUNE_MEAN") && attention->type==GGML_TYPE_F32 &&
+       ggml_is_contiguous(attention) && attention->ne[0]==256 &&
+       attention->ne[1]==256 && attention->ne[2]==16)
+        return fused_vision_scores(C,attention);
+#endif
     const int64_t keys = attention->ne[0], queries = attention->ne[1];
     auto * heads_first = ggml_cont(C, ggml_permute(C, attention, 1, 2, 0, 3));
     auto * per_query = ggml_reshape_2d(C, ggml_mean(C, heads_first), keys, queries);

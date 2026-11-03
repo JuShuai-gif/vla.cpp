@@ -1,3 +1,4 @@
+#include "layers/packed_norm.h"
 #include "layers/action_edges.h"
 // Copyright 2026 VinRobotics
 //
@@ -123,6 +124,7 @@ struct Pi05ModelArch : public ModelArchBase {
     FusedActionStepSpec   action_step_spec;
     RopeTableSpec         rope_table_spec;
     U8PatchSpec           u8_patch_spec;
+    U8PatchSpec           f32_patch_spec{F32_PATCH_MAGIC,14};
     ggml_tensor *         u8_lut = nullptr;
     FusedActionLinearSpec action_in_spec{FUSED_ACTION_LINEAR_MAGIC,1},action_out_spec;
     bool                 fuse_res_adarms = false;
@@ -273,14 +275,19 @@ ggml_tensor * build_expert_layer(
     if (fa && fg && !w.fq_q && !w.fq_qkv && !w.fq_gate && !w.fq_gu) {
         // One node per chain: adaRMS straight into the GEMMs' input type, and
         // out * gate + x reading the GEMM output in whatever type it has.
-        ggml_tensor * xn = xn_ready ? xn_ready : fused_adarms(ctx, x_in, mod_attn, at, *fa);
+        const bool pack=at==GGML_TYPE_F32 && packed_norm_enabled() &&
+                        w.Wqkv && w.Wqkv->type==GGML_TYPE_F16 && seq<=64;
+        ggml_tensor * xn = xn_ready ? xn_ready : pack ?
+            packed_norm(ctx,x_in,nullptr,nullptr,mod_attn,fa->eps,0) :
+            fused_adarms(ctx, x_in, mod_attn, at, *fa);
         ggml_tensor * o  = gemma_attn(ctx, w, xn, positions, cfg, seq, cached_K, cached_V, mask,
                                       nullptr, nullptr, at, use_fused_attention(), nullptr, nullptr, kv,
                                       nullptr,nullptr,nullptr,nullptr,false,angles);
         ggml_tensor * h1 = nullptr;
         ggml_tensor * xm = nullptr;
         if (fr && at == GGML_TYPE_F32)
-            xm = fused_res_adarms(ctx, x_in, o, mod_attn, mod_ffn, *fr, &h1);
+            xm = pack ? packed_norm(ctx,x_in,o,mod_attn,mod_ffn,fr->eps,1,&h1) :
+                        fused_res_adarms(ctx, x_in, o, mod_attn, mod_ffn, *fr, &h1);
         else {
             h1 = fused_gateres(ctx, x_in, o, mod_attn, *fg);
             xm = fused_adarms(ctx, h1, mod_ffn, at, *fa);
@@ -288,7 +295,8 @@ ggml_tensor * build_expert_layer(
         auto * mlp = gemma_mlp(ctx, w, xm, at);
         if (fr && at == GGML_TYPE_F32 && next_mod && next_norm) {
             ggml_tensor * result = nullptr;
-            *next_norm = fused_res_adarms(ctx, h1, mlp, mod_ffn, next_mod, *fr, &result);
+            *next_norm = pack ? packed_norm(ctx,h1,mlp,mod_ffn,next_mod,fr->eps,1,&result) :
+                               fused_res_adarms(ctx, h1, mlp, mod_ffn, next_mod, *fr, &result);
             return result;
         }
         return fused_gateres(ctx, h1, mlp, mod_ffn, *fg);
@@ -408,6 +416,7 @@ bool bake_adarms(gguf_reader & g, Pi05ModelArch & m) {
     }
     m.u8_lut = ggml_new_tensor_1d(m.ctx_const,GGML_TYPE_F16,256);
     m.u8_patch_spec.patch=m.vis.patch_size;
+    m.f32_patch_spec.patch=m.vis.patch_size;
     m.ada_mod   = ggml_new_tensor_3d(m.ctx_const, GGML_TYPE_F32, 3*h, nj, ns);
     m.ada_scale1.resize(n_slot);
     m.ada_shift.resize(n_slot);
@@ -562,6 +571,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         m->rope_table_spec.base=cfg.rope_freq_base;
         m->action_in_spec.eps=m->action_out_spec.eps=cfg.rms_eps;
         m->action_out_spec.dt=m->action_step_spec.dt;
+        m->action_in_spec.packed=b.is_musa && m->matmul_type==GGML_TYPE_F16 && packed_norm_enabled();
         m->input_cache = b.is_musa && env_flag("VLA_PI05_INPUT_CACHE");
         m->async_vision = b.is_musa && env_flag("VLA_PI05_ASYNC_VISION");
         m->direct_vision = b.is_musa && env_flag("VLA_PI05_VISION_DIRECT");
@@ -882,15 +892,18 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
     const ggml_type vt = vis.vit.enc.cfg.act;
     bool raw_u8=musa_backend && env_flag("VLA_PI05_U8_PATCH") && host_input!=3;
     for(int v=0;v<n_images;++v)raw_u8=raw_u8 && images[v].format==PixelFormat::U8;
-    const bool built = vis_graph.ensure(backend, raw_u8 ? -(int64_t)n_images : (int64_t)n_images, (size_t) 128*1024*1024,
+    bool raw_f32=musa_backend && env_flag("VLA_PI05_F32_PATCH") && host_input!=3;
+    for(int v=0;v<n_images;++v)raw_f32=raw_f32 && images[v].format==PixelFormat::F32_RGB_01;
+    const int input_mode=raw_u8?1:raw_f32?2:0;
+    const bool built = vis_graph.ensure(backend, (int64_t)n_images*3+input_mode, (size_t) 128*1024*1024,
                                         [&](ggml_context * VC, VisIO & vio) -> ggml_cgraph * {
         // Tower + PaliGemma projector (linear, optional bias) over nv views of
         // pixels: F32 [hidden, nv*K]. The patch embed (conv_2d) runs in F32, the
         // tower in vt.
         auto tower = [&](ggml_tensor * px, int64_t nv) {
             ggml_tensor * x = nullptr;
-            if(raw_u8) {
-                auto * patches=u8_patch(VC,px,u8_lut,u8_patch_spec);
+            if(raw_u8 || raw_f32) {
+                auto * patches=raw_u8?u8_patch(VC,px,u8_lut,u8_patch_spec):f32_patch(VC,px,f32_patch_spec);
                 patches=ggml_reshape_2d(VC,patches,patches->ne[0],K*nv);
                 auto * pw=ggml_cast(VC,ggml_reshape_2d(VC,vis.vit.patch_w,3*vis.patch_size*vis.patch_size,vis.vit.enc.cfg.hidden),GGML_TYPE_F16);
                 x=ggml_mul_mat(VC,pw,patches);
@@ -947,7 +960,8 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         ggml_cgraph * vg = ggml_new_graph_custom(VC, 8192, false);
         auto new_px = [&](int64_t nv) {
             ggml_tensor * t = raw_u8 ? ggml_new_tensor_4d(VC,GGML_TYPE_I8,3,S,S,nv)
-                                    : ggml_new_tensor_4d(VC,GGML_TYPE_F32,S,S,3,nv);
+                : raw_f32 ? ggml_new_tensor_4d(VC,GGML_TYPE_F32,3,S,S,nv)
+                          : ggml_new_tensor_4d(VC,GGML_TYPE_F32,S,S,3,nv);
             ggml_set_input(t);
             vio.t_px.push_back(t);
             return t;
@@ -997,8 +1011,9 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
     if (destination) GGML_ASSERT(output_offset==ggml_nbytes(destination));
 
     const size_t per_view = (size_t) 3*S*S;
-    if(raw_u8) {
-        const size_t bytes=per_view*n_images;
+    if(raw_u8 || raw_f32) {
+        const size_t view_bytes=per_view*(raw_f32?sizeof(float):1);
+        const size_t bytes=view_bytes*n_images;
         uint8_t * raw=nullptr;
 #ifdef GGML_USE_MUSA
         if(host_input==2) {
@@ -1013,7 +1028,7 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         if(!raw){pixels_storage.resize((bytes+3)/4);raw=(uint8_t *)pixels_storage.data();}
         for(int v=0;v<n_images;++v) {
             if(!view_ok("pi05",images[v],S))return nullptr;
-            std::memcpy(raw+v*per_view,images[v].data,per_view);
+            std::memcpy(raw+v*view_bytes,images[v].data,view_bytes);
         }
         size_t byte_off=0;
         for(size_t j=0;j<vio.t_px.size();++j) {
@@ -1290,7 +1305,9 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         const bool edges = musa_backend && fused_ew && expert_act == GGML_TYPE_F32 && env_flag("VLA_PI05_ACTION_EDGES");
         const bool linear_edges=musa_backend && fused_ew && expert_act==GGML_TYPE_F32 && env_flag("VLA_PI05_ACTION_LINEAR");
         if(linear_edges) input_norm=fused_action_linear(C,W_ain,x_t,b_ain,mod(0),nullptr,action_in_spec,&h);
-        else if(edges) input_norm=fused_bias_adarms(C,input_proj,b_ain,mod(0),input_adarms_spec,&h);
+        else if(edges) input_norm=packed_norm_enabled() && matmul_type==GGML_TYPE_F16 ?
+            packed_norm(C,input_proj,b_ain,nullptr,mod(0),input_adarms_spec.eps,2,&h) :
+            fused_bias_adarms(C,input_proj,b_ain,mod(0),input_adarms_spec,&h);
         else h=ggml_add(C,input_proj,b_ain);
         const bool cross = fuse_cross_adarms && fuse_res_adarms && fused_ew && expert_act == GGML_TYPE_F32;
         ggml_tensor * next_norm = input_norm;

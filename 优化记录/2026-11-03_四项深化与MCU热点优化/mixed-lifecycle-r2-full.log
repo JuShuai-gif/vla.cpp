@@ -1,0 +1,44 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+VLA_PI05_PHASES {"vision_ms":7265.814453,"prefix_ms":375.066824,"denoise_ms":268.444737,"steps":10}
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+VLA_PI05_PHASES {"vision_ms":140.894913,"prefix_ms":367.737937,"denoise_ms":572.571767,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.062622,"prefix_ms":362.962644,"denoise_ms":265.891166,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.106293,"prefix_ms":363.179100,"denoise_ms":265.737825,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.078613,"prefix_ms":363.741627,"denoise_ms":265.475956,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.059921,"prefix_ms":363.382425,"denoise_ms":265.338021,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.231262,"prefix_ms":363.340571,"denoise_ms":265.128516,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.215897,"prefix_ms":364.276173,"denoise_ms":265.292925,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.144333,"prefix_ms":362.459041,"denoise_ms":265.343043,"steps":10}
+VLA_PI05_PHASES {"vision_ms":129.989471,"prefix_ms":363.107932,"denoise_ms":264.966808,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.227493,"prefix_ms":363.304662,"denoise_ms":265.112374,"steps":10}
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+VLA_PI05_PHASES {"vision_ms":131.755905,"prefix_ms":364.134452,"denoise_ms":265.275783,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.899231,"prefix_ms":363.249768,"denoise_ms":265.257295,"steps":10}
+VLA_PI05_PHASES {"vision_ms":131.159378,"prefix_ms":363.612472,"denoise_ms":265.471594,"steps":10}
+VLA_PI05_PHASES {"vision_ms":76.055908,"prefix_ms":253.608892,"denoise_ms":258.787370,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.258804,"prefix_ms":363.430163,"denoise_ms":263.034437,"steps":10}
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+VLA_PI05_PHASES {"vision_ms":0.000000,"prefix_ms":369.318782,"denoise_ms":545.750602,"steps":10}
+VLA_PI05_PHASES {"vision_ms":0.000000,"prefix_ms":254.099324,"denoise_ms":258.131976,"steps":10}
+VLA_PI05_PHASES {"vision_ms":129.751587,"prefix_ms":363.511068,"denoise_ms":264.138606,"steps":10}
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+VLA_PI05_PHASES {"vision_ms":129.590332,"prefix_ms":368.866795,"denoise_ms":528.114704,"steps":10}
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+VLA_PI05_PHASES {"vision_ms":141.716690,"prefix_ms":363.032526,"denoise_ms":265.346665,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.285873,"prefix_ms":363.499527,"denoise_ms":265.099195,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.337952,"prefix_ms":364.012168,"denoise_ms":264.636069,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.026993,"prefix_ms":363.500833,"denoise_ms":264.829004,"steps":10}
+VLA_PI05_PHASES {"vision_ms":130.135452,"prefix_ms":362.310234,"denoise_ms":264.768553,"steps":10}
+{'model': 'full', 'reference_max_abs': 0, 'f32_u8_f32_roundtrip_exact': True, 'one_two_one_two_views': True, 'precomputed_embedding_exact': True, 'changed_image_roundtrip_exact': True, 'phase_replay_runs': 8, 'tokens': 42}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 5.05 GiB
+vla(pi05): model loaded (n_threads=4)

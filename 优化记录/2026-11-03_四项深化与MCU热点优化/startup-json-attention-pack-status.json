@@ -1,0 +1,47 @@
+[
+  {
+    "stage": "geglu-pack",
+    "model": "pruned",
+    "returncode": 1
+  },
+  {
+    "stage": "geglu-pack",
+    "model": "full",
+    "returncode": 1
+  },
+  {
+    "stage": "prune-mean",
+    "model": "pruned",
+    "returncode": 1
+  },
+  {
+    "stage": "tiled-denoise",
+    "model": "pruned",
+    "returncode": 1
+  },
+  {
+    "stage": "tiled-denoise",
+    "model": "full",
+    "returncode": 1
+  },
+  {
+    "stage": "tiled-all",
+    "model": "pruned",
+    "returncode": 1
+  },
+  {
+    "stage": "tiled-all",
+    "model": "full",
+    "returncode": 1
+  },
+  {
+    "stage": "pack-combined",
+    "model": "pruned",
+    "returncode": 1
+  },
+  {
+    "stage": "pack-combined",
+    "model": "full",
+    "returncode": 1
+  }
+]\n

@@ -1,0 +1,2 @@
+{'stage': 'hot-combined-r2-pruned', 'returncode': 0, 'valid_kernel_report': True}
+{'stage': 'hot-combined-r2-full', 'returncode': 0, 'valid_kernel_report': True}

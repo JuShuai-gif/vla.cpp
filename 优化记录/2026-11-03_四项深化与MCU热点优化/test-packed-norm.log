@@ -1,0 +1,38 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp/build-musa-official
+Test project /home/skysi/code/vla.cpp/build-musa-official
+    Start 30: musa_packed_norm
+1/1 Test #30: musa_packed_norm .................Subprocess aborted***Exception:   7.96 sec
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+musa_ops: backend = MUSA (device 0: M1000)
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-backend.cpp:338: GGML_ASSERT(buf != NULL && "tensor buffer not set") failed
+[New LWP 24716]
+[New LWP 24719]
+[New LWP 24720]
+[New LWP 24721]
+[New LWP 24722]
+[New LWP 24723]
+[New LWP 24724]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+0x0000ffff857d9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	../sysdeps/unix/sysv/linux/wait4.c: 没有那个文件或目录.
+#0  0x0000ffff857d9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	in ../sysdeps/unix/sysv/linux/wait4.c
+#1  0x0000ffff85bfa3ac in ggml_print_backtrace () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0
+#2  0x0000ffff85bfa5f8 in ggml_abort () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0
+#3  0x0000ffff85c13d60 in ggml_backend_tensor_set () from /home/skysi/code/vla.cpp/build-musa-official/bin/libggml-base.so.0
+#4  0x0000000000413cd4 in (anonymous namespace)::Graph::upload() ()
+#5  0x0000000000412de8 in (anonymous namespace)::Graph::run(ggml_backend*, std::vector<ggml_tensor*, std::allocator<ggml_tensor*> > const&, ggml_tensor*, bool, int, bool) ()
+#6  0x000000000040c954 in (anonymous namespace)::packed_norm_graph(ggml_backend*, int, int, int, bool) ()
+#7  0x0000000000409d00 in main ()
+[Inferior 1 (process 24711) detached]
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   7.96 sec
+
+The following tests FAILED:
+	 30 - musa_packed_norm (Subprocess aborted)
+Errors while running CTest

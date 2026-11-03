@@ -1,0 +1,58 @@
+{
+  "protocol": "separate synchronized phase instrumentation, not ordinary wall",
+  "runs": [
+    {
+      "vision_ms": 130.106293,
+      "prefix_ms": 363.1791,
+      "denoise_ms": 265.737825,
+      "steps": 10
+    },
+    {
+      "vision_ms": 130.078613,
+      "prefix_ms": 363.741627,
+      "denoise_ms": 265.475956,
+      "steps": 10
+    },
+    {
+      "vision_ms": 130.059921,
+      "prefix_ms": 363.382425,
+      "denoise_ms": 265.338021,
+      "steps": 10
+    },
+    {
+      "vision_ms": 130.231262,
+      "prefix_ms": 363.340571,
+      "denoise_ms": 265.128516,
+      "steps": 10
+    },
+    {
+      "vision_ms": 130.215897,
+      "prefix_ms": 364.276173,
+      "denoise_ms": 265.292925,
+      "steps": 10
+    },
+    {
+      "vision_ms": 130.144333,
+      "prefix_ms": 362.459041,
+      "denoise_ms": 265.343043,
+      "steps": 10
+    },
+    {
+      "vision_ms": 129.989471,
+      "prefix_ms": 363.107932,
+      "denoise_ms": 264.966808,
+      "steps": 10
+    },
+    {
+      "vision_ms": 130.227493,
+      "prefix_ms": 363.304662,
+      "denoise_ms": 265.112374,
+      "steps": 10
+    }
+  ],
+  "means": {
+    "vision_ms": 130.131660375,
+    "prefix_ms": 363.348941375,
+    "denoise_ms": 265.29943349999996
+  }
+}

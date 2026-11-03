@@ -1,0 +1,34 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+{
+  "model": "full",
+  "model_path": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "warmup": 3,
+  "samples": 15,
+  "text_tokens": 42,
+  "camera_order": [
+    "observation.images.wrist",
+    "observation.images.top"
+  ],
+  "num_steps": 10,
+  "pixel_format": "F32_RGB_01 (saved LeRobot float resize)",
+  "mean_ms": 781.6739450000872,
+  "p95_ms": 782.6630215004116,
+  "max_ms": 783.0385400002342,
+  "min_ms": 781.1276439997528,
+  "repeat_max_abs": 0,
+  "reference_relative_peak": 0.0,
+  "reference": "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-03_\u516b\u9879\u4f18\u5316\u4e0e\u5ef6\u8fdf\u76ee\u6807/candidate-full-entry/cup_cube_joint_061_a800_50k_20261022/f32.json",
+  "reference_sha256": "4cd13e357309d7b3bcec3395c7aaeebeb799a324d7cf70e69e3a37609330a28e",
+  "scope": "resident predict Python binding wall; excludes checkpoint load, image file decode/resize and tokenizer"
+}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 5.05 GiB
+vla(pi05): model loaded (n_threads=4)

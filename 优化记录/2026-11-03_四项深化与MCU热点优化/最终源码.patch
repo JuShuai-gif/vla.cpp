@@ -1,0 +1,978 @@
+diff --git a/scripts/pi05_musa_profiles.json b/scripts/pi05_musa_profiles.json
+index ad7bdc1..6c42de4 100644
+--- a/scripts/pi05_musa_profiles.json
++++ b/scripts/pi05_musa_profiles.json
+@@ -23,7 +23,12 @@
+     "VLA_MUSA_GEMMA_FLAT_AV": "denoise",
+     "VLA_PI05_PRUNED_BATCH": "1",
+     "VLA_MUSA_SMALL_GEMM": "auto",
+-    "VLA_MUSA_GEMMA_FLAT_QK": "denoise"
++    "VLA_MUSA_GEMMA_FLAT_QK": "denoise",
++    "VLA_PI05_F32_PATCH": "1",
++    "VLA_PI05_NORM_PACK": "1",
++    "VLA_PI05_GEGLU_PACK": "1",
++    "VLA_PI05_PRUNE_MEAN": "1",
++    "VLA_MUSA_SMALL_PIPE": "shape"
+   },
+   "full": {
+     "VLA_MUSA_VISION_SDPA": "1",
+@@ -48,6 +53,10 @@
+     "VLA_PI05_VISION_NO_OUT_COPY": "1",
+     "VLA_MUSA_GEMMA_FLAT_AV": "denoise",
+     "VLA_MUSA_GEMMA_FLAT_QK": "denoise",
+-    "VLA_MUSA_SMALL_GEMM": "auto"
++    "VLA_MUSA_SMALL_GEMM": "auto",
++    "VLA_PI05_F32_PATCH": "1",
++    "VLA_PI05_NORM_PACK": "1",
++    "VLA_PI05_GEGLU_PACK": "1",
++    "VLA_MUSA_SMALL_PIPE": "shape"
+   }
+ }
+diff --git a/src/layers/action_edges.h b/src/layers/action_edges.h
+index 19c2007..90be845 100644
+--- a/src/layers/action_edges.h
++++ b/src/layers/action_edges.h
+@@ -1,6 +1,7 @@
+ #pragma once
+ #include "ggml.h"
+ #include "layers/custom_params.h"
++#include "layers/packed_norm.h"
+ #include <cmath>
+ #include <vector>
+ namespace vla {
+@@ -9,6 +10,7 @@ struct FusedActionLinearSpec {
+     uint32_t magic=FUSED_ACTION_LINEAR_MAGIC;
+     int input=0;
+     float eps=1e-6f,dt=0;
++    int packed=0;
+ };
+ inline void action_linear_cpu(ggml_tensor * dst,int ith,int nth,void * ud) {
+     const auto & s=*(const FusedActionLinearSpec *)ud;
+@@ -19,7 +21,9 @@ inline void action_linear_cpu(ggml_tensor * dst,int ith,int nth,void * ud) {
+     const int h=s.input?dst->src[0]->ne[1]:dst->src[0]->ne[0];
+     const int cols=dst->src[0]->ne[0],outputs=dst->src[0]->ne[1],rows=dst->src[1]->ne[1];
+     auto * y=(float *)dst->data;std::vector<float> values(h);
+-    for(int row=ith;row<rows;row+=nth) {
++    for(int row=ith;row<(s.packed?64:rows);row+=nth) {
++        auto * half=s.packed?(ggml_fp16_t *)(y+h*rows):nullptr;
++        if(row>=rows){for(int i=0;i<h;++i)half[row*h+i]=ggml_fp32_to_fp16(0.f);continue;}
+         double sum=0;
+         for(int i=0;i<h;++i) {
+             float v=0;
+@@ -32,7 +36,10 @@ inline void action_linear_cpu(ggml_tensor * dst,int ith,int nth,void * ud) {
+         }
+         const float inv=1.f/std::sqrt((float)(sum/h)+s.eps);
+         for(int i=0;i<h;++i){const float n=values[i]*inv;values[i]=(n+n*mod[i])+mod[h+i];}
+-        if(s.input)for(int i=0;i<h;++i)y[h*rows+row*h+i]=values[i];
++        if(s.input)for(int i=0;i<h;++i) {
++            if(s.packed)half[row*h+i]=ggml_fp32_to_fp16(values[i]);
++            else y[h*rows+row*h+i]=values[i];
++        }
+         else for(int o=0;o<outputs;++o) {
+             float v=0;for(int i=0;i<h;++i)v=std::fma(w[o*h+i],values[i],v);
+             const float velocity=v+b[o],step=velocity*s.dt;
+@@ -50,12 +57,20 @@ inline ggml_tensor * fused_action_linear(ggml_context * C,ggml_tensor * w,ggml_t
+     GGML_ASSERT(mod->type==GGML_TYPE_F32 && ggml_nelements(mod)==3*h);
+     if(!spec.input)GGML_ASSERT(noise && noise->type==GGML_TYPE_F32 && noise->ne[0]==w->ne[1] && noise->ne[1]==x->ne[1]);
+     ggml_tensor * args[]={w,x,b,mod,noise};
+-    auto * t=ggml_custom_4d(C,GGML_TYPE_F32,w->ne[1],x->ne[1],spec.input?2:1,1,args,
++    GGML_ASSERT(!spec.packed || (spec.input && x->ne[1]>0 && x->ne[1]<=64));
++    auto * t=ggml_custom_4d(C,spec.packed?GGML_TYPE_I8:GGML_TYPE_F32,
++                           spec.packed?h*x->ne[1]*4+h*64*2:w->ne[1],
++                           spec.packed?1:x->ne[1],spec.packed?1:spec.input?2:1,1,args,
+                            spec.input?4:5,action_linear_cpu,GGML_N_TASKS_MAX,(void *)&spec);
+     custom_parameter_snapshot(t,spec);
+     ggml_set_name(t,spec.input?"action_in_linear_adarms":"action_out_adarms_linear_step");
+     if(!spec.input)return t;
+     GGML_ASSERT(residual);
++    if(spec.packed) {
++        *residual=packed_typed_view(C,t,GGML_TYPE_F32,h,x->ne[1],0);
++        auto * pad=packed_typed_view(C,t,GGML_TYPE_F16,h,64,h*x->ne[1]*4);
++        return ggml_view_2d(C,pad,h,x->ne[1],pad->nb[1],0);
++    }
+     *residual=ggml_view_2d(C,t,h,x->ne[1],t->nb[1],0);
+     return ggml_view_2d(C,t,h,x->ne[1],t->nb[1],t->nb[2]);
+ }
+diff --git a/src/layers/small_gemm.h b/src/layers/small_gemm.h
+index eb40a59..6eba174 100644
+--- a/src/layers/small_gemm.h
++++ b/src/layers/small_gemm.h
+@@ -9,7 +9,7 @@
+ #include <cstdlib>
+ namespace vla {
+ constexpr uint32_t SMALL_GEMM_MAGIC=0x4d47534d,SMALL_PACK_MAGIC=0x4b50534d;
+-struct SmallGemmSpec {uint32_t magic=SMALL_GEMM_MAGIC;int tile=32;};
++struct SmallGemmSpec {uint32_t magic=SMALL_GEMM_MAGIC;int tile=32;int pipeline=0;};
+ inline void small_pack_cpu(ggml_tensor * t,int ith,int nth,void *) {
+  const auto * x=t->src[0];auto * y=(ggml_fp16_t *)t->data;const int64_t n=ggml_nelements(x);
+  for(int64_t i=ith;i<ggml_nelements(t);i+=nth)
+@@ -31,9 +31,20 @@ inline ggml_tensor * small_gemm(ggml_context * C,ggml_tensor * w,ggml_tensor * x
+              w->ne[0]%16==0 && w->ne[1]%tile==0 && x->ne[1]>0 && x->ne[1]<=64 &&
+              w->ne[2]==1 && w->ne[3]==1 && x->ne[2]==1 && x->ne[3]==1 && (tile==32 || tile==64));
+  static const uint32_t pack=SMALL_PACK_MAGIC;ggml_tensor * inputs[]={x};
+- auto * padded=ggml_custom_4d(C,GGML_TYPE_F16,x->ne[0],64,1,1,inputs,1,small_pack_cpu,GGML_N_TASKS_MAX,(void *)&pack);
+- static const SmallGemmSpec s32{SMALL_GEMM_MAGIC,32},s64{SMALL_GEMM_MAGIC,64};
+- const auto & spec=tile==64?s64:s32;ggml_tensor * args[]={w,padded};
++ size_t view_offset=0;std::memcpy(&view_offset,x->op_params,sizeof(view_offset));
++ auto * padded=x->op==GGML_OP_VIEW && x->type==GGML_TYPE_F16 && view_offset==0 &&
++  x->src[0] && x->src[0]->type==GGML_TYPE_F16 && ggml_is_contiguous(x->src[0]) &&
++  x->src[0]->ne[0]==x->ne[0] && x->src[0]->ne[1]==64 &&
++  x->src[0]->ne[2]==1 && x->src[0]->ne[3]==1 ? x->src[0] :
++  ggml_custom_4d(C,GGML_TYPE_F16,x->ne[0],64,1,1,inputs,1,small_pack_cpu,GGML_N_TASKS_MAX,(void *)&pack);
++ static const SmallGemmSpec specs[2][2]={
++  {{SMALL_GEMM_MAGIC,32,0},{SMALL_GEMM_MAGIC,32,4}},
++  {{SMALL_GEMM_MAGIC,64,0},{SMALL_GEMM_MAGIC,64,4}}};
++ const char * value=std::getenv("VLA_MUSA_SMALL_PIPE");
++ const bool shape=value && std::strcmp(value,"shape")==0;
++ const bool unroll=value && (std::strcmp(value,"4")==0 ||
++                           (shape && !(w->ne[0]==1024 && w->ne[1]==8192)));
++ const auto & spec=specs[tile==64][unroll?1:0];ggml_tensor * args[]={w,padded};
+  auto * out=ggml_custom_4d(C,GGML_TYPE_F32,w->ne[1],x->ne[1],1,1,args,2,small_gemm_cpu,GGML_N_TASKS_MAX,(void *)&spec);
+  custom_parameter_snapshot(out,spec);return out;
+ }
+diff --git a/src/layers/u8_patch.h b/src/layers/u8_patch.h
+index f1c6d53..d5fbe4c 100644
+--- a/src/layers/u8_patch.h
++++ b/src/layers/u8_patch.h
+@@ -5,7 +5,7 @@
+ #include "layers/custom_params.h"
+ #include <cstdint>
+ namespace vla {
+-constexpr uint32_t U8_PATCH_MAGIC=0x38505455;
++constexpr uint32_t U8_PATCH_MAGIC=0x38505455,F32_PATCH_MAGIC=0x46505455;
+ struct U8PatchSpec {uint32_t magic=U8_PATCH_MAGIC;int patch=14;};
+ inline void u8_patch_cpu(ggml_tensor * t,int ith,int nth,void * ud) {
+  const int ps=((const U8PatchSpec *)ud)->patch,S=t->src[0]->ne[1],grid=S/ps,pd=3*ps*ps;
+@@ -27,4 +27,23 @@ inline ggml_tensor * u8_patch(ggml_context * C,ggml_tensor * image,ggml_tensor *
+                         args,2,u8_patch_cpu,GGML_N_TASKS_MAX,(void *)&spec);
+  custom_parameter_snapshot(t,spec);return t;
+ }
++inline void f32_patch_cpu(ggml_tensor * t,int ith,int nth,void * ud) {
++ const int ps=((const U8PatchSpec *)ud)->patch,S=t->src[0]->ne[1],grid=S/ps,pd=3*ps*ps;
++ const auto * x=(const float *)t->src[0]->data;auto * y=(ggml_fp16_t *)t->data;
++ for(int64_t i=ith;i<ggml_nelements(t);i+=nth) {
++  const int p=i%pd,tok=i/pd%(grid*grid),v=i/(pd*grid*grid);
++  const int ch=p/(ps*ps),iy=(tok/grid)*ps+p/ps%ps,ix=(tok%grid)*ps+p%ps;
++  y[i]=ggml_fp32_to_fp16((x[((int64_t)v*S*S+iy*S+ix)*3+ch]-0.5f)/0.5f);
++ }
++}
++inline ggml_tensor * f32_patch(ggml_context * C,ggml_tensor * image,const U8PatchSpec & spec) {
++ GGML_ASSERT(spec.magic==F32_PATCH_MAGIC && spec.patch>0 && image->type==GGML_TYPE_F32 &&
++             ggml_is_contiguous(image) && image->ne[0]==3 && image->ne[1]==image->ne[2] &&
++             image->ne[1]%spec.patch==0);
++ const int64_t grid=image->ne[1]/spec.patch;ggml_tensor * args[]={image};
++ auto * t=ggml_custom_4d(C,GGML_TYPE_F16,3*spec.patch*spec.patch,grid*grid,image->ne[3],1,
++                        args,1,f32_patch_cpu,GGML_N_TASKS_MAX,(void *)&spec);
++ custom_parameter_snapshot(t,spec);return t;
++}
++
+ }
+diff --git a/src/models/pi05.cpp b/src/models/pi05.cpp
+index 09c36a0..9b7ab69 100644
+--- a/src/models/pi05.cpp
++++ b/src/models/pi05.cpp
+@@ -1,3 +1,4 @@
++#include "layers/packed_norm.h"
+ #include "layers/action_edges.h"
+ // Copyright 2026 VinRobotics
+ //
+@@ -123,6 +124,7 @@ struct Pi05ModelArch : public ModelArchBase {
+     FusedActionStepSpec   action_step_spec;
+     RopeTableSpec         rope_table_spec;
+     U8PatchSpec           u8_patch_spec;
++    U8PatchSpec           f32_patch_spec{F32_PATCH_MAGIC,14};
+     ggml_tensor *         u8_lut = nullptr;
+     FusedActionLinearSpec action_in_spec{FUSED_ACTION_LINEAR_MAGIC,1},action_out_spec;
+     bool                 fuse_res_adarms = false;
+@@ -273,14 +275,19 @@ ggml_tensor * build_expert_layer(
+     if (fa && fg && !w.fq_q && !w.fq_qkv && !w.fq_gate && !w.fq_gu) {
+         // One node per chain: adaRMS straight into the GEMMs' input type, and
+         // out * gate + x reading the GEMM output in whatever type it has.
+-        ggml_tensor * xn = xn_ready ? xn_ready : fused_adarms(ctx, x_in, mod_attn, at, *fa);
++        const bool pack=at==GGML_TYPE_F32 && packed_norm_enabled() &&
++                        w.Wqkv && w.Wqkv->type==GGML_TYPE_F16 && seq<=64;
++        ggml_tensor * xn = xn_ready ? xn_ready : pack ?
++            packed_norm(ctx,x_in,nullptr,nullptr,mod_attn,fa->eps,0) :
++            fused_adarms(ctx, x_in, mod_attn, at, *fa);
+         ggml_tensor * o  = gemma_attn(ctx, w, xn, positions, cfg, seq, cached_K, cached_V, mask,
+                                       nullptr, nullptr, at, use_fused_attention(), nullptr, nullptr, kv,
+                                       nullptr,nullptr,nullptr,nullptr,false,angles);
+         ggml_tensor * h1 = nullptr;
+         ggml_tensor * xm = nullptr;
+         if (fr && at == GGML_TYPE_F32)
+-            xm = fused_res_adarms(ctx, x_in, o, mod_attn, mod_ffn, *fr, &h1);
++            xm = pack ? packed_norm(ctx,x_in,o,mod_attn,mod_ffn,fr->eps,1,&h1) :
++                        fused_res_adarms(ctx, x_in, o, mod_attn, mod_ffn, *fr, &h1);
+         else {
+             h1 = fused_gateres(ctx, x_in, o, mod_attn, *fg);
+             xm = fused_adarms(ctx, h1, mod_ffn, at, *fa);
+@@ -288,7 +295,8 @@ ggml_tensor * build_expert_layer(
+         auto * mlp = gemma_mlp(ctx, w, xm, at);
+         if (fr && at == GGML_TYPE_F32 && next_mod && next_norm) {
+             ggml_tensor * result = nullptr;
+-            *next_norm = fused_res_adarms(ctx, h1, mlp, mod_ffn, next_mod, *fr, &result);
++            *next_norm = pack ? packed_norm(ctx,h1,mlp,mod_ffn,next_mod,fr->eps,1,&result) :
++                               fused_res_adarms(ctx, h1, mlp, mod_ffn, next_mod, *fr, &result);
+             return result;
+         }
+         return fused_gateres(ctx, h1, mlp, mod_ffn, *fg);
+@@ -408,6 +416,7 @@ bool bake_adarms(gguf_reader & g, Pi05ModelArch & m) {
+     }
+     m.u8_lut = ggml_new_tensor_1d(m.ctx_const,GGML_TYPE_F16,256);
+     m.u8_patch_spec.patch=m.vis.patch_size;
++    m.f32_patch_spec.patch=m.vis.patch_size;
+     m.ada_mod   = ggml_new_tensor_3d(m.ctx_const, GGML_TYPE_F32, 3*h, nj, ns);
+     m.ada_scale1.resize(n_slot);
+     m.ada_shift.resize(n_slot);
+@@ -562,6 +571,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+         m->rope_table_spec.base=cfg.rope_freq_base;
+         m->action_in_spec.eps=m->action_out_spec.eps=cfg.rms_eps;
+         m->action_out_spec.dt=m->action_step_spec.dt;
++        m->action_in_spec.packed=b.is_musa && m->matmul_type==GGML_TYPE_F16 && packed_norm_enabled();
+         m->input_cache = b.is_musa && env_flag("VLA_PI05_INPUT_CACHE");
+         m->async_vision = b.is_musa && env_flag("VLA_PI05_ASYNC_VISION");
+         m->direct_vision = b.is_musa && env_flag("VLA_PI05_VISION_DIRECT");
+@@ -882,15 +892,18 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+     const ggml_type vt = vis.vit.enc.cfg.act;
+     bool raw_u8=musa_backend && env_flag("VLA_PI05_U8_PATCH") && host_input!=3;
+     for(int v=0;v<n_images;++v)raw_u8=raw_u8 && images[v].format==PixelFormat::U8;
+-    const bool built = vis_graph.ensure(backend, raw_u8 ? -(int64_t)n_images : (int64_t)n_images, (size_t) 128*1024*1024,
++    bool raw_f32=musa_backend && env_flag("VLA_PI05_F32_PATCH") && host_input!=3;
++    for(int v=0;v<n_images;++v)raw_f32=raw_f32 && images[v].format==PixelFormat::F32_RGB_01;
++    const int input_mode=raw_u8?1:raw_f32?2:0;
++    const bool built = vis_graph.ensure(backend, (int64_t)n_images*3+input_mode, (size_t) 128*1024*1024,
+                                         [&](ggml_context * VC, VisIO & vio) -> ggml_cgraph * {
+         // Tower + PaliGemma projector (linear, optional bias) over nv views of
+         // pixels: F32 [hidden, nv*K]. The patch embed (conv_2d) runs in F32, the
+         // tower in vt.
+         auto tower = [&](ggml_tensor * px, int64_t nv) {
+             ggml_tensor * x = nullptr;
+-            if(raw_u8) {
+-                auto * patches=u8_patch(VC,px,u8_lut,u8_patch_spec);
++            if(raw_u8 || raw_f32) {
++                auto * patches=raw_u8?u8_patch(VC,px,u8_lut,u8_patch_spec):f32_patch(VC,px,f32_patch_spec);
+                 patches=ggml_reshape_2d(VC,patches,patches->ne[0],K*nv);
+                 auto * pw=ggml_cast(VC,ggml_reshape_2d(VC,vis.vit.patch_w,3*vis.patch_size*vis.patch_size,vis.vit.enc.cfg.hidden),GGML_TYPE_F16);
+                 x=ggml_mul_mat(VC,pw,patches);
+@@ -947,7 +960,8 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+         ggml_cgraph * vg = ggml_new_graph_custom(VC, 8192, false);
+         auto new_px = [&](int64_t nv) {
+             ggml_tensor * t = raw_u8 ? ggml_new_tensor_4d(VC,GGML_TYPE_I8,3,S,S,nv)
+-                                    : ggml_new_tensor_4d(VC,GGML_TYPE_F32,S,S,3,nv);
++                : raw_f32 ? ggml_new_tensor_4d(VC,GGML_TYPE_F32,3,S,S,nv)
++                          : ggml_new_tensor_4d(VC,GGML_TYPE_F32,S,S,3,nv);
+             ggml_set_input(t);
+             vio.t_px.push_back(t);
+             return t;
+@@ -997,8 +1011,9 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+     if (destination) GGML_ASSERT(output_offset==ggml_nbytes(destination));
+ 
+     const size_t per_view = (size_t) 3*S*S;
+-    if(raw_u8) {
+-        const size_t bytes=per_view*n_images;
++    if(raw_u8 || raw_f32) {
++        const size_t view_bytes=per_view*(raw_f32?sizeof(float):1);
++        const size_t bytes=view_bytes*n_images;
+         uint8_t * raw=nullptr;
+ #ifdef GGML_USE_MUSA
+         if(host_input==2) {
+@@ -1013,7 +1028,7 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
+         if(!raw){pixels_storage.resize((bytes+3)/4);raw=(uint8_t *)pixels_storage.data();}
+         for(int v=0;v<n_images;++v) {
+             if(!view_ok("pi05",images[v],S))return nullptr;
+-            std::memcpy(raw+v*per_view,images[v].data,per_view);
++            std::memcpy(raw+v*view_bytes,images[v].data,view_bytes);
+         }
+         size_t byte_off=0;
+         for(size_t j=0;j<vio.t_px.size();++j) {
+@@ -1290,7 +1305,9 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
+         const bool edges = musa_backend && fused_ew && expert_act == GGML_TYPE_F32 && env_flag("VLA_PI05_ACTION_EDGES");
+         const bool linear_edges=musa_backend && fused_ew && expert_act==GGML_TYPE_F32 && env_flag("VLA_PI05_ACTION_LINEAR");
+         if(linear_edges) input_norm=fused_action_linear(C,W_ain,x_t,b_ain,mod(0),nullptr,action_in_spec,&h);
+-        else if(edges) input_norm=fused_bias_adarms(C,input_proj,b_ain,mod(0),input_adarms_spec,&h);
++        else if(edges) input_norm=packed_norm_enabled() && matmul_type==GGML_TYPE_F16 ?
++            packed_norm(C,input_proj,b_ain,nullptr,mod(0),input_adarms_spec.eps,2,&h) :
++            fused_bias_adarms(C,input_proj,b_ain,mod(0),input_adarms_spec,&h);
+         else h=ggml_add(C,input_proj,b_ain);
+         const bool cross = fuse_cross_adarms && fuse_res_adarms && fused_ew && expert_act == GGML_TYPE_F32;
+         ggml_tensor * next_norm = input_norm;
+diff --git a/src/modules/gemma_expert.h b/src/modules/gemma_expert.h
+index 0a7593e..6ec984a 100644
+--- a/src/modules/gemma_expert.h
++++ b/src/modules/gemma_expert.h
+@@ -1,3 +1,4 @@
++#include "layers/packed_norm.h"
+ #include "layers/weight_prefetch.h"
+ // Copyright 2026 VinRobotics
+ //
+@@ -669,6 +670,10 @@ inline ggml_tensor * gemma_mlp(ggml_context * ctx, const GemmaLayerW & w, ggml_t
+                 w.Wdown->type == GGML_TYPE_F16 && w.Wdown->buffer &&
+                 !ggml_backend_buffer_is_host(w.Wdown->buffer))
+                 retype(inter,GGML_TYPE_F16);
++            if(inter->type==GGML_TYPE_F16 && gu->type==GGML_TYPE_F32 &&
++               gu->ne[1]<=64 && std::getenv("VLA_PI05_GEGLU_PACK") &&
++               std::getenv("VLA_MUSA_SMALL_GEMM") && musa_small_gemm_supported())
++                inter=packed_geglu(ctx,gu);
+             if(w.prefetch_next) {
+                 auto * fork=weight_prefetch(ctx,inter,w.prefetch_next,w.prefetch_begin);
+                 auto * out=at==GGML_TYPE_F32 && fork->type==GGML_TYPE_F16 ?
+diff --git a/src/modules/vision_prune.h b/src/modules/vision_prune.h
+index e779681..95fe512 100644
+--- a/src/modules/vision_prune.h
++++ b/src/modules/vision_prune.h
+@@ -5,15 +5,43 @@
+ #include <cmath>
+ #include <cstdint>
+ #include <cstring>
++#include <cstdlib>
+ #include <numeric>
+ #include <stdexcept>
+ #include <vector>
+ 
+ namespace vla {
+ 
++constexpr uint32_t VISION_SCORE_MAGIC=0x5350564du;
++inline void vision_scores_cpu(ggml_tensor * t,int ith,int nth,void *) {
++ const auto * a=(const float *)t->src[0]->data;auto * out=(float *)t->data;
++ for(int k=ith;k<256;k+=nth) {
++  double sum=0;
++  for(int q=0;q<256;++q) {
++   double heads=0;for(int h=0;h<16;++h)heads+=a[k+256*(q+256*h)];
++   sum+=(float)(heads/16);
++  }
++  out[k]=(float)(sum/256);
++ }
++}
++inline ggml_tensor * fused_vision_scores(ggml_context * C,ggml_tensor * attention) {
++ GGML_ASSERT(attention->type==GGML_TYPE_F32 && ggml_is_contiguous(attention) &&
++             attention->ne[0]==256 && attention->ne[1]==256 &&
++             attention->ne[2]==16 && attention->ne[3]==1);
++ static const uint32_t magic=VISION_SCORE_MAGIC;ggml_tensor * args[]={attention};
++ return ggml_custom_4d(C,GGML_TYPE_F32,256,1,1,1,args,1,vision_scores_cpu,
++                       GGML_N_TASKS_MAX,(void *)&magic);
++}
++
+ // Attention is [key, query, head]. Match VisPruner: mean(head), then mean(query).
+ inline ggml_tensor * vision_patch_scores(ggml_context * C, ggml_tensor * attention) {
+     GGML_ASSERT(attention->ne[3] == 1);
++#ifdef GGML_USE_MUSA
++    if(std::getenv("VLA_PI05_PRUNE_MEAN") && attention->type==GGML_TYPE_F32 &&
++       ggml_is_contiguous(attention) && attention->ne[0]==256 &&
++       attention->ne[1]==256 && attention->ne[2]==16)
++        return fused_vision_scores(C,attention);
++#endif
+     const int64_t keys = attention->ne[0], queries = attention->ne[1];
+     auto * heads_first = ggml_cont(C, ggml_permute(C, attention, 1, 2, 0, 3));
+     auto * per_query = ggml_reshape_2d(C, ggml_mean(C, heads_first), keys, queries);
+diff --git a/src/musa/vla_musa_epilogue.cu b/src/musa/vla_musa_epilogue.cu
+index dd86a51..02b1938 100644
+--- a/src/musa/vla_musa_epilogue.cu
++++ b/src/musa/vla_musa_epilogue.cu
+@@ -49,6 +49,14 @@ __global__ void pack_u8_patch(const uint8_t * x,const half * lut,half * y,int ps
+     const int ch=p/(ps*ps),iy=(tok/grid)*ps+p/ps%ps,ix=(tok%grid)*ps+p%ps;
+     y[i]=lut[x[(v*S*S+iy*S+ix)*3+ch]];
+ }
++__global__ void pack_f32_patch(const float * x,half * y,int ps,int S,int n) {
++    const int i=blockIdx.x*blockDim.x+threadIdx.x;
++    if(i>=n)return;
++    const int grid=S/ps,pd=3*ps*ps,p=i%pd,tok=i/pd%(grid*grid),v=i/(pd*grid*grid);
++    const int ch=p/(ps*ps),iy=(tok/grid)*ps+p/ps%ps,ix=(tok%grid)*ps+p%ps;
++    const float value=__fmul_rn(__fsub_rn(x[(v*S*S+iy*S+ix)*3+ch],0.5f),2.0f);
++    y[i]=__float2half_rn(value);
++}
+ template<bool Gelu>
+ __global__ void vision_epilogue(const float * x, const float * bias, const float * residual,
+                                float * dst, int h) {
+@@ -66,6 +74,11 @@ void musa_geglu_fast_forward(ggml_tensor * t,void * stream_ptr) {
+     fast_geglu<<<(n+WG-1)/WG,WG,0,(musaStream_t)stream_ptr>>>((const float *)t->src[0]->data,
+         (half *)t->data,t->ne[0],n,swapped);
+ }
++void musa_f32_patch_forward(ggml_tensor * t,int patch,void * stream_ptr) {
++    const int n=ggml_nelements(t);
++    pack_f32_patch<<<(n+WG-1)/WG,WG,0,(musaStream_t)stream_ptr>>>((const float *)t->src[0]->data,
++        (half *)t->data,patch,t->src[0]->ne[1],n);
++}
+ void musa_u8_patch_forward(ggml_tensor * t,int patch,void * stream_ptr) {
+     const int n=ggml_nelements(t);
+     pack_u8_patch<<<(n+WG-1)/WG,WG,0,(musaStream_t)stream_ptr>>>((const uint8_t *)t->src[0]->data,
+diff --git a/src/musa/vla_musa_fused.cu b/src/musa/vla_musa_fused.cu
+index 43f813d..3c15cc0 100644
+--- a/src/musa/vla_musa_fused.cu
++++ b/src/musa/vla_musa_fused.cu
+@@ -7,6 +7,7 @@
+ #include "layers/u8_patch.h"
+ #include "layers/weight_prefetch.h"
+ #include "layers/small_gemm.h"
++#include "layers/packed_norm.h"
+ #include <mma.h>
+ #include "layers/fused_ops.h"
+ #include "modules/vision_prune.h"
+@@ -168,10 +169,33 @@ bool supports(const ggml_tensor * t) {
+                (spec.kind != FusedKind::BiasRes ||
+                 (dense_f32(t->src[2]) && ggml_are_same_shape(t, t->src[2])));
+     }
++    if(m==VISION_SCORE_MAGIC) {
++        const auto * x=t->src[0];
++        return dense_f32(t) && t->ne[0]==256 && ggml_nelements(t)==256 &&
++               dense_f32(x) && x->ne[0]==256 && x->ne[1]==256 && x->ne[2]==16 && x->ne[3]==1;
++    }
+     if (m == VISION_KEEP_MAGIC)
+         return t->type == GGML_TYPE_I32 && dense_f32(t->src[0]) &&
+                ggml_is_vector(t->src[0]) && t->src[0]->ne[0] <= WG &&
+                t->ne[0] > 0 && t->ne[0] <= t->src[0]->ne[0];
++    if(m==PACKED_GEGLU_MAGIC) {
++        const auto * x=t->src[0];
++        return dense_f16(t) && dense_f32(x) && x->ne[0]==2*t->ne[0] &&
++               x->ne[1]>0 && x->ne[1]<=64 && x->ne[2]==1 && x->ne[3]==1 &&
++               t->ne[1]==64 && t->ne[2]==1 && t->ne[3]==1;
++    }
++    if(m==PACKED_NORM_MAGIC) {
++        const auto spec=packed_norm_spec(t);const auto * x=t->src[0];
++        if(!dense_f32(x) || x->ne[1]<1 || x->ne[1]>64 || x->ne[2]!=1 || x->ne[3]!=1 ||
++           spec.kind<0 || spec.kind>2 || t->type!=GGML_TYPE_I8 || !ggml_is_contiguous(t))return false;
++        if(spec.kind && !dense_f32(t->src[1]))return false;
++        if(spec.kind==1 && (!ggml_are_same_shape(x,t->src[1]) || !dense_f32(t->src[2]) ||
++                           ggml_nelements(t->src[2])!=3*x->ne[0]))return false;
++        if(spec.kind==2 && ggml_nelements(t->src[1])!=x->ne[0])return false;
++        const auto * mod=t->src[spec.kind==1?3:spec.kind==2?2:1];
++        return dense_f32(mod) && ggml_nelements(mod)==3*x->ne[0] &&
++               ggml_nbytes(t)==(spec.kind?ggml_nelements(x)*4:0)+x->ne[0]*64*2;
++    }
+     if(m==SMALL_PACK_MAGIC) {
+         const auto * x=t->src[0];
+         return dense_f16(t) && (dense_f16(x)||dense_f32(x)) && x->ne[0]==t->ne[0] &&
+@@ -182,7 +206,7 @@ bool supports(const ggml_tensor * t) {
+         if(!musa_small_gemm_supported())return false;
+         const auto & spec=*(const SmallGemmSpec *)userdata(t);
+         const auto * a=t->src[0],*b=t->src[1];
+-        return (spec.tile==32 || spec.tile==64) && dense_f32(t) && dense_f16(a) && dense_f16(b) &&
++        return (spec.pipeline==0 || spec.pipeline==4) && (spec.tile==32 || spec.tile==64) && dense_f32(t) && dense_f16(a) && dense_f16(b) &&
+                a->ne[0]%16==0 && a->ne[1]%spec.tile==0 && a->ne[0]==b->ne[0] && b->ne[1]==64 &&
+                a->ne[2]==1 && a->ne[3]==1 && b->ne[2]==1 && b->ne[3]==1 &&
+                t->ne[0]==a->ne[1] && t->ne[1]>0 && t->ne[1]<=64 && t->ne[2]==1 && t->ne[3]==1;
+@@ -193,6 +217,13 @@ bool supports(const ggml_tensor * t) {
+                t->view_src && t->view_offs==0 && ggml_are_same_shape(t,t->src[0]) &&
+                t->type==t->src[0]->type && (spec.join || (spec.bytes>0 && spec.bytes<=ggml_nbytes(t->src[1])));
+     }
++    if(m==F32_PATCH_MAGIC) {
++        const int ps=((const U8PatchSpec *)userdata(t))->patch;
++        const auto * x=t->src[0];
++        return dense_f16(t) && dense_f32(x) && x->ne[0]==3 && x->ne[1]==x->ne[2] &&
++               ps>0 && x->ne[1]%ps==0 && t->ne[0]==3*ps*ps &&
++               t->ne[1]==(x->ne[1]/ps)*(x->ne[1]/ps) && t->ne[2]==x->ne[3] && t->ne[3]==1;
++    }
+     if(m==U8_PATCH_MAGIC) {
+         const int ps=((const U8PatchSpec *)userdata(t))->patch;
+         const auto * x=t->src[0];
+@@ -215,6 +246,10 @@ bool supports(const ggml_tensor * t) {
+         const auto & s=*(const FusedActionLinearSpec *)userdata(t);
+         for(int i=0;i<(s.input?4:5);++i)if(!dense_f32(t->src[i]))return false;
+         const auto * w=t->src[0],* x=t->src[1];
++        if(s.packed)return s.input && w->ne[1]<=4096 && w->ne[0]==x->ne[0] &&
++             w->ne[2]==1 && w->ne[3]==1 && x->ne[2]==1 && x->ne[3]==1 &&
++             x->ne[1]>0 && x->ne[1]<=64 && t->type==GGML_TYPE_I8 && ggml_is_contiguous(t) &&
++             ggml_nbytes(t)==w->ne[1]*(x->ne[1]*4+64*2);
+         return (s.input?w->ne[1]:w->ne[0])<=4096 && dense_f32(t) && w->ne[0]==x->ne[0] && w->ne[2]==1 && w->ne[3]==1 &&
+                x->ne[2]==1 && x->ne[3]==1 && t->ne[0]==w->ne[1] && t->ne[1]==x->ne[1] &&
+                t->ne[2]==(s.input?2:1) && t->ne[3]==1;
+@@ -310,10 +345,15 @@ __global__ void res_adarms(const float * x, const T * o, const float * gate,
+     }
+ }
+ 
+-template<bool Input>
++template<bool Input,bool Packed=false>
+ __global__ void action_linear_kernel(const float * w,const float * x,const float * b,
+         const float * mod,const float * noise,float * y,int h,int cols,int outputs,int rows,float eps,float dt) {
+     const int row=blockIdx.x,tid=threadIdx.x;
++    half * normalized=Packed?(half *)(y+(size_t)h*rows):nullptr;
++    if(Packed && row>=rows) {
++        for(int i=tid;i<h;i+=WG)normalized[(size_t)row*h+i]=__float2half_rn(0.f);
++        return;
++    }
+     extern __shared__ float shared[];
+     float * values=shared,* sums=shared+h;
+     float sum=0;
+@@ -331,7 +371,10 @@ __global__ void action_linear_kernel(const float * w,const float * x,const float
+     for(int i=tid;i<h;i+=WG) {
+         const float n=values[i]*inv;
+         values[i]=(n+n*mod[i])+mod[h+i];
+-        if(Input)y[(size_t)h*rows+(size_t)row*h+i]=values[i];
++        if(Input) {
++            if(Packed)normalized[(size_t)row*h+i]=__float2half_rn(values[i]);
++            else y[(size_t)h*rows+(size_t)row*h+i]=values[i];
++        }
+     }
+     __syncthreads();
+     if(!Input)for(int o=tid;o<outputs;o+=WG) {
+@@ -362,6 +405,30 @@ __global__ void merged_geglu(const S * src, D * dst, int h, bool swapped) {
+ 
+ 
+ // 256 patches: exact ranking, ties prefer the lower spatial index.
++// Reproduce native mean(head=16), then its 32-lane mean(query=256) tree.
++__global__ void vision_scores_kernel(const float * x,float * out) {
++ const int lane=threadIdx.x/8,key=blockIdx.x*8+threadIdx.x%8;
++ float sum=0;
++ #pragma unroll
++ for(int j=0;j<8;++j) {
++  float v[16];
++  #pragma unroll
++  for(int h=0;h<16;++h)v[h]=x[key+256*(lane+j*32+256*h)];
++  #pragma unroll
++  for(int stride=8;stride;stride/=2) {
++   #pragma unroll
++   for(int h=0;h<stride;++h)v[h]+=v[h+stride];
++  }
++  sum+=v[0]/16.f;
++ }
++ __shared__ float values[256];values[threadIdx.x]=sum;__syncthreads();
++ for(int stride=16;stride;stride/=2) {
++  if(lane<stride)values[threadIdx.x]+=values[threadIdx.x+stride*8];
++  __syncthreads();
++ }
++ if(!lane)out[key]=values[threadIdx.x]/256.f;
++}
++
+ __global__ void vision_keep(const float * scores, int32_t * ids, int n, int keep) {
+     __shared__ float values[WG];
+     __shared__ int selected[WG];
+@@ -663,7 +730,40 @@ void release_attention(int device,void * stream) {
+ #endif
+ }
+ 
+-template<int TM>
++__global__ void packed_geglu_kernel(const float * x,half * y,int h,int rows) {
++ const int i=blockIdx.x*blockDim.x+threadIdx.x,r=blockIdx.y;
++ if(i>=h)return;
++ float value=0;
++ if(r<rows) {
++  const float g=x[r*2*h+i],u=x[r*2*h+h+i];
++  const float gelu=0.5f*g*(1.0f+tanhf(0.7978845608028654f*g*(1.0f+0.044715f*g*g)));
++  value=gelu*u;
++ }
++ y[r*h+i]=__float2half_rn(value);
++}
++
++template<int Kind>
++__global__ void packed_norm_kernel(const float * x,const float * o,const float * gate,
++        const float * mod,char * blob,int h,int rows,float eps) {
++ const int tid=threadIdx.x,r=blockIdx.x;const size_t row=(size_t)r*h;
++ float * residual=(float *)blob;
++ half * norm=(half *)(blob+(Kind?h*rows*4:0));
++ if(r>=rows){for(int i=tid;i<h;i+=WG)norm[row+i]=__float2half_rn(0.f);return;}
++ __shared__ float sums[WG];float sum=0;
++ for(int i=tid;i<h;i+=WG) {
++  const float a=Kind==1?x[row+i]+o[row+i]*gate[2*h+i]:Kind==2?x[row+i]+o[i]:x[row+i];
++  if(Kind)residual[row+i]=a;sum+=a*a;
++ }
++ sums[tid]=sum;__syncthreads();
++ for(int stride=WG/2;stride;stride/=2){if(tid<stride)sums[tid]+=sums[tid+stride];__syncthreads();}
++ const float inv=rsqrtf(sums[0]/h+eps);
++ for(int i=tid;i<h;i+=WG) {
++  const float n=(Kind?residual[row+i]:x[row+i])*inv;
++  norm[row+i]=__float2half_rn((n+n*mod[i])+mod[h+i]);
++ }
++}
++
++template<int TM,int Pipeline=0>
+ __global__ void small_gemm_kernel(const __half*w,const __half*x,float*y,int m,int n,int k) {
+ #if !defined(__MUSA_ARCH__) || __MUSA_ARCH__==220
+  using namespace mtmusa::wmma;constexpr int NT=2,MT=TM/32,ld=68;
+@@ -676,6 +776,7 @@ __global__ void small_gemm_kernel(const __half*w,const __half*x,float*y,int m,in
+   #pragma unroll
+   for(int j=0;j<NT;j++)fill_fragment(acc[i][j],0.f);
+  }
++ #pragma unroll (Pipeline?Pipeline:1)
+  for(int p=0;p<k;p+=16) {
+   #pragma unroll
+   for(int i=0;i<MT;i++)load_matrix_sync(a[i],w+(size_t)(row+i*32)*k+p,k);
+@@ -728,7 +829,17 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
+ #endif
+     const int h = (int) t->ne[0];
+     const auto * x = (const float *) t->src[0]->data;
+-    if(magic(t)==SMALL_PACK_MAGIC) {
++    if(magic(t)==PACKED_GEGLU_MAGIC) {
++        packed_geglu_kernel<<<dim3((h+WG-1)/WG,64),WG,0,stream>>>(x,(half *)t->data,h,t->src[0]->ne[1]);
++    } else if(magic(t)==PACKED_NORM_MAGIC) {
++        const auto spec=packed_norm_spec(t);const auto * a=t->src[0];
++        const float * o=spec.kind?(const float *)t->src[1]->data:nullptr;
++        const float * gate=spec.kind==1?(const float *)t->src[2]->data:nullptr;
++        const float * mod=(const float *)t->src[spec.kind==1?3:spec.kind==2?2:1]->data;
++#define PACKED_NORM_CASE(K) case K: packed_norm_kernel<K><<<64,WG,0,stream>>>(x,o,gate,mod,(char *)t->data,a->ne[0],a->ne[1],spec.eps);break
++        switch(spec.kind){PACKED_NORM_CASE(0);PACKED_NORM_CASE(1);PACKED_NORM_CASE(2);}
++#undef PACKED_NORM_CASE
++    } else if(magic(t)==SMALL_PACK_MAGIC) {
+         const auto * a=t->src[0];const int k=a->ne[0],n=a->ne[1];
+         if(a->type==GGML_TYPE_F16)small_pack_kernel<<<(k*64+WG-1)/WG,WG,0,stream>>>(
+             (const half *)a->data,(half *)t->data,k,n);
+@@ -737,10 +848,13 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
+     } else if(magic(t)==SMALL_GEMM_MAGIC) {
+         const auto & spec=*(const SmallGemmSpec *)userdata(t);
+         const int m=t->ne[0],n=t->ne[1],k=t->src[0]->ne[0];
+-        if(spec.tile==64)small_gemm_kernel<64><<<dim3(m/64,1),128,0,stream>>>(
+-            (const half *)t->src[0]->data,(const half *)t->src[1]->data,(float *)t->data,m,n,k);
+-        else small_gemm_kernel<32><<<dim3(m/32,1),128,0,stream>>>(
+-            (const half *)t->src[0]->data,(const half *)t->src[1]->data,(float *)t->data,m,n,k);
++#define SMALL_PIPE_CASE(P) case P: \
++        if(spec.tile==64)small_gemm_kernel<64,P><<<dim3(m/64,1),128,0,stream>>>( \
++            (const half *)t->src[0]->data,(const half *)t->src[1]->data,(float *)t->data,m,n,k); \
++        else small_gemm_kernel<32,P><<<dim3(m/32,1),128,0,stream>>>( \
++            (const half *)t->src[0]->data,(const half *)t->src[1]->data,(float *)t->data,m,n,k);break
++        switch(spec.pipeline){SMALL_PIPE_CASE(4);default: SMALL_PIPE_CASE(0);}
++#undef SMALL_PIPE_CASE
+     } else if(magic(t)==WEIGHT_PREFETCH_MAGIC) {
+         const auto & spec=*(const WeightPrefetchSpec *)userdata(t);
+         auto & state=*(WeightPrefetchState *)spec.state;
+@@ -765,6 +879,8 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
+             (const float *)a->data,(const float *)b->data,(float *)t->data,a->ne[0],a->ne[1],b->ne[1]);
+     } else if (magic(t) == FUSED_MAGIC) {
+         musa_vision_epilogue(t, ((const FusedSpec *) userdata(t))->kind == FusedKind::BiasGelu, stream_ptr);
++    } else if(magic(t)==VISION_SCORE_MAGIC) {
++        vision_scores_kernel<<<32,256,0,stream>>>(x,(float *)t->data);
+     } else if (magic(t) == VISION_KEEP_MAGIC) {
+         vision_keep<<<1, WG, 0, stream>>>(x, (int32_t *)t->data, t->src[0]->ne[0], h);
+     } else if (t->op == GGML_OP_GLU) {
+@@ -792,6 +908,8 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
+         float eps;
+         std::memcpy(&eps, t->op_params, sizeof(eps));
+         adarms<<<ggml_nrows(t), WG, 0, stream>>>((const __half *) x, nullptr, (__half *) t->data, h, eps);
++    } else if(magic(t)==F32_PATCH_MAGIC) {
++        musa_f32_patch_forward(t,((const U8PatchSpec *)userdata(t))->patch,stream_ptr);
+     } else if(magic(t)==U8_PATCH_MAGIC) {
+         musa_u8_patch_forward(t,((const U8PatchSpec *)userdata(t))->patch,stream_ptr);
+     } else if(magic(t)==ROPE_TABLE_MAGIC || magic(t)==ROPE_APPLY_MAGIC) {
+@@ -800,7 +918,10 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
+         const auto & s=*(const FusedActionLinearSpec *)userdata(t);
+         const auto * w=t->src[0]; const int hidden=s.input?w->ne[1]:w->ne[0];
+         const size_t smem=(hidden+WG)*sizeof(float);
+-        if(s.input)action_linear_kernel<true><<<t->ne[1],WG,smem,stream>>>(
++        if(s.packed)action_linear_kernel<true,true><<<64,WG,smem,stream>>>(
++            (const float *)w->data,(const float *)t->src[1]->data,(const float *)t->src[2]->data,
++            (const float *)t->src[3]->data,nullptr,(float *)t->data,hidden,w->ne[0],w->ne[1],t->src[1]->ne[1],s.eps,s.dt);
++        else if(s.input)action_linear_kernel<true><<<t->ne[1],WG,smem,stream>>>(
+             (const float *)w->data,(const float *)t->src[1]->data,(const float *)t->src[2]->data,
+             (const float *)t->src[3]->data,nullptr,(float *)t->data,hidden,w->ne[0],w->ne[1],t->ne[1],s.eps,s.dt);
+         else action_linear_kernel<false><<<t->ne[1],WG,smem,stream>>>(
+diff --git a/src/musa/vla_musa_ops.h b/src/musa/vla_musa_ops.h
+index ac53b20..31a75c3 100644
+--- a/src/musa/vla_musa_ops.h
++++ b/src/musa/vla_musa_ops.h
+@@ -20,6 +20,7 @@ bool musa_vision_pack_enabled();
+ bool musa_vision_raw_qkv(const ggml_tensor * q, const ggml_tensor * k, const ggml_tensor * v);
+ void musa_vision_epilogue(ggml_tensor * t, bool gelu, void * stream);
+ void musa_geglu_fast_forward(ggml_tensor * t,void * stream);
++void musa_f32_patch_forward(ggml_tensor * t,int patch,void * stream);
+ void musa_u8_patch_forward(ggml_tensor * t,int patch,void * stream);
+ void musa_cached_rope_forward(ggml_tensor * t,void * stream);
+ #else
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 41e89b5..cf030cc 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -109,6 +109,9 @@ if(GGML_MUSA)
+ 
+     set_tests_properties(musa_f32_attention PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
+     set_tests_properties(musa_ops PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
++    add_test(NAME musa_f32_patch COMMAND test_musa_ops --f32-patch)
++    set_tests_properties(musa_f32_patch PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
++
+     if(GGML_CUDA_FA)
+         add_test(NAME musa_attention256_direct COMMAND test_musa_ops --attention256)
+         set_tests_properties(musa_attention256_direct PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
+@@ -226,3 +229,9 @@ if(GGML_SYCL AND NOT GGML_CUDA)
+     target_link_options(test_bf16_sycl_ops PRIVATE -fsycl)
+     add_test(NAME bf16_sycl_ops COMMAND test_bf16_sycl_ops)
+ endif()
++
++if(GGML_MUSA)
++    add_test(NAME musa_packed_norm COMMAND test_musa_ops --packed-norm)
++    add_test(NAME musa_prune_score COMMAND test_musa_ops --prune-score)
++    set_tests_properties(musa_packed_norm musa_prune_score PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
++endif()
+diff --git a/tests/test_musa_ops.cpp b/tests/test_musa_ops.cpp
+index f96550b..b9188a0 100644
+--- a/tests/test_musa_ops.cpp
++++ b/tests/test_musa_ops.cpp
+@@ -1,3 +1,4 @@
++#include "layers/packed_norm.h"
+ #include "layers/action_edges.h"
+ #include "layers/u8_patch.h"
+ // Copyright 2026 VinRobotics
+@@ -27,6 +28,12 @@
+ 
+ namespace {
+ 
++float f32_patch_value(size_t i) {
++    const float edges[]={0.f,1.f,.5f,std::nextafter(.5f,0.f),std::nextafter(.5f,1.f),
++                          1.f/255.f,.1234567f,1e-12f};
++    return i%13<8?edges[i%13]:float(uint32_t(i*2654435761u)>>8)*(1.f/16777216.f);
++}
++
+ struct Graph {
+     ggml_context * ctx = ggml_init({32*1024*1024, nullptr, true});
+     ggml_gallocr_t alloc = nullptr;
+@@ -63,6 +70,8 @@ struct Graph {
+             std::vector<float> data(n);
+             for (size_t i = 0; i < n; ++i)
+                 data[i] = ((int) ((i*37 + j*13) % 67) - 33) / 128.0f;
++            if (std::strcmp(ggml_get_name(t), "prune_score_values") == 0)
++                for(size_t i=0;i<n;++i)data[i]=.01f+std::fabs(std::sin(float(i)*.017f));
+             if (std::strcmp(ggml_get_name(t), "attention_values") == 0)
+                 for (size_t i=0; i<n; ++i) data[i] = 2.0f*std::sin(float(i)*0.017f+float(j));
+             if (std::strcmp(ggml_get_name(t), "epilogue_values") == 0)
+@@ -82,6 +91,13 @@ struct Graph {
+                     const size_t hwc=((v*S+y)*S+x)*3+c;
+                     data[i]=(((hwc*37)&255)/255.0f-.5f)/.5f;
+                 }
++            if(std::strcmp(ggml_get_name(t),"f32_hwc")==0)
++                for(size_t i=0;i<n;++i)data[i]=f32_patch_value(i);
++            if(std::strcmp(ggml_get_name(t),"f32_chw")==0)
++                for(size_t i=0;i<n;++i) {
++                    const size_t S=t->ne[0],x=i%S,y=i/S%S,c=i/(S*S)%3,v=i/(S*S*3);
++                    data[i]=(f32_patch_value(((v*S+y)*S+x)*3+c)-.5f)/.5f;
++                }
+             if (j==0 && mapped_input) {
+                 std::memcpy(mapped_input,data.data(),ggml_nbytes(t));continue;
+             }
+@@ -419,10 +435,10 @@ std::vector<float> strided_pack(ggml_backend_t backend, int64_t hd, int64_t seq,
+     return g.run(backend, {ggml_cast(g.ctx, transposed, GGML_TYPE_F16)});
+ }
+ 
+-std::vector<float> patch_scores(ggml_backend_t backend) {
++std::vector<float> patch_scores(ggml_backend_t backend,bool fused=false) {
+     Graph g;
+-    auto * a = g.input(GGML_TYPE_F32, {256, 256, 16});
+-    return g.run(backend, {vla::vision_patch_scores(g.ctx, a)});
++    auto * a = g.input(GGML_TYPE_F32, {256, 256, 16});ggml_set_name(a,"prune_score_values");
++    return g.run(backend, {fused?vla::fused_vision_scores(g.ctx,a):vla::vision_patch_scores(g.ctx, a)});
+ }
+ 
+ std::vector<float> fused_expert(ggml_backend_t backend, int64_t h, int64_t rows, bool fused, bool half = false) {
+@@ -476,6 +492,50 @@ std::vector<float> merged_glu(ggml_backend_t backend, ggml_type type, bool nativ
+     return g.run(backend, {y});
+ }
+ 
++std::vector<float> action_linear(ggml_backend_t,int64_t,int64_t,int,bool,bool,bool);
++
++std::vector<float> small_padded_view(ggml_backend_t backend,int offset,bool fused) {
++ Graph g;auto * w=g.input(GGML_TYPE_F16,{128,64});auto * pad=g.input(GGML_TYPE_F16,{128,64});
++ auto * x=ggml_view_2d(g.ctx,pad,128,50,pad->nb[1],offset*pad->nb[1]);
++ return g.run(backend,{fused?vla::small_gemm(g.ctx,w,x):ggml_mul_mat(g.ctx,w,x)});
++}
++
++std::vector<float> packed_geglu_graph(ggml_backend_t backend,int h,int rows,bool fused) {
++ Graph g;auto * x=g.input(GGML_TYPE_F32,{2*h,rows});ggml_set_name(x,"geglu_values");
++ auto * out=fused?vla::packed_geglu(g.ctx,x):vla::retype(ggml_geglu(g.ctx,x),GGML_TYPE_F16);
++ return g.run(backend,{out});
++}
++
++std::vector<float> packed_norm_graph(ggml_backend_t backend,int h,int rows,int kind,bool fused) {
++ Graph g;auto * x=g.input(GGML_TYPE_F32,{h,rows});
++ auto * o=kind?g.input(GGML_TYPE_F32,{h,kind==2?1:rows}):nullptr;
++ auto * gate=kind==1?g.input(GGML_TYPE_F32,{3*h}):nullptr;auto * mod=g.input(GGML_TYPE_F32,{3*h});
++ ggml_tensor * res=nullptr,*norm=nullptr;
++ vla::FusedAdarmsSpec a;vla::FusedResAdarmsSpec b;
++ if(fused)norm=vla::packed_norm(g.ctx,x,o,gate,mod,a.eps,kind,&res);
++ else {
++  if(kind==1)norm=vla::fused_res_adarms(g.ctx,x,o,gate,mod,b,&res);
++  else if(kind==2){b.magic=vla::FUSED_BIAS_ADARMS_MAGIC;norm=vla::fused_bias_adarms(g.ctx,x,o,mod,b,&res);}
++  else norm=vla::fused_adarms(g.ctx,x,mod,GGML_TYPE_F32,a);
++  norm=ggml_cast(g.ctx,norm,GGML_TYPE_F16);
++ }
++ std::vector<ggml_tensor *> out;if(kind)out.push_back(res);out.push_back(norm);
++ if(fused)out.push_back(norm->src[0]);
++ auto result=g.run(backend,out);
++ if(fused) {
++  const size_t valid=(kind?2:1)*h*rows;
++  const size_t stride=valid+h*64;
++  if(result.size()!=3*stride)return {};
++  std::vector<float> compact;
++  for(int repeat=0;repeat<3;++repeat) {
++   for(int i=h*rows;i<h*64;++i)if(result[repeat*stride+valid+i]!=0.f)return {};
++   compact.insert(compact.end(),result.begin()+repeat*stride,result.begin()+repeat*stride+valid);
++  }
++  return compact;
++ }
++ return result;
++}
++
+ std::vector<float> res_adarms(ggml_backend_t backend, int64_t h, int64_t rows, ggml_type type, bool fused) {
+     Graph g;
+     auto * x = g.input(GGML_TYPE_F32, {h, rows});
+@@ -536,6 +596,20 @@ std::vector<float> u8_patch_graph(ggml_backend_t backend,int nv,bool fused) {
+     return g.run(backend,{out});
+ }
+ 
++std::vector<float> f32_patch_graph(ggml_backend_t backend,int nv,bool fused) {
++    Graph g;ggml_tensor * out;
++    vla::U8PatchSpec spec{vla::F32_PATCH_MAGIC,14};
++    if(fused) {
++        auto * raw=g.input(GGML_TYPE_F32,{3,224,224,nv});ggml_set_name(raw,"f32_hwc");
++        out=vla::f32_patch(g.ctx,raw,spec);
++    } else {
++        auto * chw=g.input(GGML_TYPE_F32,{224,224,3,nv});ggml_set_name(chw,"f32_chw");
++        auto * w=g.input(GGML_TYPE_F32,{14,14,3,1});
++        out=ggml_im2col(g.ctx,w,chw,14,14,0,0,1,1,true,GGML_TYPE_F16);
++    }
++    return g.run(backend,{out});
++}
++
+ bool custom_parameter_replay(ggml_backend_t backend) {
+     Graph g;
+     auto * x=g.input(GGML_TYPE_F32,{32,50}),*v=g.input(GGML_TYPE_F32,{32,50}),*b=g.input(GGML_TYPE_F32,{32});
+@@ -593,13 +667,14 @@ std::vector<float> last_prefix_kv(ggml_backend_t backend,int64_t seq,bool kv_onl
+     return g.run(backend,{k,v});
+ }
+ 
+-std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,int steps,bool fused) {
++std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,int steps,bool fused,bool packed=false,bool narrow=false) {
+     Graph g;
+     auto * wi=g.input(GGML_TYPE_F32,{32,h}),*wo=g.input(GGML_TYPE_F32,{h,32});
+     auto * x=g.input(GGML_TYPE_F32,{32,rows}),*bi=g.input(GGML_TYPE_F32,{h}),*bo=g.input(GGML_TYPE_F32,{32});
+     auto * mi=g.input(GGML_TYPE_F32,{3*h}),*mo=g.input(GGML_TYPE_F32,{3*h});
+     vla::FusedActionLinearSpec in{vla::FUSED_ACTION_LINEAR_MAGIC,1,1e-6f,-1.f/steps};
+     vla::FusedActionLinearSpec out{vla::FUSED_ACTION_LINEAR_MAGIC,0,1e-6f,-1.f/steps};
++    in.packed=packed?1:0;
+     ggml_tensor * hidden=nullptr,*norm=nullptr,*y=nullptr;
+     auto adarms=[&](ggml_tensor * a,ggml_tensor * m) {
+         auto * n=ggml_rms_norm(g.ctx,a,1e-6f);
+@@ -614,6 +689,7 @@ std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,i
+         norm=adarms(hidden,mi);
+         y=ggml_add(g.ctx,x,ggml_scale(g.ctx,ggml_add(g.ctx,ggml_mul_mat(g.ctx,wo,adarms(hidden,mo)),bo),out.dt));
+     }
++    if(narrow && !packed)norm=ggml_cast(g.ctx,norm,GGML_TYPE_F16);
+     return g.run(backend,{hidden,norm,y});
+ }
+ 
+@@ -684,6 +760,37 @@ int main(int argc, char ** argv) {
+     ggml_backend_cpu_set_n_threads(cpu, 4);
+     bool ok = true;
+     if (!vla::musa_register_fused_ops()) return 1;
++    if(argc==2 && std::strcmp(argv[1],"--prune-score")==0) {
++        ok=compare("prune_score_exact",GGML_TYPE_F32,patch_scores(b.handle),patch_scores(b.handle,true),1e-12)&&ok;
++        ok=compare("prune_score_cpu",GGML_TYPE_F32,patch_scores(cpu,true),patch_scores(b.handle,true),2e-5)&&ok;
++        ggml_backend_free(cpu);ggml_backend_free(b.handle);return ok?0:1;
++    }
++    if(argc==2 && std::strcmp(argv[1],"--packed-norm")==0) {
++        for(int offset:{0,14})
++            ok=compare("small_padded_view_exact",GGML_TYPE_F32,
++                small_padded_view(b.handle,offset,false),small_padded_view(b.handle,offset,true),1e-12)&&ok;
++        for(int h:{256,1024})for(int rows:{1,17,50,64})
++            ok=compare("packed_action_linear_exact",GGML_TYPE_F32,
++                action_linear(b.handle,h,rows,10,true,false,true),
++                action_linear(b.handle,h,rows,10,true,true,true),1e-12)&&ok;
++        for(int h:{256,4096})for(int rows:{1,17,50,64})
++            ok=compare("packed_geglu_exact",GGML_TYPE_F16,
++                packed_geglu_graph(b.handle,h,rows,false),
++                packed_geglu_graph(b.handle,h,rows,true),1e-12)&&ok;
++        for(int h:{256,1024})for(int rows:{1,17,50,64})for(int kind:{0,1,2})
++            ok=compare("packed_norm_exact",GGML_TYPE_F32,
++                packed_norm_graph(b.handle,h,rows,kind,false),
++                packed_norm_graph(b.handle,h,rows,kind,true),1e-12)&&ok;
++        ggml_backend_free(cpu);return ok?0:1;
++    }
++    if(argc==2 && std::strcmp(argv[1],"--f32-patch")==0) {
++        for(int nv:{1,2}) {
++            const auto fused=f32_patch_graph(b.handle,nv,true);
++            ok=compare("f32_patch_native",GGML_TYPE_F16,f32_patch_graph(b.handle,nv,false),fused,1e-12)&&ok;
++            ok=compare("f32_patch_cpu",GGML_TYPE_F16,f32_patch_graph(cpu,nv,true),fused,1e-12)&&ok;
++        }
++        ggml_backend_free(cpu);ggml_backend_free(b.handle);return ok?0:1;
++    }
+     if (argc == 2 && std::strcmp(argv[1], "--attention256") == 0) {
+         for (auto shape : {std::pair<int,int>{50,328},{50,568},{278,278},{518,518},{17,67},{1,1},{1,67},{50,640},{50,641},{640,640}})
+             for (bool masked : {false,true}) {
+diff --git a/src/layers/packed_norm.h b/src/layers/packed_norm.h
+new file mode 100644
+index 0000000..10072e3
+--- /dev/null
++++ b/src/layers/packed_norm.h
+@@ -0,0 +1,89 @@
++// Copyright 2026 VinRobotics
++// SPDX-License-Identifier: Apache-2.0
++#pragma once
++#include "layers/fused_ew.h"
++#include "layers/small_gemm.h"
++namespace vla {
++constexpr uint32_t PACKED_NORM_MAGIC=0x4e50524d;
++struct PackedNormSpec {uint32_t magic=PACKED_NORM_MAGIC;float eps=1e-6f;int kind=0;};
++inline PackedNormSpec packed_norm_spec(const ggml_tensor * t) {
++ PackedNormSpec s;std::memcpy(&s,(const char *)t->op_params+32,sizeof(s));return s;
++}
++inline bool packed_norm_enabled() {
++#ifdef GGML_USE_MUSA
++ return std::getenv("VLA_PI05_NORM_PACK") && std::getenv("VLA_MUSA_SMALL_GEMM") &&
++        musa_small_gemm_supported();
++#else
++ return false;
++#endif
++}
++// Byte-preserving typed views keep both allocations visible to ggml's scheduler.
++inline ggml_tensor * packed_typed_view(ggml_context * C,ggml_tensor * blob,ggml_type type,
++                                      int64_t h,int64_t rows,size_t offset) {
++ GGML_ASSERT(blob->type==GGML_TYPE_I8);
++ const size_t bytes=h*rows*ggml_type_size(type);
++ auto * v=ggml_view_1d(C,blob,bytes,offset);
++ v->type=type;v->ne[0]=h*rows;v->nb[0]=ggml_type_size(type);
++ return ggml_reshape_2d(C,v,h,rows);
++}
++inline void packed_norm_cpu(ggml_tensor * t,int ith,int nth,void *) {
++ const auto s=packed_norm_spec(t);const auto * x=t->src[0];
++ const int h=x->ne[0],rows=x->ne[1];
++ const float * xp=(const float *)x->data,* op=s.kind?(const float *)t->src[1]->data:nullptr;
++ const float * gate=s.kind==1?(const float *)t->src[2]->data:nullptr;
++ const float * mod=(const float *)t->src[s.kind==1?3:s.kind==2?2:1]->data;
++ auto * res=(float *)t->data;
++ auto * norm=(ggml_fp16_t *)((char *)t->data+(s.kind?h*rows*4:0));
++ for(int r=ith;r<64;r+=nth) {
++  if(r>=rows){for(int i=0;i<h;++i)norm[r*h+i]=ggml_fp32_to_fp16(0);continue;}
++  double sum=0;
++  for(int i=0;i<h;++i) {
++   const float a=s.kind==1?xp[r*h+i]+op[r*h+i]*gate[2*h+i]:
++                 s.kind==2?xp[r*h+i]+op[i]:xp[r*h+i];
++   if(s.kind)res[r*h+i]=a;sum+=(double)a*a;
++  }
++  const float inv=1.f/std::sqrt((float)(sum/h)+s.eps);
++  for(int i=0;i<h;++i) {
++   const float n=(s.kind?res[r*h+i]:xp[r*h+i])*inv;
++   norm[r*h+i]=ggml_fp32_to_fp16((n+n*mod[i])+mod[h+i]);
++  }
++ }
++}
++inline ggml_tensor * packed_norm(ggml_context * C,ggml_tensor * x,ggml_tensor * o,
++        ggml_tensor * gate,ggml_tensor * mod,float eps,int kind,ggml_tensor ** residual=nullptr) {
++ GGML_ASSERT(x->type==GGML_TYPE_F32 && ggml_is_contiguous(x) && x->ne[1]>0 && x->ne[1]<=64 &&
++             x->ne[2]==1 && x->ne[3]==1 && kind>=0 && kind<=2 && mod->ne[0]==3*x->ne[0]);
++ GGML_ASSERT(mod->type==GGML_TYPE_F32 && ggml_is_contiguous(mod) && (!kind || residual));
++ GGML_ASSERT(kind!=1 || (gate && gate->type==GGML_TYPE_F32 && ggml_is_contiguous(gate)));
++ GGML_ASSERT(!kind || (o && o->type==GGML_TYPE_F32 && ggml_is_contiguous(o)));
++ GGML_ASSERT(kind!=1 || (ggml_are_same_shape(x,o) && gate && gate->ne[0]==3*x->ne[0]));
++ GGML_ASSERT(kind!=2 || ggml_nelements(o)==x->ne[0]);
++ ggml_tensor * args[]={x,kind?o:mod,kind==1?gate:mod,mod};
++ static const uint32_t magic=PACKED_NORM_MAGIC;
++ const size_t offset=kind?ggml_nelements(x)*4:0;
++ auto * blob=ggml_custom_4d(C,GGML_TYPE_I8,offset+x->ne[0]*64*2,1,1,1,args,
++                           kind==1?4:kind==2?3:2,packed_norm_cpu,GGML_N_TASKS_MAX,(void *)&magic);
++ custom_parameter_snapshot(blob,PackedNormSpec{PACKED_NORM_MAGIC,eps,kind});
++ if(kind)*residual=packed_typed_view(C,blob,GGML_TYPE_F32,x->ne[0],x->ne[1],0);
++ auto * pad=packed_typed_view(C,blob,GGML_TYPE_F16,x->ne[0],64,offset);
++ return ggml_view_2d(C,pad,x->ne[0],x->ne[1],pad->nb[1],0);
++}
++constexpr uint32_t PACKED_GEGLU_MAGIC=0x4750504d;
++inline void packed_geglu_cpu(ggml_tensor * t,int ith,int nth,void *) {
++ const auto * x=(const float *)t->src[0]->data;auto * y=(ggml_fp16_t *)t->data;
++ const int h=t->ne[0],rows=t->src[0]->ne[1];
++ for(int64_t i=ith;i<h*64;i+=nth) {
++  const int r=i/h,c=i%h;
++  y[i]=ggml_fp32_to_fp16(r<rows?fused_gelu_tanh(x[r*2*h+c])*x[r*2*h+h+c]:0.f);
++ }
++}
++inline ggml_tensor * packed_geglu(ggml_context * C,ggml_tensor * x) {
++ GGML_ASSERT(x->type==GGML_TYPE_F32 && ggml_is_contiguous(x) && x->ne[0]%2==0 &&
++             x->ne[1]>0 && x->ne[1]<=64 && x->ne[2]==1 && x->ne[3]==1);
++ static const uint32_t magic=PACKED_GEGLU_MAGIC;ggml_tensor * inputs[]={x};
++ auto * pad=ggml_custom_4d(C,GGML_TYPE_F16,x->ne[0]/2,64,1,1,inputs,1,
++                          packed_geglu_cpu,GGML_N_TASKS_MAX,(void *)&magic);
++ return ggml_view_2d(C,pad,pad->ne[0],x->ne[1],pad->nb[1],0);
++}
++
++}

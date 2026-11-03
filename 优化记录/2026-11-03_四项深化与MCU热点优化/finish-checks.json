@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "msys_mcu_family_counts_match": true,
+  "ctest_skip_properties_verified_on_gpu": true
+}

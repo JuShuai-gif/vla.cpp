@@ -23,7 +23,12 @@
     "VLA_MUSA_GEMMA_FLAT_AV": "denoise",
     "VLA_PI05_PRUNED_BATCH": "1",
     "VLA_MUSA_SMALL_GEMM": "auto",
-    "VLA_MUSA_GEMMA_FLAT_QK": "denoise"
+    "VLA_MUSA_GEMMA_FLAT_QK": "denoise",
+    "VLA_PI05_F32_PATCH": "1",
+    "VLA_PI05_NORM_PACK": "1",
+    "VLA_PI05_GEGLU_PACK": "1",
+    "VLA_PI05_PRUNE_MEAN": "1",
+    "VLA_MUSA_SMALL_PIPE": "shape"
   },
   "full": {
     "VLA_MUSA_VISION_SDPA": "1",
@@ -48,6 +53,10 @@
     "VLA_PI05_VISION_NO_OUT_COPY": "1",
     "VLA_MUSA_GEMMA_FLAT_AV": "denoise",
     "VLA_MUSA_GEMMA_FLAT_QK": "denoise",
-    "VLA_MUSA_SMALL_GEMM": "auto"
+    "VLA_MUSA_SMALL_GEMM": "auto",
+    "VLA_PI05_F32_PATCH": "1",
+    "VLA_PI05_NORM_PACK": "1",
+    "VLA_PI05_GEGLU_PACK": "1",
+    "VLA_MUSA_SMALL_PIPE": "shape"
   }
 }

@@ -1,0 +1,56 @@
+[
+  {
+    "stage": "tiled-parallel-denoise",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 568.0035891249418,
+    "reference_relative_peak": 5.164169488125481e-05
+  },
+  {
+    "stage": "tiled-parallel-denoise",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 1217.2128541251368,
+    "reference_relative_peak": 9.207530092680827e-05
+  },
+  {
+    "stage": "tiled-parallel-all",
+    "model": "pruned",
+    "returncode": 1
+  },
+  {
+    "stage": "tiled-parallel-all",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 1540.9340017499744,
+    "reference_relative_peak": 0.00018928071949630976
+  },
+  {
+    "stage": "pack-combined-v2",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 461.597955499883,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "pack-combined-v2",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 757.9532923749639,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "combined-pipe4",
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 460.6808521250514,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "stage": "combined-pipe4",
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 755.4088412501869,
+    "reference_relative_peak": 0.0
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "focus-attention-all",
+    "returncode": 0,
+    "valid_kernel_report": true
+  },
+  {
+    "stage": "focus-attention-all-parallel",
+    "returncode": 0,
+    "valid_kernel_report": true
+  },
+  {
+    "stage": "hot-combined-r2-pruned",
+    "returncode": 0,
+    "valid_kernel_report": true
+  },
+  {
+    "stage": "hot-combined-r2-full",
+    "returncode": 0,
+    "valid_kernel_report": true
+  }
+]

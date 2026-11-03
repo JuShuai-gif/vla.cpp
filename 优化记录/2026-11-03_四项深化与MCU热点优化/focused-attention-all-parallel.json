@@ -1,0 +1,92 @@
+[
+  {
+    "name": "void vla::(anonymous namespace)::gemma_tiled_256<true>(__half const*, __half const*, __half const*, __half const*, float*, int, int, int, float)",
+    "grid": "40, 8, 1",
+    "block": "128, 1, 1",
+    "count": 36,
+    "sum_ms": 954.6000000000004,
+    "mean_ms": 26.516666666666676,
+    "registers": [
+      118.0
+    ],
+    "shared_bytes": [
+      57876.0
+    ],
+    "mean_compute_pct": 69.32222222222221
+  },
+  {
+    "name": "void vla::(anonymous namespace)::gemma_tiled_256<true>(__half const*, __half const*, __half const*, __half const*, float*, int, int, int, float)",
+    "grid": "33, 8, 1",
+    "block": "128, 1, 1",
+    "count": 36,
+    "sum_ms": 687.1,
+    "mean_ms": 19.086111111111112,
+    "registers": [
+      118.0
+    ],
+    "shared_bytes": [
+      57876.0
+    ],
+    "mean_compute_pct": 70.93527777777777
+  },
+  {
+    "name": "void vla::(anonymous namespace)::gemma_tiled_256<true>(__half const*, __half const*, __half const*, __half const*, float*, int, int, int, float)",
+    "grid": "4, 8, 1",
+    "block": "128, 1, 1",
+    "count": 108,
+    "sum_ms": 256.16999999999996,
+    "mean_ms": 2.371944444444444,
+    "registers": [
+      118.0
+    ],
+    "shared_bytes": [
+      57876.0
+    ],
+    "mean_compute_pct": 70.1350925925926
+  },
+  {
+    "name": "void vla::(anonymous namespace)::gemma_tiled_256<true>(__half const*, __half const*, __half const*, __half const*, float*, int, int, int, float)",
+    "grid": "18, 8, 1",
+    "block": "128, 1, 1",
+    "count": 36,
+    "sum_ms": 232.47,
+    "mean_ms": 6.4575,
+    "registers": [
+      118.0
+    ],
+    "shared_bytes": [
+      57876.0
+    ],
+    "mean_compute_pct": 75.80111111111113
+  },
+  {
+    "name": "void vla::(anonymous namespace)::gemma_tiled_256<true>(__half const*, __half const*, __half const*, __half const*, float*, int, int, int, float)",
+    "grid": "1, 8, 1",
+    "block": "128, 1, 1",
+    "count": 72,
+    "sum_ms": 34.9033,
+    "mean_ms": 0.4847680555555556,
+    "registers": [
+      118.0
+    ],
+    "shared_bytes": [
+      57876.0
+    ],
+    "mean_compute_pct": 57.00513888888889
+  },
+  {
+    "name": "void vla::(anonymous namespace)::gemma_tiled_256<true>(__half const*, __half const*, __half const*, __half const*, float*, int, int, int, float)",
+    "grid": "2, 8, 1",
+    "block": "128, 1, 1",
+    "count": 36,
+    "sum_ms": 26.216389999999997,
+    "mean_ms": 0.7282330555555555,
+    "registers": [
+      118.0
+    ],
+    "shared_bytes": [
+      57876.0
+    ],
+    "mean_compute_pct": 62.49027777777778
+  }
+]

@@ -1,0 +1,656 @@
+[0/1] Re-running CMake...
+-- llama.cpp version: 0.5.0-dev
+CMAKE_BUILD_TYPE=Release
+-- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE=OFF
+-- CMAKE_SYSTEM_PROCESSOR: aarch64
+-- GGML_SYSTEM_ARCH: ARM
+-- Including CPU backend
+-- ARM detected
+CMake Warning at build-musa-deps/llama/ggml/src/ggml-cpu/CMakeLists.txt:142 (message):
+  ARM -march/-mcpu not found, -mcpu=native will be used
+Call Stack (most recent call first):
+  build-musa-deps/llama/ggml/src/CMakeLists.txt:586 (ggml_add_cpu_backend_variant_impl)
+
+
+-- Checking for ARM features using flags:
+--   -U__ARM_FEATURE_MATMUL_INT8
+--   -U__ARM_FEATURE_SVE
+--   -U__ARM_FEATURE_SME
+--   -mcpu=native+dotprod+noi8mm+nosve+nosme
+-- Adding CPU backend variant ggml-cpu: -U__ARM_FEATURE_MATMUL_INT8;-U__ARM_FEATURE_SVE;-U__ARM_FEATURE_SME;-mcpu=native+dotprod+noi8mm+nosve+nosme 
+-- MUSA Toolkit found
+-- Using MUSA architectures: 22
+-- FlashAttention K-V type combinations: f16-f16;q4_0-q4_0;q8_0-q8_0;bf16-bf16
+-- Including MUSA backend
+-- ggml version: 0.25.3
+-- ggml commit:  4da6337-dirty
+-- OpenSSL found: 3.0.2
+-- VERSION: 0.2.1
+-- Found atomic: /usr/lib/aarch64-linux-gnu/libatomic.so.1
+-- vla: IPO/LTO disabled (Change Dir: /home/skysi/code/vla.cpp/build-musa-official/CMakeFiles/_CMakeLTOTest-CXX/bin
+
+Run Build Command(s):/usr/bin/ninja && [1/4] Building CXX object CMakeFiles/foo.dir/foo.cpp.o
+[2/4] Building CXX object CMakeFiles/boo.dir/main.cpp.o
+[3/4] Linking CXX static library libfoo.a
+[4/4] Linking CXX executable boo
+FAILED: boo 
+: && /usr/local/musa/bin/clang++ -flto=thin  CMakeFiles/boo.dir/main.cpp.o -o boo  libfoo.a && :
+/usr/bin/ld: /usr/local/musa-5.1.0/bin/../lib/LLVMgold.so: error loading plugin: /usr/local/musa-5.1.0/bin/../lib/LLVMgold.so: 无法打开共享目标文件: 没有那个文件或目录
+clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/skysi/code/vla.cpp/build-musa-official
+[1/48] Building CXX object CMakeFiles/vla_core.dir/src/modules/qwen3_lm.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/modules/qwen3_lm.cpp:17:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[2/48] Building CXX object CMakeFiles/vla_core.dir/src/modules/dit_head.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/modules/dit_head.cpp:18:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[3/48] Building CXX object CMakeFiles/vla_core.dir/src/modules/encoder.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/modules/encoder.cpp:17:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[4/48] Building CXX object CMakeFiles/vla_core.dir/src/models/evo1.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/evo1.cpp:27:
+In file included from /home/skysi/code/vla.cpp/src/act_dtype.h:46:
+In file included from /home/skysi/code/vla.cpp/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[5/48] Building CXX object CMakeFiles/vla_core.dir/src/models/gr00tn1d7.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/gr00tn1d7.cpp:32:
+In file included from /home/skysi/code/vla.cpp/src/modules/qwen3vl_vit.h:21:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[6/48] Building CXX object CMakeFiles/vla_core.dir/src/models/pi0.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/pi0.cpp:16:
+In file included from /home/skysi/code/vla.cpp/src/modules/gemma_expert.h:22:
+In file included from /home/skysi/code/vla.cpp/src/act_dtype.h:46:
+In file included from /home/skysi/code/vla.cpp/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[7/48] Building CXX object CMakeFiles/vla_core.dir/src/models/openvla_oft.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/openvla_oft.cpp:19:
+In file included from /home/skysi/code/vla.cpp/src/modules/dual_tower.h:24:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[8/48] Building CXX object CMakeFiles/vla_core.dir/src/models/vla_adapter.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/vla_adapter.cpp:19:
+In file included from /home/skysi/code/vla.cpp/src/modules/dual_tower.h:24:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[9/48] Building CXX object CMakeFiles/vla_core.dir/src/models/vla_jepa.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/vla_jepa.cpp:30:
+In file included from /home/skysi/code/vla.cpp/src/modules/qwen3vl_vit.h:21:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[10/48] Building CXX object CMakeFiles/vla_core.dir/src/models/act.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/act.cpp:32:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[11/48] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/pi05.cpp:17:
+In file included from /home/skysi/code/vla.cpp/src/modules/gemma_expert.h:22:
+In file included from /home/skysi/code/vla.cpp/src/act_dtype.h:46:
+In file included from /home/skysi/code/vla.cpp/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[12/48] Building CXX object CMakeFiles/vla_core.dir/src/models/turbovla.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/turbovla.cpp:31:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[13/48] Building CXX object tests/CMakeFiles/test_qwen3vl_vit.dir/test_qwen3vl_vit.cpp.o
+In file included from /home/skysi/code/vla.cpp/tests/test_qwen3vl_vit.cpp:17:
+In file included from /home/skysi/code/vla.cpp/src/modules/qwen3vl_vit.h:21:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[14/48] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_epilogue.cu.o
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_epilogue.cu:4:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_epilogue.cu:6:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/convert.cuh:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:1453:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:1454:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+6 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_epilogue.cu:4:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_epilogue.cu:6:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/convert.cuh:2:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:1453:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/common.cuh:1454:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+6 warnings generated when compiling for host.
+[15/48] Building CXX object CMakeFiles/vla_core.dir/src/models/smolvla.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/smolvla.cpp:20:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[16/48] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_fused.cu.o
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:9:
+In file included from /home/skysi/code/vla.cpp/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+3 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp/src/musa/vla_musa_fused.cu:9:
+In file included from /home/skysi/code/vla.cpp/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+3 warnings generated when compiling for host.
+[17/48] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+In file included from /home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:13:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp/tests/test_musa_ops.cpp:533:39: warning: 'ggml_mul_mat_set_prec' is deprecated: use ggml_prec_set_acc() instead [-Wdeprecated-declarations]
+        out=ggml_mul_mat(g.ctx,wf,xf);ggml_mul_mat_set_prec(out,GGML_PREC_F32);
+                                      ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml.h:1489:5: note: 'ggml_mul_mat_set_prec' has been explicitly marked deprecated here
+    GGML_DEPRECATED(GGML_API void ggml_mul_mat_set_prec(
+    ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml.h:192:61: note: expanded from macro 'GGML_DEPRECATED'
+#    define GGML_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+                                                            ^
+2 warnings generated.
+[18/48] Building CXX object CMakeFiles/vla_core.dir/src/models/octo.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/octo.cpp:19:
+In file included from /home/skysi/code/vla.cpp/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[19/48] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/ggml-cuda/ggml-cuda.cu.o
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/allreduce.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1453:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1454:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:32:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/mmf.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mma.cuh:709:5: warning: non-void function does not return a value [-Wreturn-type]
+    }
+    ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:33:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq.cuh:437:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:12:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:103:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:192:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:255:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:318:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:398:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:476:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:542:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:603:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:716:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:827:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:951:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1041:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1103:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1167:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1232:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1300:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1364:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1433:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1500:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1569:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1678:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback, prec_src1);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:2572:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:2572:51: warning: no previous prototype for function 'ggml_backend_musa_mapped_buffer' [-Wmissing-prototypes]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+                                                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:2572:29: note: declare 'static' if the function is not intended to be used outside of this translation unit
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+                            ^
+                            static 
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:4979:82: warning: format specifies type 'void *' but the argument has type 'const ggml_tensor *' [-Wformat-pedantic]
+                GGML_LOG_DEBUG("Adding stream at node %s %p\n", root_node->name, root_node);
+                                                         ~~                      ^~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-impl.h:122:69: note: expanded from macro 'GGML_LOG_DEBUG'
+#define GGML_LOG_DEBUG(...) ggml_log_internal(GGML_LOG_LEVEL_DEBUG, __VA_ARGS__)
+                                                                    ^~~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5630:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5623:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5620:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5612:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5603:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5566:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5560:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5553:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5497:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5490:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5476:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5472:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5433:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5373:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5359:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+46 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/allreduce.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1453:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh:1454:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:32:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-cuda/mmf.cuh:3:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mma.cuh:709:5: warning: non-void function does not return a value [-Wreturn-type]
+    }
+    ^
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:33:
+In file included from /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq.cuh:437:
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:12:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:103:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:192:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:255:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:318:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:398:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:476:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:542:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:603:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:716:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:827:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:951:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1041:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1103:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1167:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1232:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1300:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1364:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1433:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1500:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1569:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/mmq-load-tiles.cuh:1678:19: warning: unused variable 'sram_stride' [-Wunused-variable]
+    constexpr int sram_stride = ggml_cuda_mmq_get_sram_stride(type, J, fallback, prec_src1);
+                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:2572:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:2572:51: warning: no previous prototype for function 'ggml_backend_musa_mapped_buffer' [-Wmissing-prototypes]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+                                                  ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:2572:29: note: declare 'static' if the function is not intended to be used outside of this translation unit
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+                            ^
+                            static 
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:4979:82: warning: format specifies type 'void *' but the argument has type 'const ggml_tensor *' [-Wformat-pedantic]
+                GGML_LOG_DEBUG("Adding stream at node %s %p\n", root_node->name, root_node);
+                                                         ~~                      ^~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-musa/../ggml-impl.h:122:69: note: expanded from macro 'GGML_LOG_DEBUG'
+#define GGML_LOG_DEBUG(...) ggml_log_internal(GGML_LOG_LEVEL_DEBUG, __VA_ARGS__)
+                                                                    ^~~~~~~~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5630:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5623:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5620:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5612:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5603:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5566:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5560:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5553:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5497:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5490:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5476:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5472:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5433:15: warning: 'break' will never be executed [-Wunreachable-code-break]
+            } break;
+              ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5373:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:5359:13: warning: 'break' will never be executed [-Wunreachable-code-break]
+            break;
+            ^~~~~
+46 warnings generated when compiling for host.
+[20/48] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[21/48] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[22/48] Linking CXX shared library bin/libggml.so.0.25.3
+[23/48] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[24/48] Linking CXX executable tests/test_qwen3vl_vit
+[25/48] Linking CXX executable tests/test_dit_common
+[26/48] Linking CXX executable tests/test_graph_names
+[27/48] Linking CXX executable tests/test_rope_conventions
+[28/48] Linking CXX executable tests/test_vision_prune
+[29/48] Linking CXX shared library libvla_core.so
+[30/48] Linking CXX shared library libvla.so
+[31/48] Linking CXX shared library bin/libllama.so.0.5.0
+[32/48] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[33/48] Linking CXX shared library bin/libllama-common.so.0.5.0
+[34/48] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[35/48] Linking CXX shared library bin/libmtmd.so.0.5.0
+[36/48] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[37/48] Linking CXX shared library libvlm_core.so
+[38/48] Linking C executable tests/test_c_api
+[39/48] Linking CXX executable tests/test_prompt
+[40/48] Linking CXX executable tests/vla_predict_check
+[41/48] Linking CXX executable vla-cli
+[42/48] Linking CXX executable tests/test_config_guard
+[43/48] Linking CXX executable vla-server
+[44/48] Linking CXX executable vla-bench
+[45/48] Linking CXX executable vlm-server
+[46/48] Linking CXX executable tests/test_foldquant_cpu_op
+[47/48] Linking CXX executable tests/test_foldquant_dequant
+[48/48] Linking CXX executable tests/test_musa_ops

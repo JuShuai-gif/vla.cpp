@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/usr/bin/mcu",
+    "--dump-mode",
+    "normal",
+    "--kernel-name",
+    "regex:small_gemm",
+    "-o",
+    "/home/skysi/VLA/four-deep-20261103/focus-pipe-8-gu",
+    "/tmp/pi05-pipeline-mcu-8",
+    "8192",
+    "50",
+    "1024",
+    "1"
+  ]
+}

@@ -1,0 +1,134 @@
+[
+  {
+    "mode": 0,
+    "shape": "gu",
+    "name": "void small_gemm<32>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "256, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 89.62,
+    "ms": 0.40926,
+    "registers": 49.0,
+    "shared_bytes": 8724.0
+  },
+  {
+    "mode": 0,
+    "shape": "o",
+    "name": "void small_gemm<64>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "16, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 73.82,
+    "ms": 0.14331,
+    "registers": 71.0,
+    "shared_bytes": 17428.0
+  },
+  {
+    "mode": 0,
+    "shape": "down",
+    "name": "void small_gemm<32>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "32, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 89.92,
+    "ms": 0.23658,
+    "registers": 49.0,
+    "shared_bytes": 8724.0
+  },
+  {
+    "mode": 1,
+    "shape": "gu",
+    "name": "void small_gemm<32>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "256, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 87.29,
+    "ms": 0.43008,
+    "registers": 47.0,
+    "shared_bytes": 8724.0
+  },
+  {
+    "mode": 1,
+    "shape": "o",
+    "name": "void small_gemm<64>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "16, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 75.16,
+    "ms": 0.13776,
+    "registers": 71.0,
+    "shared_bytes": 17428.0
+  },
+  {
+    "mode": 1,
+    "shape": "down",
+    "name": "void small_gemm<32>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "32, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 84.8,
+    "ms": 0.22207,
+    "registers": 47.0,
+    "shared_bytes": 8724.0
+  },
+  {
+    "mode": 4,
+    "shape": "gu",
+    "name": "void small_gemm<32>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "256, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 83.29,
+    "ms": 0.43687000000000004,
+    "registers": 71.0,
+    "shared_bytes": 8724.0
+  },
+  {
+    "mode": 4,
+    "shape": "o",
+    "name": "void small_gemm<64>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "16, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 70.76,
+    "ms": 0.13321000000000002,
+    "registers": 104.0,
+    "shared_bytes": 17428.0
+  },
+  {
+    "mode": 4,
+    "shape": "down",
+    "name": "void small_gemm<32>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "32, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 76.21,
+    "ms": 0.21961000000000003,
+    "registers": 71.0,
+    "shared_bytes": 8724.0
+  },
+  {
+    "mode": 8,
+    "shape": "gu",
+    "name": "void small_gemm<32>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "256, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 85.71,
+    "ms": 0.42296,
+    "registers": 71.0,
+    "shared_bytes": 8724.0
+  },
+  {
+    "mode": 8,
+    "shape": "o",
+    "name": "void small_gemm<64>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "16, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 61.72,
+    "ms": 0.16632,
+    "registers": 122.0,
+    "shared_bytes": 17428.0
+  },
+  {
+    "mode": 8,
+    "shape": "down",
+    "name": "void small_gemm<32>(__half const*, __half const*, float*, int, int, int)",
+    "grid": "32, 1, 1",
+    "block": "128, 1, 1",
+    "compute_pct": 71.96,
+    "ms": 0.23925000000000002,
+    "registers": 71.0,
+    "shared_bytes": 8724.0
+  }
+]

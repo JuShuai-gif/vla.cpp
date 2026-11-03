@@ -1,0 +1,64 @@
+{
+  "起点提交": {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "returncode": 0,
+    "output": "bca90f33e78beeb2df437817c543971486665c21"
+  },
+  "内核": {
+    "argv": [
+      "uname",
+      "-a"
+    ],
+    "returncode": 0,
+    "output": "Linux aibox 6.6.10 #1 SMP PREEMPT Thu Jul  9 05:35:20 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux"
+  },
+  "MCC": {
+    "argv": [
+      "/usr/local/musa/bin/mcc",
+      "--version"
+    ],
+    "returncode": 0,
+    "output": "clang version 14.0.0 (git@sh-code.mthreads.com:sw/mtcc.git 61c54cd8e5c72ef146656c7beee1889a837ed7bc)\nmcc version 5.1.0\nTarget: aarch64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /usr/local/musa/bin"
+  },
+  "MCU": {
+    "argv": [
+      "/usr/bin/mcu",
+      "--version"
+    ],
+    "returncode": 0,
+    "output": "Moore Perf Compute Version:  1.2.2-3a6f1fcec"
+  },
+  "CMake": {
+    "argv": [
+      "cmake",
+      "--version"
+    ],
+    "returncode": 0,
+    "output": "cmake version 3.22.1\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake)."
+  },
+  "Python": {
+    "argv": [
+      ".venv-converter/bin/python",
+      "--version"
+    ],
+    "returncode": 0,
+    "output": "Python 3.10.12"
+  },
+  "电源模式": {
+    "argv": [
+      "/usr/bin/python3",
+      "/usr/bin/powerprofilesctl",
+      "get"
+    ],
+    "returncode": 0,
+    "output": "performance"
+  },
+  "/proc/driver/musa/version": "package version:5.1.1-M1000\n",
+  "/usr/local/musa/version.json": "{\n\t\"musa_toolkits\":\t{\n\t\t\"version\":\t\"5.1.0\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"AIMODULE_1.4.1\",\n\t\t\"commit id\":\t\"e1481406739bd545c45c4b852450a81ac5feee6c\",\n\t\t\"commit date\":\t\"2026-03-06 20:38:51 +0800\"\n\t},\n\t\"CUB\":\t{\n\t\t\"version\":\t\"1.17.2\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"No tag\",\n\t\t\"commit id\":\t\"2aa7e2b6a2e82ca339ca132d345377d6faef6024\",\n\t\t\"commit date\":\t\"2026-04-22 21:48:03 +0800\"\n\t},\n\t\"mcc\":\t{\n\t\t\"version\":\t\"5.1.0\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"61c54cd8e5c72ef146656c7beee1889a837ed7bc\",\n\t\t\"commit date\":\t\"2026-04-28 15:32:37 +0800\"\n\t},\n\t\"mtjpeg\":\t{\n\t\t\"version\":\t\"1.0.5\",\n\t\t\"git branch\":\t\"release_musa_5.1.0\",\n\t\t\"git tag\":\t\"No tag\",\n\t\t\"commit id\":\t\"070f3ff97088cfdef12da04b09af22bfc862874c\",\n\t\t\"commit date\":\t\"2026-03-23 13:40:41 +0800\"\n\t},\n\t\"mublasLt\":\t{\n\t\t\"version\":\t\"1.12.0\",\n\t\t\"build archs\":\t\"22\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"b99c7919a587a92ec1f24b75a633d18da754377b\",\n\t\t\"commit date\":\t\"2026-04-07 14:08:36 +0800\"\n\t},\n\t\"mublas\":\t{\n\t\t\"version\":\t\"1.12.0\",\n\t\t\"build archs\":\t\"22\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"4bced69bfb393863c43c23e9d21fbce6e2ff9ffd\",\n\t\t\"commit date\":\t\"2026-04-23 19:16:27 +0800\"\n\t},\n\t\"mufft\":\t{\n\t\t\"version\":\t\"1.12.0\",\n\t\t\"build archs\":\t\"22\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"0a2e9ac103e2d54c384947561076c682c6811c1e\",\n\t\t\"commit date\":\t\"2026-03-11 19:24:16 +0800\"\n\t},\n\t\"muPP\":\t{\n\t\t\"version\":\t\"1.13.0\",\n\t\t\"build archs\":\t\"22\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"0a8b4f2b1c8f9928130fa882a97705be2fc693e2\",\n\t\t\"commit date\":\t\"2026-03-12 14:48:07 +0800\"\n\t},\n\t\"MUPTI\":\t{\n\t\t\"version\":\t\"1.2.0\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"AIMODULE_1.4.1\",\n\t\t\"commit id\":\t\"453615f9e030b4c0bd101ce44d60346a1ffee11b\",\n\t\t\"commit date\":\t\"2026-04-28 12:40:08 +0800\"\n\t},\n\t\"murand\":\t{\n\t\t\"version\":\t\"1.3.0\",\n\t\t\"build archs\":\t\"22\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"525224ed521b4cb0af25ada59b84583241e57761\",\n\t\t\"commit date\":\t\"2026-03-27 19:58:21 +0800\"\n\t},\n\t\"musa_runtime\":\t{\n\t\t\"version\":\t\"5.1.0\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"3b6956c97bc055afffd676cb4c30c33347de9a9b\",\n\t\t\"commit date\":\t\"2026-04-24 15:53:42 +0800\"\n\t},\n\t\"musify\":\t{\n\t\t\"version\":\t\"1.2.0\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"a5f79eb9e507dd7bfa1b5bd8b6b833f671c6b8c1\",\n\t\t\"commit date\":\t\"2026-04-08 14:58:40 +0800\"\n\t},\n\t\"musolver\":\t{\n\t\t\"version\":\t\"1.6.0\",\n\t\t\"build archs\":\t\"22\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"f6062eb2da90ad3b5091a91d3348423649275d12\",\n\t\t\"commit date\":\t\"2026-04-25 19:06:04 +0800\"\n\t},\n\t\"musparse\":\t{\n\t\t\"version\":\t\"1.7.0\",\n\t\t\"build archs\":\t\"22\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"20260430_release_musa_5.1.0\",\n\t\t\"commit id\":\t\"3b5df2ca75c504c98821bc2cd71a9160ddf4eb55\",\n\t\t\"commit date\":\t\"2026-04-27 17:08:43 +0800\"\n\t},\n\t\"Thrust\":\t{\n\t\t\"version\":\t\"1.17.2\",\n\t\t\"git branch\":\t\"HEAD\",\n\t\t\"git tag\":\t\"AIMODULE_1.4.0\",\n\t\t\"commit id\":\t\"bffd03bde9af75266cc1a51d46cde48f4bcd9280\",\n\t\t\"commit date\":\t\"2026-04-22 21:51:23 +0800\"\n\t}\n}",
+  "GPU": "M1000, cc2.2/MP22; MCU实际记录8 MP、4 MPX/MP、warp128",
+  "驱动版本": "若上述/proc字段不可用，本轮未单独记录；不推测"
+}

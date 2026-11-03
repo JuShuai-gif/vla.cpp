@@ -49,6 +49,14 @@ __global__ void pack_u8_patch(const uint8_t * x,const half * lut,half * y,int ps
     const int ch=p/(ps*ps),iy=(tok/grid)*ps+p/ps%ps,ix=(tok%grid)*ps+p%ps;
     y[i]=lut[x[(v*S*S+iy*S+ix)*3+ch]];
 }
+__global__ void pack_f32_patch(const float * x,half * y,int ps,int S,int n) {
+    const int i=blockIdx.x*blockDim.x+threadIdx.x;
+    if(i>=n)return;
+    const int grid=S/ps,pd=3*ps*ps,p=i%pd,tok=i/pd%(grid*grid),v=i/(pd*grid*grid);
+    const int ch=p/(ps*ps),iy=(tok/grid)*ps+p/ps%ps,ix=(tok%grid)*ps+p%ps;
+    const float value=__fmul_rn(__fsub_rn(x[(v*S*S+iy*S+ix)*3+ch],0.5f),2.0f);
+    y[i]=__float2half_rn(value);
+}
 template<bool Gelu>
 __global__ void vision_epilogue(const float * x, const float * bias, const float * residual,
                                float * dst, int h) {
@@ -65,6 +73,11 @@ void musa_geglu_fast_forward(ggml_tensor * t,void * stream_ptr) {
     const int n=ggml_nelements(t);const bool swapped=((const int32_t *)t->op_params)[1]!=0;
     fast_geglu<<<(n+WG-1)/WG,WG,0,(musaStream_t)stream_ptr>>>((const float *)t->src[0]->data,
         (half *)t->data,t->ne[0],n,swapped);
+}
+void musa_f32_patch_forward(ggml_tensor * t,int patch,void * stream_ptr) {
+    const int n=ggml_nelements(t);
+    pack_f32_patch<<<(n+WG-1)/WG,WG,0,(musaStream_t)stream_ptr>>>((const float *)t->src[0]->data,
+        (half *)t->data,patch,t->src[0]->ne[1],n);
 }
 void musa_u8_patch_forward(ggml_tensor * t,int patch,void * stream_ptr) {
     const int n=ggml_nelements(t);

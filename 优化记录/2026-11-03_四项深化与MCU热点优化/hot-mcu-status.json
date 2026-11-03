@@ -1,0 +1,18 @@
+[
+  {
+    "stage": "focus-attention-all",
+    "returncode": 0
+  },
+  {
+    "stage": "focus-attention-all-parallel",
+    "returncode": 0
+  },
+  {
+    "stage": "hot-combined-pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "hot-combined-full",
+    "returncode": 0
+  }
+]

@@ -109,6 +109,9 @@ if(GGML_MUSA)
 
     set_tests_properties(musa_f32_attention PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
     set_tests_properties(musa_ops PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
+    add_test(NAME musa_f32_patch COMMAND test_musa_ops --f32-patch)
+    set_tests_properties(musa_f32_patch PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
+
     if(GGML_CUDA_FA)
         add_test(NAME musa_attention256_direct COMMAND test_musa_ops --attention256)
         set_tests_properties(musa_attention256_direct PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180
@@ -225,4 +228,10 @@ if(GGML_SYCL AND NOT GGML_CUDA)
     target_compile_options(test_bf16_sycl_ops PRIVATE -fsycl -Wall -Wextra)
     target_link_options(test_bf16_sycl_ops PRIVATE -fsycl)
     add_test(NAME bf16_sycl_ops COMMAND test_bf16_sycl_ops)
+endif()
+
+if(GGML_MUSA)
+    add_test(NAME musa_packed_norm COMMAND test_musa_ops --packed-norm)
+    add_test(NAME musa_prune_score COMMAND test_musa_ops --prune-score)
+    set_tests_properties(musa_packed_norm musa_prune_score PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
 endif()

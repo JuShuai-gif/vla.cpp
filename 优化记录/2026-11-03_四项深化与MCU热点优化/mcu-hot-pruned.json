@@ -1,0 +1,129 @@
+{
+  "model": "pruned",
+  "config": "combined-pipe4-env.json",
+  "scope": "MCU Graph OFF warmed marked real input, filtered kernels only; excludes other kernels",
+  "launches": 380,
+  "sum_filtered_ms": 57.749540000000046,
+  "kernels": [
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 4>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "count": 54,
+      "sum_ms": 22.291249999999998,
+      "mean_ms": 0.4128009259259259,
+      "registers": [
+        71.0
+      ],
+      "shared_bytes": [
+        8724.0
+      ],
+      "mean_compute_pct": 88.16611111111115
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 4>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "32, 1, 1",
+      "block": "128, 1, 1",
+      "count": 54,
+      "sum_ms": 12.936580000000003,
+      "mean_ms": 0.23956629629629636,
+      "registers": [
+        71.0
+      ],
+      "shared_bytes": [
+        8724.0
+      ],
+      "mean_compute_pct": 77.3427777777778
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 4>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "80, 1, 1",
+      "block": "128, 1, 1",
+      "count": 54,
+      "sum_ms": 8.46649,
+      "mean_ms": 0.15678685185185184,
+      "registers": [
+        71.0
+      ],
+      "shared_bytes": [
+        8724.0
+      ],
+      "mean_compute_pct": 84.68555555555555
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<64, 4>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "16, 1, 1",
+      "block": "128, 1, 1",
+      "count": 54,
+      "sum_ms": 7.41008,
+      "mean_ms": 0.1372237037037037,
+      "registers": [
+        104.0
+      ],
+      "shared_bytes": [
+        17428.0
+      ],
+      "mean_compute_pct": 68.59685185185187
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1>(float const*, float const*, float const*, float const*, char*, int, int, float)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "count": 105,
+      "sum_ms": 3.643990000000001,
+      "mean_ms": 0.034704666666666675,
+      "registers": [
+        21.0
+      ],
+      "shared_bytes": [
+        1044.0
+      ],
+      "mean_compute_pct": 63.95247619047618
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "count": 54,
+      "sum_ms": 2.5977799999999993,
+      "mean_ms": 0.048107037037037025,
+      "registers": [
+        7.0
+      ],
+      "shared_bytes": [
+        20.0
+      ],
+      "mean_compute_pct": 75.90148148148147
+    },
+    {
+      "name": "vla::(anonymous namespace)::vision_scores_kernel(float const*, float*)",
+      "grid": "32, 1, 1",
+      "block": "256, 1, 1",
+      "count": 2,
+      "sum_ms": 0.3163,
+      "mean_ms": 0.15815,
+      "registers": [
+        29.0
+      ],
+      "shared_bytes": [
+        1044.0
+      ],
+      "mean_compute_pct": 47.975
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<2>(float const*, float const*, float const*, float const*, char*, int, int, float)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "count": 3,
+      "sum_ms": 0.08707000000000001,
+      "mean_ms": 0.029023333333333335,
+      "registers": [
+        19.0
+      ],
+      "shared_bytes": [
+        1044.0
+      ],
+      "mean_compute_pct": 66.68666666666667
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{'stage': 'mixed-lifecycle-r2-pruned', 'returncode': 0}
+{'stage': 'mixed-lifecycle-r2-full', 'returncode': 0}
+{'stage': 'final-cli-f32-pruned', 'returncode': 0}
+CLI exact f32 pruned
+{'stage': 'final-cli-f16-pruned', 'returncode': 0}
+CLI exact f16 pruned
+{'stage': 'final-cli-f32-full', 'returncode': 0}
+CLI exact f32 full
+{'stage': 'final-cli-f16-full', 'returncode': 0}
+CLI exact f16 full
+FINAL VALIDATION COMPLETE

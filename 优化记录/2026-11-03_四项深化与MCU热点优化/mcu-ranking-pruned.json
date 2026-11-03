@@ -1,0 +1,581 @@
+{
+  "model": "pruned",
+  "scope": "MCU Graph OFF marked warmed real-input inference",
+  "launches": 1834,
+  "with_duration": 1834,
+  "sum_kernel_ms": 480.7639800000001,
+  "kernels": [
+    {
+      "name": "gemmex_nt_512_256x256_f16f32_epilogue_qy2",
+      "count": 64,
+      "sum_ms": 221.29909,
+      "mean_ms": 3.45779828125,
+      "max_ms": 6.57,
+      "registers": [
+        242.0
+      ],
+      "shared_bytes": [
+        65676.0
+      ]
+    },
+    {
+      "name": "void flash_attn_tile<256, 256, 32, 1, false>(char const*, char const*, char const*, char const*, char const*, int const*, float*, float2*, float, float, float, float, unsigned int, float, int, uint3, int, int, int, int, int, int, int, int, int, int, int, long, int, int, long, int, int, int, int, int, long)",
+      "count": 17,
+      "sum_ms": 51.59,
+      "mean_ms": 3.0347058823529416,
+      "max_ms": 3.24,
+      "registers": [
+        190.0
+      ],
+      "shared_bytes": [
+        29716.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32>(__half const*, __half const*, float*, int, int, int)",
+      "count": 162,
+      "sum_ms": 43.441060000000014,
+      "mean_ms": 0.2681546913580248,
+      "max_ms": 0.43019,
+      "registers": [
+        49.0
+      ],
+      "shared_bytes": [
+        8724.0
+      ]
+    },
+    {
+      "name": "gemmex_nt_256_256x128_f16f32_epilogue_qy2",
+      "count": 121,
+      "sum_ms": 33.740389999999984,
+      "mean_ms": 0.2788461983471073,
+      "max_ms": 0.59014,
+      "registers": [
+        242.0
+      ],
+      "shared_bytes": [
+        24716.0
+      ]
+    },
+    {
+      "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+      "count": 7,
+      "sum_ms": 21.04,
+      "mean_ms": 3.005714285714286,
+      "max_ms": 4.62,
+      "registers": [
+        39.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::merged_geglu<float, __half>(float const*, __half*, int, bool)",
+      "count": 71,
+      "sum_ms": 13.831529999999995,
+      "mean_ms": 0.19481028169014078,
+      "max_ms": 0.68567,
+      "registers": [
+        16.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, uint3, uint3, uint3, uint3, uint3, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+      "count": 89,
+      "sum_ms": 13.414600000000002,
+      "mean_ms": 0.15072584269662923,
+      "max_ms": 0.31451,
+      "registers": [
+        20.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<64>(__half const*, __half const*, float*, int, int, int)",
+      "count": 54,
+      "sum_ms": 7.551710000000001,
+      "mean_ms": 0.1398464814814815,
+      "max_ms": 0.1452,
+      "registers": [
+        71.0
+      ],
+      "shared_bytes": [
+        17428.0
+      ]
+    },
+    {
+      "name": "void convert_unary_cont_vec4<float, __half>(void const*, __half*, long)",
+      "count": 114,
+      "sum_ms": 6.140950000000006,
+      "mean_ms": 0.053867982456140405,
+      "max_ms": 0.12692,
+      "registers": [
+        8.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::apply_rope_table<float>(float const*, float const*, float*, int, int, int, unsigned long, unsigned long)",
+      "count": 143,
+      "sum_ms": 5.063220000000002,
+      "mean_ms": 0.03540713286713288,
+      "max_ms": 0.11073000000000001,
+      "registers": [
+        15.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::pack_f16x4(float const*, __half2*, unsigned long, int, int, int, unsigned long, unsigned long, unsigned long)",
+      "count": 126,
+      "sum_ms": 4.947510000000001,
+      "mean_ms": 0.03926595238095239,
+      "max_ms": 0.0511,
+      "registers": [
+        27.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::vision_epilogue<true>(float const*, float const*, float const*, float*, int)",
+      "count": 15,
+      "sum_ms": 4.60567,
+      "mean_ms": 0.3070446666666667,
+      "max_ms": 0.30859,
+      "registers": [
+        37.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "gemmex_nn_256_256x128_f16f32_epilogue_qy2",
+      "count": 54,
+      "sum_ms": 4.40444,
+      "mean_ms": 0.08156370370370371,
+      "max_ms": 0.08367000000000001,
+      "registers": [
+        242.0
+      ],
+      "shared_bytes": [
+        24716.0
+      ]
+    },
+    {
+      "name": "void rms_norm_f32<1024, true, false, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, uint3, uint3, uint3, uint3, float const*, long, long, long, uint3, uint3, uint3, uint3, float)",
+      "count": 35,
+      "sum_ms": 4.065599999999999,
+      "mean_ms": 0.11615999999999997,
+      "max_ms": 0.12014,
+      "registers": [
+        13.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, uint3, uint3, uint3, uint3, uint3, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+      "count": 34,
+      "sum_ms": 3.9422099999999998,
+      "mean_ms": 0.11594735294117646,
+      "max_ms": 0.12573,
+      "registers": [
+        20.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "musa_asm_hflash_atten_512_256x64x128",
+      "count": 14,
+      "sum_ms": 3.78526,
+      "mean_ms": 0.2703757142857143,
+      "max_ms": 0.27182,
+      "registers": [
+        244.0
+      ],
+      "shared_bytes": [
+        57472.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::gemma_probs(float const*, __half const*, __half*, int, int, float)",
+      "count": 54,
+      "sum_ms": 3.643500000000001,
+      "mean_ms": 0.06747222222222224,
+      "max_ms": 0.06988,
+      "registers": [
+        25.0
+      ],
+      "shared_bytes": [
+        532.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::res_adarms<float, false>(float const*, float const*, float const*, float const*, float*, int, int, float)",
+      "count": 105,
+      "sum_ms": 3.58891,
+      "mean_ms": 0.03418009523809524,
+      "max_ms": 0.03635,
+      "registers": [
+        20.0
+      ],
+      "shared_bytes": [
+        1044.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::vision_epilogue<false>(float const*, float const*, float const*, float*, int)",
+      "count": 30,
+      "sum_ms": 3.5715900000000005,
+      "mean_ms": 0.11905300000000002,
+      "max_ms": 0.12062,
+      "registers": [
+        39.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_pack_kernel<float>(float const*, __half*, int, int)",
+      "count": 162,
+      "sum_ms": 3.566940000000001,
+      "mean_ms": 0.022018148148148155,
+      "max_ms": 0.03046,
+      "registers": [
+        6.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void norm_f32<1024>(float const*, float*, int, long, long, long, float)",
+      "count": 31,
+      "sum_ms": 3.5292800000000004,
+      "mean_ms": 0.11384774193548389,
+      "max_ms": 0.11536,
+      "registers": [
+        11.0
+      ],
+      "shared_bytes": [
+        24.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::attention_matmul_f32(float const*, float const*, float*, int, int, int)",
+      "count": 2,
+      "sum_ms": 3.13,
+      "mean_ms": 1.565,
+      "max_ms": 1.6,
+      "registers": [
+        57.0
+      ],
+      "shared_bytes": [
+        2196.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_pack_kernel<__half>(__half const*, __half*, int, int)",
+      "count": 54,
+      "sum_ms": 2.557250000000001,
+      "mean_ms": 0.0473564814814815,
+      "max_ms": 0.04859,
+      "registers": [
+        6.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::pack_vision_qkv(float const*, float const*, float const*, __half2*, __half2*, __half2*, int, unsigned long, unsigned long, unsigned long)",
+      "count": 14,
+      "sum_ms": 2.00774,
+      "mean_ms": 0.14341,
+      "max_ms": 0.14492,
+      "registers": [
+        20.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void flash_attn_combine_results<256>(float const*, float2 const*, float*, int)",
+      "count": 17,
+      "sum_ms": 1.7664900000000001,
+      "mean_ms": 0.10391117647058824,
+      "max_ms": 0.10475,
+      "registers": [
+        14.0
+      ],
+      "shared_bytes": [
+        24.0
+      ]
+    },
+    {
+      "name": "void reduce_rows_f32<true>(float const*, float*, int)",
+      "count": 4,
+      "sum_ms": 1.6513200000000001,
+      "mean_ms": 0.41283000000000003,
+      "max_ms": 0.8035100000000001,
+      "registers": [
+        24.0
+      ],
+      "shared_bytes": [
+        148.0
+      ]
+    },
+    {
+      "name": "void soft_max_f32<true, 256, 256, float>(float const*, float const*, float const*, float*, soft_max_params)",
+      "count": 1,
+      "sum_ms": 1.6,
+      "mean_ms": 1.6,
+      "max_ms": 1.6,
+      "registers": [
+        38.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void mul_mat_vec_f<float, float, 8, 128, false, false>(float const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, uint3, int, int, int, uint3, int, int, int, uint3, int, int, int, int)",
+      "count": 18,
+      "sum_ms": 1.3161699999999996,
+      "mean_ms": 0.07312055555555554,
+      "max_ms": 0.07463,
+      "registers": [
+        30.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::gemma_unpack(float4 const*, float4*, int)",
+      "count": 54,
+      "sum_ms": 1.26137,
+      "mean_ms": 0.023358703703703704,
+      "max_ms": 0.06584999999999999,
+      "registers": [
+        10.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void cpy_scalar_contiguous<float, __half>(char const*, char*, long)",
+      "count": 72,
+      "sum_ms": 1.1029600000000002,
+      "mean_ms": 0.01531888888888889,
+      "max_ms": 0.024370000000000003,
+      "registers": [
+        9.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void concat_cont<unsigned short, 2>(unsigned short const*, unsigned short const*, unsigned short*, long, long, long, long, long, long)",
+      "count": 36,
+      "sum_ms": 0.90818,
+      "mean_ms": 0.02522722222222222,
+      "max_ms": 0.026010000000000002,
+      "registers": [
+        19.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::unpack_sdpa(__half2 const*, float4*, int)",
+      "count": 14,
+      "sum_ms": 0.6951400000000001,
+      "mean_ms": 0.04965285714285715,
+      "max_ms": 0.05129,
+      "registers": [
+        7.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void mul_mat_vec_f<float, float, 8, 256, false, false>(float const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, uint3, int, int, int, uint3, int, int, int, uint3, int, int, int, int)",
+      "count": 18,
+      "sum_ms": 0.55122,
+      "mean_ms": 0.030623333333333336,
+      "max_ms": 0.03202000000000001,
+      "registers": [
+        30.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void im2col_kernel<__half>(float const*, __half*, long, long, long, long, long, long, long, long, long, long, long, long, long, int, int, int, int, int, int)",
+      "count": 1,
+      "sum_ms": 0.36474,
+      "mean_ms": 0.36474,
+      "max_ms": 0.36474,
+      "registers": [
+        75.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void cpy_scalar_transpose<float>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+      "count": 3,
+      "sum_ms": 0.19967,
+      "mean_ms": 0.06655666666666667,
+      "max_ms": 0.12096,
+      "registers": [
+        34.0
+      ],
+      "shared_bytes": [
+        8468.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::vision_keep(float const*, int*, int, int)",
+      "count": 2,
+      "sum_ms": 0.18713000000000002,
+      "mean_ms": 0.09356500000000001,
+      "max_ms": 0.09364,
+      "registers": [
+        7.0
+      ],
+      "shared_bytes": [
+        2068.0
+      ]
+    },
+    {
+      "name": "void mul_mat_vec_f<float, float, 2, 128, false, false>(float const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, uint3, int, int, int, uint3, int, int, int, uint3, int, int, int, int)",
+      "count": 3,
+      "sum_ms": 0.15853,
+      "mean_ms": 0.05284333333333333,
+      "max_ms": 0.05307,
+      "registers": [
+        25.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::make_rope_table(int const*, float*, int, int, float)",
+      "count": 2,
+      "sum_ms": 0.10078000000000001,
+      "mean_ms": 0.050390000000000004,
+      "max_ms": 0.07416,
+      "registers": [
+        26.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::res_adarms<float, true>(float const*, float const*, float const*, float const*, float*, int, int, float)",
+      "count": 3,
+      "sum_ms": 0.09782,
+      "mean_ms": 0.032606666666666666,
+      "max_ms": 0.03279,
+      "registers": [
+        19.0
+      ],
+      "shared_bytes": [
+        1044.0
+      ]
+    },
+    {
+      "name": "void k_get_rows_float_vec<float>(float const*, int const*, float*, long, long, uint3, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long)",
+      "count": 2,
+      "sum_ms": 0.08412,
+      "mean_ms": 0.04206,
+      "max_ms": 0.04262,
+      "registers": [
+        36.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void rms_norm_f32<1024, false, false, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, uint3, uint3, uint3, uint3, float const*, long, long, long, uint3, uint3, uint3, uint3, float)",
+      "count": 3,
+      "sum_ms": 0.07572000000000001,
+      "mean_ms": 0.025240000000000002,
+      "max_ms": 0.0259,
+      "registers": [
+        11.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void mul_mat_vec_f<float, float, 2, 256, false, false>(float const*, float const*, int const*, ggml_cuda_mm_fusion_args_device, float*, int, uint3, int, int, int, uint3, int, int, int, uint3, int, int, int, int)",
+      "count": 3,
+      "sum_ms": 0.06688,
+      "mean_ms": 0.02229333333333333,
+      "max_ms": 0.02284,
+      "registers": [
+        25.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::gateres<float>(float const*, float const*, float const*, float*, int)",
+      "count": 3,
+      "sum_ms": 0.062259999999999996,
+      "mean_ms": 0.020753333333333332,
+      "max_ms": 0.02115,
+      "registers": [
+        6.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::action_step(float const*, float const*, float const*, float*, unsigned long, int, float)",
+      "count": 3,
+      "sum_ms": 0.05503000000000001,
+      "mean_ms": 0.018343333333333336,
+      "max_ms": 0.018920000000000003,
+      "registers": [
+        20.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    }
+  ]
+}

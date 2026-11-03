@@ -7,6 +7,7 @@
 #include "layers/u8_patch.h"
 #include "layers/weight_prefetch.h"
 #include "layers/small_gemm.h"
+#include "layers/packed_norm.h"
 #include <mma.h>
 #include "layers/fused_ops.h"
 #include "modules/vision_prune.h"
@@ -168,10 +169,33 @@ bool supports(const ggml_tensor * t) {
                (spec.kind != FusedKind::BiasRes ||
                 (dense_f32(t->src[2]) && ggml_are_same_shape(t, t->src[2])));
     }
+    if(m==VISION_SCORE_MAGIC) {
+        const auto * x=t->src[0];
+        return dense_f32(t) && t->ne[0]==256 && ggml_nelements(t)==256 &&
+               dense_f32(x) && x->ne[0]==256 && x->ne[1]==256 && x->ne[2]==16 && x->ne[3]==1;
+    }
     if (m == VISION_KEEP_MAGIC)
         return t->type == GGML_TYPE_I32 && dense_f32(t->src[0]) &&
                ggml_is_vector(t->src[0]) && t->src[0]->ne[0] <= WG &&
                t->ne[0] > 0 && t->ne[0] <= t->src[0]->ne[0];
+    if(m==PACKED_GEGLU_MAGIC) {
+        const auto * x=t->src[0];
+        return dense_f16(t) && dense_f32(x) && x->ne[0]==2*t->ne[0] &&
+               x->ne[1]>0 && x->ne[1]<=64 && x->ne[2]==1 && x->ne[3]==1 &&
+               t->ne[1]==64 && t->ne[2]==1 && t->ne[3]==1;
+    }
+    if(m==PACKED_NORM_MAGIC) {
+        const auto spec=packed_norm_spec(t);const auto * x=t->src[0];
+        if(!dense_f32(x) || x->ne[1]<1 || x->ne[1]>64 || x->ne[2]!=1 || x->ne[3]!=1 ||
+           spec.kind<0 || spec.kind>2 || t->type!=GGML_TYPE_I8 || !ggml_is_contiguous(t))return false;
+        if(spec.kind && !dense_f32(t->src[1]))return false;
+        if(spec.kind==1 && (!ggml_are_same_shape(x,t->src[1]) || !dense_f32(t->src[2]) ||
+                           ggml_nelements(t->src[2])!=3*x->ne[0]))return false;
+        if(spec.kind==2 && ggml_nelements(t->src[1])!=x->ne[0])return false;
+        const auto * mod=t->src[spec.kind==1?3:spec.kind==2?2:1];
+        return dense_f32(mod) && ggml_nelements(mod)==3*x->ne[0] &&
+               ggml_nbytes(t)==(spec.kind?ggml_nelements(x)*4:0)+x->ne[0]*64*2;
+    }
     if(m==SMALL_PACK_MAGIC) {
         const auto * x=t->src[0];
         return dense_f16(t) && (dense_f16(x)||dense_f32(x)) && x->ne[0]==t->ne[0] &&
@@ -182,7 +206,7 @@ bool supports(const ggml_tensor * t) {
         if(!musa_small_gemm_supported())return false;
         const auto & spec=*(const SmallGemmSpec *)userdata(t);
         const auto * a=t->src[0],*b=t->src[1];
-        return (spec.tile==32 || spec.tile==64) && dense_f32(t) && dense_f16(a) && dense_f16(b) &&
+        return (spec.pipeline==0 || spec.pipeline==4) && (spec.tile==32 || spec.tile==64) && dense_f32(t) && dense_f16(a) && dense_f16(b) &&
                a->ne[0]%16==0 && a->ne[1]%spec.tile==0 && a->ne[0]==b->ne[0] && b->ne[1]==64 &&
                a->ne[2]==1 && a->ne[3]==1 && b->ne[2]==1 && b->ne[3]==1 &&
                t->ne[0]==a->ne[1] && t->ne[1]>0 && t->ne[1]<=64 && t->ne[2]==1 && t->ne[3]==1;
@@ -192,6 +216,13 @@ bool supports(const ggml_tensor * t) {
         return spec.state && t->src[1] && (dense_f16(t)||dense_f32(t)) &&
                t->view_src && t->view_offs==0 && ggml_are_same_shape(t,t->src[0]) &&
                t->type==t->src[0]->type && (spec.join || (spec.bytes>0 && spec.bytes<=ggml_nbytes(t->src[1])));
+    }
+    if(m==F32_PATCH_MAGIC) {
+        const int ps=((const U8PatchSpec *)userdata(t))->patch;
+        const auto * x=t->src[0];
+        return dense_f16(t) && dense_f32(x) && x->ne[0]==3 && x->ne[1]==x->ne[2] &&
+               ps>0 && x->ne[1]%ps==0 && t->ne[0]==3*ps*ps &&
+               t->ne[1]==(x->ne[1]/ps)*(x->ne[1]/ps) && t->ne[2]==x->ne[3] && t->ne[3]==1;
     }
     if(m==U8_PATCH_MAGIC) {
         const int ps=((const U8PatchSpec *)userdata(t))->patch;
@@ -215,6 +246,10 @@ bool supports(const ggml_tensor * t) {
         const auto & s=*(const FusedActionLinearSpec *)userdata(t);
         for(int i=0;i<(s.input?4:5);++i)if(!dense_f32(t->src[i]))return false;
         const auto * w=t->src[0],* x=t->src[1];
+        if(s.packed)return s.input && w->ne[1]<=4096 && w->ne[0]==x->ne[0] &&
+             w->ne[2]==1 && w->ne[3]==1 && x->ne[2]==1 && x->ne[3]==1 &&
+             x->ne[1]>0 && x->ne[1]<=64 && t->type==GGML_TYPE_I8 && ggml_is_contiguous(t) &&
+             ggml_nbytes(t)==w->ne[1]*(x->ne[1]*4+64*2);
         return (s.input?w->ne[1]:w->ne[0])<=4096 && dense_f32(t) && w->ne[0]==x->ne[0] && w->ne[2]==1 && w->ne[3]==1 &&
                x->ne[2]==1 && x->ne[3]==1 && t->ne[0]==w->ne[1] && t->ne[1]==x->ne[1] &&
                t->ne[2]==(s.input?2:1) && t->ne[3]==1;
@@ -310,10 +345,15 @@ __global__ void res_adarms(const float * x, const T * o, const float * gate,
     }
 }
 
-template<bool Input>
+template<bool Input,bool Packed=false>
 __global__ void action_linear_kernel(const float * w,const float * x,const float * b,
         const float * mod,const float * noise,float * y,int h,int cols,int outputs,int rows,float eps,float dt) {
     const int row=blockIdx.x,tid=threadIdx.x;
+    half * normalized=Packed?(half *)(y+(size_t)h*rows):nullptr;
+    if(Packed && row>=rows) {
+        for(int i=tid;i<h;i+=WG)normalized[(size_t)row*h+i]=__float2half_rn(0.f);
+        return;
+    }
     extern __shared__ float shared[];
     float * values=shared,* sums=shared+h;
     float sum=0;
@@ -331,7 +371,10 @@ __global__ void action_linear_kernel(const float * w,const float * x,const float
     for(int i=tid;i<h;i+=WG) {
         const float n=values[i]*inv;
         values[i]=(n+n*mod[i])+mod[h+i];
-        if(Input)y[(size_t)h*rows+(size_t)row*h+i]=values[i];
+        if(Input) {
+            if(Packed)normalized[(size_t)row*h+i]=__float2half_rn(values[i]);
+            else y[(size_t)h*rows+(size_t)row*h+i]=values[i];
+        }
     }
     __syncthreads();
     if(!Input)for(int o=tid;o<outputs;o+=WG) {
@@ -362,6 +405,30 @@ __global__ void merged_geglu(const S * src, D * dst, int h, bool swapped) {
 
 
 // 256 patches: exact ranking, ties prefer the lower spatial index.
+// Reproduce native mean(head=16), then its 32-lane mean(query=256) tree.
+__global__ void vision_scores_kernel(const float * x,float * out) {
+ const int lane=threadIdx.x/8,key=blockIdx.x*8+threadIdx.x%8;
+ float sum=0;
+ #pragma unroll
+ for(int j=0;j<8;++j) {
+  float v[16];
+  #pragma unroll
+  for(int h=0;h<16;++h)v[h]=x[key+256*(lane+j*32+256*h)];
+  #pragma unroll
+  for(int stride=8;stride;stride/=2) {
+   #pragma unroll
+   for(int h=0;h<stride;++h)v[h]+=v[h+stride];
+  }
+  sum+=v[0]/16.f;
+ }
+ __shared__ float values[256];values[threadIdx.x]=sum;__syncthreads();
+ for(int stride=16;stride;stride/=2) {
+  if(lane<stride)values[threadIdx.x]+=values[threadIdx.x+stride*8];
+  __syncthreads();
+ }
+ if(!lane)out[key]=values[threadIdx.x]/256.f;
+}
+
 __global__ void vision_keep(const float * scores, int32_t * ids, int n, int keep) {
     __shared__ float values[WG];
     __shared__ int selected[WG];
@@ -663,7 +730,40 @@ void release_attention(int device,void * stream) {
 #endif
 }
 
-template<int TM>
+__global__ void packed_geglu_kernel(const float * x,half * y,int h,int rows) {
+ const int i=blockIdx.x*blockDim.x+threadIdx.x,r=blockIdx.y;
+ if(i>=h)return;
+ float value=0;
+ if(r<rows) {
+  const float g=x[r*2*h+i],u=x[r*2*h+h+i];
+  const float gelu=0.5f*g*(1.0f+tanhf(0.7978845608028654f*g*(1.0f+0.044715f*g*g)));
+  value=gelu*u;
+ }
+ y[r*h+i]=__float2half_rn(value);
+}
+
+template<int Kind>
+__global__ void packed_norm_kernel(const float * x,const float * o,const float * gate,
+        const float * mod,char * blob,int h,int rows,float eps) {
+ const int tid=threadIdx.x,r=blockIdx.x;const size_t row=(size_t)r*h;
+ float * residual=(float *)blob;
+ half * norm=(half *)(blob+(Kind?h*rows*4:0));
+ if(r>=rows){for(int i=tid;i<h;i+=WG)norm[row+i]=__float2half_rn(0.f);return;}
+ __shared__ float sums[WG];float sum=0;
+ for(int i=tid;i<h;i+=WG) {
+  const float a=Kind==1?x[row+i]+o[row+i]*gate[2*h+i]:Kind==2?x[row+i]+o[i]:x[row+i];
+  if(Kind)residual[row+i]=a;sum+=a*a;
+ }
+ sums[tid]=sum;__syncthreads();
+ for(int stride=WG/2;stride;stride/=2){if(tid<stride)sums[tid]+=sums[tid+stride];__syncthreads();}
+ const float inv=rsqrtf(sums[0]/h+eps);
+ for(int i=tid;i<h;i+=WG) {
+  const float n=(Kind?residual[row+i]:x[row+i])*inv;
+  norm[row+i]=__float2half_rn((n+n*mod[i])+mod[h+i]);
+ }
+}
+
+template<int TM,int Pipeline=0>
 __global__ void small_gemm_kernel(const __half*w,const __half*x,float*y,int m,int n,int k) {
 #if !defined(__MUSA_ARCH__) || __MUSA_ARCH__==220
  using namespace mtmusa::wmma;constexpr int NT=2,MT=TM/32,ld=68;
@@ -676,6 +776,7 @@ __global__ void small_gemm_kernel(const __half*w,const __half*x,float*y,int m,in
   #pragma unroll
   for(int j=0;j<NT;j++)fill_fragment(acc[i][j],0.f);
  }
+ #pragma unroll (Pipeline?Pipeline:1)
  for(int p=0;p<k;p+=16) {
   #pragma unroll
   for(int i=0;i<MT;i++)load_matrix_sync(a[i],w+(size_t)(row+i*32)*k+p,k);
@@ -728,7 +829,17 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
 #endif
     const int h = (int) t->ne[0];
     const auto * x = (const float *) t->src[0]->data;
-    if(magic(t)==SMALL_PACK_MAGIC) {
+    if(magic(t)==PACKED_GEGLU_MAGIC) {
+        packed_geglu_kernel<<<dim3((h+WG-1)/WG,64),WG,0,stream>>>(x,(half *)t->data,h,t->src[0]->ne[1]);
+    } else if(magic(t)==PACKED_NORM_MAGIC) {
+        const auto spec=packed_norm_spec(t);const auto * a=t->src[0];
+        const float * o=spec.kind?(const float *)t->src[1]->data:nullptr;
+        const float * gate=spec.kind==1?(const float *)t->src[2]->data:nullptr;
+        const float * mod=(const float *)t->src[spec.kind==1?3:spec.kind==2?2:1]->data;
+#define PACKED_NORM_CASE(K) case K: packed_norm_kernel<K><<<64,WG,0,stream>>>(x,o,gate,mod,(char *)t->data,a->ne[0],a->ne[1],spec.eps);break
+        switch(spec.kind){PACKED_NORM_CASE(0);PACKED_NORM_CASE(1);PACKED_NORM_CASE(2);}
+#undef PACKED_NORM_CASE
+    } else if(magic(t)==SMALL_PACK_MAGIC) {
         const auto * a=t->src[0];const int k=a->ne[0],n=a->ne[1];
         if(a->type==GGML_TYPE_F16)small_pack_kernel<<<(k*64+WG-1)/WG,WG,0,stream>>>(
             (const half *)a->data,(half *)t->data,k,n);
@@ -737,10 +848,13 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
     } else if(magic(t)==SMALL_GEMM_MAGIC) {
         const auto & spec=*(const SmallGemmSpec *)userdata(t);
         const int m=t->ne[0],n=t->ne[1],k=t->src[0]->ne[0];
-        if(spec.tile==64)small_gemm_kernel<64><<<dim3(m/64,1),128,0,stream>>>(
-            (const half *)t->src[0]->data,(const half *)t->src[1]->data,(float *)t->data,m,n,k);
-        else small_gemm_kernel<32><<<dim3(m/32,1),128,0,stream>>>(
-            (const half *)t->src[0]->data,(const half *)t->src[1]->data,(float *)t->data,m,n,k);
+#define SMALL_PIPE_CASE(P) case P: \
+        if(spec.tile==64)small_gemm_kernel<64,P><<<dim3(m/64,1),128,0,stream>>>( \
+            (const half *)t->src[0]->data,(const half *)t->src[1]->data,(float *)t->data,m,n,k); \
+        else small_gemm_kernel<32,P><<<dim3(m/32,1),128,0,stream>>>( \
+            (const half *)t->src[0]->data,(const half *)t->src[1]->data,(float *)t->data,m,n,k);break
+        switch(spec.pipeline){SMALL_PIPE_CASE(4);default: SMALL_PIPE_CASE(0);}
+#undef SMALL_PIPE_CASE
     } else if(magic(t)==WEIGHT_PREFETCH_MAGIC) {
         const auto & spec=*(const WeightPrefetchSpec *)userdata(t);
         auto & state=*(WeightPrefetchState *)spec.state;
@@ -765,6 +879,8 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
             (const float *)a->data,(const float *)b->data,(float *)t->data,a->ne[0],a->ne[1],b->ne[1]);
     } else if (magic(t) == FUSED_MAGIC) {
         musa_vision_epilogue(t, ((const FusedSpec *) userdata(t))->kind == FusedKind::BiasGelu, stream_ptr);
+    } else if(magic(t)==VISION_SCORE_MAGIC) {
+        vision_scores_kernel<<<32,256,0,stream>>>(x,(float *)t->data);
     } else if (magic(t) == VISION_KEEP_MAGIC) {
         vision_keep<<<1, WG, 0, stream>>>(x, (int32_t *)t->data, t->src[0]->ne[0], h);
     } else if (t->op == GGML_OP_GLU) {
@@ -792,6 +908,8 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
         float eps;
         std::memcpy(&eps, t->op_params, sizeof(eps));
         adarms<<<ggml_nrows(t), WG, 0, stream>>>((const __half *) x, nullptr, (__half *) t->data, h, eps);
+    } else if(magic(t)==F32_PATCH_MAGIC) {
+        musa_f32_patch_forward(t,((const U8PatchSpec *)userdata(t))->patch,stream_ptr);
     } else if(magic(t)==U8_PATCH_MAGIC) {
         musa_u8_patch_forward(t,((const U8PatchSpec *)userdata(t))->patch,stream_ptr);
     } else if(magic(t)==ROPE_TABLE_MAGIC || magic(t)==ROPE_APPLY_MAGIC) {
@@ -800,7 +918,10 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
         const auto & s=*(const FusedActionLinearSpec *)userdata(t);
         const auto * w=t->src[0]; const int hidden=s.input?w->ne[1]:w->ne[0];
         const size_t smem=(hidden+WG)*sizeof(float);
-        if(s.input)action_linear_kernel<true><<<t->ne[1],WG,smem,stream>>>(
+        if(s.packed)action_linear_kernel<true,true><<<64,WG,smem,stream>>>(
+            (const float *)w->data,(const float *)t->src[1]->data,(const float *)t->src[2]->data,
+            (const float *)t->src[3]->data,nullptr,(float *)t->data,hidden,w->ne[0],w->ne[1],t->src[1]->ne[1],s.eps,s.dt);
+        else if(s.input)action_linear_kernel<true><<<t->ne[1],WG,smem,stream>>>(
             (const float *)w->data,(const float *)t->src[1]->data,(const float *)t->src[2]->data,
             (const float *)t->src[3]->data,nullptr,(float *)t->data,hidden,w->ne[0],w->ne[1],t->ne[1],s.eps,s.dt);
         else action_linear_kernel<false><<<t->ne[1],WG,smem,stream>>>(

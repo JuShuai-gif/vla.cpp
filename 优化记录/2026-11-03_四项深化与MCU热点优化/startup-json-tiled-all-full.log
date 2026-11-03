@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp/优化记录/2026-11-03_四项深化与MCU热点优化/bench_real.py", line 6, in <module>
+    env=json.loads((d/os.environ.get('BENCH_CONFIG','baseline-env.json')).read_text())[short]
+  File "/usr/lib/python3.10/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.10/json/decoder.py", line 340, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 57 column 2 (char 1809)

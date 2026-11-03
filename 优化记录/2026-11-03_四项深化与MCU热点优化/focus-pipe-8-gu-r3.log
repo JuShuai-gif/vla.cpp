@@ -1,0 +1,60 @@
+==PROF== '/tmp/pi05-pipeline-mcu-8' started, pid:47968  
+==PROF== Profiling "1:2:small_gemm<32>(__half const*, __half const*, float*, int, int, int)" - 0: Application replay pass 0 
+profiled one GEMM
+==PROF== '/tmp/pi05-pipeline-mcu-8' exit, exit code(0)  
+==PROF== Disconnected from process 47968 
+==PROF== '/tmp/pi05-pipeline-mcu-8' started, pid:47988  
+==PROF== Profiling "1:2:small_gemm<32>(__half const*, __half const*, float*, int, int, int)" - 0: Application replay pass 1 
+profiled one GEMM
+==PROF== '/tmp/pi05-pipeline-mcu-8' exit, exit code(0)  
+==PROF== Disconnected from process 47988 
+==PROF== '/tmp/pi05-pipeline-mcu-8' started, pid:48012  
+==PROF== Profiling "1:2:small_gemm<32>(__half const*, __half const*, float*, int, int, int)" - 0: Application replay pass 2 
+profiled one GEMM
+==PROF== '/tmp/pi05-pipeline-mcu-8' exit, exit code(0)  
+==PROF== Disconnected from process 48012 
+==PROF== Capture finished. Path is "/home/skysi/VLA/four-deep-20261103/focus-pipe-8-gu-r3.mcu-rep"  
+[47968] pi05-pipeline-mcu-8@aibox 
+  void small_gemm<32>(__half const*, __half const*, float*, int, int, int) (256, 1, 1)x(128, 1, 1), Context 1, Stream 2, Device 0 
+    Section: GPU Speed Of Light Throughput 
+    ---------------------- ----------- ------------ 
+    Metric Name            Metric Unit Metric Value 
+    ---------------------- ----------- ------------ 
+    Compute(MP) Throughput           %        85.71 
+    L1 Cache Throughput              %        58.35 
+    L2 Cache Throughput              %        10.67 
+    Duration                        us       422.96 
+    Elapsed Cycles               cycle      634,437 
+    MP Active Cycles             cycle      606,667 
+    MP Frequency                   Ghz         1.50 
+    ---------------------- ----------- ------------ 
+ 
+ 
+    Section: Memory Workload Analysis 
+    -------------- ----------- ------------ 
+    Metric Name    Metric Unit Metric Value 
+    -------------- ----------- ------------ 
+    L1 Hit Rate              %        65.33 
+    Mem Pipes Busy           %        35.25 
+    -------------- ----------- ------------ 
+ 
+ 
+    Section: Launch Statistics 
+    ------------------------------- --------------- ------------ 
+    Metric Name                         Metric Unit Metric Value 
+    ------------------------------- --------------- ------------ 
+    Block Size                                               128 
+    Grid Size                                                256 
+    Registers Per Thread            register/thread           71 
+    Driver Shared Memory Per Block      Kbyte/block         0.00 
+    Dynamic Shared Memory Per Block      byte/block         0.00 
+    Static Shared Memory Per Block       byte/block      8724.00 
+    Threads                                  thread       32,768 
+    Uses Green Context                                         0 
+    Waves Per MP                                            0.67 
+    # MPs                                                      8 
+    # MPXs                                                     4 
+    Enabled MPX IDs                                          all 
+    ------------------------------- --------------- ------------ 
+ 
+ 

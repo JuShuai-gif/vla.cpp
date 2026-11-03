@@ -1,0 +1,15 @@
+{
+  "src/musa/vla_musa_fused.cu": "70a06a7b96c05f2ec8205dd926e1ddc8a1694fc3f3ea4bd41b89a8ce7e27854c",
+  "src/musa/vla_musa_attention256.cuh": "2702948e266af5d0cf8b14cf63fe78e66683aab09f873e49542ceafe8a042c23",
+  "src/layers/small_gemm.h": "da3dbb088c89699c7335ac186367191164c83e7b303daa091d99a2b694840a71",
+  "src/layers/packed_norm.h": "eef4796214f1bd1493acab86839e00aa0a0d3106505b4f839dbc6646affd283b",
+  "src/layers/action_edges.h": "03a6e7f574341331ebca51d2f715b5e1c05e42fc6f74b027e4cbeccdb737725c",
+  "src/modules/gemma_expert.h": "4c57f25db13645a1da56d4f825722cbe00981aa00188620714b19b773ea87161",
+  "src/modules/vision_prune.h": "aa32fc9aac1260b0cef88483c4e16597d4df90bc68824cfa7f694133ac507932",
+  "src/models/pi05.cpp": "7d33469e0cf5a7078a73a723e76b2879d62bf6a252fa480a8725bab3d5c66d57",
+  "src/layers/u8_patch.h": "aab773c5886828e1beda76214f5e8577bae46951720b3ddf6204f269480bef3d",
+  "src/musa/vla_musa_ops.h": "9931a74151fabfbe67f0c638a962daec96d00330f83ed17a69cc5a21272a16fc",
+  "src/musa/vla_musa_epilogue.cu": "3998d2bbc8c8cf0095d3020bf4f73020d661736671a56155fb323007827aded3",
+  "tests/test_musa_ops.cpp": "e6b270a44c440f681bfc700e48a6de16f3c02b82e1632d0f764dd78d1093e5d9",
+  "tests/CMakeLists.txt": "79ccf95a579965f751d83463f4a45dc2b14bc76dc041192ae75e92e8add7c657"
+}

@@ -1,0 +1,3 @@
+{"m":1024,"n":50,"k":2048,"mode":0,"split":1,"ms":0.2244407,"max_abs":0,"relative_peak":0}
+{"m":1024,"n":50,"k":2048,"mode":1,"split":1,"ms":0.1330307,"max_abs":0,"relative_peak":0}
+{"m":1024,"n":50,"k":2048,"mode":2,"split":1,"ms":0.1483953,"max_abs":0,"relative_peak":0}

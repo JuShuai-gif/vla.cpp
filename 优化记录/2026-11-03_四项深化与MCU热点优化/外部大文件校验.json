@@ -1,0 +1,215 @@
+{
+  "note": "二进制profiler报告和标记库等保留外部路径；也包含失败产物，是否有效以日志/valid_kernel_report为准。原始JSON已有仓库gzip副本。",
+  "files": [
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/baseline-full.json",
+      "bytes": 11635036,
+      "sha256": "9b2a9645a1dedee33b3162db924a9effe2cad7e0f4d7ff4893cbac6ad4a8432b"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/baseline-full.mcu-rep",
+      "bytes": 100474880,
+      "sha256": "7ffdea82522b0c1bb3c5be83fe01107bff8b473cd8474877db48bc599969a264"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/baseline-full.msys-rep",
+      "bytes": 4489216,
+      "sha256": "634d6a8222258955d760d2c7247cacc7ba870328a0b8da81b971638007bea241"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/baseline-pruned.json",
+      "bytes": 4963716,
+      "sha256": "37211872799cace9786235dabc3bfc1849aba94457d8a43eafd301fd0c7c2872"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/baseline-pruned.mcu-rep",
+      "bytes": 40009728,
+      "sha256": "2482555a2378935bb5726b071d4cf026b23d1747ffe0fd76f0e6040b2e16e744"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/baseline-pruned.msys-rep",
+      "bytes": 1978368,
+      "sha256": "8d742d9076eee9107d56434919a21c00ad0192ff124bda785cb53baff86c3171"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-attention-all-parallel.mcu-rep",
+      "bytes": 3432448,
+      "sha256": "6579a6af576aa737ba5f8dd2e0879c63c0c88407be46c0f0ed179b82c7cab656"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-attention-all.mcu-rep",
+      "bytes": 3395584,
+      "sha256": "744f734a83cf943bffd818e978aa66bdb5d0a1e32d33da5f4d7d6eee60b68b6b"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-0-down-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "fcf2474f81097026c8fb4b841c2b6df92c1fda68426c8883aadcb31eede0c0ff"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-0-down.mcu-rep",
+      "bytes": 49152,
+      "sha256": "0e32cf276967e1bca361052bb0d9f5a931c62f67f1e79ad79a0508d39f98358a"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-0-gu-r2.mcu-rep",
+      "bytes": 61440,
+      "sha256": "f3c2e672d29214f0e65a24f8f87b5c04d4de7731e874e638bb07908d99c6b099"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-0-gu-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "ac1bba762210ce15a3e388005b6383e6d1db84ecd3238cd304bc537b9716467b"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-0-gu.mcu-rep",
+      "bytes": 49152,
+      "sha256": "31e6445df615e8a7693b3a32d96e19a9874d7d8fce18864308465eaca63c0111"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-0-o-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "1577713bce6acef817e8ed8f9cfc7cdbda7b8713c360648d2318702380f3a368"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-0-o.mcu-rep",
+      "bytes": 49152,
+      "sha256": "8ded46f80f36cdc944ed8562e62c8b3535475e76d2e7990357c908ab8a570fb3"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-1-down-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "93ddd232705383b327007d441679dafdbb6c5d9f5676dadb21f64b69e0e290a3"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-1-down.mcu-rep",
+      "bytes": 49152,
+      "sha256": "8911089bbde92a31b20cd712deeaec13e8d637dcbbaeef8f1939904c088ba899"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-1-gu-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "a06da95e9a9aa11ee8994141ae99d6e41da0d38ca759449ce5924cfa09c8c9e8"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-1-gu.mcu-rep",
+      "bytes": 49152,
+      "sha256": "6242004d57b8edde479ff38cc5c2d69cd106cf6d4a5ca46ed3b852f396c732aa"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-1-o-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "7a6d0466a8ee6993d71b9bc78c532559d1e340fe02c940f0f63043805323590a"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-1-o.mcu-rep",
+      "bytes": 49152,
+      "sha256": "b44683b213e61d090609fb38bc0ba059b3488ea287c4fb9b0acd46c5d6b1bb4f"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-4-down-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "9d5243dd6ab29c86e17151a0eb55bddb211e111b13fe7e37deb3b1a7abed9071"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-4-down.mcu-rep",
+      "bytes": 49152,
+      "sha256": "edcd66f6f42867609e95a82398f53dbc852dc41786d2eadd80cfb0d1c71f19af"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-4-gu-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "acfa6e953654b74a4bfac78fc63938814ad75828bc216e989421adfcb4852780"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-4-gu.mcu-rep",
+      "bytes": 49152,
+      "sha256": "4cbc934b82a50aa097785a53b0b22e81083a8cc0180c7ce1b1671aad63998230"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-4-o-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "1cf8cc596e2deb37ae9bb0b25b57a29b11e511e871815fb4a406963e23466139"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-4-o.mcu-rep",
+      "bytes": 49152,
+      "sha256": "feab7b4c67969e66babeac831ccd56328438eb806e5a2d8b51beef085ba75e64"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-8-down-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "583536ce92e2ea6736076411216e52d43a06c648d8c5996b856b4fc8c215cc84"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-8-down.mcu-rep",
+      "bytes": 49152,
+      "sha256": "d6c1e2fa2298f0b068c8705547c2c1fa61029aaf545dcbff60a5afdc65dcd3db"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-8-gu-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "b13bd73c9606253a28a936c2bd831691f83a3a3c10e4229c6fd81f5df2e55ffd"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-8-gu.mcu-rep",
+      "bytes": 49152,
+      "sha256": "00cebb4000435582a1f3a73632c8e7f7214b0987dc535f653a2cd274a48d28d0"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-8-o-r3.mcu-rep",
+      "bytes": 61440,
+      "sha256": "2518175745dd08af3ba3e658fd07cf301452fc6183520e81afba6019f69a1fa8"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/focus-pipe-8-o.mcu-rep",
+      "bytes": 49152,
+      "sha256": "1eeaa659e28e6a4aacf6071aba9dff19f69cabbc20132d80753d654b1443ac66"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/hot-combined-full.mcu-rep",
+      "bytes": 49152,
+      "sha256": "1009b21fcf33890355ac9605ff624fa80e4af7216e894638400541cfaf3560a0"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/hot-combined-pruned.mcu-rep",
+      "bytes": 49152,
+      "sha256": "3f8e8933089a7ee88fdd89608c6c532b813d11d2517a3704ba874fa3aee660f9"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/hot-combined-r2-full.mcu-rep",
+      "bytes": 27058176,
+      "sha256": "da5581491dbce155bc2bfdd990fbcd1b9f34cd7feed203b56453e7058e45a3ac"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/hot-combined-r2-pruned.mcu-rep",
+      "bytes": 8294400,
+      "sha256": "32e9357cc5e275461d4cc1edfd572fb52120df1df66395bedeb377cc8daf72bc"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/profile_markers.so",
+      "bytes": 21856,
+      "sha256": "5759b50de2bd8f64d5180d3c6e0148b87f36d0bea45ee5458fa08558635bec65"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/selected-msys-full.json",
+      "bytes": 10421702,
+      "sha256": "ca2d14524542d4db8f771f92b22f2fb9ba6d24afd98f61c814367d6d3d6fffc4"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/selected-msys-full.msys-rep",
+      "bytes": 4100096,
+      "sha256": "90a35cdb658b6af122535e13aa94d48551ac09dd3c6c6b562b3e364cf3f64dcc"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/selected-msys-pruned.json",
+      "bytes": 4551133,
+      "sha256": "0eb2a64bee143a42d3f54e1f4570854a42fe244b4ddb66db6818cff712250b32"
+    },
+    {
+      "path": "/home/skysi/VLA/four-deep-20261103/selected-msys-pruned.msys-rep",
+      "bytes": 1855488,
+      "sha256": "4d3fea7011f86adb1fb547f5d032ef6bd2f65f49538cf52e68192a08845b3133"
+    }
+  ]
+}

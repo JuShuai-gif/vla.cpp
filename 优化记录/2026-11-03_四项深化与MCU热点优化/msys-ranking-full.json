@@ -1,0 +1,236 @@
+{
+  "model": "full",
+  "timing_valid": false,
+  "timing_limitation": "Repeated timestamps and durations across unrelated kernels; counts only, not timing/ranking evidence",
+  "scope": "MSYS Graph OFF marked warmed real-input inference",
+  "window_ms": 790.8720879999995,
+  "launches": 4584,
+  "sum_kernel_ms": 687.36672,
+  "mcu_launches": 4584,
+  "kernels": [
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32>(__half const*, __half const*, float*, int, int, int)",
+      "count": 540,
+      "sum_ms": 65.52924,
+      "mean_ms": 0.12135044444444444,
+      "max_ms": 0.42632
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_pack_kernel<float>(float const*, __half*, int, int)",
+      "count": 540,
+      "sum_ms": 59.20811999999997,
+      "mean_ms": 0.10964466666666661,
+      "max_ms": 0.42632
+    },
+    {
+      "name": "vla::(anonymous namespace)::pack_f16x4(float const*, __half2*, unsigned long, int, int, int, unsigned long, unsigned long, unsigned long)",
+      "count": 395,
+      "sum_ms": 54.231799999999986,
+      "mean_ms": 0.1372956962025316,
+      "max_ms": 0.73268
+    },
+    {
+      "name": "void vla::(anonymous namespace)::apply_rope_table<float>(float const*, float const*, float*, int, int, int, unsigned long, unsigned long)",
+      "count": 395,
+      "sum_ms": 54.07347999999997,
+      "mean_ms": 0.1368948860759493,
+      "max_ms": 0.73268
+    },
+    {
+      "name": "gemmex_nt_256_256x128_f16f32_epilogue_qy2",
+      "count": 288,
+      "sum_ms": 51.77956000000004,
+      "mean_ms": 0.17979013888888903,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "void convert_unary_cont_vec4<float, __half>(void const*, __half*, long)",
+      "count": 162,
+      "sum_ms": 43.50120000000001,
+      "mean_ms": 0.268525925925926,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "void vla::(anonymous namespace)::res_adarms<float, false>(float const*, float const*, float const*, float const*, float*, int, int, float)",
+      "count": 350,
+      "sum_ms": 37.57804000000001,
+      "mean_ms": 0.1073658285714286,
+      "max_ms": 0.42632
+    },
+    {
+      "name": "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, uint3, uint3, uint3, uint3, uint3, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+      "count": 119,
+      "sum_ms": 34.38600000000005,
+      "mean_ms": 0.28895798319327776,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "void cpy_scalar_contiguous<float, __half>(char const*, char*, long)",
+      "count": 198,
+      "sum_ms": 27.41628,
+      "mean_ms": 0.13846606060606062,
+      "max_ms": 0.73268
+    },
+    {
+      "name": "void vla::(anonymous namespace)::merged_geglu<float, __half>(float const*, __half*, int, bool)",
+      "count": 197,
+      "sum_ms": 26.689160000000005,
+      "mean_ms": 0.13547796954314723,
+      "max_ms": 0.73268
+    },
+    {
+      "name": "gemmex_nn_256_256x128_f16f32_epilogue_qy2",
+      "count": 197,
+      "sum_ms": 26.553520000000006,
+      "mean_ms": 0.1347894416243655,
+      "max_ms": 0.73268
+    },
+    {
+      "name": "vla::(anonymous namespace)::gemma_probs(float const*, __half const*, __half*, int, int, float)",
+      "count": 197,
+      "sum_ms": 26.1398,
+      "mean_ms": 0.13268934010152283,
+      "max_ms": 0.73268
+    },
+    {
+      "name": "gemmex_nt_512_256x256_f16f32_epilogue_qy2",
+      "count": 88,
+      "sum_ms": 23.74220000000001,
+      "mean_ms": 0.2697977272727274,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_pack_kernel<__half>(__half const*, __half*, int, int)",
+      "count": 180,
+      "sum_ms": 21.836720000000007,
+      "mean_ms": 0.12131511111111115,
+      "max_ms": 0.42632
+    },
+    {
+      "name": "vla::(anonymous namespace)::gemma_unpack(float4 const*, float4*, int)",
+      "count": 180,
+      "sum_ms": 20.583240000000014,
+      "mean_ms": 0.11435133333333342,
+      "max_ms": 0.42632
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<64>(__half const*, __half const*, float*, int, int, int)",
+      "count": 180,
+      "sum_ms": 20.185120000000015,
+      "mean_ms": 0.11213955555555565,
+      "max_ms": 0.42632
+    },
+    {
+      "name": "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, uint3, uint3, uint3, uint3, uint3, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)",
+      "count": 55,
+      "sum_ms": 15.37092,
+      "mean_ms": 0.27947127272727273,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "void norm_f32<1024>(float const*, float*, int, long, long, long, float)",
+      "count": 55,
+      "sum_ms": 15.110919999999998,
+      "mean_ms": 0.274744,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "void vla::(anonymous namespace)::vision_epilogue<false>(float const*, float const*, float const*, float*, int)",
+      "count": 54,
+      "sum_ms": 15.098159999999998,
+      "mean_ms": 0.27959555555555554,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "void rms_norm_f32<1024, true, false, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, uint3, uint3, uint3, uint3, float const*, long, long, long, uint3, uint3, uint3, uint3, float)",
+      "count": 35,
+      "sum_ms": 9.852440000000001,
+      "mean_ms": 0.28149828571428576,
+      "max_ms": 0.73268
+    },
+    {
+      "name": "vla::(anonymous namespace)::pack_vision_qkv(float const*, float const*, float const*, __half2*, __half2*, __half2*, int, unsigned long, unsigned long, unsigned long)",
+      "count": 27,
+      "sum_ms": 7.451839999999999,
+      "mean_ms": 0.27599407407407406,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "void vla::(anonymous namespace)::vision_epilogue<true>(float const*, float const*, float const*, float*, int)",
+      "count": 27,
+      "sum_ms": 7.302999999999999,
+      "mean_ms": 0.27048148148148143,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "musa_asm_hflash_atten_512_256x64x128",
+      "count": 27,
+      "sum_ms": 7.266799999999999,
+      "mean_ms": 0.2691407407407407,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "vla::(anonymous namespace)::unpack_sdpa(__half2 const*, float4*, int)",
+      "count": 27,
+      "sum_ms": 7.1952799999999995,
+      "mean_ms": 0.2664918518518518,
+      "max_ms": 0.84888
+    },
+    {
+      "name": "void concat_cont<unsigned short, 2>(unsigned short const*, unsigned short const*, unsigned short*, long, long, long, long, long, long)",
+      "count": 36,
+      "sum_ms": 4.160720000000001,
+      "mean_ms": 0.1155755555555556,
+      "max_ms": 0.40072
+    },
+    {
+      "name": "void vla::(anonymous namespace)::action_linear_kernel<true>(float const*, float const*, float const*, float const*, float const*, float*, int, int, int, int, float, float)",
+      "count": 10,
+      "sum_ms": 1.44496,
+      "mean_ms": 0.144496,
+      "max_ms": 0.40932
+    },
+    {
+      "name": "void vla::(anonymous namespace)::action_linear_kernel<false>(float const*, float const*, float const*, float const*, float const*, float*, int, int, int, int, float, float)",
+      "count": 10,
+      "sum_ms": 1.2837200000000002,
+      "mean_ms": 0.128372,
+      "max_ms": 0.40932
+    },
+    {
+      "name": "void vla::(anonymous namespace)::gateres<float>(float const*, float const*, float const*, float*, int)",
+      "count": 10,
+      "sum_ms": 1.2837200000000002,
+      "mean_ms": 0.128372,
+      "max_ms": 0.40932
+    },
+    {
+      "name": "vla::(anonymous namespace)::make_rope_table(int const*, float*, int, int, float)",
+      "count": 2,
+      "sum_ms": 0.4026,
+      "mean_ms": 0.2013,
+      "max_ms": 0.20604
+    },
+    {
+      "name": "void im2col_kernel<__half>(float const*, __half*, long, long, long, long, long, long, long, long, long, long, long, long, long, int, int, int, int, int, int)",
+      "count": 1,
+      "sum_ms": 0.36304000000000003,
+      "mean_ms": 0.36304000000000003,
+      "max_ms": 0.36304000000000003
+    },
+    {
+      "name": "void cpy_scalar<&(void cpy_1_scalar<float, float>(char const*, char*))>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+      "count": 1,
+      "sum_ms": 0.17256000000000002,
+      "mean_ms": 0.17256000000000002,
+      "max_ms": 0.17256000000000002
+    },
+    {
+      "name": "void cpy_scalar_transpose<float>(char const*, char*, long, long, long, long, long, long, long, long, long, long, long, long, long, long, long)",
+      "count": 1,
+      "sum_ms": 0.17256000000000002,
+      "mean_ms": 0.17256000000000002,
+      "max_ms": 0.17256000000000002
+    }
+  ]
+}

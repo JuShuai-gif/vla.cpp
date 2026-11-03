@@ -1,0 +1,130 @@
+[
+  {
+    "variant": "A",
+    "round": 1,
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 481.3890564000758,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "A",
+    "round": 1,
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 778.3897152666517,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "B",
+    "round": 1,
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 461.15422333338455,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "B",
+    "round": 1,
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 757.3076734667969,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "C",
+    "round": 1,
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 461.15293993340555,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "C",
+    "round": 1,
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 756.2461268667903,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "D",
+    "round": 1,
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 460.7825961332613,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "D",
+    "round": 1,
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 753.6717592667628,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "D",
+    "round": 2,
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 460.5454998002945,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "D",
+    "round": 2,
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 752.4354828668947,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "C",
+    "round": 2,
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 461.2985208666335,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "C",
+    "round": 2,
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 756.3442939333376,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "B",
+    "round": 2,
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 461.7583630001415,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "B",
+    "round": 2,
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 756.0782505999669,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "A",
+    "round": 2,
+    "model": "pruned",
+    "returncode": 0,
+    "mean_ms": 482.1163018665781,
+    "reference_relative_peak": 0.0
+  },
+  {
+    "variant": "A",
+    "round": 2,
+    "model": "full",
+    "returncode": 0,
+    "mean_ms": 781.6739450000872,
+    "reference_relative_peak": 0.0
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "stage": "baseline-pruned",
+    "returncode": 0,
+    "elapsed_seconds": 84.8343620300293
+  },
+  {
+    "stage": "msys-pruned",
+    "returncode": 0,
+    "elapsed_seconds": 77.42837452888489
+  },
+  {
+    "stage": "mcu-pruned",
+    "returncode": 0,
+    "elapsed_seconds": 850.7547883987427
+  },
+  {
+    "stage": "baseline-full",
+    "returncode": 0,
+    "elapsed_seconds": 37.123148918151855
+  },
+  {
+    "stage": "msys-full",
+    "returncode": 0,
+    "elapsed_seconds": 28.95523476600647
+  },
+  {
+    "stage": "mcu-full",
+    "returncode": 0,
+    "elapsed_seconds": 1628.8546042442322
+  }
+]

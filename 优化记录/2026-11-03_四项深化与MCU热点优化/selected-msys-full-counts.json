@@ -1,0 +1,54 @@
+{
+  "model": "full",
+  "kernel_count": 4042,
+  "timing_valid": false,
+  "scope": "marked warmed Graph OFF real predict, counts only",
+  "kernel_counts": {
+    "void cpy_scalar_contiguous<float, __half>(char const*, char*, long)": 199,
+    "vla::(anonymous namespace)::pack_f32_patch(float const*, __half*, int, int, int)": 1,
+    "void k_bin_bcast<&(op_add(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, uint3, uint3, uint3, uint3, uint3, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)": 119,
+    "musa_asm_hflash_atten_512_256x64x128": 27,
+    "vla::(anonymous namespace)::unpack_sdpa(__half2 const*, float4*, int)": 27,
+    "void convert_unary_cont_vec4<float, __half>(void const*, __half*, long)": 161,
+    "gemmex_nt_256_256x128_f16f32_epilogue_qy2": 288,
+    "void vla::(anonymous namespace)::vision_epilogue<false>(float const*, float const*, float const*, float*, int)": 54,
+    "void norm_f32<1024>(float const*, float*, int, long, long, long, float)": 55,
+    "void k_bin_bcast<&(op_mul(float, float)), float, float, float, float const*>(float const*, float const*, float*, unsigned int, unsigned int, unsigned int, uint3, uint3, uint3, uint3, uint3, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, float const*)": 55,
+    "vla::(anonymous namespace)::pack_vision_qkv(float const*, float const*, float const*, __half2*, __half2*, __half2*, int, unsigned long, unsigned long, unsigned long)": 27,
+    "gemmex_nt_512_256x256_f16f32_epilogue_qy2": 88,
+    "void vla::(anonymous namespace)::vision_epilogue<true>(float const*, float const*, float const*, float*, int)": 27,
+    "void vla::(anonymous namespace)::merged_geglu<float, __half>(float const*, __half*, int, bool)": 17,
+    "vla::(anonymous namespace)::pack_f16x4(float const*, __half2*, unsigned long, int, int, int, unsigned long, unsigned long, unsigned long)": 395,
+    "void rms_norm_f32<1024, true, false, false>(float const*, float*, int, long, long, long, float, float const*, long, long, long, uint3, uint3, uint3, uint3, float const*, long, long, long, uint3, uint3, uint3, uint3, float)": 35,
+    "void vla::(anonymous namespace)::apply_rope_table<float>(float const*, float const*, float*, int, int, int, unsigned long, unsigned long)": 395,
+    "vla::(anonymous namespace)::gemma_probs(float const*, __half const*, __half*, int, int, float)": 197,
+    "gemmex_nn_256_256x128_f16f32_epilogue_qy2": 197,
+    "vla::(anonymous namespace)::make_rope_table(int const*, float*, int, int, float)": 2,
+    "void vla::(anonymous namespace)::action_linear_kernel<true, true>(float const*, float const*, float const*, float const*, float const*, float*, int, int, int, int, float, float)": 10,
+    "void vla::(anonymous namespace)::small_gemm_kernel<32, 4>(__half const*, __half const*, float*, int, int, int)": 360,
+    "void concat_cont<unsigned short, 2>(unsigned short const*, unsigned short const*, unsigned short*, long, long, long, long, long, long)": 36,
+    "vla::(anonymous namespace)::gemma_unpack(float4 const*, float4*, int)": 180,
+    "void vla::(anonymous namespace)::small_pack_kernel<float>(float const*, __half*, int, int)": 180,
+    "void vla::(anonymous namespace)::small_gemm_kernel<64, 4>(__half const*, __half const*, float*, int, int, int)": 180,
+    "void vla::(anonymous namespace)::packed_norm_kernel<1>(float const*, float const*, float const*, float const*, char*, int, int, float)": 350,
+    "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)": 180,
+    "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)": 180,
+    "void vla::(anonymous namespace)::gateres<float>(float const*, float const*, float const*, float*, int)": 10,
+    "void vla::(anonymous namespace)::action_linear_kernel<false, false>(float const*, float const*, float const*, float const*, float const*, float*, int, int, int, int, float, float)": 10
+  },
+  "filtered_mcu_count_crosscheck": {
+    "msys": {
+      "small_gemm_kernel": 720,
+      "packed_norm_kernel": 350,
+      "packed_geglu_kernel": 180,
+      "vision_scores_kernel": 0
+    },
+    "mcu": {
+      "small_gemm_kernel": 720,
+      "packed_norm_kernel": 350,
+      "packed_geglu_kernel": 180,
+      "vision_scores_kernel": 0
+    },
+    "passed": true
+  }
+}

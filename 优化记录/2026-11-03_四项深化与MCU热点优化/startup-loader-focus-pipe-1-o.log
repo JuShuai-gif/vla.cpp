@@ -1,0 +1,5 @@
+==PROF== '/tmp/pi05-pipeline-mcu-1' started, pid:41500  
+/tmp/pi05-pipeline-mcu-1: error while loading shared libraries: libmublas.so.1: cannot open shared object file: No such file or directory
+==ERROR== The application returned an error code (127).  
+==PROF== Capture finished. Path is "/home/skysi/VLA/four-deep-20261103/focus-pipe-1-o.mcu-rep"  
+==WARNING== No kernels were profiled.  

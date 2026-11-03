@@ -1,3 +1,4 @@
+#include "layers/packed_norm.h"
 #include "layers/weight_prefetch.h"
 // Copyright 2026 VinRobotics
 //
@@ -669,6 +670,10 @@ inline ggml_tensor * gemma_mlp(ggml_context * ctx, const GemmaLayerW & w, ggml_t
                 w.Wdown->type == GGML_TYPE_F16 && w.Wdown->buffer &&
                 !ggml_backend_buffer_is_host(w.Wdown->buffer))
                 retype(inter,GGML_TYPE_F16);
+            if(inter->type==GGML_TYPE_F16 && gu->type==GGML_TYPE_F32 &&
+               gu->ne[1]<=64 && std::getenv("VLA_PI05_GEGLU_PACK") &&
+               std::getenv("VLA_MUSA_SMALL_GEMM") && musa_small_gemm_supported())
+                inter=packed_geglu(ctx,gu);
             if(w.prefetch_next) {
                 auto * fork=weight_prefetch(ctx,inter,w.prefetch_next,w.prefetch_begin);
                 auto * out=at==GGML_TYPE_F32 && fork->type==GGML_TYPE_F16 ?

@@ -1,0 +1,10 @@
+{
+  "model": "full",
+  "reference_max_abs": 0,
+  "f32_u8_f32_roundtrip_exact": true,
+  "one_two_one_two_views": true,
+  "precomputed_embedding_exact": true,
+  "changed_image_roundtrip_exact": true,
+  "phase_replay_runs": 8,
+  "tokens": 42
+}

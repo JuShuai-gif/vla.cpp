@@ -1,3 +1,4 @@
+#include "layers/packed_norm.h"
 #include "layers/action_edges.h"
 #include "layers/u8_patch.h"
 // Copyright 2026 VinRobotics
@@ -26,6 +27,12 @@
 #include <vector>
 
 namespace {
+
+float f32_patch_value(size_t i) {
+    const float edges[]={0.f,1.f,.5f,std::nextafter(.5f,0.f),std::nextafter(.5f,1.f),
+                          1.f/255.f,.1234567f,1e-12f};
+    return i%13<8?edges[i%13]:float(uint32_t(i*2654435761u)>>8)*(1.f/16777216.f);
+}
 
 struct Graph {
     ggml_context * ctx = ggml_init({32*1024*1024, nullptr, true});
@@ -63,6 +70,8 @@ struct Graph {
             std::vector<float> data(n);
             for (size_t i = 0; i < n; ++i)
                 data[i] = ((int) ((i*37 + j*13) % 67) - 33) / 128.0f;
+            if (std::strcmp(ggml_get_name(t), "prune_score_values") == 0)
+                for(size_t i=0;i<n;++i)data[i]=.01f+std::fabs(std::sin(float(i)*.017f));
             if (std::strcmp(ggml_get_name(t), "attention_values") == 0)
                 for (size_t i=0; i<n; ++i) data[i] = 2.0f*std::sin(float(i)*0.017f+float(j));
             if (std::strcmp(ggml_get_name(t), "epilogue_values") == 0)
@@ -81,6 +90,13 @@ struct Graph {
                     const size_t S=t->ne[0],x=i%S,y=i/S%S,c=i/(S*S)%3,v=i/(S*S*3);
                     const size_t hwc=((v*S+y)*S+x)*3+c;
                     data[i]=(((hwc*37)&255)/255.0f-.5f)/.5f;
+                }
+            if(std::strcmp(ggml_get_name(t),"f32_hwc")==0)
+                for(size_t i=0;i<n;++i)data[i]=f32_patch_value(i);
+            if(std::strcmp(ggml_get_name(t),"f32_chw")==0)
+                for(size_t i=0;i<n;++i) {
+                    const size_t S=t->ne[0],x=i%S,y=i/S%S,c=i/(S*S)%3,v=i/(S*S*3);
+                    data[i]=(f32_patch_value(((v*S+y)*S+x)*3+c)-.5f)/.5f;
                 }
             if (j==0 && mapped_input) {
                 std::memcpy(mapped_input,data.data(),ggml_nbytes(t));continue;
@@ -419,10 +435,10 @@ std::vector<float> strided_pack(ggml_backend_t backend, int64_t hd, int64_t seq,
     return g.run(backend, {ggml_cast(g.ctx, transposed, GGML_TYPE_F16)});
 }
 
-std::vector<float> patch_scores(ggml_backend_t backend) {
+std::vector<float> patch_scores(ggml_backend_t backend,bool fused=false) {
     Graph g;
-    auto * a = g.input(GGML_TYPE_F32, {256, 256, 16});
-    return g.run(backend, {vla::vision_patch_scores(g.ctx, a)});
+    auto * a = g.input(GGML_TYPE_F32, {256, 256, 16});ggml_set_name(a,"prune_score_values");
+    return g.run(backend, {fused?vla::fused_vision_scores(g.ctx,a):vla::vision_patch_scores(g.ctx, a)});
 }
 
 std::vector<float> fused_expert(ggml_backend_t backend, int64_t h, int64_t rows, bool fused, bool half = false) {
@@ -474,6 +490,50 @@ std::vector<float> merged_glu(ggml_backend_t backend, ggml_type type, bool nativ
     auto * y = swapped ? ggml_geglu_swapped(g.ctx, x) : ggml_geglu(g.ctx, x);
     if (!native && type == GGML_TYPE_F16) y = ggml_cast(g.ctx, y, type);
     return g.run(backend, {y});
+}
+
+std::vector<float> action_linear(ggml_backend_t,int64_t,int64_t,int,bool,bool,bool);
+
+std::vector<float> small_padded_view(ggml_backend_t backend,int offset,bool fused) {
+ Graph g;auto * w=g.input(GGML_TYPE_F16,{128,64});auto * pad=g.input(GGML_TYPE_F16,{128,64});
+ auto * x=ggml_view_2d(g.ctx,pad,128,50,pad->nb[1],offset*pad->nb[1]);
+ return g.run(backend,{fused?vla::small_gemm(g.ctx,w,x):ggml_mul_mat(g.ctx,w,x)});
+}
+
+std::vector<float> packed_geglu_graph(ggml_backend_t backend,int h,int rows,bool fused) {
+ Graph g;auto * x=g.input(GGML_TYPE_F32,{2*h,rows});ggml_set_name(x,"geglu_values");
+ auto * out=fused?vla::packed_geglu(g.ctx,x):vla::retype(ggml_geglu(g.ctx,x),GGML_TYPE_F16);
+ return g.run(backend,{out});
+}
+
+std::vector<float> packed_norm_graph(ggml_backend_t backend,int h,int rows,int kind,bool fused) {
+ Graph g;auto * x=g.input(GGML_TYPE_F32,{h,rows});
+ auto * o=kind?g.input(GGML_TYPE_F32,{h,kind==2?1:rows}):nullptr;
+ auto * gate=kind==1?g.input(GGML_TYPE_F32,{3*h}):nullptr;auto * mod=g.input(GGML_TYPE_F32,{3*h});
+ ggml_tensor * res=nullptr,*norm=nullptr;
+ vla::FusedAdarmsSpec a;vla::FusedResAdarmsSpec b;
+ if(fused)norm=vla::packed_norm(g.ctx,x,o,gate,mod,a.eps,kind,&res);
+ else {
+  if(kind==1)norm=vla::fused_res_adarms(g.ctx,x,o,gate,mod,b,&res);
+  else if(kind==2){b.magic=vla::FUSED_BIAS_ADARMS_MAGIC;norm=vla::fused_bias_adarms(g.ctx,x,o,mod,b,&res);}
+  else norm=vla::fused_adarms(g.ctx,x,mod,GGML_TYPE_F32,a);
+  norm=ggml_cast(g.ctx,norm,GGML_TYPE_F16);
+ }
+ std::vector<ggml_tensor *> out;if(kind)out.push_back(res);out.push_back(norm);
+ if(fused)out.push_back(norm->src[0]);
+ auto result=g.run(backend,out);
+ if(fused) {
+  const size_t valid=(kind?2:1)*h*rows;
+  const size_t stride=valid+h*64;
+  if(result.size()!=3*stride)return {};
+  std::vector<float> compact;
+  for(int repeat=0;repeat<3;++repeat) {
+   for(int i=h*rows;i<h*64;++i)if(result[repeat*stride+valid+i]!=0.f)return {};
+   compact.insert(compact.end(),result.begin()+repeat*stride,result.begin()+repeat*stride+valid);
+  }
+  return compact;
+ }
+ return result;
 }
 
 std::vector<float> res_adarms(ggml_backend_t backend, int64_t h, int64_t rows, ggml_type type, bool fused) {
@@ -530,6 +590,20 @@ std::vector<float> u8_patch_graph(ggml_backend_t backend,int nv,bool fused) {
         out=u8_patch(g.ctx,raw,lut,spec);
     } else {
         auto * chw=g.input(GGML_TYPE_F32,{224,224,3,nv});ggml_set_name(chw,"u8_chw");
+        auto * w=g.input(GGML_TYPE_F32,{14,14,3,1});
+        out=ggml_im2col(g.ctx,w,chw,14,14,0,0,1,1,true,GGML_TYPE_F16);
+    }
+    return g.run(backend,{out});
+}
+
+std::vector<float> f32_patch_graph(ggml_backend_t backend,int nv,bool fused) {
+    Graph g;ggml_tensor * out;
+    vla::U8PatchSpec spec{vla::F32_PATCH_MAGIC,14};
+    if(fused) {
+        auto * raw=g.input(GGML_TYPE_F32,{3,224,224,nv});ggml_set_name(raw,"f32_hwc");
+        out=vla::f32_patch(g.ctx,raw,spec);
+    } else {
+        auto * chw=g.input(GGML_TYPE_F32,{224,224,3,nv});ggml_set_name(chw,"f32_chw");
         auto * w=g.input(GGML_TYPE_F32,{14,14,3,1});
         out=ggml_im2col(g.ctx,w,chw,14,14,0,0,1,1,true,GGML_TYPE_F16);
     }
@@ -593,13 +667,14 @@ std::vector<float> last_prefix_kv(ggml_backend_t backend,int64_t seq,bool kv_onl
     return g.run(backend,{k,v});
 }
 
-std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,int steps,bool fused) {
+std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,int steps,bool fused,bool packed=false,bool narrow=false) {
     Graph g;
     auto * wi=g.input(GGML_TYPE_F32,{32,h}),*wo=g.input(GGML_TYPE_F32,{h,32});
     auto * x=g.input(GGML_TYPE_F32,{32,rows}),*bi=g.input(GGML_TYPE_F32,{h}),*bo=g.input(GGML_TYPE_F32,{32});
     auto * mi=g.input(GGML_TYPE_F32,{3*h}),*mo=g.input(GGML_TYPE_F32,{3*h});
     vla::FusedActionLinearSpec in{vla::FUSED_ACTION_LINEAR_MAGIC,1,1e-6f,-1.f/steps};
     vla::FusedActionLinearSpec out{vla::FUSED_ACTION_LINEAR_MAGIC,0,1e-6f,-1.f/steps};
+    in.packed=packed?1:0;
     ggml_tensor * hidden=nullptr,*norm=nullptr,*y=nullptr;
     auto adarms=[&](ggml_tensor * a,ggml_tensor * m) {
         auto * n=ggml_rms_norm(g.ctx,a,1e-6f);
@@ -614,6 +689,7 @@ std::vector<float> action_linear(ggml_backend_t backend,int64_t h,int64_t rows,i
         norm=adarms(hidden,mi);
         y=ggml_add(g.ctx,x,ggml_scale(g.ctx,ggml_add(g.ctx,ggml_mul_mat(g.ctx,wo,adarms(hidden,mo)),bo),out.dt));
     }
+    if(narrow && !packed)norm=ggml_cast(g.ctx,norm,GGML_TYPE_F16);
     return g.run(backend,{hidden,norm,y});
 }
 
@@ -684,6 +760,37 @@ int main(int argc, char ** argv) {
     ggml_backend_cpu_set_n_threads(cpu, 4);
     bool ok = true;
     if (!vla::musa_register_fused_ops()) return 1;
+    if(argc==2 && std::strcmp(argv[1],"--prune-score")==0) {
+        ok=compare("prune_score_exact",GGML_TYPE_F32,patch_scores(b.handle),patch_scores(b.handle,true),1e-12)&&ok;
+        ok=compare("prune_score_cpu",GGML_TYPE_F32,patch_scores(cpu,true),patch_scores(b.handle,true),2e-5)&&ok;
+        ggml_backend_free(cpu);ggml_backend_free(b.handle);return ok?0:1;
+    }
+    if(argc==2 && std::strcmp(argv[1],"--packed-norm")==0) {
+        for(int offset:{0,14})
+            ok=compare("small_padded_view_exact",GGML_TYPE_F32,
+                small_padded_view(b.handle,offset,false),small_padded_view(b.handle,offset,true),1e-12)&&ok;
+        for(int h:{256,1024})for(int rows:{1,17,50,64})
+            ok=compare("packed_action_linear_exact",GGML_TYPE_F32,
+                action_linear(b.handle,h,rows,10,true,false,true),
+                action_linear(b.handle,h,rows,10,true,true,true),1e-12)&&ok;
+        for(int h:{256,4096})for(int rows:{1,17,50,64})
+            ok=compare("packed_geglu_exact",GGML_TYPE_F16,
+                packed_geglu_graph(b.handle,h,rows,false),
+                packed_geglu_graph(b.handle,h,rows,true),1e-12)&&ok;
+        for(int h:{256,1024})for(int rows:{1,17,50,64})for(int kind:{0,1,2})
+            ok=compare("packed_norm_exact",GGML_TYPE_F32,
+                packed_norm_graph(b.handle,h,rows,kind,false),
+                packed_norm_graph(b.handle,h,rows,kind,true),1e-12)&&ok;
+        ggml_backend_free(cpu);return ok?0:1;
+    }
+    if(argc==2 && std::strcmp(argv[1],"--f32-patch")==0) {
+        for(int nv:{1,2}) {
+            const auto fused=f32_patch_graph(b.handle,nv,true);
+            ok=compare("f32_patch_native",GGML_TYPE_F16,f32_patch_graph(b.handle,nv,false),fused,1e-12)&&ok;
+            ok=compare("f32_patch_cpu",GGML_TYPE_F16,f32_patch_graph(cpu,nv,true),fused,1e-12)&&ok;
+        }
+        ggml_backend_free(cpu);ggml_backend_free(b.handle);return ok?0:1;
+    }
     if (argc == 2 && std::strcmp(argv[1], "--attention256") == 0) {
         for (auto shape : {std::pair<int,int>{50,328},{50,568},{278,278},{518,518},{17,67},{1,1},{1,67},{50,640},{50,641},{640,640}})
             for (bool masked : {false,true}) {
