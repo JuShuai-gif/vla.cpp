@@ -1,0 +1,34 @@
+[
+  {
+    "variant": "pruned",
+    "pairs": 2,
+    "samples_per_process": 30,
+    "order": "A0 B0 B1 A1",
+    "pair_predict_p50_reductions": [
+      0.12010533514837751,
+      0.11612038778451417
+    ],
+    "software_chain_performance_pass": true,
+    "finite_action_shape": [
+      50,
+      7
+    ],
+    "robot_camera_network_io": false
+  },
+  {
+    "variant": "full",
+    "pairs": 2,
+    "samples_per_process": 30,
+    "order": "A0 B0 B1 A1",
+    "pair_predict_p50_reductions": [
+      0.10370640253892227,
+      0.09875506219980201
+    ],
+    "software_chain_performance_pass": true,
+    "finite_action_shape": [
+      50,
+      7
+    ],
+    "robot_camera_network_io": false
+  }
+]

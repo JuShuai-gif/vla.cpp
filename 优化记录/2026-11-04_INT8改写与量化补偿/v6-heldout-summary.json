@@ -1,0 +1,22 @@
+[
+  {
+    "variant": "pruned",
+    "samples": 396,
+    "action_vectors": 19800,
+    "offline_accuracy_pass": true,
+    "minimum_action_cosine": 0.9998076803018409,
+    "native_p50_reduction": 0.12497788968519707,
+    "predict_p50_reduction": 0.12521904793190208,
+    "source_checkpoint_sha_matches_development": true
+  },
+  {
+    "variant": "full",
+    "samples": 396,
+    "action_vectors": 19800,
+    "offline_accuracy_pass": true,
+    "minimum_action_cosine": 0.9997207220981345,
+    "native_p50_reduction": 0.11042267889770274,
+    "predict_p50_reduction": 0.1113382667401448,
+    "source_checkpoint_sha_matches_development": true
+  }
+]

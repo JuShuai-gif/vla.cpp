@@ -1,0 +1,11 @@
+[
+  {
+    "name": "v6-heldout-driver",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/run_v6_heldout.py"
+    ],
+    "returncode": 1,
+    "elapsed_seconds": 433.16119408607483
+  }
+]

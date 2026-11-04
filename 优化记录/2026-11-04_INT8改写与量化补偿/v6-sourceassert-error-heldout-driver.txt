@@ -1,0 +1,7 @@
+{"name": "v6-heldout-pruned-freeze", "command": ["/home/skysi/code/robot_runtime/.venv/bin/python", "scripts/prepare_pi05_bf16_inputs.py", "--config", "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/pruned-main-native-policy.json", "--corpus", "validation/quant/data/real-v1/manifest.json", "--samples", "396", "--split", "heldout", "--output-dir", "/home/skysi/code/vla.cpp-quant/validation/quant/bf16-inputs-pruned-heldout-396"], "returncode": 0, "elapsed_seconds": 18.74584984779358}
+{"name": "v6-heldout-pruned-bf16", "command": ["/home/skysi/.conda/envs/lerobot_musa312/bin/python", "scripts/reference_pi05_bf16.py", "--checkpoint", "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/pretrained_model", "--inputs", "/home/skysi/code/vla.cpp-quant/validation/quant/bf16-inputs-pruned-heldout-396/manifest.json", "--samples", "396", "--output", "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/pruned-bf16-reference-heldout-396.json"], "returncode": 0, "elapsed_seconds": 411.2585709095001}
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/run_v6_heldout.py", line 43, in <module>
+    assert ref["source_sha256"]==old["source_sha256"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

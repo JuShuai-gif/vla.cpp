@@ -1,0 +1,10 @@
+{
+  "all_frozen_artifacts_and_production_files_unchanged": true,
+  "changes": {},
+  "production_head": "67f47a07c48c29ac276e0e74122733b94b127a84",
+  "production_status": "",
+  "production_runtime_head": "22e5223263ae6035bd533dbd3bd6f7162d64fec1",
+  "production_runtime_status": " M docs/VLA_CPP.md\n M pyproject.toml\n M src/robot_runtime/inference.py\n M src/robot_runtime/setup/devices.py\n M src/robot_runtime/setup/runs.py\n M src/robot_runtime/vla_cpp_backend.py\n M tests/python/test_inference_console.py\n M tests/python/test_monitor_telemetry.py\n M tests/python/test_realsense_setup.py\n M tests/python/test_vla_cpp_backend.py\n?? configs/examples/vla_cpp_vit_npu.json\n?? configs/examples/vla_policy_vit_npu.json\n?? docs/VLA_VIT_NPU.md\n?? native/\n?? scripts/build_vla_vit_npu.sh\n?? src/robot_runtime/vit_npu_pipeline.py\n?? src/robot_runtime/vla_cpp_vit_npu_backend.py\n?? tests/python/test_vit_npu_build_isolation.py\n?? tests/python/test_vit_npu_pipeline.py\n?? tests/python/test_vit_npu_runtime.py\n?? tests/python/test_vla_cpp_vit_npu_backend.py\n?? validation/vla_vit_npu_accuracy_report.md\n",
+  "production_runtime_diff_sha256_at_final_check": "3049f4f5f6e30751f15c97bb4d5794d9bf5c63b6add22297f0bebad176b02684",
+  "quant_runtime_status": ""
+}

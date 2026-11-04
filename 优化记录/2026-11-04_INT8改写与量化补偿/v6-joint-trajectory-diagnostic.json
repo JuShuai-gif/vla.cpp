@@ -1,0 +1,46 @@
+[
+  {
+    "variant": "pruned",
+    "observation_index": 140,
+    "episode": 74,
+    "dimension_index": 5,
+    "temporal_cosine": 0.5107713607195301,
+    "bf16_l2": 1.1647020416796943,
+    "int8_l2": 0.9749977094351082,
+    "bf16_range": [
+      -0.19509124755859375,
+      0.4406013488769531
+    ],
+    "int8_range": [
+      -0.2859649658203125,
+      0.44873809814453125
+    ],
+    "mae": 0.1286181640625,
+    "max_abs": 0.3295135498046875,
+    "same_observation_float_baseline_temporal_cosine": 0.7148904878144688,
+    "units": "checkpoint output units; physical units not independently verified",
+    "note": "Diagnostic across 50 time points for one coordinate; the predeclared acceptance metric is the 7D vector at each time."
+  },
+  {
+    "variant": "full",
+    "observation_index": 59,
+    "episode": 38,
+    "dimension_index": 1,
+    "temporal_cosine": 0.6155214515421782,
+    "bf16_l2": 1.9542718862070292,
+    "int8_l2": 1.6400094729859995,
+    "bf16_range": [
+      -0.4728420078754425,
+      0.6050339937210083
+    ],
+    "int8_range": [
+      -0.6618869304656982,
+      0.4695424437522888
+    ],
+    "mae": 0.20931318582035602,
+    "max_abs": 0.41090602427721024,
+    "same_observation_float_baseline_temporal_cosine": 0.9096270987807951,
+    "units": "checkpoint output units; physical units not independently verified",
+    "note": "Diagnostic across 50 time points for one coordinate; the predeclared acceptance metric is the 7D vector at each time."
+  }
+]

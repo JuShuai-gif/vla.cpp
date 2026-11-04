@@ -1,0 +1,13 @@
+{
+  "reason": "input manifest must differ across development/heldout; all shared checkpoint/framework/reference sources match",
+  "shared_source_count": 7,
+  "old_input_manifest": [
+    "/home/skysi/code/vla.cpp-quant/validation/quant/bf16-inputs-pruned-development-90/manifest.json"
+  ],
+  "new_input_manifest": [
+    "/home/skysi/code/vla.cpp-quant/validation/quant/bf16-inputs-pruned-heldout-396/manifest.json"
+  ],
+  "checkpoint_mutation_selfcheck_rejected": true,
+  "reused_reference_actions_sha256": "eac54ba27f7695b6d23478f0104a6def32245e2f136d9bb8baae1d6ba9edab27",
+  "candidate_unchanged": true
+}

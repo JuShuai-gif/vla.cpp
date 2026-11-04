@@ -1,0 +1,31 @@
+[
+  {
+    "name": "v6-heldout-driver",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/run_v6_heldout.py"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 1980.8025591373444
+  },
+  {
+    "name": "v6-runtime-driver",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/run_v6_runtime.py"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 487.43411135673523
+  },
+  {
+    "name": "native-v6-ctest-all",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-musa-quant",
+      "--output-on-failure"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 121.63706684112549
+  }
+]
