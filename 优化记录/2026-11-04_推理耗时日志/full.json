@@ -1,0 +1,73 @@
+{
+  "profile": "full",
+  "scope": "saved observations; no camera or robot I/O",
+  "warmup": 3,
+  "samples": 3,
+  "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+  "observation_sha256": "f36b7ae613686bfa0066a191bfdf55e0479f13dd10fce4d9dc5629f631c1eab5",
+  "resolved": {
+    "checkpoint": {
+      "value": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+      "source": "policy config / GGUF"
+    },
+    "task": {
+      "value": "pick up the cube",
+      "source": "policy config / GGUF"
+    },
+    "precision": {
+      "value": "f16",
+      "source": "policy config / GGUF"
+    },
+    "act_dtype": {
+      "value": "f32",
+      "source": "policy config / GGUF"
+    },
+    "device_requested": {
+      "value": "0",
+      "source": "policy config / GGUF"
+    },
+    "seed": {
+      "value": 0,
+      "source": "policy config / GGUF"
+    },
+    "num_steps": {
+      "value": 10,
+      "source": "policy config / GGUF"
+    },
+    "optimization_variant": {
+      "value": "full",
+      "source": "policy config / GGUF"
+    },
+    "source_contract_verified": {
+      "value": false,
+      "source": "policy config / GGUF"
+    }
+  },
+  "action_shape": [
+    50,
+    7
+  ],
+  "timings": [
+    {
+      "prediction": 1,
+      "predict_ms": 954.3397019997428,
+      "preprocess_ms": 197.6347119998536,
+      "native_call_ms": 756.5494690002197,
+      "postprocess_ms": 0.07944099979795283
+    },
+    {
+      "prediction": 2,
+      "predict_ms": 958.1711399996493,
+      "preprocess_ms": 201.10385999987557,
+      "native_call_ms": 756.9297599998208,
+      "postprocess_ms": 0.07884000024205307
+    },
+    {
+      "prediction": 3,
+      "predict_ms": 956.1082940003871,
+      "preprocess_ms": 198.11183899992102,
+      "native_call_ms": 757.8636939997523,
+      "postprocess_ms": 0.07968100044308812
+    }
+  ]
+}

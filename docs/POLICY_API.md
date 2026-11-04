@@ -40,8 +40,9 @@ Example deployment JSON (paths resolve relative to this file):
 
 The API preserves raw state/action units; declaring units does not convert them.
 `verified` records the deployment owner's check against training data and robot
-configuration. It is not inferred from numeric ranges. `robot_runtime` refuses
-live execution while it is false. Camera order, dimensions, denoising steps,
+configuration. It is not inferred from numeric ranges. `robot_runtime` validates
+the declared Piper action contract; this provenance flag is not an execution gate.
+Camera order, dimensions, denoising steps,
 normalization and tokenizer are read from GGUF. The MUSA profile selects pruned
 or full automatically, with the existing validated F16/F32/FA settings.
 
@@ -54,7 +55,12 @@ API with independently managed low-level models in one process.
 
 `last_predict_timings_ms` contains CPU wall intervals `preprocess_ms`,
 `native_call_ms` (including ctypes marshalling and result copying), and
-`postprocess_ms`. These are not pure GPU kernel timings.
+`postprocess_ms`. These are not pure GPU kernel timings. The native call includes
+native preprocessing/inference as well as the Python binding overhead; the
+Python preprocessing interval includes tokenization, RGB preparation and noise.
+The `robot_runtime` adapter prints these intervals for each completed production
+prediction, alongside runtime prediction and observation-to-prediction wall time.
+Warmup is excluded from that console prediction count.
 
 For an existing native MUSA build, add `bindings/python` to the caller's Python
 path and install the `policy` dependencies listed in `bindings/python/pyproject.toml`.

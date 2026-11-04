@@ -1,0 +1,28 @@
+{
+  "vla_base": "3dc88d79ab6be9bfa3e513c58c7ecd453d1d3872",
+  "runtime_base": "22e5223263ae6035bd533dbd3bd6f7162d64fec1",
+  "runtime_modified_files_sha256": {
+    "src/robot_runtime/inference.py": "7cfa9031b28d60d431458005bbaffbe9eb328132697cb625500ba0bda070cea4",
+    "src/robot_runtime/setup/runs.py": "7fb206cfde181a8138dc2072caf3b982234ea5d816aac659c0568ba9cdedd972",
+    "tests/python/test_inference_console.py": "42f1229cf95919a88785d7b2cb6700fdf6863e47238915dd6d22ed16bb48f514",
+    "tests/python/test_monitor_telemetry.py": "58b670a46545202a15ef55c62c33a6cae2bd8b7675143458face7ae418cda9df"
+  },
+  "gpu_and_driver": "Wed Nov  4 18:56:03 2026\n-------------------------------------------------------------------------\n    mthreads-gmi:1.4.0                 Driver Version:5.1.1-M1000\n-------------------------------------------------------------------------\nID   Name                 |PCIe                |%GPU    Mem             \n     Device Type   Perf   |Pcie Lane Width     |Temp    MPC Capable     \n                                               |        ECC Mode        \n+-----------------------------------------------------------------------+\n0    M1000                |N/A                 |7.0     6886MiB(31878MiB)\n     Physical      N/A    |N/A                 |40.6C   N/A             \n                                               |        N/A             \n-------------------------------------------------------------------------\n\n",
+  "power_profile": "performance",
+  "musa_sdk_version": "未记录",
+  "tests": [
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests/python -p test_inference_console.py -v",
+      "passed": 5
+    },
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests/python -p test_monitor_telemetry.py -v",
+      "passed": 12
+    },
+    {
+      "command": ".venv/bin/python -m unittest discover -s tests/python -p test_vla_cpp_backend.py -v",
+      "passed": 6
+    }
+  ],
+  "test_output_note": "23 项全部通过；此处为结果摘要，未保存单元测试原始终端输出。"
+}

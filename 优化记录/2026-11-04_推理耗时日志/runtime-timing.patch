@@ -1,0 +1,142 @@
+diff --git a/src/robot_runtime/inference.py b/src/robot_runtime/inference.py
+index 746a784..cc0ab73 100755
+--- a/src/robot_runtime/inference.py
++++ b/src/robot_runtime/inference.py
+@@ -1240,7 +1240,9 @@ def inference(cfg: InferenceConfig) -> None:
+                     prediction_count += 1
+                     telemetry.prediction_metrics(cameras, native_timings, capture_start=capture_start, capture_end=capture_end,
+                                                  predict_ms=elapsed, feedback_timestamp=state_timestamp,
+-                                                 cadence=prediction_cadence, completed_at=inference_end, context=cfg.task)
++                                                 cadence=prediction_cadence, completed_at=inference_end, context=cfg.task,
++                                                 console_label=(f"vla_cpp predict #{prediction_count}"
++                                                                if cfg.policy_backend == "vla_cpp" else None))
+                     model_ms = _model_stage_ms(native_timings)
+                     if model_ms is not None:
+                         telemetry.event('metric', model_ms=model_ms)
+diff --git a/src/robot_runtime/setup/runs.py b/src/robot_runtime/setup/runs.py
+index ae0be40..781e83d 100644
+--- a/src/robot_runtime/setup/runs.py
++++ b/src/robot_runtime/setup/runs.py
+@@ -450,7 +450,7 @@ class DispatchMetrics:
+ 
+ 
+ def prediction_metrics(cameras, timings, *, capture_start, capture_end, predict_ms, feedback_timestamp,
+-                       cadence=None, completed_at=None, context=None):
++                       cadence=None, completed_at=None, context=None, console_label=None):
+     """Publish bounded scalar timings; delivery age is not sensor exposure age."""
+     now=time.monotonic() if completed_at is None else completed_at
+     values=dict(predict_ms=predict_ms,_prediction_completed_s=now,
+@@ -463,11 +463,26 @@ def prediction_metrics(cameras, timings, *, capture_start, capture_end, predict_
+     ages=[max(0,delivery_now-stamp)*1000 for camera in cameras.values()
+           if type(stamp:=getattr(camera,'last_returned_timestamp',None)) in (int,float) and math.isfinite(stamp)]
+     if len(ages)==len(cameras) and ages:values['camera_delivery_age_ms']=max(ages)
+-    for key in ('preprocess_ms','postprocess_ms','vit_ms','llm_ms','action_ms','model_ms','prepare_ms','decode_ms'):
++    for key in ('preprocess_ms','postprocess_ms','vit_ms','llm_ms','action_ms','model_ms','prepare_ms','decode_ms','native_call_ms'):
+         value=timings.get(key)
+         if type(value) in (int,float) and math.isfinite(value) and value>=0:
+             values['backend_'+key]=value
+     event('metric',**values)
++    if console_label is not None:
++        fields = []
++        for label, key in (('native_call_ms', 'backend_native_call_ms'),
++                           ('preprocess_ms', 'backend_preprocess_ms'),
++                           ('postprocess_ms', 'backend_postprocess_ms'),
++                           ('predict_ms', 'predict_ms'),
++                           ('observation_to_prediction_ms', 'observation_to_prediction_ms')):
++            value = values.get(key)
++            valid = type(value) in (int, float) and math.isfinite(value) and value >= 0
++            fields.append(f'{label}={value:.2f}' if valid else f'{label}=n/a')
++        try:
++            print(f'[{console_label}] ' + ' '.join(fields), flush=True)
++        except (OSError, ValueError):
++            # A disconnected console must not abort an otherwise successful prediction.
++            pass
+ 
+ 
+ def prune_snapshots(folder, *, max_files=2000, max_bytes=512*1024*1024):
+diff --git a/tests/python/test_inference_console.py b/tests/python/test_inference_console.py
+index 59f02ec..1431e80 100644
+--- a/tests/python/test_inference_console.py
++++ b/tests/python/test_inference_console.py
+@@ -65,7 +65,7 @@ class InferenceConsoleTests(unittest.TestCase):
+                 effective, live_control=False, schedule='sequential_batches')
+             self.assertEqual(console['precision'], '后端未提供')
+ 
+-    def run_inference(self, duration, *, action_log_interval=0):
++    def run_inference(self, duration, *, action_log_interval=0, backend="flashrt"):
+         namespace = helpers.runtime_namespace()
+         fake_mp, sdk, telemetry_rows = helpers.FakeMP(), helpers.FakeSDK(), []
+ 
+@@ -84,7 +84,8 @@ class InferenceConsoleTests(unittest.TestCase):
+         class Model:
+             chunk_size = 3
+             mapping = SimpleNamespace(camera_order=('top', 'wrist'))
+-            last_predict_timings_ms = {'vit_ms': 1, 'llm_ms': 2, 'action_ms': 1}
++            last_predict_timings_ms = ({'native_call_ms': 1.25, 'preprocess_ms': .5, 'postprocess_ms': .25}
++                                       if backend == 'vla_cpp' else {'vit_ms': 1, 'llm_ms': 2, 'action_ms': 1})
+             resolved_parameters = {
+                 'precision': {'value': 'fp8', 'source': 'engine config'},
+                 'task': {'value': 'actual task\nsecond line', 'source': 'policy config'},
+@@ -112,7 +113,7 @@ class InferenceConsoleTests(unittest.TestCase):
+                          busy_wait=lambda duration: time.sleep(max(0, duration)),
+                          logger=debug_logger)
+         cfg = namespace['InferenceConfig'](
+-            policy_backend='flashrt', inference_backend='standard', precision='fp16',
++            policy_backend=backend, inference_backend='standard', precision='fp16',
+             robot=SimpleNamespace(type='single_piper', ctrl_mode='joint', use_degrees=True,
+                                   port='private-device-sentinel', cameras={'top': 'private-camera-sentinel'}),
+             task='requested task\nsecond line', duration=duration,
+@@ -130,6 +131,22 @@ class InferenceConsoleTests(unittest.TestCase):
+         return SimpleNamespace(output=output.getvalue(), calls=model.calls,
+                                events=telemetry_rows, logger=debug_logger)
+ 
++    def test_vla_prints_one_timing_line_per_prediction_and_keeps_native_telemetry(self):
++        result = self.run_inference(.12, backend='vla_cpp')
++        lines = [line for line in result.output.splitlines() if line.startswith('[vla_cpp predict #')]
++        self.assertGreaterEqual(result.calls, 2)
++        self.assertEqual(len(lines), result.calls)
++        for number, line in enumerate(lines, 1):
++            self.assertTrue(line.startswith(f'[vla_cpp predict #{number}] '))
++            self.assertIn('native_call_ms=1.25', line)
++            self.assertIn('preprocess_ms=0.50', line)
++            self.assertIn('postprocess_ms=0.25', line)
++            self.assertIn('predict_ms=', line)
++            self.assertIn('observation_to_prediction_ms=', line)
++        metrics = [row for kind, row in result.events if kind == 'metric' and 'predict_ms' in row]
++        self.assertEqual(len(metrics), result.calls)
++        self.assertTrue(all(row['backend_native_call_ms'] == 1.25 for row in metrics))
++
+     def test_more_predictions_do_not_add_terminal_lines_and_raw_telemetry_survives(self):
+         short = self.run_inference(.12)
+         longer = self.run_inference(.32, action_log_interval=1)
+diff --git a/tests/python/test_monitor_telemetry.py b/tests/python/test_monitor_telemetry.py
+index 089ac3d..d1e553e 100644
+--- a/tests/python/test_monitor_telemetry.py
++++ b/tests/python/test_monitor_telemetry.py
+@@ -61,6 +61,26 @@ class MonitorTelemetryTests(unittest.TestCase):
+         self.assertEqual(cadence.sample(102, context='two'), {})
+         self.assertEqual(cadence.sample(100, context='two'), {})
+ 
++    def test_prediction_console_marks_invalid_timings_unavailable(self):
++        for native in (None, -1, float('nan'), float('inf'), '1.25', True):
++            with self.subTest(native=native), redirect_stdout(io.StringIO()) as output:
++                runs.prediction_metrics({}, {'native_call_ms': native}, capture_start=10,
++                                        capture_end=10.001, predict_ms=3, feedback_timestamp=0,
++                                        completed_at=10.004, console_label='vla_cpp predict #1')
++            self.assertIn('native_call_ms=n/a', output.getvalue())
++            self.assertIn('preprocess_ms=n/a', output.getvalue())
++            self.assertIn('predict_ms=3.00', output.getvalue())
++            self.assertIn('observation_to_prediction_ms=4.00', output.getvalue())
++            self.assertNotIn('backend_native_call_ms', self.metrics()[-1])
++
++    def test_prediction_console_failure_preserves_telemetry(self):
++        for error in (BrokenPipeError(), ValueError('closed stdout')):
++            with self.subTest(error=type(error)), patch('builtins.print', side_effect=error):
++                runs.prediction_metrics({}, {'native_call_ms': 2}, capture_start=10,
++                                        capture_end=10.001, predict_ms=3, feedback_timestamp=0,
++                                        completed_at=10.004, console_label='vla_cpp predict #1')
++            self.assertEqual(self.metrics()[-1]['backend_native_call_ms'], 2)
++
+     def test_failure_dry_run_and_task_reset_cannot_invent_sdk_frequency(self):
+         metrics = runs.DispatchMetrics(.02)
+         def submit(end, *, ok=True, live=True, context='one'):
