@@ -10,7 +10,6 @@ import os
 from pathlib import Path
 import sys
 import tempfile
-from functools import lru_cache
 
 from pi05_gguf import GGUFReader
 from pi05_preprocess import prepare_image, prepare_images
@@ -20,43 +19,7 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "bindings/python"))
 
 
-@lru_cache(maxsize=2)
-def _tokenizer(kind, model, length):
-    if kind == "json":
-        from tokenizers import Tokenizer
-        tok = Tokenizer.from_str(model)
-        tok.no_padding()
-        tok.enable_truncation(max_length=length)
-        return tok
-    import sentencepiece as spm
-    return spm.SentencePieceProcessor(model_proto=model)
-
-
-def prepare_prompt(reader, text, state):
-    tensors = {t.name: t for t in reader.tensors}
-    q01 = np.asarray(tensors["state_q01"].data, dtype=np.float32).reshape(-1)
-    q99 = np.asarray(tensors["state_q99"].data, dtype=np.float32).reshape(-1)
-    state = np.asarray(state, dtype=np.float32)
-    if state.shape != q01.shape or not np.isfinite(state).all():
-        raise ValueError(f"Expected {len(q01)} finite raw state values")
-    eps = reader.fields["pi05.norm_eps"].contents()
-    denom = q99 - q01
-    normed = 2 * (state - q01) / np.where(denom == 0, eps, denom) - 1
-    bins = np.digitize(normed, np.linspace(-1, 1, 257)[:-1]) - 1
-    text = text.strip().replace("_", " ").replace("\n", " ")
-    prompt = f"Task: {text}, State: {' '.join(map(str, bins.tolist()))};\nAction: "
-    length = int(reader.fields["pi05.tokenizer_max_length"].contents())
-    if "pi05.tokenizer.hf_json" in reader.fields:
-        tok = _tokenizer("json", reader.fields["pi05.tokenizer.hf_json"].contents(), length)
-        ids = tok.encode(prompt).ids
-    elif "pi05.tokenizer.spm_model" in reader.fields:
-        field = reader.fields["pi05.tokenizer.spm_model"]
-        model = field.raw_bytes() if hasattr(field, "raw_bytes") else bytes(field.contents())
-        tok = _tokenizer("spm", model, length)
-        ids = ([tok.bos_id()] + tok.encode(prompt))[:length]
-    else:
-        raise ValueError("GGUF has no local tokenizer; use convert_pi05_local.py")
-    return prompt, ids
+from vla_cpp.policy import prepare_prompt
 
 
 def main():

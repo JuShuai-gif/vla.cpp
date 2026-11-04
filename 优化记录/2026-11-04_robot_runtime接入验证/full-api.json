@@ -1,0 +1,23 @@
+{
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "variant": "full",
+  "camera_order": [
+    "observation.images.wrist",
+    "observation.images.top"
+  ],
+  "action_shape": [
+    50,
+    7
+  ],
+  "reference": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u6a21\u578b\u52a0\u8f7d\u4e0e\u56fe\u50cf\u9884\u5904\u7406\u4f18\u5316/entry-B2-full.actions.json",
+  "max_abs_reference_error": 0.0,
+  "fresh_noise": true,
+  "warmup_restored_rng": true,
+  "first_predict_timings_ms": {
+    "preprocess_ms": 201.972321003268,
+    "native_call_ms": 790.0003359973198,
+    "postprocess_ms": 0.10200000542681664
+  },
+  "timing_scope": "single observation integration check; CPU wall times, not a performance benchmark",
+  "scope": "saved synthetic RGB images and checkpoint state mean; no hardware or closed-loop task validation"
+}

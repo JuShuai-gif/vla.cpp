@@ -1,0 +1,159 @@
+{
+  "checks": [
+    {
+      "name": "python",
+      "ok": true,
+      "value": "3.12.12 · /home/skysi/code/robot_runtime/.venv/bin/python",
+      "elapsed_ms": 0.01,
+      "phase": "static"
+    },
+    {
+      "name": "robot-runtime",
+      "ok": true,
+      "value": "0.1.0",
+      "repair": [
+        "-m",
+        "pip",
+        "install",
+        "robot-runtime"
+      ],
+      "elapsed_ms": 2.141,
+      "phase": "static"
+    },
+    {
+      "name": "numpy",
+      "ok": true,
+      "value": "2.5.4",
+      "repair": [
+        "-m",
+        "pip",
+        "install",
+        "numpy"
+      ],
+      "elapsed_ms": 1.281,
+      "phase": "static"
+    },
+    {
+      "name": "draccus",
+      "ok": true,
+      "value": "0.11.6",
+      "repair": [
+        "-m",
+        "pip",
+        "install",
+        "draccus"
+      ],
+      "elapsed_ms": 1.046,
+      "phase": "static"
+    },
+    {
+      "name": "opencv-python-headless",
+      "ok": true,
+      "value": "4.13.0.92",
+      "repair": [
+        "-m",
+        "pip",
+        "install",
+        "opencv-python-headless"
+      ],
+      "elapsed_ms": 0.833,
+      "phase": "static"
+    },
+    {
+      "name": "python-can",
+      "ok": true,
+      "value": "4.6.1",
+      "repair": [
+        "-m",
+        "pip",
+        "install",
+        "python-can"
+      ],
+      "elapsed_ms": 0.665,
+      "phase": "static"
+    },
+    {
+      "name": "project_root",
+      "ok": true,
+      "value": "/home/skysi/code/robot_runtime",
+      "elapsed_ms": 0.122,
+      "phase": "static"
+    },
+    {
+      "name": "policy_config",
+      "ok": true,
+      "value": "/home/skysi/code/robot_runtime/configs/policies/vla_pruned.json",
+      "hint": "在所示执行环境核对路径、权限及容器挂载；不会猜测替代路径。",
+      "elapsed_ms": 0.102,
+      "phase": "static"
+    },
+    {
+      "name": "backend",
+      "ok": true,
+      "value": {
+        "name": "vla_cpp",
+        "api_version": 1
+      },
+      "hint": "请在所选解释器安装该后端，参见 docs/backend_api.md。",
+      "elapsed_ms": 40.977,
+      "phase": "static"
+    },
+    {
+      "name": "robot_driver",
+      "ok": true,
+      "value": {
+        "name": "piper",
+        "api_version": 1
+      },
+      "elapsed_ms": 0.042,
+      "phase": "static"
+    },
+    {
+      "name": "profile_parameters",
+      "ok": true,
+      "value": null,
+      "elapsed_ms": 5.103,
+      "phase": "static"
+    },
+    {
+      "name": "model_contract",
+      "ok": true,
+      "value": {
+        "policy_config": "/home/skysi/code/robot_runtime/configs/policies/vla_pruned.json",
+        "spec": {
+          "checkpoint": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+          "camera_order": [
+            "observation.images.top",
+            "observation.images.wrist"
+          ],
+          "state_dim": 7,
+          "action_dim": 7,
+          "chunk_size": 50,
+          "action_names": [
+            "joint_1.pos",
+            "joint_2.pos",
+            "joint_3.pos",
+            "joint_4.pos",
+            "joint_5.pos",
+            "joint_6.pos",
+            "gripper.pos"
+          ],
+          "action_space": "absolute_joint",
+          "joint_unit": "degrees",
+          "gripper_unit": "mm",
+          "contract_verified": false,
+          "image_size": 224,
+          "num_steps": 3,
+          "variant": "pruned",
+          "rtc_training_max_delay": 0
+        },
+        "note": "Metadata checked; no hardware/model execution. Unit contract requires deployment confirmation."
+      },
+      "phase": "model_contract",
+      "hint": "仅调用后端只读资源检查，不加载模型或预热；硬件/精度是否可运行仍需目标环境推理验证。",
+      "elapsed_ms": 230.606
+    }
+  ],
+  "calibration": [],
+  "executable": "/home/skysi/code/robot_runtime/.venv/bin/python"
+}

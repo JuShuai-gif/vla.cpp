@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "model": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+  "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+  "optimization_profile": "/home/skysi/code/vla.cpp/scripts/pi05_musa_profiles.json",
+  "device": "0",
+  "seed": 0,
+  "threads": 4,
+  "runtime": {
+    "weight_dtype": "f16",
+    "act_dtype": "f32",
+    "mm_prec": "f32",
+    "flash_attn": true
+  },
+  "source_contract": {
+    "action_names": [
+      "joint_1.pos",
+      "joint_2.pos",
+      "joint_3.pos",
+      "joint_4.pos",
+      "joint_5.pos",
+      "joint_6.pos",
+      "gripper.pos"
+    ],
+    "action_space": "absolute_joint",
+    "joint_unit": "degrees",
+    "gripper_unit": "mm",
+    "verified": false
+  }
+}

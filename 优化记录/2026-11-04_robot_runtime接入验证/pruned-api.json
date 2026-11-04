@@ -1,0 +1,23 @@
+{
+  "model": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+  "variant": "pruned",
+  "camera_order": [
+    "observation.images.top",
+    "observation.images.wrist"
+  ],
+  "action_shape": [
+    50,
+    7
+  ],
+  "reference": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u6a21\u578b\u52a0\u8f7d\u4e0e\u56fe\u50cf\u9884\u5904\u7406\u4f18\u5316/entry-B2-pruned.actions.json",
+  "max_abs_reference_error": 0.0,
+  "fresh_noise": true,
+  "warmup_restored_rng": true,
+  "first_predict_timings_ms": {
+    "preprocess_ms": 17.656830001214985,
+    "native_call_ms": 480.8395239961101,
+    "postprocess_ms": 0.09627899999031797
+  },
+  "timing_scope": "single observation integration check; CPU wall times, not a performance benchmark",
+  "scope": "saved synthetic RGB images and checkpoint state mean; no hardware or closed-loop task validation"
+}

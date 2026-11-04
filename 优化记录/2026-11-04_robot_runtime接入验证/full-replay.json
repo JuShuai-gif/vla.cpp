@@ -1,0 +1,128 @@
+{
+  "scope": "saved observations; no robot/camera/network I/O",
+  "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+  "observation_sha256": "f36b7ae613686bfa0066a191bfdf55e0479f13dd10fce4d9dc5629f631c1eab5",
+  "samples": 3,
+  "warmup": 3,
+  "initialization_warmup_runs": 3,
+  "seconds": 2.6952895669965073,
+  "cpu_seconds": 4.971441560000002,
+  "maxrss_native_units": 2835732,
+  "predict_ms": {
+    "count": 3,
+    "mean": 895.7225240010303,
+    "p50": 896.7801100006909,
+    "p95": 897.0499100032612,
+    "p99": 897.0499100032612,
+    "max": 897.0499100032612
+  },
+  "backend_timings_ms": {
+    "preprocess_ms": {
+      "count": 3,
+      "mean": 138.44261233316502,
+      "p50": 138.57386600284372,
+      "p95": 138.88082499761367,
+      "p99": 138.88082499761367,
+      "max": 138.88082499761367
+    },
+    "native_call_ms": {
+      "count": 3,
+      "mean": 757.1436049984186,
+      "p50": 757.7653249973082,
+      "p95": 758.3332439971855,
+      "p99": 758.3332439971855,
+      "max": 758.3332439971855
+    },
+    "postprocess_ms": {
+      "count": 3,
+      "mean": 0.07858666746566693,
+      "p50": 0.07840000034775585,
+      "p95": 0.07947999984025955,
+      "p99": 0.07947999984025955,
+      "max": 0.07947999984025955
+    }
+  },
+  "action_shape": [
+    50,
+    7
+  ],
+  "network_requests": 0,
+  "config": {
+    "schema_version": 2,
+    "policy_backend": "vla_cpp",
+    "robot_layout": "single",
+    "devices": {
+      "arms": {
+        "single": null
+      },
+      "cameras": {
+        "top": null,
+        "wrist": null
+      }
+    },
+    "active_profile": "pruned",
+    "profiles": {
+      "pruned": {
+        "policy_config": "configs/policies/vla_pruned.json",
+        "inference_backend": "standard",
+        "task": "pick up the cube",
+        "warmup_steps": 3,
+        "execution_horizon": 50,
+        "execution_period": 0.03333333333333333,
+        "replan_threshold": 0,
+        "rtc_blend_steps": 5,
+        "enable_filter_smooth": false,
+        "enable_rtc_smooth": false,
+        "warmstep": false,
+        "rl_joint_offsets": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "joint_unit": "degrees",
+        "gripper_mapping": "linear",
+        "camera_map": {
+          "observation.images.top": "top",
+          "observation.images.wrist": "wrist"
+        },
+        "execute_robot": false,
+        "dry_run": true
+      },
+      "full": {
+        "policy_config": "configs/policies/vla_full.json",
+        "inference_backend": "standard",
+        "task": "pick up the cube",
+        "warmup_steps": 3,
+        "execution_horizon": 50,
+        "execution_period": 0.03333333333333333,
+        "replan_threshold": 0,
+        "rtc_blend_steps": 5,
+        "enable_filter_smooth": false,
+        "enable_rtc_smooth": false,
+        "warmstep": false,
+        "rl_joint_offsets": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "joint_unit": "degrees",
+        "gripper_mapping": "linear",
+        "camera_map": {
+          "observation.images.top": "top",
+          "observation.images.wrist": "wrist"
+        },
+        "execute_robot": false,
+        "dry_run": true
+      }
+    },
+    "last_checks": {},
+    "python_executable": "/home/skysi/code/robot_runtime/.venv/bin/python"
+  },
+  "profile": "full"
+}

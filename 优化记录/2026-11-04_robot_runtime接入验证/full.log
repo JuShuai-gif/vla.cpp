@@ -1,0 +1,13 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+{"model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf", "variant": "full", "camera_order": ["observation.images.wrist", "observation.images.top"], "action_shape": [50, 7], "reference": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u6a21\u578b\u52a0\u8f7d\u4e0e\u56fe\u50cf\u9884\u5904\u7406\u4f18\u5316/entry-B2-full.actions.json", "max_abs_reference_error": 0.0, "fresh_noise": true, "warmup_restored_rng": true, "first_predict_timings_ms": {"preprocess_ms": 201.972321003268, "native_call_ms": 790.0003359973198, "postprocess_ms": 0.10200000542681664}, "timing_scope": "single observation integration check; CPU wall times, not a performance benchmark", "scope": "saved synthetic RGB images and checkpoint state mean; no hardware or closed-loop task validation"}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 5.05 GiB
+vla(pi05): model loaded (n_threads=4)

@@ -1,0 +1,12 @@
+{
+  "hardware": "M1000 device 0 / aibox aarch64 / Linux 6.6.10",
+  "driver_sdk_versions": "not recorded in this round",
+  "power_mode": "not recorded",
+  "runtime_base": "6633aef",
+  "vla_compute_base": "4a1d31a",
+  "sha256": {
+    "/home/skysi/code/vla.cpp/build-musa-official/libvla.so": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+    "/home/skysi/code/vla.cpp/build-musa-official/libvla_core.so": "9883c265ca86cef79f20926c428d1cb8c3a941342df7d862ec6b818853573d00",
+    "/home/skysi/code/vla.cpp/scripts/pi05_musa_profiles.json": "b315ac7747906d29a011186d0ac1c695d45e90ae898002b3560278ec37f4bffe"
+  }
+}
