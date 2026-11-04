@@ -1,0 +1,44 @@
+[
+  {
+    "K": 32,
+    "M": 64,
+    "layout": "original",
+    "bijective": true,
+    "word_store_aligned": true
+  },
+  {
+    "K": 64,
+    "M": 64,
+    "layout": "four-word lanes",
+    "bijective": true,
+    "word_store_aligned": true
+  },
+  {
+    "K": 96,
+    "M": 64,
+    "layout": "original",
+    "bijective": true,
+    "word_store_aligned": true
+  },
+  {
+    "K": 128,
+    "M": 64,
+    "layout": "four-word lanes",
+    "bijective": true,
+    "word_store_aligned": true
+  },
+  {
+    "K": 1024,
+    "M": 64,
+    "layout": "four-word lanes",
+    "bijective": true,
+    "word_store_aligned": true
+  },
+  {
+    "K": 4096,
+    "M": 64,
+    "layout": "four-word lanes",
+    "bijective": true,
+    "word_store_aligned": true
+  }
+]

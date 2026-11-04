@@ -1,0 +1,1 @@
+First narrow filter used default function-name basis, so template-specific small_gemm and norm selectors did not match. Baseline report only contains GEGLU. These partial reports cannot compare the complete expert path. narrow2 explicitly sets --kernel-name-base demangled; all raw logs preserved.

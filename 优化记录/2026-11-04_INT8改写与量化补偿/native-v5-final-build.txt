@@ -1,0 +1,26 @@
+[1/26] Linking CXX shared library bin/libllama.so.0.5.0
+[2/26] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[3/26] Linking CXX shared library bin/libllama-common.so.0.5.0
+[4/26] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[5/26] Linking CXX shared library bin/libmtmd.so.0.5.0
+[6/26] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[7/26] Linking CXX shared library libvlm_core.so
+[8/26] Linking CXX executable vla-cli
+[9/26] Linking CXX executable vla-bench
+[10/26] Linking CXX executable vla-server
+[11/26] Linking CXX executable tests/test_vision_prune
+[12/26] Linking CXX executable tests/test_rope_conventions
+[13/26] Linking CXX executable tests/test_dit_common
+[14/26] Linking CXX executable tests/test_graph_names
+[15/26] Linking CXX executable tests/test_qwen3vl_vit
+[16/26] Linking CXX executable vlm-server
+[17/26] Linking C executable tests/test_c_api
+[18/26] Linking CXX executable tests/vla_predict_check
+[19/26] Linking CXX executable tests/test_config_guard
+[20/26] Linking CXX executable tests/test_prompt
+[21/26] Linking CXX executable tests/test_foldquant_cpu_op
+[22/26] Linking CXX executable tests/test_musa_ops
+[23/26] Linking CXX executable tests/test_foldquant_dequant
+[24/26] Linking CXX executable tests/test_quant_calibration
+[25/26] Linking CXX executable tests/test_weight_loading
+[26/26] Linking CXX executable tests/bench_musa_quant

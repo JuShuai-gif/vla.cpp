@@ -38,6 +38,14 @@ bool musa_int8_supports(const ggml_tensor * t){
         ggml_is_contiguous(t->src[2]) && t->src[2]->ne[0]%(a->ne[0]+4)==0 &&
         t->src[2]->ne[0]/(a->ne[0]+4)>=t->ne[1];
 }
+template<int TM,int TN,int NW=1,bool Compensate=false,bool Geglu=false>
+static void launch_int8(musaStream_t st,const signed char*w,const signed char*x,const float*sw,const float*sx,
+        float*y,int M,int N,int K,int NP,const half *extra=nullptr,const void *original=nullptr,
+        const int *indices=nullptr,int R=0,bool half_input=false){
+    const dim3 grid(M/(TM*NW),NP/TN);
+    if(K%64==0)int8_native::row_wmma<TM,TN,NW,Compensate,Geglu,true><<<grid,128*NW,0,st>>>(w,x,sw,sx,y,M,N,K,extra,original,indices,R,half_input);
+    else int8_native::row_wmma<TM,TN,NW,Compensate,Geglu,false><<<grid,128*NW,0,st>>>(w,x,sw,sx,y,M,N,K,extra,original,indices,R,half_input);
+}
 bool musa_int8_forward(ggml_tensor *t,void *stream){
     const auto st=(musaStream_t)stream;const auto k=kind(t);const auto *a=t->src[0];
     if(k==MUSA_INT8_PACK){
@@ -51,15 +59,15 @@ bool musa_int8_forward(ggml_tensor *t,void *stream){
         const auto *w=(const signed char*)a->data,*x=(const signed char*)t->src[2]->data;
         const auto *sw=(const float*)t->src[1]->data,*sx=(const float*)(x+(size_t)NP*K);
         if(k==MUSA_INT8_GEGLU){
-            int8_native::row_wmma<64,64,1,false,true><<<dim3(M/64,1),128,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K);
+            launch_int8<64,64,1,false,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
         }else if(t->src[4]){
             const auto *extra=(const half*)t->src[4]->data;const auto *indices=(const int*)t->src[5]->data;
             const int R=t->src[4]->ne[0];const bool half_input=t->src[3]->type==GGML_TYPE_F16;
-            if(N<=64)int8_native::row_wmma<32,64,1,true><<<dim3(M/32,NP/64),128,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K,extra,t->src[3]->data,indices,R,half_input);
-            else int8_native::row_wmma<64,160,2,true><<<dim3(M/128,NP/160),256,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K,extra,t->src[3]->data,indices,R,half_input);
+            if(N<=64)launch_int8<32,64,1,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP,extra,t->src[3]->data,indices,R,half_input);
+            else launch_int8<64,160,2,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP,extra,t->src[3]->data,indices,R,half_input);
         }else{
-            if(N<=64)int8_native::row_wmma<32,64,1><<<dim3(M/32,NP/64),128,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K);
-            else int8_native::row_wmma<64,160,2><<<dim3(M/128,NP/160),256,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K);
+            if(N<=64)launch_int8<32,64,1>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
+            else launch_int8<64,160,2>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
         }
     }else return false;
     return musaGetLastError()==musaSuccess;

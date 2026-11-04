@@ -1,0 +1,1961 @@
+{
+  "precision": "baseline",
+  "scope": "V3 Graph OFF; selected kernels of one warmed observation; profiler-perturbed; not acceptance timing",
+  "kernels": [
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "count": 54,
+      "sum_ms": 22.143,
+      "mean_ms": 0.41005555555555556,
+      "registers": [
+        49.0
+      ],
+      "shared_bytes": [
+        8724.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "count": 105,
+      "sum_ms": 3.33179,
+      "mean_ms": 0.031731333333333334,
+      "registers": [
+        21.0
+      ],
+      "shared_bytes": [
+        1044.0
+      ]
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "count": 54,
+      "sum_ms": 2.5662,
+      "mean_ms": 0.047522222222222216,
+      "registers": [
+        7.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    }
+  ],
+  "raw": [
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.98,
+      "ms": 0.03277,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.61,
+      "ms": 0.42281,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.18,
+      "ms": 0.047619999999999996,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.04,
+      "ms": 0.03208,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 60.32,
+      "ms": 0.03161,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.95,
+      "ms": 0.40361,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.01,
+      "ms": 0.047450000000000006,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.71,
+      "ms": 0.03295,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.88,
+      "ms": 0.03125,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.21,
+      "ms": 0.40309,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.68,
+      "ms": 0.047369999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.6,
+      "ms": 0.03271,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 60.07,
+      "ms": 0.03221,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.81,
+      "ms": 0.40994,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.59,
+      "ms": 0.04777000000000001,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.23,
+      "ms": 0.03351,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.2,
+      "ms": 0.03151,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.06,
+      "ms": 0.40481,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.87,
+      "ms": 0.04723,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.2,
+      "ms": 0.03226,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.07,
+      "ms": 0.03125,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.92,
+      "ms": 0.41825,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.49,
+      "ms": 0.047189999999999996,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.47,
+      "ms": 0.033850000000000005,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.35,
+      "ms": 0.03128,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 91.03,
+      "ms": 0.41103,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.84,
+      "ms": 0.04753,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.19,
+      "ms": 0.03261,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.84,
+      "ms": 0.02997,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.52,
+      "ms": 0.40991000000000005,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.63,
+      "ms": 0.046869999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.92,
+      "ms": 0.032780000000000004,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.15,
+      "ms": 0.03058,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.12,
+      "ms": 0.40950000000000003,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.73,
+      "ms": 0.04672,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.01,
+      "ms": 0.03347,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.02,
+      "ms": 0.03077,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.85,
+      "ms": 0.39538,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.7,
+      "ms": 0.047200000000000006,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.99,
+      "ms": 0.03327,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.48,
+      "ms": 0.03215,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.86,
+      "ms": 0.39594,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.95,
+      "ms": 0.04751,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.04,
+      "ms": 0.033490000000000006,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.9,
+      "ms": 0.03057,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.05,
+      "ms": 0.41562,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.24,
+      "ms": 0.04739,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.65,
+      "ms": 0.032189999999999996,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.88,
+      "ms": 0.03015,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.23,
+      "ms": 0.39641000000000004,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.05,
+      "ms": 0.04864,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.42,
+      "ms": 0.032740000000000005,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.67,
+      "ms": 0.03073,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 91.37,
+      "ms": 0.40068000000000004,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.54,
+      "ms": 0.048240000000000005,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.27,
+      "ms": 0.03254,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.35,
+      "ms": 0.029930000000000002,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.63,
+      "ms": 0.40031,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.16,
+      "ms": 0.04704,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 67.06,
+      "ms": 0.03357,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.04,
+      "ms": 0.03052,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.69,
+      "ms": 0.41116,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.74,
+      "ms": 0.04779,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.63,
+      "ms": 0.03243,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.68,
+      "ms": 0.03014,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.48,
+      "ms": 0.40343,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.73,
+      "ms": 0.04668,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.26,
+      "ms": 0.032850000000000004,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.88,
+      "ms": 0.03064,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.16,
+      "ms": 0.4063,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.45,
+      "ms": 0.047380000000000005,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 68.3,
+      "ms": 0.02951,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.3,
+      "ms": 0.42299000000000003,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.76,
+      "ms": 0.04736,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.82,
+      "ms": 0.032549999999999996,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.37,
+      "ms": 0.02973,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.59,
+      "ms": 0.40449,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 71.93,
+      "ms": 0.05179,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.71,
+      "ms": 0.032729999999999995,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.38,
+      "ms": 0.03002,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.39,
+      "ms": 0.40536,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.63,
+      "ms": 0.04859,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.74,
+      "ms": 0.03211,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.83,
+      "ms": 0.0305,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.07,
+      "ms": 0.4136,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.83,
+      "ms": 0.047670000000000004,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.77,
+      "ms": 0.032310000000000005,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.72,
+      "ms": 0.03031,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.8,
+      "ms": 0.41142,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.32,
+      "ms": 0.04671,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.01,
+      "ms": 0.03347,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.73,
+      "ms": 0.03013,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.59,
+      "ms": 0.40626,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.54,
+      "ms": 0.047240000000000004,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.71,
+      "ms": 0.03294,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.58,
+      "ms": 0.03048,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.97,
+      "ms": 0.41901,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.12,
+      "ms": 0.04733,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.57,
+      "ms": 0.03258,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.01,
+      "ms": 0.03049,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.99,
+      "ms": 0.40242,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.06,
+      "ms": 0.047439999999999996,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.57,
+      "ms": 0.032479999999999995,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.38,
+      "ms": 0.03014,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.96,
+      "ms": 0.40757,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.2,
+      "ms": 0.046869999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.42,
+      "ms": 0.032119999999999996,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.39,
+      "ms": 0.02983,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.93,
+      "ms": 0.40907,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.39,
+      "ms": 0.04743,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.6,
+      "ms": 0.03272,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.74,
+      "ms": 0.030690000000000002,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.29,
+      "ms": 0.40375,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.42,
+      "ms": 0.047799999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.48,
+      "ms": 0.032490000000000005,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.99,
+      "ms": 0.03039,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.51,
+      "ms": 0.42963,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.28,
+      "ms": 0.04708,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.14,
+      "ms": 0.03215,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.84,
+      "ms": 0.0304,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.23,
+      "ms": 0.40928,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.16,
+      "ms": 0.04733,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.07,
+      "ms": 0.03252000000000001,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.52,
+      "ms": 0.03102,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.77,
+      "ms": 0.40165,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.6,
+      "ms": 0.04754,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.53,
+      "ms": 0.033490000000000006,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.44,
+      "ms": 0.03093,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.47,
+      "ms": 0.41473000000000004,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.17,
+      "ms": 0.04686,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.04,
+      "ms": 0.03198,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.69,
+      "ms": 0.0302,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.18,
+      "ms": 0.41318,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.04,
+      "ms": 0.04704,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 60.91,
+      "ms": 0.03286,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.55,
+      "ms": 0.03177,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.52,
+      "ms": 0.42195,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.27,
+      "ms": 0.046740000000000004,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 58.82,
+      "ms": 0.03434,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.4,
+      "ms": 0.02963,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.9,
+      "ms": 0.41514999999999996,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.13,
+      "ms": 0.046869999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 67.29,
+      "ms": 0.03015,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.37,
+      "ms": 0.42097,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.42,
+      "ms": 0.04772,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.83,
+      "ms": 0.032119999999999996,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 59.27,
+      "ms": 0.03276,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.98,
+      "ms": 0.40967000000000003,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.29,
+      "ms": 0.047270000000000006,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.55,
+      "ms": 0.03269,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.85,
+      "ms": 0.02969,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.37,
+      "ms": 0.41200000000000003,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.88,
+      "ms": 0.04746,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.87,
+      "ms": 0.03226,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.78,
+      "ms": 0.02963,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.38,
+      "ms": 0.4114,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.2,
+      "ms": 0.04765,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.54,
+      "ms": 0.03354,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.63,
+      "ms": 0.03075,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.1,
+      "ms": 0.40720999999999996,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.27,
+      "ms": 0.047880000000000006,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.17,
+      "ms": 0.032409999999999994,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.67,
+      "ms": 0.02954,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.22,
+      "ms": 0.40625,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.86,
+      "ms": 0.048049999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.01,
+      "ms": 0.03309,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.5,
+      "ms": 0.02977,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.82,
+      "ms": 0.41641000000000006,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.68,
+      "ms": 0.04718,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.06,
+      "ms": 0.03218,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.79,
+      "ms": 0.030440000000000002,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.77,
+      "ms": 0.41312,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.19,
+      "ms": 0.047909999999999994,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.67,
+      "ms": 0.033049999999999996,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.05,
+      "ms": 0.03025,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.1,
+      "ms": 0.4123,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.98,
+      "ms": 0.04661,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.73,
+      "ms": 0.03394,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.8,
+      "ms": 0.03114,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 90.37,
+      "ms": 0.4111,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.77,
+      "ms": 0.04801,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.63,
+      "ms": 0.033030000000000004,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 68.34,
+      "ms": 0.03259,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.44,
+      "ms": 0.41766000000000003,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.81,
+      "ms": 0.04736,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.82,
+      "ms": 0.03289,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 67.59,
+      "ms": 0.03057,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.6,
+      "ms": 0.40875,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.5,
+      "ms": 0.048170000000000004,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.41,
+      "ms": 0.03334,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 66.03,
+      "ms": 0.033659999999999995,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.9,
+      "ms": 0.40705,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.59,
+      "ms": 0.04768,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.01,
+      "ms": 0.03195,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 67.74,
+      "ms": 0.03005,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.93,
+      "ms": 0.40732999999999997,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.66,
+      "ms": 0.047799999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.74,
+      "ms": 0.033060000000000006,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.89,
+      "ms": 0.03023,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.69,
+      "ms": 0.42014,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.53,
+      "ms": 0.0475,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.84,
+      "ms": 0.033030000000000004,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.42,
+      "ms": 0.03089,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.57,
+      "ms": 0.4112,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.13,
+      "ms": 0.048049999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 60.77,
+      "ms": 0.03304,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.95,
+      "ms": 0.03194,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 89.45,
+      "ms": 0.40936,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.41,
+      "ms": 0.04693,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.54,
+      "ms": 0.03236,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.86,
+      "ms": 0.030420000000000003,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::small_gemm_kernel<32, 0>(__half const*, __half const*, float*, int, int, int)",
+      "grid": "256, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.71,
+      "ms": 0.41139,
+      "registers": 49.0,
+      "shared_bytes": 8724.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.97,
+      "ms": 0.04766,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    }
+  ]
+}

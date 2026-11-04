@@ -1,0 +1,118 @@
+[1/11] Building CXX object tests/CMakeFiles/test_musa_int8.dir/test_musa_int8.cpp.o
+In file included from /home/skysi/code/vla.cpp-quant/tests/test_musa_int8.cpp:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:6:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[2/11] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_fused.cu.o
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/action_edges.h:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:200:30: warning: comparison of integers of different signs: 'size_t' (aka 'unsigned long') and 'long' [-Wsign-compare]
+               ggml_nbytes(t)==(spec.kind?ggml_nelements(x)*4:0)+x->ne[0]*64*2+(spec.quantized?(x->ne[0]+4)*64:0);
+               ~~~~~~~~~~~~~~^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:255:28: warning: comparison of integers of different signs: 'size_t' (aka 'unsigned long') and 'long' [-Wsign-compare]
+             ggml_nbytes(t)==w->ne[1]*(x->ne[1]*4+64*2);
+             ~~~~~~~~~~~~~~^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:812:18: warning: argument to '#pragma unroll' should not be in parentheses in CUDA C/C++ [-Wcuda-compat]
+ #pragma unroll (Pipeline?Pipeline:1)
+                 ^
+6 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:4:
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/action_edges.h:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:200:30: warning: comparison of integers of different signs: 'size_t' (aka 'unsigned long') and 'long' [-Wsign-compare]
+               ggml_nbytes(t)==(spec.kind?ggml_nelements(x)*4:0)+x->ne[0]*64*2+(spec.quantized?(x->ne[0]+4)*64:0);
+               ~~~~~~~~~~~~~~^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:255:28: warning: comparison of integers of different signs: 'size_t' (aka 'unsigned long') and 'long' [-Wsign-compare]
+             ggml_nbytes(t)==w->ne[1]*(x->ne[1]*4+64*2);
+             ~~~~~~~~~~~~~~^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_fused.cu:812:18: warning: argument to '#pragma unroll' should not be in parentheses in CUDA C/C++ [-Wcuda-compat]
+ #pragma unroll (Pipeline?Pipeline:1)
+                 ^
+6 warnings generated when compiling for host.
+[3/11] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_int8.cu.o
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:3:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:6:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:4:
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:4:
+/home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:9:55: warning: function 'musa_int8_cpu' could be declared with attribute 'noreturn' [-Wmissing-noreturn]
+inline void musa_int8_cpu(ggml_tensor*,int,int,void*) {
+                                                      ^
+4 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:3:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:6:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:4:
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:4:
+/home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:9:55: warning: function 'musa_int8_cpu' could be declared with attribute 'noreturn' [-Wmissing-noreturn]
+inline void musa_int8_cpu(ggml_tensor*,int,int,void*) {
+                                                      ^
+4 warnings generated when compiling for host.
+[4/11] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[5/11] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[6/11] Linking CXX shared library bin/libggml.so.0.25.3
+[7/11] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[8/11] Linking CXX shared library libvla_core.so
+[9/11] Linking CXX shared library libvla.so
+[10/11] Linking CXX executable tests/bench_musa_native_int8
+[11/11] Linking CXX executable tests/test_musa_int8

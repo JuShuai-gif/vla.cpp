@@ -756,7 +756,7 @@ __global__ void packed_norm_kernel(const float * x,const float * o,const float *
   for(int i=tid;i<h;i+=WG){
    norm[row+i]=__float2half_rn(0.f);
    if constexpr(Quantized){
-    const size_t dest=((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
+    const size_t dest=h%64==0?((size_t)(r/32)*(h/32)+(i/64)*2)*1024+((r%16)*4+(i%16)/4+(i%32/16)*64)*16+(i/32%2)*8+(r%32/16)*4+i%4:((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
     q[dest]=0;
    }
   }
@@ -780,11 +780,18 @@ __global__ void packed_norm_kernel(const float * x,const float * o,const float *
   for(int i=tid;i<h;i+=WG)mx=fmaxf(mx,fabsf(float(norm[row+i])*inverse[i]));
   sums[tid]=mx;__syncthreads();
   for(int d=WG/2;d;d>>=1){if(tid<d)sums[tid]=fmaxf(sums[tid],sums[tid+d]);__syncthreads();}
-  const float scale=sums[0]>0?__fdiv_rn(sums[0],127.f):1.f;
+  const float scale=sums[0]>0?fmaxf(__fdiv_rn(sums[0],127.f),1.17549435e-38f):1.f;
+  const float inverse_scale=__fdiv_rn(1.f,scale);
   if(tid==0)scales[r]=scale;
-  for(int i=tid;i<h;i+=WG){
-   const size_t dest=((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
-   q[dest]=(signed char)rintf(fminf(127.f,fmaxf(-127.f,__fdiv_rn(float(norm[row+i])*inverse[i],scale))));
+  for(int i=tid*4;i<h;i+=WG*4){
+   const size_t dest=h%64==0?((size_t)(r/32)*(h/32)+(i/64)*2)*1024+((r%16)*4+(i%16)/4+(i%32/16)*64)*16+(i/32%2)*8+(r%32/16)*4+i%4:((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
+   unsigned bits=0;
+   #pragma unroll
+   for(int j=0;j<4;++j){
+    const signed char value=(signed char)rintf(fminf(127.f,fmaxf(-127.f,(float(norm[row+i+j])*inverse[i+j])*inverse_scale)));
+    bits|=unsigned((unsigned char)value)<<(8*j);
+   }
+   *((unsigned*)(q+dest))=bits;
   }
  }
 }

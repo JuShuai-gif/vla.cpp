@@ -1,0 +1,2 @@
+{"name": "native-v5-final-build", "command": ["cmake", "--build", "build-musa-quant", "-j4"], "returncode": 0}
+{"name": "native-v5-ctest", "command": ["ctest", "--test-dir", "build-musa-quant", "--output-on-failure", "-j1"], "returncode": 0}

@@ -1,0 +1,42 @@
+[
+  {
+    "name": "v3-mcu-pruned2-baseline",
+    "command": [
+      "/opt/moore-threads/moore-perf-compute/1.2.2/target-linux-aarch64/mcu",
+      "--dump-mode",
+      "normal",
+      "--kernel-name-base",
+      "demangled",
+      "--kernel-name",
+      "regex:(small_gemm_kernel<32, 0>|packed_norm_kernel<1,|packed_geglu_kernel|row_wmma|int8_native.*pack|vla_r2_begin|vla_r2_end)",
+      "-o",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8-mcu-narrow2/v3-mcu-pruned2-baseline",
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/profile_native.py",
+      "pruned",
+      "baseline"
+    ],
+    "returncode": 0,
+    "valid_kernel_report": true
+  },
+  {
+    "name": "v3-mcu-pruned2-int8-expert-smooth",
+    "command": [
+      "/opt/moore-threads/moore-perf-compute/1.2.2/target-linux-aarch64/mcu",
+      "--dump-mode",
+      "normal",
+      "--kernel-name-base",
+      "demangled",
+      "--kernel-name",
+      "regex:(small_gemm_kernel<32, 0>|packed_norm_kernel<1,|packed_geglu_kernel|row_wmma|int8_native.*pack|vla_r2_begin|vla_r2_end)",
+      "-o",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8-mcu-narrow2/v3-mcu-pruned2-int8-expert-smooth",
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/profile_native.py",
+      "pruned",
+      "int8-expert-smooth"
+    ],
+    "returncode": 0,
+    "valid_kernel_report": true
+  }
+]

@@ -1,0 +1,506 @@
+{
+  "precision": "baseline",
+  "scope": "V3 Graph OFF; selected kernels of one warmed observation; profiler-perturbed; not acceptance timing",
+  "kernels": [
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "count": 54,
+      "sum_ms": 2.5550800000000002,
+      "mean_ms": 0.0473162962962963,
+      "registers": [
+        7.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    }
+  ],
+  "raw": [
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.02,
+      "ms": 0.04796,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.15,
+      "ms": 0.04851,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.76,
+      "ms": 0.04766,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 79.0,
+      "ms": 0.047799999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.02,
+      "ms": 0.04797,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.54,
+      "ms": 0.047369999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 74.41,
+      "ms": 0.04825,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.48,
+      "ms": 0.047479999999999994,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.36,
+      "ms": 0.04753,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.82,
+      "ms": 0.04821,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.52,
+      "ms": 0.046939999999999996,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.23,
+      "ms": 0.04743,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.28,
+      "ms": 0.04768,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.04,
+      "ms": 0.04722,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.63,
+      "ms": 0.04741,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.51,
+      "ms": 0.048049999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.71,
+      "ms": 0.04746,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.77,
+      "ms": 0.04708,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.6,
+      "ms": 0.047689999999999996,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.3,
+      "ms": 0.046869999999999995,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.07,
+      "ms": 0.04711,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.55,
+      "ms": 0.04766,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 74.93,
+      "ms": 0.04777000000000001,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.21,
+      "ms": 0.04729,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.57,
+      "ms": 0.04696,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.98,
+      "ms": 0.04753,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.53,
+      "ms": 0.047240000000000004,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.19,
+      "ms": 0.047630000000000006,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.3,
+      "ms": 0.04715,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.17,
+      "ms": 0.04693,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.71,
+      "ms": 0.0469,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.86,
+      "ms": 0.04728,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.08,
+      "ms": 0.04764,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.23,
+      "ms": 0.04703,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.42,
+      "ms": 0.04621,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.37,
+      "ms": 0.04698,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 79.09,
+      "ms": 0.04722,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.17,
+      "ms": 0.046579999999999996,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.18,
+      "ms": 0.04759000000000001,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.95,
+      "ms": 0.046950000000000006,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.1,
+      "ms": 0.047,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.19,
+      "ms": 0.04704,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.12,
+      "ms": 0.04714,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 74.5,
+      "ms": 0.047490000000000004,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.56,
+      "ms": 0.04684000000000001,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.57,
+      "ms": 0.047060000000000005,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.53,
+      "ms": 0.04682,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.72,
+      "ms": 0.04715,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.7,
+      "ms": 0.04678,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.42,
+      "ms": 0.04734000000000001,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.03,
+      "ms": 0.047630000000000006,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.4,
+      "ms": 0.046950000000000006,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 77.49,
+      "ms": 0.04707,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "vla::(anonymous namespace)::packed_geglu_kernel(float const*, __half*, int, int)",
+      "grid": "16, 64, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 78.36,
+      "ms": 0.04655,
+      "registers": 7.0,
+      "shared_bytes": 20.0
+    }
+  ]
+}

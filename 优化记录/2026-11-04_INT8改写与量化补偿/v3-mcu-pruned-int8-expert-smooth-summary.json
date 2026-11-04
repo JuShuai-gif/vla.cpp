@@ -1,0 +1,506 @@
+{
+  "precision": "int8-expert-smooth",
+  "scope": "V3 Graph OFF; selected kernels of one warmed observation; profiler-perturbed; not acceptance timing",
+  "kernels": [
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "count": 54,
+      "sum_ms": 13.671090000000001,
+      "mean_ms": 0.2531683333333334,
+      "registers": [
+        71.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    }
+  ],
+  "raw": [
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.66,
+      "ms": 0.25787,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.91,
+      "ms": 0.25352,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.75,
+      "ms": 0.25524,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.04,
+      "ms": 0.25367,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.3,
+      "ms": 0.25527,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.13,
+      "ms": 0.25002,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.62,
+      "ms": 0.25217,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.04,
+      "ms": 0.25538,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.59,
+      "ms": 0.25333,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.14,
+      "ms": 0.25048,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.14,
+      "ms": 0.25408000000000003,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 81.59,
+      "ms": 0.26648000000000005,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.07,
+      "ms": 0.25189,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.49,
+      "ms": 0.25028,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.01,
+      "ms": 0.27904,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.21,
+      "ms": 0.2547,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.96,
+      "ms": 0.25487,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.34,
+      "ms": 0.25309,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.28,
+      "ms": 0.25349,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.58,
+      "ms": 0.25307,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.2,
+      "ms": 0.25112,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.28,
+      "ms": 0.25302,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.36,
+      "ms": 0.25236000000000003,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.44,
+      "ms": 0.26257,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.05,
+      "ms": 0.25073,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.2,
+      "ms": 0.25222,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.62,
+      "ms": 0.24867,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.5,
+      "ms": 0.25009000000000003,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.71,
+      "ms": 0.24997,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.66,
+      "ms": 0.25119,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.92,
+      "ms": 0.24633000000000002,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.68,
+      "ms": 0.24714,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.08,
+      "ms": 0.24934,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.09,
+      "ms": 0.24780000000000002,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.82,
+      "ms": 0.24897,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 82.48,
+      "ms": 0.26267,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.81,
+      "ms": 0.25257,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.78,
+      "ms": 0.25266,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.65,
+      "ms": 0.25167,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.61,
+      "ms": 0.2539,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.78,
+      "ms": 0.25147,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.07,
+      "ms": 0.25177,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.14,
+      "ms": 0.25429,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 88.04,
+      "ms": 0.25184,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.73,
+      "ms": 0.24847,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.93,
+      "ms": 0.25475000000000003,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.02,
+      "ms": 0.25077,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.41,
+      "ms": 0.25088,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.34,
+      "ms": 0.25268,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.16,
+      "ms": 0.25194,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.43,
+      "ms": 0.25501,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.59,
+      "ms": 0.25331000000000004,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.78,
+      "ms": 0.25192,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.5,
+      "ms": 0.24906,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    }
+  ]
+}

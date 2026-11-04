@@ -1,0 +1,10 @@
+[
+  {
+    "script": "run_native_v5_regression.py",
+    "returncode": 0
+  },
+  {
+    "script": "run_development_reference.py",
+    "returncode": 0
+  }
+]

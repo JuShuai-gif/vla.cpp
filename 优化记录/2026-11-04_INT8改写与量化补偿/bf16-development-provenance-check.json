@@ -1,0 +1,12 @@
+{
+  "pruned": {
+    "observations": 90,
+    "original_checkpoint_unchanged": true,
+    "first_30_inputs_noise_tokens_match": true
+  },
+  "full": {
+    "observations": 90,
+    "original_checkpoint_unchanged": true,
+    "first_30_inputs_noise_tokens_match": true
+  }
+}

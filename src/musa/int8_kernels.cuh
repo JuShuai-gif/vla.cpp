@@ -7,9 +7,9 @@
 #define INT8_WARP 128
 #define PREFETCH_STEPS 2
 namespace vla { namespace int8_native {
-template<int TM,int TN,int NW=1,bool Compensate=false,bool Geglu=false> __global__ void row_wmma(const signed char*w,const signed char*x,const float*sw,const float*sx,float*y,int M,int N,int K,const half *extra=nullptr,const void *original=nullptr,const int *indices=nullptr,int R=0,bool half_input=false) {
+template<int TM,int TN,int NW=1,bool Compensate=false,bool Geglu=false,bool Packed4=false> __global__ void row_wmma(const signed char*w,const signed char*x,const float*sw,const float*sx,float*y,int M,int N,int K,const half *extra=nullptr,const void *original=nullptr,const int *indices=nullptr,int R=0,bool half_input=false) {
     using namespace mtmusa::wmma;
-    constexpr int MT=TM/32,NT=TN/32,LD=TN+4;
+    constexpr int MT=TM/32,NT=TN/32,Group=Geglu?MT/2:MT;
     int warp=threadIdx.x/INT8_WARP,row=(blockIdx.x*NW+warp)*(Geglu?TM/2:TM),col=blockIdx.y*TN,t=threadIdx.x%INT8_WARP;
     fragment<accumulator,32,32,32,int> cf[MT][NT];
     #pragma unroll
@@ -21,16 +21,33 @@ template<int TM,int TN,int NW=1,bool Compensate=false,bool Geglu=false> __global
     for(int kb=0;kb<K;kb+=32*PREFETCH_STEPS){
       fragment<matrix_a,32,32,32,signed char,row_major> af[PREFETCH_STEPS][MT];
       fragment<matrix_b,32,32,32,signed char,col_major> bf[PREFETCH_STEPS][NT];
+      if constexpr(Packed4){
+        // Four adjacent words hold both 32-wide K fragments for this lane.
+        #pragma unroll
+        for(int i=0;i<MT;++i){
+          const int wr=row/32+i%Group+(i/Group)*(M/64);
+          const int4 v=((const int4*)(w+((size_t)wr*(K/32)+kb/32)*1024))[t];
+          ((int*)&af[0][i])[0]=v.x;((int*)&af[0][i])[1]=v.y;
+          ((int*)&af[1][i])[0]=v.z;((int*)&af[1][i])[1]=v.w;
+        }
+        #pragma unroll
+        for(int j=0;j<NT;++j){
+          const int4 v=((const int4*)(x+((size_t)(col/32+j)*(K/32)+kb/32)*1024))[t];
+          ((int*)&bf[0][j])[0]=v.x;((int*)&bf[0][j])[1]=v.y;
+          ((int*)&bf[1][j])[0]=v.z;((int*)&bf[1][j])[1]=v.w;
+        }
+      }else{
       #pragma unroll
       for(int u=0;u<PREFETCH_STEPS;++u){
         if(kb+32*u<K){
           #pragma unroll
-          for(int i=0;i<MT;++i){const int *p=(const int*)(w+((size_t)(row/32+(Geglu?(i%(MT/2)+(i/(MT/2))*(M/64)):i))*(K/32)+kb/32+u)*1024);
+          for(int i=0;i<MT;++i){const int *p=(const int*)(w+((size_t)(row/32+(i%Group+(i/Group)*(M/64)))*(K/32)+kb/32+u)*1024);
               ((int*)&af[u][i])[0]=p[t];((int*)&af[u][i])[1]=p[128+t];}
           #pragma unroll
           for(int j=0;j<NT;++j){const int *p=(const int*)(x+((size_t)(col/32+j)*(K/32)+kb/32+u)*1024);
               ((int*)&bf[u][j])[0]=p[t];((int*)&bf[u][j])[1]=p[128+t];}
         }
+      }
       }
       #pragma unroll
       for(int u=0;u<PREFETCH_STEPS;++u){
@@ -83,11 +100,18 @@ template<typename T> __global__ void pack(const T*x,const float*inverse,signed c
     for(int k=t;k<K;k+=128)mx=fmaxf(mx,n<N?fabsf(float(x[(size_t)n*K+k])*inverse[k]):0.f);
     __shared__ float reduce[128];reduce[t]=mx;__syncthreads();
     for(int d=64;d;d>>=1){if(t<d)reduce[t]=fmaxf(reduce[t],reduce[t+d]);__syncthreads();}
-    const float scale=reduce[0]>0?__fdiv_rn(reduce[0],127.f):1.f;
+    const float scale=reduce[0]>0?fmaxf(__fdiv_rn(reduce[0],127.f),1.17549435e-38f):1.f;
+    const float inverse_scale=__fdiv_rn(1.f,scale);
     if(t==0)s[n]=scale;
-    for(int k=t;k<K;k+=128){
-        const size_t i=((size_t)(n/32)*(K/32)+k/32)*1024+(n%32/16)*512+((n%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
-        q[i]=n<N?(signed char)rintf(fminf(127.f,fmaxf(-127.f,__fdiv_rn(float(x[(size_t)n*K+k])*inverse[k],scale)))):0;
+    for(int k=t*4;k<K;k+=128*4){
+        const size_t i=K%64==0?((size_t)(n/32)*(K/32)+(k/64)*2)*1024+((n%16)*4+(k%16)/4+(k%32/16)*64)*16+(k/32%2)*8+(n%32/16)*4+k%4:((size_t)(n/32)*(K/32)+k/32)*1024+(n%32/16)*512+((n%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
+        unsigned bits=0;
+        #pragma unroll
+        for(int j=0;j<4;++j){
+            const signed char value=n<N?(signed char)rintf(fminf(127.f,fmaxf(-127.f,(float(x[(size_t)n*K+k+j])*inverse[k+j])*inverse_scale))):0;
+            bits|=unsigned((unsigned char)value)<<(8*j);
+        }
+        *((unsigned*)(q+i))=bits;
     }
 }
 

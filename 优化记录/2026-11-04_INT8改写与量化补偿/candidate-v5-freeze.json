@@ -1,0 +1,17 @@
+{
+  "candidate": "V5 native_int8 expert GateUp, SmoothQuant alpha .75, no outlier correction",
+  "scope": "18 expert GateUp projections W8A8 INT32; others floating; offline candidate only",
+  "acceptance": "per-action BF16 cosine >= .999; repeatable positive full-model and runtime-chain gain",
+  "hashes": {
+    "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so": "38714c0a4d4404b463c3a4f0bcc4dc7a761a55ca332511ed6adff42260589746",
+    "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla_core.so": "ffea4fabb1a4757d11b57bb6d8f4c5d6f2130e9f22cda8bf3422b9b6b66e3138",
+    "/home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-musa.so": "b9a2631e1b3493f62af01dbcfb6cdf5b6e1fe4487341b8aeda980784f24a16df",
+    "/home/skysi/code/vla.cpp-quant/scripts/pi05_musa_profiles.json": "b315ac7747906d29a011186d0ac1c695d45e90ae898002b3560278ec37f4bffe",
+    "/home/skysi/code/vla.cpp-quant/scripts/bench_pi05_precision.py": "887c7f9ebd57e72544be50c18c56bd32f3d9fc83af4821dcbc9a48b374e11713",
+    "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/pruned-native-policy.json": "d12b510ae63b566ad4e1c37832702d45dfde4bb7052734f98c2ee1d9bb42dd05",
+    "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-smooth/manifest.json": "ce9e6086b40f020f2da1f9fe0f281b1a69992c6a9408de151c5426aa9fc20a20",
+    "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/full-native-policy.json": "fa02f420c65433aca8df8995675c8fb834c7f7b1607fb3ec8d5fc7425bd79fb2",
+    "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-expert-smooth/manifest.json": "28fc304c1fa308d4e51c69c405dabf98bee0e8a75642b57d614da0b0c2568fa6"
+  },
+  "full_ctest": "42/42 passed; native-v5-ctest.txt"
+}

@@ -2,6 +2,8 @@
 
 The native replay consumes W8A8 codes directly. simulate() is a numerical
 reference using float BLAS; it is never evidence of INT8 inference speed.
+The model kernel uses reciprocal multiplication for activation rounding; at rare
+rounding boundaries its INT8 code can differ from the ideal division reference.
 The AWQ-style search uses mean-absolute-activation channel scaling adapted to
 W8A8. It is not the official weight-only AWQ implementation or its accuracy claim.
 Source: https://github.com/mit-han-lab/llm-awq/blob/main/awq/quantize/auto_scale.py

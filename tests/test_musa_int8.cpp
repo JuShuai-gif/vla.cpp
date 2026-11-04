@@ -9,13 +9,15 @@
 #include <chrono>
 #include <vector>
 #include <cmath>
+#include <cstdlib>
 #include <limits>
 #define CHECK(x) do{if(!(x)){fprintf(stderr,"failed line %d: %s\n",__LINE__,#x);return 1;}}while(0)
-int main(){
+int main(int argc,char **argv){
     const auto b=vla::backend_init("native-int8-test",4);
     if(!b.handle || !b.is_musa)return 77;
     CHECK(vla::musa_register_fused_ops() && vla::musa_small_gemm_supported());
-    const int K=96,M=128;
+    const int K=argc>1?std::atoi(argv[1]):96,M=128;
+    CHECK(K>=32 && K<=1024 && K%32==0);
     const auto root=std::filesystem::temp_directory_path()/("vla-int8-"+std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
     CHECK(std::filesystem::create_directory(root));
     auto *source=ggml_init({1024*1024,nullptr,false});
@@ -26,7 +28,7 @@ int main(){
     gguf_free(file);ggml_free(source);
     vla::gguf_reader reader("int8-test");CHECK(reader.open((root/"model.gguf").string()));
     auto rejects=[&](const std::vector<float>& inv,const std::vector<int32_t>& indices,bool trailing=false){
-        {std::ofstream f(root/"params",std::ios::binary);uint32_t h[]={0x31503849,K,(uint32_t)indices.size()};
+        {std::ofstream f(root/"params",std::ios::binary);uint32_t h[]={0x31503849,(uint32_t)K,(uint32_t)indices.size()};
          f.write((char*)h,sizeof(h));f.write((char*)inv.data(),inv.size()*4);f.write((char*)indices.data(),indices.size()*4);
          if(trailing)f.put('x');}
         auto *ctx=ggml_init({1024*1024,nullptr,true});
@@ -43,7 +45,7 @@ int main(){
     for(int R:{0,16}){
         std::vector<float> inv(K);for(int k=0;k<K;++k)inv[k]=k<R?0:float(k%5+1)/3;
         std::vector<int32_t> indices(R);for(int i=0;i<R;++i)indices[i]=i;
-        {std::ofstream f(root/"params",std::ios::binary);uint32_t h[]={0x31503849,K,(uint32_t)R};
+        {std::ofstream f(root/"params",std::ios::binary);uint32_t h[]={0x31503849,(uint32_t)K,(uint32_t)R};
          f.write((char*)h,sizeof(h));f.write((char*)inv.data(),K*4);f.write((char*)indices.data(),R*4);}
         auto *wc=ggml_init({1024*1024,nullptr,true});
         vla::WeightLoader loader("test",reader,wc,GGML_TYPE_F16);
@@ -55,7 +57,7 @@ int main(){
             sw[m]=mx?mx/127:1;
             for(int k=0;k<K;++k){
                 codes[m*K+k]=inv[k]?(int8_t)std::lrint(std::min(127.f,std::max(-127.f,weights[m*K+k]/inv[k]/sw[m]))):0;
-                size_t dest=((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+((m%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
+                size_t dest=K%64==0?((m/32)*(K/32)+(k/64)*2)*1024+((m%16)*4+(k%16)/4+(k%32/16)*64)*16+(k/32%2)*8+(m%32/16)*4+k%4:((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+((m%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
                 packed[dest]=codes[m*K+k];
             }
         }
@@ -74,6 +76,7 @@ int main(){
                 for(int i=0;i<K*N;++i){
                     float value=i<K&&repeat==0?0:float((i*13+repeat*7)%67-33)/11;
                     if(i%K==19)value*=13;
+                    if(repeat==1 && i/K==1)value*=1e-40f;
                     half_input[i]=ggml_fp32_to_fp16(value);input[i]=type==GGML_TYPE_F16?ggml_fp16_to_fp32(half_input[i]):value;
                 }
                 ggml_backend_tensor_set(x,type==GGML_TYPE_F16?(void*)half_input.data():(void*)input.data(),0,ggml_nbytes(x));
@@ -96,8 +99,8 @@ int main(){
                 }
                 for(int n=0;n<N;++n){
                     float mx=0;for(int k=0;k<K;++k)mx=std::max(mx,std::fabs(input[n*K+k]*inv[k]));
-                    const float sx=mx?mx/127:1;std::vector<int8_t> xq(K);
-                    for(int k=0;k<K;++k)xq[k]=(int8_t)std::lrint(std::min(127.f,std::max(-127.f,input[n*K+k]*inv[k]/sx)));
+                    const float sx=mx?std::max(mx/127,std::numeric_limits<float>::min()):1;const float inverse_sx=1.f/sx;std::vector<int8_t> xq(K);
+                    for(int k=0;k<K;++k)xq[k]=(int8_t)std::lrint(std::min(127.f,std::max(-127.f,(input[n*K+k]*inv[k])*inverse_sx)));
                     for(int m=0;m<M;++m){
                         int32_t acc=0;for(int k=0;k<K;++k)acc+=(int32_t)codes[m*K+k]*xq[k];
                         float ref=float(acc)*sw[m]*sx;

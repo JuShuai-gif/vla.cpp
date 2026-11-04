@@ -1,0 +1,1475 @@
+{
+  "precision": "int8-expert-smooth",
+  "scope": "V3 Graph OFF; selected kernels of one warmed observation; profiler-perturbed; not acceptance timing",
+  "kernels": [
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "count": 54,
+      "sum_ms": 16.11623,
+      "mean_ms": 0.29844870370370374,
+      "registers": [
+        75.0
+      ],
+      "shared_bytes": [
+        1044.0
+      ]
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "count": 54,
+      "sum_ms": 13.24017,
+      "mean_ms": 0.24518833333333334,
+      "registers": [
+        71.0
+      ],
+      "shared_bytes": [
+        20.0
+      ]
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "count": 51,
+      "sum_ms": 1.68775,
+      "mean_ms": 0.03309313725490196,
+      "registers": [
+        21.0
+      ],
+      "shared_bytes": [
+        1044.0
+      ]
+    }
+  ],
+  "raw": [
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.85,
+      "ms": 0.29677,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.25,
+      "ms": 0.24704,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.66,
+      "ms": 0.03393,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.92,
+      "ms": 0.29952999999999996,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.64,
+      "ms": 0.24435,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.99,
+      "ms": 0.03297,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.31,
+      "ms": 0.29874,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.42,
+      "ms": 0.24562,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.05,
+      "ms": 0.034,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.9,
+      "ms": 0.29732,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.06,
+      "ms": 0.2425,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.94,
+      "ms": 0.03239,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.83,
+      "ms": 0.30079,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.36,
+      "ms": 0.24645,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.86,
+      "ms": 0.03284,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.18,
+      "ms": 0.29726,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.87,
+      "ms": 0.24237,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.3,
+      "ms": 0.0345,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.19,
+      "ms": 0.29846,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.36,
+      "ms": 0.24480000000000002,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.47,
+      "ms": 0.03302,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.28,
+      "ms": 0.30191,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.81,
+      "ms": 0.24306,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.72,
+      "ms": 0.03289,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.84,
+      "ms": 0.2984,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.08,
+      "ms": 0.24324,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.37,
+      "ms": 0.033670000000000005,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.33,
+      "ms": 0.298,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.8,
+      "ms": 0.24413,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.18,
+      "ms": 0.03375,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.4,
+      "ms": 0.29694,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.81,
+      "ms": 0.24843,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.78,
+      "ms": 0.03279,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.11,
+      "ms": 0.29895,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.63,
+      "ms": 0.24281,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.89,
+      "ms": 0.03199,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.94,
+      "ms": 0.29867000000000005,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.31,
+      "ms": 0.24547,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.15,
+      "ms": 0.033159999999999995,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.18,
+      "ms": 0.29912,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.56,
+      "ms": 0.24549,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.83,
+      "ms": 0.032880000000000006,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.1,
+      "ms": 0.29914999999999997,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.0,
+      "ms": 0.24086000000000002,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.94,
+      "ms": 0.03293,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.17,
+      "ms": 0.29789,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.34,
+      "ms": 0.24716,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.06,
+      "ms": 0.032880000000000006,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.47,
+      "ms": 0.29701,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.82,
+      "ms": 0.24669,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.66,
+      "ms": 0.032740000000000005,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.38,
+      "ms": 0.29710000000000003,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.78,
+      "ms": 0.24396,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.84,
+      "ms": 0.29579000000000005,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.76,
+      "ms": 0.25406,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.79,
+      "ms": 0.03418,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.01,
+      "ms": 0.29886,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 82.25,
+      "ms": 0.24753,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.15,
+      "ms": 0.03368,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.37,
+      "ms": 0.29727,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.48,
+      "ms": 0.24367,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 60.46,
+      "ms": 0.0354,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.44,
+      "ms": 0.29763,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.34,
+      "ms": 0.24575,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.46,
+      "ms": 0.03182,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.96,
+      "ms": 0.29871,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.58,
+      "ms": 0.24342,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.44,
+      "ms": 0.032549999999999996,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.8,
+      "ms": 0.29883,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.98,
+      "ms": 0.24401,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.25,
+      "ms": 0.03325,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.97,
+      "ms": 0.29832,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 87.18,
+      "ms": 0.25056,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.46,
+      "ms": 0.03437,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.52,
+      "ms": 0.29810000000000003,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.72,
+      "ms": 0.24462,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.25,
+      "ms": 0.03183,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.33,
+      "ms": 0.29896,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.8,
+      "ms": 0.24787,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.85,
+      "ms": 0.033159999999999995,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.85,
+      "ms": 0.29747,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.46,
+      "ms": 0.24488000000000001,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.76,
+      "ms": 0.03269,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.06,
+      "ms": 0.29805000000000004,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.14,
+      "ms": 0.24624000000000001,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 60.83,
+      "ms": 0.03347,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.26,
+      "ms": 0.29901,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.34,
+      "ms": 0.24401,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.68,
+      "ms": 0.03218,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.9,
+      "ms": 0.29861000000000004,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.54,
+      "ms": 0.24432,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.54,
+      "ms": 0.033490000000000006,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.76,
+      "ms": 0.29982,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.44,
+      "ms": 0.24752000000000002,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.99,
+      "ms": 0.03313000000000001,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.52,
+      "ms": 0.29842,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.97,
+      "ms": 0.24956,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.8,
+      "ms": 0.03307,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.4,
+      "ms": 0.29712,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.89,
+      "ms": 0.24437,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.25,
+      "ms": 0.03345,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.16,
+      "ms": 0.29794,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.57,
+      "ms": 0.24139,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.78,
+      "ms": 0.032869999999999996,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.42,
+      "ms": 0.29744,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 86.52,
+      "ms": 0.24576,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.4,
+      "ms": 0.29796,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.17,
+      "ms": 0.2452,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.3,
+      "ms": 0.03325,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.15,
+      "ms": 0.29802999999999996,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.96,
+      "ms": 0.24445,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.34,
+      "ms": 0.032979999999999995,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.53,
+      "ms": 0.29772000000000004,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.9,
+      "ms": 0.24712,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.19,
+      "ms": 0.032979999999999995,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.61,
+      "ms": 0.29743,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.5,
+      "ms": 0.24506,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.44,
+      "ms": 0.032549999999999996,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.39,
+      "ms": 0.2973,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.82,
+      "ms": 0.24531,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.87,
+      "ms": 0.03312,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.0,
+      "ms": 0.29822000000000004,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.26,
+      "ms": 0.24735,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.82,
+      "ms": 0.03264,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.12,
+      "ms": 0.30029,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.14,
+      "ms": 0.24473,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.79,
+      "ms": 0.03301,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.72,
+      "ms": 0.30005000000000004,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 85.26,
+      "ms": 0.24507,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.57,
+      "ms": 0.03243,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.11,
+      "ms": 0.29892,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.6,
+      "ms": 0.24363,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.53,
+      "ms": 0.03343,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.18,
+      "ms": 0.29795,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.23,
+      "ms": 0.24599000000000001,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.78,
+      "ms": 0.03319,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.47,
+      "ms": 0.29839,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.37,
+      "ms": 0.24402000000000001,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.26,
+      "ms": 0.03321,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.53,
+      "ms": 0.29848,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.48,
+      "ms": 0.24506,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 65.18,
+      "ms": 0.03318,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.68,
+      "ms": 0.29946,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 82.99,
+      "ms": 0.2436,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.84,
+      "ms": 0.03296,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.08,
+      "ms": 0.29831,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.89,
+      "ms": 0.24275,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 61.39,
+      "ms": 0.03294,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.67,
+      "ms": 0.30022000000000004,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.47,
+      "ms": 0.24212,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 64.34,
+      "ms": 0.0332,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.61,
+      "ms": 0.30007,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 83.03,
+      "ms": 0.24555000000000002,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 62.03,
+      "ms": 0.032,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 76.08,
+      "ms": 0.30013,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 82.08,
+      "ms": 0.24468,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, false>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 63.73,
+      "ms": 0.03276,
+      "registers": 21.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::(anonymous namespace)::packed_norm_kernel<1, true>(float const*, float const*, float const*, float const*, char*, int, int, float, float const*)",
+      "grid": "64, 1, 1",
+      "block": "256, 1, 1",
+      "compute_pct": 75.73,
+      "ms": 0.29894,
+      "registers": 75.0,
+      "shared_bytes": 1044.0
+    },
+    {
+      "name": "void vla::int8_native::row_wmma<64, 64, 1, false, true>(signed char const*, signed char const*, float const*, float const*, float*, int, int, int, __half const*, void const*, int const*, int, bool)",
+      "grid": "128, 1, 1",
+      "block": "128, 1, 1",
+      "compute_pct": 84.19,
+      "ms": 0.24451,
+      "registers": 71.0,
+      "shared_bytes": 20.0
+    }
+  ]
+}

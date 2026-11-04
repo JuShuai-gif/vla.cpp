@@ -1,0 +1,16 @@
+[
+  {
+    "name": "native-v4-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-musa-quant",
+      "-j4",
+      "--target",
+      "test_musa_int8",
+      "bench_musa_native_int8",
+      "vla"
+    ],
+    "returncode": 1
+  }
+]

@@ -403,7 +403,8 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
                     }
                     scales[m]=maximum>0?maximum/127.f:1.f;
                     for(int64_t k=0;k<K;++k){
-                        const size_t dest=((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+
+                        const size_t dest=K%64==0?((m/32)*(K/32)+(k/64)*2)*1024+((m%16)*4+(k%16)/4+(k%32/16)*64)*16+(k/32%2)*8+(m%32/16)*4+k%4:
+                            ((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+
                             ((m%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
                         packed[dest]=(int8_t)std::lrint(std::min(127.f,std::max(-127.f,scaled[k]/scales[m])));
                     }

@@ -1,0 +1,242 @@
+diff --git a/src/loader.cpp b/src/loader.cpp
+index 15162b2..cb82f04 100644
+--- a/src/loader.cpp
++++ b/src/loader.cpp
+@@ -403,7 +403,8 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
+                     }
+                     scales[m]=maximum>0?maximum/127.f:1.f;
+                     for(int64_t k=0;k<K;++k){
+-                        const size_t dest=((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+
++                        const size_t dest=K%64==0?((m/32)*(K/32)+(k/64)*2)*1024+((m%16)*4+(k%16)/4+(k%32/16)*64)*16+(k/32%2)*8+(m%32/16)*4+k%4:
++                            ((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+
+                             ((m%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
+                         packed[dest]=(int8_t)std::lrint(std::min(127.f,std::max(-127.f,scaled[k]/scales[m])));
+                     }
+diff --git a/src/musa/int8_kernels.cuh b/src/musa/int8_kernels.cuh
+index e24e490..6e42bbf 100644
+--- a/src/musa/int8_kernels.cuh
++++ b/src/musa/int8_kernels.cuh
+@@ -7,9 +7,9 @@
+ #define INT8_WARP 128
+ #define PREFETCH_STEPS 2
+ namespace vla { namespace int8_native {
+-template<int TM,int TN,int NW=1,bool Compensate=false,bool Geglu=false> __global__ void row_wmma(const signed char*w,const signed char*x,const float*sw,const float*sx,float*y,int M,int N,int K,const half *extra=nullptr,const void *original=nullptr,const int *indices=nullptr,int R=0,bool half_input=false) {
++template<int TM,int TN,int NW=1,bool Compensate=false,bool Geglu=false,bool Packed4=false> __global__ void row_wmma(const signed char*w,const signed char*x,const float*sw,const float*sx,float*y,int M,int N,int K,const half *extra=nullptr,const void *original=nullptr,const int *indices=nullptr,int R=0,bool half_input=false) {
+     using namespace mtmusa::wmma;
+-    constexpr int MT=TM/32,NT=TN/32,LD=TN+4;
++    constexpr int MT=TM/32,NT=TN/32,Group=Geglu?MT/2:MT;
+     int warp=threadIdx.x/INT8_WARP,row=(blockIdx.x*NW+warp)*(Geglu?TM/2:TM),col=blockIdx.y*TN,t=threadIdx.x%INT8_WARP;
+     fragment<accumulator,32,32,32,int> cf[MT][NT];
+     #pragma unroll
+@@ -21,17 +21,34 @@ template<int TM,int TN,int NW=1,bool Compensate=false,bool Geglu=false> __global
+     for(int kb=0;kb<K;kb+=32*PREFETCH_STEPS){
+       fragment<matrix_a,32,32,32,signed char,row_major> af[PREFETCH_STEPS][MT];
+       fragment<matrix_b,32,32,32,signed char,col_major> bf[PREFETCH_STEPS][NT];
++      if constexpr(Packed4){
++        // Four adjacent words hold both 32-wide K fragments for this lane.
++        #pragma unroll
++        for(int i=0;i<MT;++i){
++          const int wr=row/32+i%Group+(i/Group)*(M/64);
++          const int4 v=((const int4*)(w+((size_t)wr*(K/32)+kb/32)*1024))[t];
++          ((int*)&af[0][i])[0]=v.x;((int*)&af[0][i])[1]=v.y;
++          ((int*)&af[1][i])[0]=v.z;((int*)&af[1][i])[1]=v.w;
++        }
++        #pragma unroll
++        for(int j=0;j<NT;++j){
++          const int4 v=((const int4*)(x+((size_t)(col/32+j)*(K/32)+kb/32)*1024))[t];
++          ((int*)&bf[0][j])[0]=v.x;((int*)&bf[0][j])[1]=v.y;
++          ((int*)&bf[1][j])[0]=v.z;((int*)&bf[1][j])[1]=v.w;
++        }
++      }else{
+       #pragma unroll
+       for(int u=0;u<PREFETCH_STEPS;++u){
+         if(kb+32*u<K){
+           #pragma unroll
+-          for(int i=0;i<MT;++i){const int *p=(const int*)(w+((size_t)(row/32+(Geglu?(i%(MT/2)+(i/(MT/2))*(M/64)):i))*(K/32)+kb/32+u)*1024);
++          for(int i=0;i<MT;++i){const int *p=(const int*)(w+((size_t)(row/32+(i%Group+(i/Group)*(M/64)))*(K/32)+kb/32+u)*1024);
+               ((int*)&af[u][i])[0]=p[t];((int*)&af[u][i])[1]=p[128+t];}
+           #pragma unroll
+           for(int j=0;j<NT;++j){const int *p=(const int*)(x+((size_t)(col/32+j)*(K/32)+kb/32+u)*1024);
+               ((int*)&bf[u][j])[0]=p[t];((int*)&bf[u][j])[1]=p[128+t];}
+         }
+       }
++      }
+       #pragma unroll
+       for(int u=0;u<PREFETCH_STEPS;++u){
+         if(kb+32*u<K){
+@@ -85,9 +102,15 @@ template<typename T> __global__ void pack(const T*x,const float*inverse,signed c
+     for(int d=64;d;d>>=1){if(t<d)reduce[t]=fmaxf(reduce[t],reduce[t+d]);__syncthreads();}
+     const float scale=reduce[0]>0?__fdiv_rn(reduce[0],127.f):1.f;
+     if(t==0)s[n]=scale;
+-    for(int k=t;k<K;k+=128){
+-        const size_t i=((size_t)(n/32)*(K/32)+k/32)*1024+(n%32/16)*512+((n%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
+-        q[i]=n<N?(signed char)rintf(fminf(127.f,fmaxf(-127.f,__fdiv_rn(float(x[(size_t)n*K+k])*inverse[k],scale)))):0;
++    for(int k=t*4;k<K;k+=128*4){
++        const size_t i=K%64==0?((size_t)(n/32)*(K/32)+(k/64)*2)*1024+((n%16)*4+(k%16)/4+(k%32/16)*64)*16+(k/32%2)*8+(n%32/16)*4+k%4:((size_t)(n/32)*(K/32)+k/32)*1024+(n%32/16)*512+((n%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
++        unsigned bits=0;
++        #pragma unroll
++        for(int j=0;j<4;++j){
++            const signed char value=n<N?(signed char)rintf(fminf(127.f,fmaxf(-127.f,__fdiv_rn(float(x[(size_t)n*K+k+j])*inverse[k+j],scale)))):0;
++            bits|=unsigned((unsigned char)value)<<(8*j);
++        }
++        *((unsigned*)(q+i))=bits;
+     }
+ }
+ 
+diff --git a/src/musa/vla_musa_fused.cu b/src/musa/vla_musa_fused.cu
+index b8b0f7f..d65756c 100644
+--- a/src/musa/vla_musa_fused.cu
++++ b/src/musa/vla_musa_fused.cu
+@@ -756,7 +756,7 @@ __global__ void packed_norm_kernel(const float * x,const float * o,const float *
+   for(int i=tid;i<h;i+=WG){
+    norm[row+i]=__float2half_rn(0.f);
+    if constexpr(Quantized){
+-    const size_t dest=((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
++    const size_t dest=h%64==0?((size_t)(r/32)*(h/32)+(i/64)*2)*1024+((r%16)*4+(i%16)/4+(i%32/16)*64)*16+(i/32%2)*8+(r%32/16)*4+i%4:((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
+     q[dest]=0;
+    }
+   }
+@@ -782,9 +782,15 @@ __global__ void packed_norm_kernel(const float * x,const float * o,const float *
+   for(int d=WG/2;d;d>>=1){if(tid<d)sums[tid]=fmaxf(sums[tid],sums[tid+d]);__syncthreads();}
+   const float scale=sums[0]>0?__fdiv_rn(sums[0],127.f):1.f;
+   if(tid==0)scales[r]=scale;
+-  for(int i=tid;i<h;i+=WG){
+-   const size_t dest=((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
+-   q[dest]=(signed char)rintf(fminf(127.f,fmaxf(-127.f,__fdiv_rn(float(norm[row+i])*inverse[i],scale))));
++  for(int i=tid*4;i<h;i+=WG*4){
++   const size_t dest=h%64==0?((size_t)(r/32)*(h/32)+(i/64)*2)*1024+((r%16)*4+(i%16)/4+(i%32/16)*64)*16+(i/32%2)*8+(r%32/16)*4+i%4:((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
++   unsigned bits=0;
++   #pragma unroll
++   for(int j=0;j<4;++j){
++    const signed char value=(signed char)rintf(fminf(127.f,fmaxf(-127.f,__fdiv_rn(float(norm[row+i+j])*inverse[i+j],scale))));
++    bits|=unsigned((unsigned char)value)<<(8*j);
++   }
++   *((unsigned*)(q+dest))=bits;
+   }
+  }
+ }
+diff --git a/src/musa/vla_musa_int8.cu b/src/musa/vla_musa_int8.cu
+index 6558e0d..cb09127 100644
+--- a/src/musa/vla_musa_int8.cu
++++ b/src/musa/vla_musa_int8.cu
+@@ -38,6 +38,14 @@ bool musa_int8_supports(const ggml_tensor * t){
+         ggml_is_contiguous(t->src[2]) && t->src[2]->ne[0]%(a->ne[0]+4)==0 &&
+         t->src[2]->ne[0]/(a->ne[0]+4)>=t->ne[1];
+ }
++template<int TM,int TN,int NW=1,bool Compensate=false,bool Geglu=false>
++static void launch_int8(musaStream_t st,const signed char*w,const signed char*x,const float*sw,const float*sx,
++        float*y,int M,int N,int K,int NP,const half *extra=nullptr,const void *original=nullptr,
++        const int *indices=nullptr,int R=0,bool half_input=false){
++    const dim3 grid(M/(TM*NW),NP/TN);
++    if(K%64==0)int8_native::row_wmma<TM,TN,NW,Compensate,Geglu,true><<<grid,128*NW,0,st>>>(w,x,sw,sx,y,M,N,K,extra,original,indices,R,half_input);
++    else int8_native::row_wmma<TM,TN,NW,Compensate,Geglu,false><<<grid,128*NW,0,st>>>(w,x,sw,sx,y,M,N,K,extra,original,indices,R,half_input);
++}
+ bool musa_int8_forward(ggml_tensor *t,void *stream){
+     const auto st=(musaStream_t)stream;const auto k=kind(t);const auto *a=t->src[0];
+     if(k==MUSA_INT8_PACK){
+@@ -51,15 +59,15 @@ bool musa_int8_forward(ggml_tensor *t,void *stream){
+         const auto *w=(const signed char*)a->data,*x=(const signed char*)t->src[2]->data;
+         const auto *sw=(const float*)t->src[1]->data,*sx=(const float*)(x+(size_t)NP*K);
+         if(k==MUSA_INT8_GEGLU){
+-            int8_native::row_wmma<64,64,1,false,true><<<dim3(M/64,1),128,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K);
++            launch_int8<64,64,1,false,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
+         }else if(t->src[4]){
+             const auto *extra=(const half*)t->src[4]->data;const auto *indices=(const int*)t->src[5]->data;
+             const int R=t->src[4]->ne[0];const bool half_input=t->src[3]->type==GGML_TYPE_F16;
+-            if(N<=64)int8_native::row_wmma<32,64,1,true><<<dim3(M/32,NP/64),128,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K,extra,t->src[3]->data,indices,R,half_input);
+-            else int8_native::row_wmma<64,160,2,true><<<dim3(M/128,NP/160),256,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K,extra,t->src[3]->data,indices,R,half_input);
++            if(N<=64)launch_int8<32,64,1,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP,extra,t->src[3]->data,indices,R,half_input);
++            else launch_int8<64,160,2,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP,extra,t->src[3]->data,indices,R,half_input);
+         }else{
+-            if(N<=64)int8_native::row_wmma<32,64,1><<<dim3(M/32,NP/64),128,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K);
+-            else int8_native::row_wmma<64,160,2><<<dim3(M/128,NP/160),256,0,st>>>(w,x,sw,sx,(float*)t->data,M,N,K);
++            if(N<=64)launch_int8<32,64,1>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
++            else launch_int8<64,160,2>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
+         }
+     }else return false;
+     return musaGetLastError()==musaSuccess;
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 12b242d..37b9608 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -272,5 +272,7 @@ if(GGML_MUSA)
+     add_executable(test_musa_int8 test_musa_int8.cpp)
+     target_link_libraries(test_musa_int8 PRIVATE vla_core)
+     add_test(NAME musa_native_int8 COMMAND test_musa_int8)
+-    set_tests_properties(musa_native_int8 PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
++    add_test(NAME musa_native_int8_vector COMMAND test_musa_int8 128)
++    add_test(NAME musa_native_int8_expert_k COMMAND test_musa_int8 1024)
++    set_tests_properties(musa_native_int8 musa_native_int8_vector musa_native_int8_expert_k PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
+ endif()
+diff --git a/tests/test_musa_int8.cpp b/tests/test_musa_int8.cpp
+index 3c48cd1..8fb0b61 100644
+--- a/tests/test_musa_int8.cpp
++++ b/tests/test_musa_int8.cpp
+@@ -9,13 +9,15 @@
+ #include <chrono>
+ #include <vector>
+ #include <cmath>
++#include <cstdlib>
+ #include <limits>
+ #define CHECK(x) do{if(!(x)){fprintf(stderr,"failed line %d: %s\n",__LINE__,#x);return 1;}}while(0)
+-int main(){
++int main(int argc,char **argv){
+     const auto b=vla::backend_init("native-int8-test",4);
+     if(!b.handle || !b.is_musa)return 77;
+     CHECK(vla::musa_register_fused_ops() && vla::musa_small_gemm_supported());
+-    const int K=96,M=128;
++    const int K=argc>1?std::atoi(argv[1]):96,M=128;
++    CHECK(K>=32 && K<=1024 && K%32==0);
+     const auto root=std::filesystem::temp_directory_path()/("vla-int8-"+std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
+     CHECK(std::filesystem::create_directory(root));
+     auto *source=ggml_init({1024*1024,nullptr,false});
+@@ -26,7 +28,7 @@ int main(){
+     gguf_free(file);ggml_free(source);
+     vla::gguf_reader reader("int8-test");CHECK(reader.open((root/"model.gguf").string()));
+     auto rejects=[&](const std::vector<float>& inv,const std::vector<int32_t>& indices,bool trailing=false){
+-        {std::ofstream f(root/"params",std::ios::binary);uint32_t h[]={0x31503849,K,(uint32_t)indices.size()};
++        {std::ofstream f(root/"params",std::ios::binary);uint32_t h[]={0x31503849,(uint32_t)K,(uint32_t)indices.size()};
+          f.write((char*)h,sizeof(h));f.write((char*)inv.data(),inv.size()*4);f.write((char*)indices.data(),indices.size()*4);
+          if(trailing)f.put('x');}
+         auto *ctx=ggml_init({1024*1024,nullptr,true});
+@@ -43,7 +45,7 @@ int main(){
+     for(int R:{0,16}){
+         std::vector<float> inv(K);for(int k=0;k<K;++k)inv[k]=k<R?0:float(k%5+1)/3;
+         std::vector<int32_t> indices(R);for(int i=0;i<R;++i)indices[i]=i;
+-        {std::ofstream f(root/"params",std::ios::binary);uint32_t h[]={0x31503849,K,(uint32_t)R};
++        {std::ofstream f(root/"params",std::ios::binary);uint32_t h[]={0x31503849,(uint32_t)K,(uint32_t)R};
+          f.write((char*)h,sizeof(h));f.write((char*)inv.data(),K*4);f.write((char*)indices.data(),R*4);}
+         auto *wc=ggml_init({1024*1024,nullptr,true});
+         vla::WeightLoader loader("test",reader,wc,GGML_TYPE_F16);
+@@ -55,7 +57,7 @@ int main(){
+             sw[m]=mx?mx/127:1;
+             for(int k=0;k<K;++k){
+                 codes[m*K+k]=inv[k]?(int8_t)std::lrint(std::min(127.f,std::max(-127.f,weights[m*K+k]/inv[k]/sw[m]))):0;
+-                size_t dest=((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+((m%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
++                size_t dest=K%64==0?((m/32)*(K/32)+(k/64)*2)*1024+((m%16)*4+(k%16)/4+(k%32/16)*64)*16+(k/32%2)*8+(m%32/16)*4+k%4:((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+((m%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
+                 packed[dest]=codes[m*K+k];
+             }
+         }
+diff --git "a/\344\274\230\345\214\226\350\256\260\345\275\225/2026-11-04_INT8\346\224\271\345\206\231\344\270\216\351\207\217\345\214\226\350\241\245\345\201\277/README.md" "b/\344\274\230\345\214\226\350\256\260\345\275\225/2026-11-04_INT8\346\224\271\345\206\231\344\270\216\351\207\217\345\214\226\350\241\245\345\201\277/README.md"
+index f53c195..707d2a6 100644
+--- "a/\344\274\230\345\214\226\350\256\260\345\275\225/2026-11-04_INT8\346\224\271\345\206\231\344\270\216\351\207\217\345\214\226\350\241\245\345\201\277/README.md"
++++ "b/\344\274\230\345\214\226\350\256\260\345\275\225/2026-11-04_INT8\346\224\271\345\206\231\344\270\216\351\207\217\345\214\226\350\241\245\345\201\277/README.md"
+@@ -86,3 +86,18 @@ split-k-screen.json：50 个独立算子 case（SplitK=1/2/4/8/16，3 个实际
+ full MCU 全范围采集进入多轮 application replay，耗时过长，已主动终止自有 profiler 与推理子进程；mcu-full-stopped.json、native-mcu-commands.json 和部分日志保存该事实，不作为有效热点报告。run_native_mcu_narrow.py 改用 pruned 中相同形状的专家算子、较窄 kernel filter，待执行。int2/int4 向量加载原型正在独立筛选，不影响已测试的 V3 模型实现。
+ 
+ 向量加载筛选已完成（vector-screen.json，20 case 均通过数学检查）：int4 这里表示一次加载四个 32-bit 字，不是 INT4 量化。专家 GateUp 最佳 INT8 动态量化+GEMM 约 0.426 ms，同行通用 F16 BLAS 约 0.579 ms；前缀最佳约 4.050 ms，仍慢于 F16 3.473 ms，专家 Down 也没有收益。这个寄存器装载原型尚未接入模型，不能从该算子结果宣称整模型收益。
++
++## V3 热点瓶颈已定位
++
++narrow 第一轮误用默认 function 名称过滤，模板参数选择器未命中矩阵乘和归一化，报告仅为部分数据。mcu-narrow-filter-note.txt 保留原因。narrow2 显式指定 demangled，两个进程均正常结束，标记范围内完整记录：
++
++| 内核 | 浮点次数/单次 ms | V3 INT8 次数/单次 ms |
++|---|---:|---:|
++| 专家 GateUp 矩阵乘 | 54 / 0.410056 | 与 GEGLU 融合 54 / 0.245188 |
++| GEGLU | 54 / 0.047522 | 已融合 |
++| 普通残差/AdaRMS | 105 / 0.031731 | 51 / 0.033093 |
++| 残差/AdaRMS + 动态量化/打包 | 无 | 54 / 0.298449 |
++
++见 v3-mcu-pruned2-*-summary.json 及原始 .log。量化归一化额外耗时抵消矩阵乘节省；这是 Graph OFF、受 MCU 干预的瓶颈诊断，不能替代普通 Graph ON 配对性能验收。
++
++V4 已在源码中改为 K 可被 64 整除时的四字向量装载布局，并把动态激活打包由逐字节存储改为四字节存储；K=96 等保留原布局。权重、独立量化和融合 AdaRMS 同步更新；布局双射及四字节对齐检查保存 native-v4-layout-check.json。正在进行 K=96/128/1024 GPU 数值和模型验证，尚未宣称改善。
