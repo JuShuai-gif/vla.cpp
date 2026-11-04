@@ -29,6 +29,45 @@ class PolicyTests(unittest.TestCase):
             self.path.write_text(json.dumps(dict(self.config,**invalid)))
             with self.subTest(invalid=invalid),self.assertRaises(ValueError):policy.inspect_policy(self.path)
 
+    def test_named_precision_resolution_and_no_silent_fallback(self):
+        (self.path.parent/'profiles.json').write_text('{}')
+        cfg=dict(self.config, device='0', optimization_profile='profiles.json',
+                 precision_profiles={'fp16-activations': {'runtime': {'act_dtype': 'f16'}},
+                                     'q8': {'model': 'candidate.gguf', 'manifest': 'candidate.quant.json'}},
+                 default_precision='fp16-activations')
+        self.path.write_text(json.dumps(cfg))
+        selected=policy._config(self.path)
+        self.assertEqual(selected['runtime']['act_dtype'],'f16')
+        self.assertEqual(selected['precision_status'],'experimental')
+        self.assertEqual(policy._config(self.path,'baseline')['runtime']['act_dtype'],'f32')
+        with self.assertRaisesRegex(ValueError,'Unknown precision'):
+            policy._config(self.path,'fp4-typo')
+        with self.assertRaisesRegex(ValueError,'Missing model'):
+            policy._config(self.path,'q8')
+        cfg['precision_profiles']['baseline']={}
+        self.path.write_text(json.dumps(cfg))
+        with self.assertRaisesRegex(ValueError,'reserved'):
+            policy._config(self.path)
+
+    def test_prompt_cache_reuses_metadata_but_not_state_or_task(self):
+        def field(value):
+            return SimpleNamespace(contents=Mock(return_value=value))
+        reader=SimpleNamespace(tensors=[
+            SimpleNamespace(name='state_q01',data=np.zeros(2,np.float32)),
+            SimpleNamespace(name='state_q99',data=np.ones(2,np.float32))],
+            fields={'pi05.norm_eps':field(1e-8),'pi05.tokenizer_max_length':field(64),
+                    'pi05.tokenizer.hf_json':field('embedded-tokenizer')})
+        tokenizer=SimpleNamespace(encode=lambda text:SimpleNamespace(ids=list(text.encode())))
+        with patch.object(policy,'_tokenizer',return_value=tokenizer):
+            a=policy.prepare_prompt(reader,'pick_up',[0.1,0.2])
+            b=policy.prepare_prompt(reader,'put_down',[0.8,0.9])
+            c=policy.prepare_prompt(reader,'pick_up',[0.1,0.2])
+        self.assertEqual(a,c)
+        self.assertNotEqual(a,b)
+        self.assertIn('Task: pick up, State: 25 51;',a[0])
+        reader.fields['pi05.tokenizer.hf_json'].contents.assert_called_once()
+        with self.assertRaises(ValueError):policy.prepare_prompt(reader,'pick',[float('nan'),0])
+
     def test_native_session_rng_warmup_and_cleanup(self):
         cfg=policy._config(self.path)
         spec=policy.PolicySpec(cfg['model'],('wrist','top'),7,7,50,

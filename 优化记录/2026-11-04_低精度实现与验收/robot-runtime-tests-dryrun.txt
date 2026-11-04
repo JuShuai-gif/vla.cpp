@@ -1,0 +1,721 @@
+E.E...EE.FEF.F..E.E....EE........................ARX controller logs: /tmp/tmp1fgqvb6x/arx5-check-w2vz4wif
+{"feedback": {"left": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "right": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "duration_s": 0.1, "note": "\u53cd\u9988\u68c0\u67e5\u5b8c\u6210\uff1b\u672a\u8c03\u7528\u4f7f\u80fd\u3001Home \u6216\u53d1\u9001\u76ee\u6807\u3002", "mode": "feedback", "joint_unit": "radians", "gripper_unit": "closed_fraction", "controllers_started": true}
+..{"feedback": {"left": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "right": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "duration_s": 0.1, "note": "\u53cd\u9988\u68c0\u67e5\u5b8c\u6210\uff1b\u672a\u8c03\u7528\u4f7f\u80fd\u3001Home \u6216\u53d1\u9001\u76ee\u6807\u3002", "mode": "feedback", "joint_unit": "radians", "gripper_unit": "closed_fraction", "controllers_started": false}
+..ARX controller logs: /tmp/tmpm7ejt5r1/arx5-check-m26lztvq
+............sssssssss............................................[flashrt config] precision=legacy/default source=engine config requested_precision=engine default use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+.s[flashrt config] precision=legacy/default source=engine config requested_precision=engine default use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+...s[flashrt config] precision=legacy/default source=runtime override requested_precision=fp4 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp4 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp8 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp8 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp16 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp16 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+.........................FFF..............................[startup] host_lock 必须是宿主机与容器共用的绝对锁文件路径
+[startup] host_lock 必须是宿主机与容器共用的绝对锁文件路径
+[startup] host_lock 与 ROBOT_RUNTIME_HOST_LOCK 不一致，请统一共享锁路径
+....[startup] --runtime docker 需要在任务 JSON 中设置 docker_container
+........................FFFFFFEFF...............................................................[RealSense] 检测到 RealSense，正在为 /home/skysi/code/robot_runtime/.venv/bin/python 安装 pyrealsense2==2.58.1.10581
+.[RealSense] 检测到 RealSense，正在为 /home/skysi/code/robot_runtime/.venv/bin/python 安装 pyrealsense2==2.58.1.10581
+............................................................................<unknown>:3268: SyntaxWarning: invalid escape sequence '\['
+<unknown>:3284: SyntaxWarning: invalid escape sequence '\['
+..Report: /home/skysi/code/robot_runtime-quant/validation/tmp/tmp778b3dr4/report.json
+Summary: /home/skysi/code/robot_runtime-quant/validation/tmp/tmp778b3dr4/report.md
+[robot io] starting pid=671164 port=test-can-not-opened
+[robot io] piper connected
+[robot io] read-only: arm enable and gripper initialization skipped
+.ssssss..s...............................ss.........................................................................................sss.ss......ss...ss.ss......................................................s................ss.ss.s.ss........................................................................................................................................................................................................................
+======================================================================
+ERROR: test_broken_local_reference_is_partial_without_filling_missing_stages (test_action_analysis.ActionAnalysisTests.test_broken_local_reference_is_partial_without_filling_missing_stages) (from_file=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 154, in test_broken_local_reference_is_partial_without_filling_missing_stages
+    result = analysis.read_actions(self.root, RUN_ID)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/action_analysis.py", line 417, in read_actions
+    with offline_run(root, run_id) as (path, _):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 83, in offline_run
+    raise ValueError('主机正忙，推理结束并释放设备后才能分析：'+str(exc)) from exc
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+ERROR: test_compacted_stages_match_legacy_analysis_directly_and_from_file (test_action_analysis.ActionAnalysisTests.test_compacted_stages_match_legacy_analysis_directly_and_from_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 140, in test_compacted_stages_match_legacy_analysis_directly_and_from_file
+    saved = analysis.read_actions(self.root, RUN_ID)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/action_analysis.py", line 417, in read_actions
+    with offline_run(root, run_id) as (path, _):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 83, in offline_run
+    raise ValueError('主机正忙，推理结束并释放设备后才能分析：'+str(exc)) from exc
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+ERROR: test_idle_full_scan_keeps_old_plan_and_selects_only_requested_scalar (test_action_analysis.ActionAnalysisTests.test_idle_full_scan_keeps_old_plan_and_selects_only_requested_scalar)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 294, in test_idle_full_scan_keeps_old_plan_and_selects_only_requested_scalar
+    result = analysis.read_actions(self.root, RUN_ID, start_s=19, window_s=2, dimension=13)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/action_analysis.py", line 417, in read_actions
+    with offline_run(root, run_id) as (path, _):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 83, in offline_run
+    raise ValueError('主机正忙，推理结束并释放设备后才能分析：'+str(exc)) from exc
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+ERROR: test_initialization_failure_is_retained_in_api_without_trace (test_action_analysis.ActionAnalysisTests.test_initialization_failure_is_retained_in_api_without_trace)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 204, in test_initialization_failure_is_retained_in_api_without_trace
+    result = analysis.read_actions(self.root, RUN_ID)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/action_analysis.py", line 417, in read_actions
+    with offline_run(root, run_id) as (path, _):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 83, in offline_run
+    raise ValueError('主机正忙，推理结束并释放设备后才能分析：'+str(exc)) from exc
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+ERROR: test_malformed_tail_is_reported_and_old_window_partial_is_explicit (test_action_analysis.ActionAnalysisTests.test_malformed_tail_is_reported_and_old_window_partial_is_explicit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 283, in test_malformed_tail_is_reported_and_old_window_partial_is_explicit
+    result = analysis.read_actions(self.root, RUN_ID)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/action_analysis.py", line 417, in read_actions
+    with offline_run(root, run_id) as (path, _):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 83, in offline_run
+    raise ValueError('主机正忙，推理结束并释放设备后才能分析：'+str(exc)) from exc
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+ERROR: test_read_api_is_bound_to_run_and_rejects_paths_and_symlinks (test_action_analysis.ActionAnalysisTests.test_read_api_is_bound_to_run_and_rejects_paths_and_symlinks)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 235, in test_read_api_is_bound_to_run_and_rejects_paths_and_symlinks
+    self.assertEqual(analysis.read_actions(self.root, RUN_ID)['samples'][0]['dispatched'], 0)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/action_analysis.py", line 417, in read_actions
+    with offline_run(root, run_id) as (path, _):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 83, in offline_run
+    raise ValueError('主机正忙，推理结束并释放设备后才能分析：'+str(exc)) from exc
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+ERROR: test_response_byte_cap_paginates_a_continuous_prefix (test_action_analysis.ActionAnalysisTests.test_response_byte_cap_paginates_a_continuous_prefix)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 220, in test_response_byte_cap_paginates_a_continuous_prefix
+    result = analysis.read_actions(self.root, RUN_ID)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/action_analysis.py", line 417, in read_actions
+    with offline_run(root, run_id) as (path, _):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 83, in offline_run
+    raise ValueError('主机正忙，推理结束并释放设备后才能分析：'+str(exc)) from exc
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+ERROR: test_window_before_first_submission_is_not_reported_as_missing_record (test_action_analysis.ActionAnalysisTests.test_window_before_first_submission_is_not_reported_as_missing_record)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 86, in test_window_before_first_submission_is_not_reported_as_missing_record
+    result=analysis.read_actions(self.root,RUN_ID,start_s=0,window_s=10)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/action_analysis.py", line 417, in read_actions
+    with offline_run(root, run_id) as (path, _):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 83, in offline_run
+    raise ValueError('主机正忙，推理结束并释放设备后才能分析：'+str(exc)) from exc
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+ERROR: test_workspace_route_uses_numeric_bounds_and_no_request_path (test_action_analysis.ActionAnalysisTests.test_workspace_route_uses_numeric_bounds_and_no_request_path)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 315, in test_workspace_route_uses_numeric_bounds_and_no_request_path
+    result = workspace.get(SimpleNamespace(root=self.root), '/api/run/actions', {'id':[RUN_ID]})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/workspace.py", line 83, in get
+    return read_actions(app.root, query.get('id', [''])[0], start_s=start, window_s=window,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/action_analysis.py", line 417, in read_actions
+    with offline_run(root, run_id) as (path, _):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 83, in offline_run
+    raise ValueError('主机正忙，推理结束并释放设备后才能分析：'+str(exc)) from exc
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+ERROR: test_external_inference_and_hardware_lease_reject_without_tail_fallback (test_offline_analysis.OfflineAnalysisTests.test_external_inference_and_hardware_lease_reject_without_tail_fallback)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_offline_analysis.py", line 56, in test_external_inference_and_hardware_lease_reject_without_tail_fallback
+    with HardwareLease(self.root, 'test-inference'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+======================================================================
+FAIL: test_large_line_is_skipped_and_full_scan_limit_is_enforced (test_action_analysis.ActionAnalysisTests.test_large_line_is_skipped_and_full_scan_limit_is_enforced)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 262, in test_large_line_is_skipped_and_full_scan_limit_is_enforced
+    with self.assertRaisesRegex(ValueError, '上限'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "上限" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_mismatched_run_binding_and_missing_retained_log (test_action_analysis.ActionAnalysisTests.test_mismatched_run_binding_and_missing_retained_log)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 272, in test_mismatched_run_binding_and_missing_retained_log
+    with self.assertRaisesRegex(ValueError, '编号不匹配'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "编号不匹配" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_nonregular_file_and_parent_escape_are_rejected (test_action_analysis.ActionAnalysisTests.test_nonregular_file_and_parent_escape_are_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_action_analysis.py", line 253, in test_nonregular_file_and_parent_escape_are_rejected
+    with self.assertRaisesRegex(ValueError, '普通文件'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "普通文件" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_cancel_endpoint_reaches_running_gripper_test (test_gripper_identification.GripperApiTests.test_cancel_endpoint_reaches_running_gripper_test)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_gripper_identification.py", line 386, in test_cancel_endpoint_reaches_running_gripper_test
+    self.assertIn('取消', self.app.job['error'])
+AssertionError: '取消' not found in '设备正在预览、检查、归零或推理；请结束当前操作后重试'
+
+======================================================================
+FAIL: test_confirmation_is_required_and_dual_roles_target_only_selected_can (test_gripper_identification.GripperApiTests.test_confirmation_is_required_and_dual_roles_target_only_selected_can)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_gripper_identification.py", line 355, in test_confirmation_is_required_and_dual_roles_target_only_selected_can
+    self.assertEqual(self.app.job['state'], 'done', self.app.job)
+AssertionError: 'error' != 'done'
+- error
++ done
+ : {'id': '0cccb7b00ed83005', 'operation': 'gripper-test', 'state': 'error', 'started': 1793769908.8785982, 'progress': [], 'result': None, 'error': '设备正在预览、检查、归零或推理；请结束当前操作后重试', 'robot_layout': 'dual', 'can_id': 'can4', 'can_identity': {'kind': 'serial', 'device_type': 'can', 'vendor': '1d50', 'product': '606f', 'serial': 'left', 'interface': '00', 'index': '0', 'usb_path': '/sys/usb/left'}, 'arm_role': 'left', 'finished': 1793769908.8952184}
+
+======================================================================
+FAIL: test_identify_can_without_binding_or_claiming_an_arm_role (test_gripper_identification.GripperApiTests.test_identify_can_without_binding_or_claiming_an_arm_role)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_gripper_identification.py", line 398, in test_identify_can_without_binding_or_claiming_an_arm_role
+    self.assertEqual(self.app.job['state'], 'done', self.app.job)
+AssertionError: 'error' != 'done'
+- error
++ done
+ : {'id': '5d8887c415c90b1d', 'operation': 'activate', 'state': 'error', 'started': 1793769909.3938022, 'progress': [], 'result': None, 'error': '设备正在预览、检查、归零或推理；请结束当前操作后重试', 'robot_layout': 'single', 'can_id': 'can5', 'can_identity': {'kind': 'serial', 'device_type': 'can', 'vendor': '1d50', 'product': '606f', 'serial': 'right', 'interface': '00', 'index': '0', 'usb_path': '/sys/usb/right'}, 'finished': 1793769909.411392}
+
+======================================================================
+FAIL: test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal (test_offline_analysis.OfflineAnalysisTests.test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal) (reader='read_actions')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_offline_analysis.py", line 34, in assert_rejected_before_analysis
+    with self.subTest(reader=reader.__name__), self.assertRaisesRegex(ValueError, pattern):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "当前主机仍有未结束" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal (test_offline_analysis.OfflineAnalysisTests.test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal) (reader='read_timing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_offline_analysis.py", line 34, in assert_rejected_before_analysis
+    with self.subTest(reader=reader.__name__), self.assertRaisesRegex(ValueError, pattern):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "当前主机仍有未结束" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal (test_offline_analysis.OfflineAnalysisTests.test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal) (reader='read_actions')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_offline_analysis.py", line 34, in assert_rejected_before_analysis
+    with self.subTest(reader=reader.__name__), self.assertRaisesRegex(ValueError, pattern):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "当前主机仍有未结束" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal (test_offline_analysis.OfflineAnalysisTests.test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal) (reader='read_timing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_offline_analysis.py", line 34, in assert_rejected_before_analysis
+    with self.subTest(reader=reader.__name__), self.assertRaisesRegex(ValueError, pattern):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "当前主机仍有未结束" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal (test_offline_analysis.OfflineAnalysisTests.test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal) (reader='read_actions')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_offline_analysis.py", line 34, in assert_rejected_before_analysis
+    with self.subTest(reader=reader.__name__), self.assertRaisesRegex(ValueError, pattern):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "当前主机仍有未结束" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal (test_offline_analysis.OfflineAnalysisTests.test_any_other_managed_run_blocks_even_when_latest_pointer_is_terminal) (reader='read_timing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_offline_analysis.py", line 34, in assert_rejected_before_analysis
+    with self.subTest(reader=reader.__name__), self.assertRaisesRegex(ValueError, pattern):
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "当前主机仍有未结束" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_idle_lock_covers_statistics_and_is_released_after_errors (test_offline_analysis.OfflineAnalysisTests.test_idle_lock_covers_statistics_and_is_released_after_errors)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_offline_analysis.py", line 75, in test_idle_lock_covers_statistics_and_is_released_after_errors
+    with self.assertRaisesRegex(ValueError, 'checked while analyzing'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "checked while analyzing" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+======================================================================
+FAIL: test_timing_lock_covers_aggregation_and_legacy_read (test_offline_analysis.OfflineAnalysisTests.test_timing_lock_covers_aggregation_and_legacy_read)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 89, in __enter__
+    fcntl.flock(self.handle, (fcntl.LOCK_SH if self.shared else fcntl.LOCK_EX) | fcntl.LOCK_NB)
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/offline_analysis.py", line 66, in offline_run
+    with HardwareLease(root, 'offline-analysis'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime-quant/src/robot_runtime/setup/runtime.py", line 98, in __enter__
+    raise RuntimeError("设备正在预览、检查、归零或推理；请结束当前操作后重试") from exc
+RuntimeError: 设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+The above exception was the direct cause of the following exception:
+
+ValueError: 主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime-quant/tests/python/test_offline_analysis.py", line 89, in test_timing_lock_covers_aggregation_and_legacy_read
+    with self.assertRaisesRegex(ValueError, 'timing checked while locked'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "timing checked while locked" does not match "主机正忙，推理结束并释放设备后才能分析：设备正在预览、检查、归零或推理；请结束当前操作后重试"
+
+----------------------------------------------------------------------
+Ran 807 tests in 108.785s
+
+FAILED (failures=14, errors=10, skipped=39)
+已关闭旧网页 PID=31337，远端端口 8767 已释放。
+远端端口 8767 已释放。
+已关闭旧网页 PID=31337，远端端口 8767 已释放。
+python

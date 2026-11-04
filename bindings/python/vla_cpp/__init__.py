@@ -21,16 +21,16 @@ from ._ffi import PIXEL_F32_RGB_01, PIXEL_U8, TIMING_NONE, TIMING_PHASE
 __all__ = ["Model", "load", "inspect_policy", "load_policy", "PIXEL_U8", "PIXEL_F32_RGB_01", "TIMING_NONE", "TIMING_PHASE"]
 
 
-def inspect_policy(config_path):
+def inspect_policy(config_path, *, precision=None):
     """Inspect a deployment JSON without loading native libraries or devices."""
     from .policy import inspect_policy as inspect
-    return inspect(config_path)
+    return inspect(config_path, precision=precision)
 
 
-def load_policy(config_path, *, task=None):
+def load_policy(config_path, *, task=None, precision=None):
     """Load a persistent pi05 session with named camera inputs and raw state."""
     from .policy import load_policy as load
-    return load(config_path, task=task)
+    return load(config_path, task=task, precision=precision)
 
 _lib = None
 

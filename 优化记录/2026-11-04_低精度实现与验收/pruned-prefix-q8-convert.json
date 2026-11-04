@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "architecture": "pi05",
+  "recipe": "prefix",
+  "default_type": "Q8_0",
+  "quantized_tensors": 126,
+  "payload_bytes_before": 7042473504,
+  "payload_bytes_after": 5184527904,
+  "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+  "output": "/home/skysi/code/vla.cpp-quant/validation/quant/models/pruned-prefix-q8.gguf",
+  "status": "verified",
+  "source_sha256": "a386cf4364d1af982bc17505689dd169aca3fb13718fce7ba30001b2d1221504",
+  "output_sha256": "08ac9f1ddc4b050731dc32f820d468b6dc9ae3b65187d108937e5226f3356ce9"
+}

@@ -1,0 +1,10 @@
+test_config_paths_and_invalid_options (test_policy_api.PolicyTests.test_config_paths_and_invalid_options) ... ok
+test_load_failure_releases_session (test_policy_api.PolicyTests.test_load_failure_releases_session) ... ok
+test_named_precision_resolution_and_no_silent_fallback (test_policy_api.PolicyTests.test_named_precision_resolution_and_no_silent_fallback) ... ok
+test_native_session_rng_warmup_and_cleanup (test_policy_api.PolicyTests.test_native_session_rng_warmup_and_cleanup) ... ok
+test_prompt_cache_reuses_metadata_but_not_state_or_task (test_policy_api.PolicyTests.test_prompt_cache_reuses_metadata_but_not_state_or_task) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.040s
+
+OK

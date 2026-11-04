@@ -1,0 +1,25 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+sample index=0 expected=-0.357922772 actual=-0.358395338
+sample index=1 expected=-3.21322775 actual=-3.21387482
+sample index=2 expected=0.984687541 actual=0.983708203
+sample index=3 expected=-1.40576046 actual=-1.40604353
+sample index=4 expected=-0.653241846 actual=-0.653151989
+sample index=5 expected=-1.0710605 actual=-1.07086968
+sample index=6 expected=0.561682031 actual=0.562047482
+sample index=7 expected=0.274694912 actual=0.274590433
+quant-check: backend = MUSA (device 0: M1000)
+{"type":"Q8_0","reference":"dequant-F16-BLAS","M":64,"N":50,"K":256,"runs":10,"p50_ms":0.308107,"checks":3200,"finite":true,"failed_values":0,"max_error":0.00384834409,"rmse":0.000730282705,"max_reference":10.1904803}

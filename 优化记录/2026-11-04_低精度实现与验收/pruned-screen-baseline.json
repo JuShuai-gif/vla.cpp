@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "precision": "baseline",
+  "resolved_parameters": {
+    "checkpoint": {
+      "value": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+      "source": "policy config / GGUF"
+    },
+    "task": {
+      "value": "",
+      "source": "policy config / GGUF"
+    },
+    "precision": {
+      "value": "baseline",
+      "source": "policy config / GGUF"
+    },
+    "precision_status": {
+      "value": "baseline",
+      "source": "policy config / GGUF"
+    },
+    "weight_types_on_disk": {
+      "value": [
+        "BF16",
+        "F32"
+      ],
+      "source": "policy config / GGUF"
+    },
+    "floating_weight_dtype": {
+      "value": "f16",
+      "source": "policy config / GGUF"
+    },
+    "act_dtype": {
+      "value": "f32",
+      "source": "policy config / GGUF"
+    },
+    "device_requested": {
+      "value": "0",
+      "source": "policy config / GGUF"
+    },
+    "seed": {
+      "value": 0,
+      "source": "policy config / GGUF"
+    },
+    "num_steps": {
+      "value": 3,
+      "source": "policy config / GGUF"
+    },
+    "optimization_variant": {
+      "value": "pruned",
+      "source": "policy config / GGUF"
+    },
+    "source_contract_verified": {
+      "value": false,
+      "source": "policy config / GGUF"
+    }
+  },
+  "samples": 12,
+  "split": "development",
+  "offset": 0,
+  "warmup": 3,
+  "load_seconds": 16.11387324599491,
+  "input_sha256": [
+    "7afdae9b5ee92242c5bdbf8daf17d087422244c8b689696534f08bbe86dd77f6",
+    "f3ec55ae7a2e8c88e1890f162131fd03931b5d0265e1a4f331548f743128cca6",
+    "4f0b9217dbcc1cf40e807e02e4459c0ac029d96591ca555849fd67afa597a8be",
+    "8031f03566c36c58c5378c3d156d33e56622847491be16c21f6c8e1b577828c9",
+    "aae0239404d5409048f5040f2fa1ce455f194812a5f325409728733249e3a479",
+    "98c03b9d018570d7b4d617b7d25a7972924982be8ef688fe9005769f544050e7",
+    "332200fa57564f4a4fcc24cb5b13b90944dc181d0eae7ecd0907b448e074bf30",
+    "8dfff00c02eaeb77f826fe1e243813bd162a6c93e65cbcf9c0371f4b75cd8653",
+    "f7ac55bb4fc5847631f67bc2d64f406466a9b3471f17e6c8c42f63a5605a9369",
+    "586306cd17c3cbb03fee3a0a56383db6a5a7a63c6c81b9d5d83d7c0984e42126",
+    "e5bdc5fed4e75ede158470cf02ccde6d1fad9bbd34811b3adf5ba59aa3f00e85",
+    "305839576ef79fa2da1827e4e843683c5469116c126febacfa4086436c40b665"
+  ],
+  "noise_sha256": [
+    "3a374c0d47c23b1a0010ad059a4612425bcb6bb523c8804aa5734a9140f1995d",
+    "3220a60129f16cb70faea5ea512c32516c56c344acd46b83985d28e9ba142dd0",
+    "26b66ddb542e5aab284701bfec4017199b3953d3a0193bc9bb4e6748e56492a6",
+    "2e52305e0adcec28aae06a969dbc46515be6410d78e4490c80f3c856f8842ede",
+    "b9d4577e2042c6eb81662f738a046c3aebb32ad3f2160348caf8ff028eac80da",
+    "05ee3ce6002997637d32d9d1dcf57f67696be424ce001f9d25dcb9d468aab307",
+    "a355aee3a81e573e56c34813f6c9fe2dd5133b7e53156459f469f7b7217a0099",
+    "19b749e07386e1932954cd8244961ee08cf60cdea0301897fdfcf830a1aa0839",
+    "9dc14f0d5eb5ebed5c0b22e393c70434f05776397b2abdbc81132c8db3ae043d",
+    "aabe930d9fcc2c6406906f94bb5718ba6245c7b8f6448dc95c000d5da10918c3",
+    "4165904f7aa93b6a0a3b913017e9fa2dc13147da71d9822afef9a6700f0e495c",
+    "82218ccdce9908ecea679a021a9060a8ac98894c979cc39e6b327e399eba6458"
+  ],
+  "task_sha256": [
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184"
+  ],
+  "episodes": [
+    5,
+    5,
+    5,
+    16,
+    16,
+    16,
+    19,
+    19,
+    19,
+    20,
+    20,
+    20
+  ],
+  "action_half_range": [
+    35.917503356933594,
+    70.14749908447266,
+    59.34035110473633,
+    21.1299991607666,
+    29.589000701904297,
+    43.61083984375,
+    50.0
+  ],
+  "units": {
+    "joints": "degrees",
+    "gripper": "mm",
+    "confirmed": false
+  },
+  "predict_ms": {
+    "p50": 478.5377764965233,
+    "p95": 486.9730127527873,
+    "p99": 493.78232735012716,
+    "min": 470.7305650008493,
+    "max": 495.4846559994621,
+    "mean": 478.45533649948874
+  },
+  "native_ms": {
+    "p50": 472.06306149746524,
+    "p95": 480.59975125106575,
+    "p99": 486.9933054532885,
+    "min": 464.1380350003601,
+    "max": 488.59169400384417,
+    "mean": 471.856177415854
+  },
+  "preprocess_ms": {
+    "p50": 6.43226899774163,
+    "p95": 7.545284993830136,
+    "p99": 8.291736194514671,
+    "min": 5.770793002739083,
+    "max": 8.478348994685803,
+    "mean": 6.494523581447235
+  },
+  "raw_predict_ms": [
+    470.7305650008493,
+    471.2289349990897,
+    473.4338150010444,
+    479.1173869962222,
+    477.7757749980083,
+    480.00894100550795,
+    479.13218699977733,
+    479.0991669942741,
+    477.97638599877246,
+    479.98824100068305,
+    477.4879830001737,
+    495.4846559994621
+  ],
+  "raw_native_ms": [
+    464.1380350003601,
+    464.5541560021229,
+    464.85565500188386,
+    473.2431819938938,
+    471.60041500319494,
+    474.0608889987925,
+    472.73900199797936,
+    472.52211999875726,
+    471.6040029961732,
+    473.37559199513635,
+    470.98938599810936,
+    488.59169400384417
+  ],
+  "raw_preprocess_ms": [
+    6.494117995316628,
+    6.56604599498678,
+    8.478348994685803,
+    5.770793002739083,
+    6.0691079997923225,
+    5.84276099834824,
+    6.292172998655587,
+    6.469513995398302,
+    6.2659300019731745,
+    6.508598002255894,
+    6.395024000084959,
+    6.781868993130047
+  ],
+  "environment": {
+    "VLA_PI05_U8_PATCH": "1",
+    "VLA_PI05_LAST_KV_ONLY": "1",
+    "VLA_MUSA_GEMMA_ATTN": "fused-denoise",
+    "VLA_PI05_PIN_MAIN_INPUT": "1",
+    "VLA_PI05_ASYNC_VISION": "1",
+    "VLA_MUSA_VISION_PACK": "1",
+    "VLA_PI05_RES_ADARMS": "1",
+    "VLA_PI05_KV_REUSE": "1",
+    "VLA_PI05_GEGLU_PACK": "1",
+    "VLA_PI05_KV_DIRECT": "1",
+    "VLA_MUSA_ATTN_DIRECT_OUT": "1",
+    "VLA_PI05_F32_PATCH": "1",
+    "VLA_PI05_VISION_DIRECT": "1",
+    "VLA_PI05_VISION_NO_OUT_COPY": "1",
+    "VLA_MUSA_VISION_SDPA": "1",
+    "VLA_MUSA_GEGLU_F16": "1",
+    "VLA_MUSA_SMALL_PIPE": "shape",
+    "VLA_MUSA_GEMMA_FLAT_AV": "denoise",
+    "VLA_LOAD_THREADS": "4",
+    "VLA_MUSA_VISION_EPILOGUE": "all",
+    "VLA_PI05_PRUNED_BATCH": "1",
+    "VLA_MUSA_SMALL_GEMM": "auto",
+    "VLA_PI05_ACTION_EDGES": "1",
+    "VLA_MUSA_GEMMA_FLAT_QK": "denoise",
+    "VLA_PI05_VISION_QKV": "1",
+    "VLA_PI05_NORM_PACK": "1",
+    "VLA_PI05_PRUNE_MEAN": "1",
+    "VLA_PI05_CROSS_ADARMS": "1",
+    "VLA_PI05_HOST_INPUT": "pinned",
+    "VLA_LOAD_DIRECT_FUSED": "1",
+    "VLA_PI05_ROPE_TABLE": "1",
+    "VLA_LIBRARY": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "VLA_DEVICE": "0",
+    "VLA_N_THREADS": "4"
+  },
+  "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+  "cpu": "aarch64",
+  "code_commit": "3dc88d79ab6be9bfa3e513c58c7ecd453d1d3872",
+  "dirty_diff_sha256": "1851713bf766bf89a4a73358e557043c594c226f0e1e297b410b27e90f59dd56",
+  "scope": "resident public API, no camera acquisition, robot I/O or closed-loop evidence"
+}

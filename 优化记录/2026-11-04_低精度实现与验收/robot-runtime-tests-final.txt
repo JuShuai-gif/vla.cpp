@@ -1,0 +1,33 @@
+.................................................ARX controller logs: /tmp/tmpqs_u3_rb/arx5-check-a3b1i0t5
+{"feedback": {"left": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "right": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "duration_s": 0.1, "note": "\u53cd\u9988\u68c0\u67e5\u5b8c\u6210\uff1b\u672a\u8c03\u7528\u4f7f\u80fd\u3001Home \u6216\u53d1\u9001\u76ee\u6807\u3002", "mode": "feedback", "joint_unit": "radians", "gripper_unit": "closed_fraction", "controllers_started": true}
+..{"feedback": {"left": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "right": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, "duration_s": 0.1, "note": "\u53cd\u9988\u68c0\u67e5\u5b8c\u6210\uff1b\u672a\u8c03\u7528\u4f7f\u80fd\u3001Home \u6216\u53d1\u9001\u76ee\u6807\u3002", "mode": "feedback", "joint_unit": "radians", "gripper_unit": "closed_fraction", "controllers_started": false}
+..ARX controller logs: /tmp/tmpr28tfs3y/arx5-check-5r20ujea
+............sssssssss............................................[flashrt config] precision=legacy/default source=engine config requested_precision=engine default use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+.s[flashrt config] precision=legacy/default source=engine config requested_precision=engine default use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+...s[flashrt config] precision=legacy/default source=runtime override requested_precision=fp4 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp4 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp8 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp8 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp16 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+[flashrt config] precision=legacy/default source=runtime override requested_precision=fp16 use_fp4=None use_fp8=None use_fp16=None num_steps=None checkpoint=None
+..........................................................[startup] host_lock 必须是宿主机与容器共用的绝对锁文件路径
+[startup] host_lock 必须是宿主机与容器共用的绝对锁文件路径
+[startup] host_lock 与 ROBOT_RUNTIME_HOST_LOCK 不一致，请统一共享锁路径
+....[startup] --runtime docker 需要在任务 JSON 中设置 docker_container
+...........................................................................................[RealSense] 检测到 RealSense，正在为 /home/skysi/code/robot_runtime/.venv/bin/python 安装 pyrealsense2==2.58.1.10581
+.[RealSense] 检测到 RealSense，正在为 /home/skysi/code/robot_runtime/.venv/bin/python 安装 pyrealsense2==2.58.1.10581
+............................................................................<unknown>:3268: SyntaxWarning: invalid escape sequence '\['
+<unknown>:3284: SyntaxWarning: invalid escape sequence '\['
+..Report: /home/skysi/code/robot_runtime-quant/validation/tmp/tmp8rnjbx38/report.json
+Summary: /home/skysi/code/robot_runtime-quant/validation/tmp/tmp8rnjbx38/report.md
+[robot io] starting pid=656899 port=test-can-not-opened
+[robot io] piper connected
+[robot io] read-only: arm enable and gripper initialization skipped
+.ssssss..s...............................ss.........................................................................................sss.ss......ss...ss.ss......................................................s................ss.ss.s.ss......................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 805 tests in 110.227s
+
+OK (skipped=39)
+已关闭旧网页 PID=31337，远端端口 8767 已释放。
+远端端口 8767 已释放。
+已关闭旧网页 PID=31337，远端端口 8767 已释放。

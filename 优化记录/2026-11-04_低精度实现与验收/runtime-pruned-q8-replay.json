@@ -1,0 +1,184 @@
+{
+  "scope": "saved observations; no robot/camera/network I/O",
+  "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+  "observation_sha256": "7afdae9b5ee92242c5bdbf8daf17d087422244c8b689696534f08bbe86dd77f6",
+  "samples": 1,
+  "warmup": 3,
+  "initialization_warmup_runs": 3,
+  "seconds": 5.016152059004526,
+  "cpu_seconds": 9.961371839999998,
+  "maxrss_native_units": 2415744,
+  "predict_ms": {
+    "count": 1,
+    "mean": 5008.169097003702,
+    "p50": 5008.169097003702,
+    "p95": 5008.169097003702,
+    "p99": 5008.169097003702,
+    "max": 5008.169097003702
+  },
+  "backend_timings_ms": {
+    "preprocess_ms": {
+      "count": 1,
+      "mean": 4.192737003904767,
+      "p50": 4.192737003904767,
+      "p95": 4.192737003904767,
+      "p99": 4.192737003904767,
+      "max": 4.192737003904767
+    },
+    "native_call_ms": {
+      "count": 1,
+      "mean": 5003.843234000669,
+      "p50": 5003.843234000669,
+      "p95": 5003.843234000669,
+      "p99": 5003.843234000669,
+      "max": 5003.843234000669
+    },
+    "postprocess_ms": {
+      "count": 1,
+      "mean": 0.06792299973312765,
+      "p50": 0.06792299973312765,
+      "p95": 0.06792299973312765,
+      "p99": 0.06792299973312765,
+      "max": 0.06792299973312765
+    }
+  },
+  "action_shape": [
+    50,
+    7
+  ],
+  "network_requests": 0,
+  "resolved_parameters": {
+    "checkpoint": {
+      "value": "/home/skysi/code/vla.cpp-quant/validation/quant/models/pruned-prefix-mlp-q8.gguf",
+      "source": "policy config / GGUF"
+    },
+    "task": {
+      "value": "pick up the cube",
+      "source": "policy config / GGUF"
+    },
+    "precision": {
+      "value": "q8-prefix-mlp",
+      "source": "policy config / GGUF"
+    },
+    "precision_status": {
+      "value": "experimental",
+      "source": "policy config / GGUF"
+    },
+    "weight_types_on_disk": {
+      "value": [
+        "BF16",
+        "F32",
+        "Q8_0"
+      ],
+      "source": "policy config / GGUF"
+    },
+    "floating_weight_dtype": {
+      "value": "f16",
+      "source": "policy config / GGUF"
+    },
+    "act_dtype": {
+      "value": "f32",
+      "source": "policy config / GGUF"
+    },
+    "device_requested": {
+      "value": "0",
+      "source": "policy config / GGUF"
+    },
+    "seed": {
+      "value": 0,
+      "source": "policy config / GGUF"
+    },
+    "num_steps": {
+      "value": 3,
+      "source": "policy config / GGUF"
+    },
+    "optimization_variant": {
+      "value": "pruned",
+      "source": "policy config / GGUF"
+    },
+    "source_contract_verified": {
+      "value": false,
+      "source": "policy config / GGUF"
+    }
+  },
+  "config": {
+    "schema_version": 2,
+    "policy_backend": "vla_cpp",
+    "robot_layout": "single",
+    "devices": {
+      "arms": {
+        "single": null
+      },
+      "cameras": {
+        "top": null,
+        "wrist": null
+      }
+    },
+    "active_profile": "pruned",
+    "profiles": {
+      "pruned": {
+        "policy_config": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_低精度实现与验收/pruned-policy.json",
+        "inference_backend": "standard",
+        "task": "pick up the cube",
+        "warmup_steps": 3,
+        "execution_horizon": 50,
+        "execution_period": 0.03333333333333333,
+        "replan_threshold": 0,
+        "rtc_blend_steps": 5,
+        "enable_filter_smooth": false,
+        "enable_rtc_smooth": false,
+        "warmstep": false,
+        "rl_joint_offsets": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "joint_unit": "degrees",
+        "gripper_mapping": "linear",
+        "camera_map": {
+          "observation.images.top": "top",
+          "observation.images.wrist": "wrist"
+        },
+        "execute_robot": false,
+        "dry_run": true,
+        "precision": "q8-prefix-mlp"
+      },
+      "full": {
+        "policy_config": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_低精度实现与验收/full-policy.json",
+        "inference_backend": "standard",
+        "task": "pick up the cube",
+        "warmup_steps": 3,
+        "execution_horizon": 50,
+        "execution_period": 0.03333333333333333,
+        "replan_threshold": 0,
+        "rtc_blend_steps": 5,
+        "enable_filter_smooth": false,
+        "enable_rtc_smooth": false,
+        "warmstep": false,
+        "rl_joint_offsets": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "joint_unit": "degrees",
+        "gripper_mapping": "linear",
+        "camera_map": {
+          "observation.images.top": "top",
+          "observation.images.wrist": "wrist"
+        },
+        "execute_robot": false,
+        "dry_run": true,
+        "precision": "baseline"
+      }
+    },
+    "last_checks": {},
+    "python_executable": "/home/skysi/code/robot_runtime/.venv/bin/python"
+  },
+  "profile": "pruned"
+}

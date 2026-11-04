@@ -1,0 +1,16 @@
+[
+  {
+    "variant": "pruned",
+    "cases": 100,
+    "exact_match": true,
+    "before_p50_ms": 2.359815996896941,
+    "after_p50_ms": 0.21501549417735077
+  },
+  {
+    "variant": "full",
+    "cases": 100,
+    "exact_match": true,
+    "before_p50_ms": 90.2508389990544,
+    "after_p50_ms": 0.42705150190158747
+  }
+]

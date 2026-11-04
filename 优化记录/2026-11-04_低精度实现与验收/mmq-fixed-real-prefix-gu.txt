@@ -1,0 +1,15 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+VLA_MUSA_QUANT route=mmq weight=quant_check_q8 dtype=q8_0 M=32768 N=320 K=2048 cc=1049120 smpb=73728 smpbo=73728
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+VLA_MUSA_QUANT route=mmq weight=quant_check_q8 dtype=q8_0 M=32768 N=320 K=2048 cc=1049120 smpb=73728 smpbo=73728
+sample index=0 expected=2.80748881 actual=2.80748916
+sample index=2560 expected=-12.9745746 actual=-12.974575
+sample index=5121 expected=-0.210509257 actual=0.0550671481
+sample index=7681 expected=-5.79865534 actual=0
+sample index=10242 expected=7.28267983 actual=0.159089625
+sample index=12803 expected=-10.9133024 actual=0
+sample index=15363 expected=8.15700259 actual=0
+sample index=17924 expected=-6.94558615 actual=0.132041574
+quant-check: backend = MUSA (device 0: M1000)
+{"type":"Q8_0","reference":"MMQ-D4","M":32768,"N":320,"K":2048,"runs":10,"p50_ms":180.159970,"checks":4096,"finite":false,"failed_values":3981,"max_error":4.83383411e+36,"rmse":nan,"max_reference":16.7597715}

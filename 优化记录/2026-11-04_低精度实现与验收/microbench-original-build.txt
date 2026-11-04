@@ -1,0 +1,10 @@
+tests/bench_musa_quant.cpp:37:5: warning: 'ggml_mul_mat_set_prec' is deprecated: use ggml_prec_set_acc() instead [-Wdeprecated-declarations]
+    ggml_mul_mat_set_prec(out, GGML_PREC_F32);
+    ^
+build-deps/llama/ggml/include/ggml.h:1489:5: note: 'ggml_mul_mat_set_prec' has been explicitly marked deprecated here
+    GGML_DEPRECATED(GGML_API void ggml_mul_mat_set_prec(
+    ^
+build-deps/llama/ggml/include/ggml.h:192:61: note: expanded from macro 'GGML_DEPRECATED'
+#    define GGML_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+                                                            ^
+1 warning generated.

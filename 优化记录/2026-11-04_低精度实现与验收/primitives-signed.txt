@@ -1,0 +1,2 @@
+warp_size=128 sm_count=8
+{"dp4a_errors":0,"quant_errors":0,"scale_errors":0}

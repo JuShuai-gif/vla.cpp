@@ -227,7 +227,7 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor 
         return;
     }
 #endif"""
-    if replacement not in text:
+    if "static bool ggml_musa_small_f32_matmul(" not in text:
         if text.count(anchor) != 1:
             raise SystemExit(f"{path}: missing MUSA F32 projection anchor")
         text = text.replace(anchor, replacement)
@@ -424,6 +424,89 @@ extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffe
         else:
             assert text.count(anchor) == 1
             path.write_text(text.replace(anchor, addition + anchor))
+
+
+    # Trace the selected quantized route separately from timed runs. The BLAS
+    # override is a conservative reference, never a bypass of MMQ device guards.
+    path = root / 'ggml/src/ggml-cuda/ggml-cuda.cu'
+    text = path.read_text()
+    anchor = 'static void ggml_cuda_mul_mat(ggml_backend_cuda_context & ctx, const ggml_tensor * src0, const ggml_tensor * src1, ggml_tensor * dst) {'
+    addition = r'''
+#ifdef GGML_USE_MUSA
+static void vla_musa_trace_quant(const char * route, const ggml_tensor * w, const ggml_tensor * x) {
+    static const bool enabled = std::getenv("GGML_MUSA_TRACE_QUANT") != nullptr;
+    if (enabled && ggml_is_quantized(w->type)) {
+        const auto & dev = ggml_cuda_info().devices[ggml_cuda_get_device()];
+        std::fprintf(stderr, "VLA_MUSA_QUANT route=%s weight=%s dtype=%s M=%lld N=%lld K=%lld cc=%d smpb=%zu smpbo=%zu\n",
+            route, w->name, ggml_type_name(w->type), (long long)w->ne[1], (long long)x->ne[1],
+            (long long)w->ne[0], dev.cc, (size_t)dev.smpb, (size_t)dev.smpbo);
+    }
+}
+#else
+static void vla_musa_trace_quant(const char *, const ggml_tensor *, const ggml_tensor *) {}
+#endif
+
+'''
+    if addition not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit('Missing quantized dispatch trace anchor')
+        text = text.replace(anchor, addition + anchor)
+        begin = text.index(anchor)
+        end = text.index('// returns true when ggml_cuda_mul_mat_id', begin)
+        region = text[begin:end]
+        for call, route in [('ggml_cuda_mul_mat_q(ctx, src0, src1, nullptr, dst);', 'mmq'),
+                            ('ggml_cuda_mul_mat_vec_q(ctx, src0, src1, nullptr, dst);', 'mmvq'),
+                            ('ggml_cuda_mul_mat_cublas(ctx, src0, src1, dst);', 'blas')]:
+            region = region.replace(call, f'vla_musa_trace_quant("{route}", src0, src1);\n        ' + call)
+        override = r'''
+#ifdef GGML_USE_MUSA
+    static const bool quant_blas = [] {
+        const char * route = std::getenv("GGML_MUSA_QUANT_ROUTE");
+        if (!route || strcmp(route, "auto") == 0) return false;
+        if (strcmp(route, "blas") == 0) return true;
+        GGML_ABORT("GGML_MUSA_QUANT_ROUTE must be auto or blas");
+    }();
+    if (quant_blas && ggml_is_quantized(src0->type)) {
+        vla_musa_trace_quant("blas-forced", src0, src1);
+        ggml_cuda_mul_mat_cublas(ctx, src0, src1, dst);
+        return;
+    }
+#endif
+'''
+        region = region.replace('    GGML_TENSOR_BINARY_OP_LOCALS', override + '    GGML_TENSOR_BINARY_OP_LOCALS')
+        text = text[:begin] + region + text[end:]
+        path.write_text(text)
+
+
+
+    # MUSA's host CC includes a vendor offset, whereas device __CUDA_ARCH__
+    # is absent. Upstream selected Ampere on the host and Pascal on the device,
+    # disagreeing on tile dimensions, launch shape and shared-memory layout.
+    path = root / 'ggml/src/ggml-cuda/mmq.cuh'
+    text = path.read_text()
+    anchors = [
+        'static __host__ ggml_cuda_mmq_config ggml_cuda_mmq_get_config(const ggml_type type, const int J, const bool fallback, const int cc, const ggml_prec prec_src1 = GGML_PREC_Q8) {',
+        'static constexpr __device__ ggml_cuda_mmq_config ggml_cuda_mmq_get_config(ggml_type type, int J, bool fallback, ggml_prec prec_src1 = GGML_PREC_Q8) {',
+    ]
+    for anchor in anchors:
+        replacement = anchor + "\n#ifdef GGML_USE_MUSA\n    return ggml_cuda_mmq_get_config_pascal_dp4a(type, J, fallback);\n#endif"
+        if replacement not in text:
+            if text.count(anchor) != 1:
+                raise SystemExit('Missing MUSA MMQ configuration anchor')
+            text = text.replace(anchor, replacement)
+    path.write_text(text)
+
+
+
+    # M1000 reports warpSize=128, but this CUDA-derived kernel indexes logical
+    # 32-lane subwarps. Launch x=32 to match threadIdx indexing on the device.
+    anchor = "    const int warp_size = ggml_cuda_info().devices[id].warp_size;"
+    replacement = "#ifdef GGML_USE_MUSA\n    const int warp_size = 32;\n#else\n" + anchor + "\n#endif"
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit('Missing MUSA MMQ launch warp anchor')
+        text = text.replace(anchor, replacement)
+    path.write_text(text)
 
 
 if __name__ == "__main__":

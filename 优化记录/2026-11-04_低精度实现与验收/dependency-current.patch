@@ -1,0 +1,476 @@
+diff --git a/ggml/src/ggml-cuda/common.cuh b/ggml/src/ggml-cuda/common.cuh
+index 5363dd0..9f0b734 100644
+--- a/ggml/src/ggml-cuda/common.cuh
++++ b/ggml/src/ggml-cuda/common.cuh
+@@ -1280,6 +1280,7 @@ struct ggml_cuda_graph {
+     struct node_properties {
+         ggml_tensor node;
+         void *   node_src_data_ptrs[GGML_MAX_SRC];
++        ggml_type node_src_types[GGML_MAX_SRC];
+         int64_t  node_src_ne[GGML_MAX_SRC][GGML_MAX_DIMS];
+         size_t   node_src_nb[GGML_MAX_SRC][GGML_MAX_DIMS];
+     };
+diff --git a/ggml/src/ggml-cuda/fattn.cu b/ggml/src/ggml-cuda/fattn.cu
+index ad4d1df..d36ad44 100644
+--- a/ggml/src/ggml-cuda/fattn.cu
++++ b/ggml/src/ggml-cuda/fattn.cu
+@@ -539,11 +539,16 @@ static bool ggml_cuda_fattn_kv_type_supported(const ggml_type type) {
+ }
+ 
+ static best_fattn_kernel ggml_cuda_get_best_fattn_kernel(const int device, const ggml_tensor * dst) {
+-#ifndef FLASH_ATTN_AVAILABLE
++#if !defined(FLASH_ATTN_AVAILABLE) && !(defined(GGML_USE_MUSA) && !defined(__MUSA_ARCH__) && !defined(GGML_CUDA_NO_FA))
+     GGML_UNUSED(device); GGML_UNUSED(dst);
+     return BEST_FATTN_KERNEL_NONE;
+ #endif// FLASH_ATTN_AVAILABLE
+ 
++#ifdef GGML_USE_MUSA
++    if (ggml_cuda_info().devices[device].cc < GGML_CUDA_CC_QY2) {
++        return BEST_FATTN_KERNEL_NONE;
++    }
++#endif
+     const ggml_tensor * KQV   = dst;
+     const ggml_tensor * Q     = dst->src[0];
+     const ggml_tensor * K     = dst->src[1];
+diff --git a/ggml/src/ggml-cuda/ggml-cuda.cu b/ggml/src/ggml-cuda/ggml-cuda.cu
+index b50d05d..b93d27c 100644
+--- a/ggml/src/ggml-cuda/ggml-cuda.cu
++++ b/ggml/src/ggml-cuda/ggml-cuda.cu
+@@ -721,6 +721,9 @@ ggml_backend_cuda_context::~ggml_backend_cuda_context() {
+ struct ggml_backend_cuda_buffer_context {
+     int device;
+     void * dev_ptr = nullptr;
++#ifdef GGML_USE_MUSA
++    void * mapped_host = nullptr;
++#endif
+     std::string name;
+ 
+     ggml_backend_cuda_buffer_context(int device, void * dev_ptr) :
+@@ -729,6 +732,9 @@ struct ggml_backend_cuda_buffer_context {
+     }
+ 
+     ~ggml_backend_cuda_buffer_context() {
++#ifdef GGML_USE_MUSA
++        if (mapped_host) { CUDA_CHECK(cudaFreeHost(mapped_host)); return; }
++#endif
+         CUDA_CHECK(cudaFree(dev_ptr));
+     }
+ };
+@@ -919,11 +925,22 @@ static size_t ggml_backend_cuda_buffer_type_get_alloc_size(ggml_backend_buffer_t
+     return size;
+ }
+ 
++#ifdef GGML_USE_MUSA
++// M1000/5.1 aliases offsets 4 GiB apart in a single allocation. Split model buffers.
++static size_t ggml_backend_musa_buffer_type_get_max_size(ggml_backend_buffer_type_t) {
++    return (size_t) 2 * 1024 * 1024 * 1024;
++}
++#endif
++
+ static const ggml_backend_buffer_type_i ggml_backend_cuda_buffer_type_interface = {
+     /* .get_name         = */ ggml_backend_cuda_buffer_type_get_name,
+     /* .alloc_buffer     = */ ggml_backend_cuda_buffer_type_alloc_buffer,
+     /* .get_alignment    = */ ggml_backend_cuda_buffer_type_get_alignment,
++#ifdef GGML_USE_MUSA
++    /* .get_max_size     = */ ggml_backend_musa_buffer_type_get_max_size,
++#else
+     /* .get_max_size     = */ NULL, // defaults to SIZE_MAX
++#endif
+     /* .get_alloc_size   = */ ggml_backend_cuda_buffer_type_get_alloc_size,
+     /* .is_host          = */ NULL,
+ };
+@@ -1504,7 +1521,11 @@ static void ggml_cuda_mul_mat_cublas_impl(ggml_backend_cuda_context & ctx, const
+     const int cc = ggml_cuda_info().devices[ctx.device].cc;
+     bool prefer_f32_output = false;
+     if (compute_type == GGML_TYPE_F16) {
++#ifdef GGML_USE_MUSA
++        prefer_f32_output = true;
++#else
+         prefer_f32_output = cc == GGML_CUDA_CC_VOLTA || GGML_CUDA_CC_IS_RDNA4(cc) || GGML_CUDA_CC_IS_CDNA(cc);
++#endif
+     } else if (compute_type == GGML_TYPE_BF16) {
+         prefer_f32_output = !GGML_CUDA_CC_IS_RDNA3(cc) && !GGML_CUDA_CC_IS_CDNA(cc);
+     }
+@@ -1532,6 +1553,29 @@ static void ggml_cuda_mul_mat_cublas_impl(ggml_backend_cuda_context & ctx, const
+     const int64_t r2 = ne12/ne02;
+     const int64_t r3 = ne13/ne03;
+ 
++#ifdef GGML_USE_MUSA
++    // vla.cpp: shared weights and consecutive batches can form one wider GEMM.
++    static const bool flatten_shared = std::getenv("VLA_MUSA_FLATTEN_GEMM") != nullptr;
++    static const bool trace_gemm = std::getenv("VLA_MUSA_TRACE_GEMM") != nullptr;
++    if (trace_gemm) std::fprintf(stderr,
++        "VLA_MUSA_GEMM {\"m\":%lld,\"n\":%lld,\"k\":%lld,\"batch\":%lld,"
++        "\"a_batch\":%lld,\"b_outer\":%lld,\"compute_type\":%d,\"out_type\":%d,"
++        "\"lda\":%lld,\"ldb\":%lld,\"stride_b\":%lld,\"flatten_requested\":%d}\n",
++        (long long)ne01,(long long)ne11,(long long)ne10,(long long)ne12,
++        (long long)ne02,(long long)ne13,(int)compute_type,(int)cu_data_type,
++        (long long)s01,(long long)s11,(long long)s12,(int)flatten_shared);
++    if (flatten_shared && compute_type == GGML_TYPE_F16 && cu_data_type == CUDA_R_32F &&
++        ne02 == 1 && ne03 == 1 && ne12 > 1 && ne13 == 1 &&
++        s12 == s11*ne11 && ne11 <= INT32_MAX/ne12) {
++        CUBLAS_CHECK(cublasGemmEx(cublas_h, CUBLAS_OP_T, CUBLAS_OP_N,
++                ne01, ne11*ne12, ne10,
++                alpha, src0_ptr, cu_data_type_a, s01,
++                       src1_ptr, cu_data_type_b, s11,
++                beta, dst_ptr, cu_data_type, ne0,
++                cu_compute_type, CUBLAS_GEMM_DEFAULT_TENSOR_OP));
++        return;
++    }
++#endif
+     // Theoretically cublasGemmStridedBatchedEx would always work, even for a single matrix.
+     // However, for some old NVIDIA and AMD GPUs the strided/Ex GEMM is much slower,
+     //     probably because the internal kernel selection logic is suboptimal.
+@@ -1551,6 +1595,16 @@ static void ggml_cuda_mul_mat_cublas_impl(ggml_backend_cuda_context & ctx, const
+                     beta,   dst_ptr, cu_data_type,   ne0,
+                     cu_compute_type,
+                     CUBLAS_GEMM_DEFAULT_TENSOR_OP));
++#ifdef GGML_USE_MUSA
++    } else if (ne13 == 1 && ne03 == 1 && (ne02 == 1 || r2 == 1)) {
++        const int64_t stride_a = ne02 == 1 ? 0 : s02;
++        CUBLAS_CHECK(cublasGemmStridedBatchedEx(cublas_h, CUBLAS_OP_T, CUBLAS_OP_N,
++                ne01, ne11, ne10,
++                alpha, src0_ptr, cu_data_type_a, s01, stride_a,
++                       src1_ptr, cu_data_type_b, s11, s12,
++                beta, dst_ptr, cu_data_type, ne0, ne1*ne0,
++                ne12, cu_compute_type, CUBLAS_GEMM_DEFAULT_TENSOR_OP));
++#endif
+     } else if (r2 == 1 && r3 == 1 && is_src0_cont_2 && is_src1_cont_2) {
+         // with a [0, 2, 1, 3] perm. and ne02==1 the matrix strides need to be determined from dim 3:
+         const int64_t sma = ne02 == 1 ? s03 : s02;
+@@ -1815,7 +1869,60 @@ static bool ggml_cuda_should_fuse_mul_mat_vec_q(const ggml_tensor * tensor) {
+     return use_mul_mat_vec_q;
+ }
+ 
++#ifdef GGML_USE_MUSA
++static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor * b, const ggml_tensor * dst) {
++    return a->type == GGML_TYPE_F32 && b->type == GGML_TYPE_F32 && dst->type == GGML_TYPE_F32 &&
++           a->ne[2] == 1 && a->ne[3] == 1 && b->ne[2] == 1 && b->ne[3] == 1 &&
++           (a->ne[0] <= 32 || a->ne[1] <= 32) && a->ne[0] % 2 == 0 &&
++           ggml_is_contiguous(a) && ggml_is_contiguous(b) && ggml_is_contiguous(dst);
++}
++#endif
++
++
++#ifdef GGML_USE_MUSA
++static void vla_musa_trace_quant(const char * route, const ggml_tensor * w, const ggml_tensor * x) {
++    static const bool enabled = std::getenv("GGML_MUSA_TRACE_QUANT") != nullptr;
++    if (enabled && ggml_is_quantized(w->type)) {
++        const auto & dev = ggml_cuda_info().devices[ggml_cuda_get_device()];
++        std::fprintf(stderr, "VLA_MUSA_QUANT route=%s weight=%s dtype=%s M=%lld N=%lld K=%lld cc=%d smpb=%zu smpbo=%zu\n",
++            route, w->name, ggml_type_name(w->type), (long long)w->ne[1], (long long)x->ne[1],
++            (long long)w->ne[0], dev.cc, (size_t)dev.smpb, (size_t)dev.smpbo);
++    }
++}
++#else
++static void vla_musa_trace_quant(const char *, const ggml_tensor *, const ggml_tensor *) {}
++#endif
++
+ static void ggml_cuda_mul_mat(ggml_backend_cuda_context & ctx, const ggml_tensor * src0, const ggml_tensor * src1, ggml_tensor * dst) {
++#ifdef GGML_USE_MUSA
++    if (ggml_musa_small_f32_matmul(src0, src1, dst)) {
++        // Reuse the F32 vector kernel in batches of at most eight columns.
++        for (int64_t col = 0; col < src1->ne[1]; col += MMVF_MAX_BATCH_SIZE) {
++            ggml_tensor b = *src1, d = *dst;
++            b.ne[1] = d.ne[1] = std::min<int64_t>(MMVF_MAX_BATCH_SIZE, src1->ne[1] - col);
++            b.data = (char *) src1->data + col * src1->nb[1];
++            d.data = (char *) dst->data + col * dst->nb[1];
++            b.nb[2] = b.nb[3] = b.nb[1] * b.ne[1];
++            d.nb[2] = d.nb[3] = d.nb[1] * d.ne[1];
++            ggml_cuda_mul_mat_vec_f(ctx, src0, &b, nullptr, &d);
++        }
++        return;
++    }
++#endif
++
++#ifdef GGML_USE_MUSA
++    static const bool quant_blas = [] {
++        const char * route = std::getenv("GGML_MUSA_QUANT_ROUTE");
++        if (!route || strcmp(route, "auto") == 0) return false;
++        if (strcmp(route, "blas") == 0) return true;
++        GGML_ABORT("GGML_MUSA_QUANT_ROUTE must be auto or blas");
++    }();
++    if (quant_blas && ggml_is_quantized(src0->type)) {
++        vla_musa_trace_quant("blas-forced", src0, src1);
++        ggml_cuda_mul_mat_cublas(ctx, src0, src1, dst);
++        return;
++    }
++#endif
+     GGML_TENSOR_BINARY_OP_LOCALS
+ 
+     if (ggml_cuda_op_mul_mat_use_fwht(dst) && ggml_cuda_op_fwht(ctx, src1, dst)) {
+@@ -1828,6 +1935,7 @@ static void ggml_cuda_mul_mat(ggml_backend_cuda_context & ctx, const ggml_tensor
+     const bool bad_padding_clear = ggml_backend_buffer_get_usage(src0->buffer) == GGML_BACKEND_BUFFER_USAGE_COMPUTE
+         && ggml_nbytes(src0) != ggml_backend_buffer_get_alloc_size(src0->buffer, src0) && src0->view_src;
+     if (bad_padding_clear || src1->type != GGML_TYPE_F32 || dst->type != GGML_TYPE_F32) {
++        vla_musa_trace_quant("blas", src0, src1);
+         ggml_cuda_mul_mat_cublas(ctx, src0, src1, dst);
+         return;
+     }
+@@ -1860,14 +1968,17 @@ static void ggml_cuda_mul_mat(ggml_backend_cuda_context & ctx, const ggml_tensor
+         return;
+     }
+     if (ggml_cuda_should_use_mmvq(src0->type, cc, ne11)) {
++        vla_musa_trace_quant("mmvq", src0, src1);
+         ggml_cuda_mul_mat_vec_q(ctx, src0, src1, nullptr, dst);
+         return;
+     }
+     if (ggml_cuda_should_use_mmq(src0->type, cc, ne11, /*n_experts =*/ 0)) {
++        vla_musa_trace_quant("mmq", src0, src1);
+         ggml_cuda_mul_mat_q(ctx, src0, src1, nullptr, dst);
+         return;
+     }
+-    ggml_cuda_mul_mat_cublas(ctx, src0, src1, dst);
++    vla_musa_trace_quant("blas", src0, src1);
++        ggml_cuda_mul_mat_cublas(ctx, src0, src1, dst);
+ }
+ 
+ // returns true when ggml_cuda_mul_mat_id takes the fallback path that requires stream synchronization
+@@ -2058,7 +2169,46 @@ static void ggml_cuda_mul_mat_id(ggml_backend_cuda_context & ctx, ggml_tensor *
+         nb1, nb2, nb3, stream);
+ }
+ 
++#ifdef GGML_USE_MUSA
++extern "C" {
++__attribute__((visibility("default"))) bool (*ggml_musa_ext_forward)(ggml_tensor *, void *, void *) = nullptr;
++__attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml_tensor *) = nullptr;
++__attribute__((visibility("default"))) void (*ggml_musa_ext_release)(int, void *) = nullptr;
++}
++#endif
++
++#ifdef GGML_USE_MUSA
++// Diagnostic timing deliberately disables graph execution and synchronizes each op.
++struct vla_musa_op_timer {
++    const ggml_tensor * t;
++    cudaStream_t stream;
++    cudaEvent_t begin = nullptr, end = nullptr;
++    vla_musa_op_timer(const ggml_tensor * tensor, cudaStream_t s): t(tensor), stream(s) {
++        static const bool enabled = std::getenv("VLA_MUSA_PROFILE_OPS") != nullptr;
++        if (!enabled) return;
++        GGML_ASSERT(std::getenv("GGML_CUDA_DISABLE_GRAPHS") != nullptr);
++        CUDA_CHECK(musaEventCreate(&begin)); CUDA_CHECK(musaEventCreate(&end));
++        CUDA_CHECK(cudaEventRecord(begin, stream));
++    }
++    ~vla_musa_op_timer() {
++        if (!begin) return;
++        CUDA_CHECK(cudaEventRecord(end, stream)); CUDA_CHECK(cudaEventSynchronize(end));
++        float ms; CUDA_CHECK(musaEventElapsedTime(&ms, begin, end));
++        std::fprintf(stderr, "VLA_MUSA_OP {\"op\":\"%s\",\"ne\":[%lld,%lld,%lld,%lld],\"ms\":%.6f}\n",
++            ggml_op_name(t->op), (long long)t->ne[0], (long long)t->ne[1],
++            (long long)t->ne[2], (long long)t->ne[3], ms);
++        CUDA_CHECK(cudaEventDestroy(begin)); CUDA_CHECK(cudaEventDestroy(end));
++    }
++};
++#endif
++
+ static bool ggml_cuda_compute_forward(ggml_backend_cuda_context & ctx, struct ggml_tensor * dst) {
++#ifdef GGML_USE_MUSA
++    vla_musa_op_timer vla_timer(dst, ctx.stream());
++#endif
++#ifdef GGML_USE_MUSA
++    if (ggml_musa_ext_forward && ggml_musa_ext_forward(dst, (void *) ctx.stream(), dst->op == GGML_OP_MUL_MAT ? (void *) ctx.cublas_handle() : nullptr)) return true;
++#endif
+     switch (dst->op) {
+         case GGML_OP_ARGMAX:
+             ggml_cuda_argmax(ctx, dst);
+@@ -2435,10 +2585,42 @@ static const char * ggml_backend_cuda_get_name(ggml_backend_t backend) {
+ static void ggml_backend_cuda_free(ggml_backend_t backend) {
+     ggml_backend_cuda_context * cuda_ctx = (ggml_backend_cuda_context *)backend->context;
+ 
++#ifdef GGML_USE_MUSA
++    if (ggml_musa_ext_release) {
++        for (int d=0; d<GGML_CUDA_MAX_DEVICES; ++d)
++            for (int s=0; s<GGML_CUDA_MAX_STREAMS; ++s)
++                if (cuda_ctx->streams[d][s]) {
++                    ggml_cuda_set_device(d);
++                    CUDA_CHECK(cudaStreamSynchronize(cuda_ctx->streams[d][s]));
++                    ggml_musa_ext_release(d, (void *)cuda_ctx->streams[d][s]);
++                }
++    }
++#endif
++
+     delete cuda_ctx;
+     delete backend;
+ }
+ 
++#ifdef GGML_USE_MUSA
++extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
++        ggml_backend_t backend, size_t size, void ** host) {
++    auto * backend_ctx = (ggml_backend_cuda_context *) backend->context;
++    ggml_cuda_set_device(backend_ctx->device);
++    void * ptr = nullptr, * dev = nullptr;
++    auto err = musaHostAlloc(&ptr, size, musaHostAllocMapped);
++    if (err == musaSuccess) err = musaHostGetDevicePointer(&dev, ptr, 0);
++    if (err != musaSuccess) {
++        if (ptr) musaFreeHost(ptr);
++        GGML_LOG_ERROR("%s: %s\n", __func__, musaGetErrorString(err));
++        return nullptr;
++    }
++    auto * ctx = new ggml_backend_cuda_buffer_context(backend_ctx->device, dev);
++    ctx->mapped_host = ptr; *host = ptr;
++    return ggml_backend_buffer_init(ggml_backend_cuda_buffer_type(backend_ctx->device),
++                                   ggml_backend_cuda_buffer_interface, ctx, size);
++}
++#endif
++
+ static void ggml_backend_cuda_set_tensor_async(ggml_backend_t backend, ggml_tensor * tensor, const void * data, size_t offset, size_t size) {
+     ggml_backend_cuda_context * cuda_ctx = (ggml_backend_cuda_context *) backend->context;
+     ggml_backend_buffer_t buf = tensor->view_src ? tensor->view_src->buffer : tensor->buffer;
+@@ -2564,6 +2746,13 @@ static bool ggml_cuda_graph_check_compability(ggml_cgraph * cgraph) {
+             continue;
+         }
+ 
++#ifdef GGML_USE_MUSA
++        if (node->op == GGML_OP_MUL_MAT && node->src[0]->type == GGML_TYPE_F32 &&
++            !ggml_musa_small_f32_matmul(node->src[0], node->src[1], node) &&
++            !(ggml_musa_ext_supports && ggml_musa_ext_supports(node))) {
++            return false;
++        }
++#endif
+         // [TAG_MUL_MAT_ID_CUDA_GRAPHS]
+         if (node->op == GGML_OP_MUL_MAT_ID) {
+             const int cc = ggml_cuda_info().devices[ggml_cuda_get_device()].cc;
+@@ -2617,6 +2806,7 @@ static bool ggml_cuda_graph_update_required(ggml_backend_cuda_context * cuda_ctx
+         for (int j = 0; j < GGML_MAX_SRC; ++j) {
+             if (cgraph->nodes[i]->src[j]) {
+                 prop.node_src_data_ptrs[j] = cgraph->nodes[i]->src[j]->data;
++                prop.node_src_types[j] = cgraph->nodes[i]->src[j]->type;
+                 memcpy(prop.node_src_ne[j], cgraph->nodes[i]->src[j]->ne, sizeof(prop.node_src_ne[j]));
+                 memcpy(prop.node_src_nb[j], cgraph->nodes[i]->src[j]->nb, sizeof(prop.node_src_nb[j]));
+             }
+@@ -3276,8 +3466,12 @@ static bool ggml_cuda_can_fuse(const struct ggml_cgraph *                cgraph,
+             add = cgraph->nodes[node_idx+2];
+         }
+ 
++#ifdef GGML_USE_MUSA
++        if (rms_norm->src[0]->type != GGML_TYPE_F32 || rms_norm->type != GGML_TYPE_F32) return false;
++#else
+         GGML_ASSERT(rms_norm->src[0]->type == GGML_TYPE_F32);
+         GGML_ASSERT(rms_norm->type == GGML_TYPE_F32);
++#endif
+ 
+         //rms norm only supports F32
+         if (mul->src[0]->type != GGML_TYPE_F32 ||
+@@ -3313,8 +3507,12 @@ static bool ggml_cuda_can_fuse(const struct ggml_cgraph *                cgraph,
+         const ggml_tensor * rms_norm = cgraph->nodes[node_idx];
+         const ggml_tensor * scale    = cgraph->nodes[node_idx+1];
+ 
++#ifdef GGML_USE_MUSA
++        if (rms_norm->src[0]->type != GGML_TYPE_F32 || rms_norm->type != GGML_TYPE_F32) return false;
++#else
+         GGML_ASSERT(rms_norm->src[0]->type == GGML_TYPE_F32);
+         GGML_ASSERT(rms_norm->type == GGML_TYPE_F32);
++#endif
+ 
+         float bias;
+         memcpy(&bias, (const float *) scale->op_params + 1, sizeof(float));
+@@ -4403,8 +4601,7 @@ static void ggml_cuda_graph_evaluate_and_capture(ggml_backend_cuda_context * cud
+         ggml_cuda_graph * graph = cuda_ctx->cuda_graph(graph_key);
+         if (graph->instance == nullptr) { // Create executable graph from captured graph.
+             CUDA_CHECK(cudaGraphInstantiate(&graph->instance, graph->graph, NULL, NULL, 0));
+-        }
+-        if (cuda_graph_update_required) { // Update graph executable
++        } else if (cuda_graph_update_required) { // Update graph executable
+             ggml_cuda_graph_update_executable(cuda_ctx, graph_key);
+         }
+         // Launch graph
+@@ -5157,6 +5354,10 @@ static bool ggml_backend_cuda_device_supports_op(ggml_backend_dev_t dev, const g
+         }
+     }
+ 
++#ifdef GGML_USE_MUSA
++    if (ggml_musa_ext_supports && ggml_musa_ext_supports(op)) return true;
++    if (op->op == GGML_OP_CUSTOM) return false;
++#endif
+     switch (op->op) {
+         case GGML_OP_UNARY:
+             switch (ggml_get_unary_op(op)) {
+diff --git a/ggml/src/ggml-cuda/mmq.cuh b/ggml/src/ggml-cuda/mmq.cuh
+index 4b50d1d..f02dc25 100644
+--- a/ggml/src/ggml-cuda/mmq.cuh
++++ b/ggml/src/ggml-cuda/mmq.cuh
+@@ -228,6 +228,9 @@ struct ggml_cuda_mmq_config {
+ #undef CASE
+ 
+ static __host__ ggml_cuda_mmq_config ggml_cuda_mmq_get_config(const ggml_type type, const int J, const bool fallback, const int cc, const ggml_prec prec_src1 = GGML_PREC_Q8) {
++#ifdef GGML_USE_MUSA
++    return ggml_cuda_mmq_get_config_pascal_dp4a(type, J, fallback);
++#endif
+     if (GGML_CUDA_CC_IS_AMD(cc)) {
+         if (GGML_CUDA_CC_IS_GCN(cc)) {
+             return ggml_cuda_mmq_get_config_gcn(type, J, fallback);
+@@ -263,6 +266,9 @@ static __host__ ggml_cuda_mmq_config ggml_cuda_mmq_get_config(const ggml_type ty
+ }
+ 
+ static constexpr __device__ ggml_cuda_mmq_config ggml_cuda_mmq_get_config(ggml_type type, int J, bool fallback, ggml_prec prec_src1 = GGML_PREC_Q8) {
++#ifdef GGML_USE_MUSA
++    return ggml_cuda_mmq_get_config_pascal_dp4a(type, J, fallback);
++#endif
+ #ifdef GGML_USE_HIP
+ #ifdef GCN
+     return ggml_cuda_mmq_get_config_gcn(type, J, fallback);
+@@ -1405,7 +1411,11 @@ static void launch_mul_mat_q(ggml_backend_cuda_context & ctx, const mmq_args & a
+     const int id = ggml_cuda_get_device();
+     const int cc = ggml_cuda_info().devices[id].cc;
+     const int nsm = ggml_cuda_info().devices[id].nsm;
++#ifdef GGML_USE_MUSA
++    const int warp_size = 32;
++#else
+     const int warp_size = ggml_cuda_info().devices[id].warp_size;
++#endif
+ 
+     const ggml_cuda_mmq_config config = ggml_cuda_mmq_get_config(type, J, fallback, cc, prec_src1);
+     GGML_ASSERT(config.nthreads % warp_size == 0);
+diff --git a/ggml/src/ggml-cuda/softmax.cu b/ggml/src/ggml-cuda/softmax.cu
+index f320c6f..3d029ef 100644
+--- a/ggml/src/ggml-cuda/softmax.cu
++++ b/ggml/src/ggml-cuda/softmax.cu
+@@ -280,14 +280,23 @@ static void launch_soft_max_kernels(const float * x, const T * mask, const float
+                              const soft_max_params & p, cudaStream_t stream, dim3 block_dims, dim3 block_nums, size_t nbytes_shared)
+ {
+     const int id       = ggml_cuda_get_device();
++#ifdef GGML_USE_MUSA
++    // vla.cpp: M1000 cannot opt in to a larger dynamic shared-memory budget.
++    const size_t smpbo = ggml_cuda_info().devices[id].smpb;
++#else
+     const size_t smpbo = ggml_cuda_info().devices[id].smpbo;
++#endif
+ 
+     auto launch_kernel = [=](auto I) -> bool {
+         constexpr int ncols = decltype(I)::value;
+         constexpr int block = (ncols > 1024 ? 1024 : ncols);
+ 
+         if (p.ncols == ncols) {
++#ifndef GGML_USE_MUSA
+             CUDA_SET_SHARED_MEMORY_LIMIT((soft_max_f32<true, ncols, block, T>), smpbo);
++#else
++            GGML_UNUSED(smpbo);
++#endif
+             soft_max_f32<true, ncols, block><<<block_nums, block_dims, nbytes_shared, stream>>>
+                 (x, mask, sinks, dst, p);
+             return true;
+@@ -301,7 +310,11 @@ static void launch_soft_max_kernels(const float * x, const T * mask, const float
+     }
+ 
+     //default case
++#ifndef GGML_USE_MUSA
+     CUDA_SET_SHARED_MEMORY_LIMIT((soft_max_f32<true, 0, 0, T>), smpbo);
++#else
++    GGML_UNUSED(smpbo);
++#endif
+     soft_max_f32<true, 0, 0><<<block_nums, block_dims, nbytes_shared, stream>>>(x, mask, sinks, dst, p);
+ }
+ 
+@@ -343,7 +356,12 @@ static void soft_max_f32_cuda(const float *                                x,
+ 
+ 
+     const int id       = ggml_cuda_get_device();
++#ifdef GGML_USE_MUSA
++    // vla.cpp: M1000 cannot opt in to a larger dynamic shared-memory budget.
++    const size_t smpbo = ggml_cuda_info().devices[id].smpb;
++#else
+     const size_t smpbo = ggml_cuda_info().devices[id].smpbo;
++#endif
+ 
+ 
+     if (nbytes_shared <= smpbo) {

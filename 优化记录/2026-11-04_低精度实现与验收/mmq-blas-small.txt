@@ -1,0 +1,34 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+VLA_MUSA_QUANT route=blas-forced weight=quant_check_q8 dtype=q8_0 M=64 N=50 K=256 cc=1049120 smpb=73728 smpbo=73728
+ggml_cuda_compute_forward: MUL_MAT failed
+MUSA error: operation failed due to a previous error during capture
+  current device: 0, in function ggml_cuda_compute_forward at /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:2569
+  err
+quant-check: backend = MUSA (device 0: M1000)
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:109: MUSA error
+[New LWP 647625]
+[New LWP 647628]
+[New LWP 647629]
+[New LWP 647630]
+[New LWP 647631]
+[New LWP 647635]
+[New LWP 647636]
+[New LWP 647637]
+[New LWP 647638]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+0x0000ffffa16d9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	../sysdeps/unix/sysv/linux/wait4.c: 没有那个文件或目录.
+#0  0x0000ffffa16d9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	in ../sysdeps/unix/sysv/linux/wait4.c
+#1  0x0000ffffa1afa3ac in ggml_print_backtrace () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#2  0x0000ffffa1afa5f8 in ggml_abort () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#3  0x0000ffffa1c9dc84 in ggml_cuda_error(char const*, char const*, char const*, int, char const*) () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-musa.so.0
+#4  0x0000ffffa1caae84 in ggml_cuda_graph_evaluate_and_capture(ggml_backend_cuda_context*, ggml_cgraph*, bool, bool, void const*) () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-musa.so.0
+#5  0x0000ffffa1ca449c in ggml_backend_cuda_graph_compute(ggml_backend*, ggml_cgraph*) () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-musa.so.0
+#6  0x0000ffffa1b14ae0 in ggml_backend_graph_compute () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#7  0x0000000000402030 in main ()
+[Inferior 1 (process 647622) detached]

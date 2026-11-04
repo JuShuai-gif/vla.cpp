@@ -1,0 +1,229 @@
+{
+  "api_source": "/home/skysi/code/robot_runtime-quant/runtime/python/vla_cpp/__init__.py",
+  "results": [
+    {
+      "model": "pruned",
+      "precision": "baseline",
+      "spec": {
+        "checkpoint": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+        "camera_order": [
+          "observation.images.top",
+          "observation.images.wrist"
+        ],
+        "state_dim": 7,
+        "action_dim": 7,
+        "chunk_size": 50,
+        "action_names": [
+          "joint_1.pos",
+          "joint_2.pos",
+          "joint_3.pos",
+          "joint_4.pos",
+          "joint_5.pos",
+          "joint_6.pos",
+          "gripper.pos"
+        ],
+        "action_space": "absolute_joint",
+        "joint_unit": "degrees",
+        "gripper_unit": "mm",
+        "contract_verified": false,
+        "image_size": 224,
+        "num_steps": 3,
+        "variant": "pruned",
+        "rtc_training_max_delay": 0,
+        "precision": "baseline",
+        "precision_status": "baseline",
+        "weight_types": [
+          "BF16",
+          "F32"
+        ]
+      }
+    },
+    {
+      "model": "pruned",
+      "precision": "fp16-activations",
+      "spec": {
+        "checkpoint": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+        "camera_order": [
+          "observation.images.top",
+          "observation.images.wrist"
+        ],
+        "state_dim": 7,
+        "action_dim": 7,
+        "chunk_size": 50,
+        "action_names": [
+          "joint_1.pos",
+          "joint_2.pos",
+          "joint_3.pos",
+          "joint_4.pos",
+          "joint_5.pos",
+          "joint_6.pos",
+          "gripper.pos"
+        ],
+        "action_space": "absolute_joint",
+        "joint_unit": "degrees",
+        "gripper_unit": "mm",
+        "contract_verified": false,
+        "image_size": 224,
+        "num_steps": 3,
+        "variant": "pruned",
+        "rtc_training_max_delay": 0,
+        "precision": "fp16-activations",
+        "precision_status": "experimental",
+        "weight_types": [
+          "BF16",
+          "F32"
+        ]
+      }
+    },
+    {
+      "model": "pruned",
+      "precision": "q8-prefix-mlp",
+      "spec": {
+        "checkpoint": "/home/skysi/code/vla.cpp-quant/validation/quant/models/pruned-prefix-mlp-q8.gguf",
+        "camera_order": [
+          "observation.images.top",
+          "observation.images.wrist"
+        ],
+        "state_dim": 7,
+        "action_dim": 7,
+        "chunk_size": 50,
+        "action_names": [
+          "joint_1.pos",
+          "joint_2.pos",
+          "joint_3.pos",
+          "joint_4.pos",
+          "joint_5.pos",
+          "joint_6.pos",
+          "gripper.pos"
+        ],
+        "action_space": "absolute_joint",
+        "joint_unit": "degrees",
+        "gripper_unit": "mm",
+        "contract_verified": false,
+        "image_size": 224,
+        "num_steps": 3,
+        "variant": "pruned",
+        "rtc_training_max_delay": 0,
+        "precision": "q8-prefix-mlp",
+        "precision_status": "experimental",
+        "weight_types": [
+          "BF16",
+          "F32",
+          "Q8_0"
+        ]
+      }
+    },
+    {
+      "model": "full",
+      "precision": "baseline",
+      "spec": {
+        "checkpoint": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+        "camera_order": [
+          "observation.images.wrist",
+          "observation.images.top"
+        ],
+        "state_dim": 7,
+        "action_dim": 7,
+        "chunk_size": 50,
+        "action_names": [
+          "joint_1.pos",
+          "joint_2.pos",
+          "joint_3.pos",
+          "joint_4.pos",
+          "joint_5.pos",
+          "joint_6.pos",
+          "gripper.pos"
+        ],
+        "action_space": "absolute_joint",
+        "joint_unit": "degrees",
+        "gripper_unit": "mm",
+        "contract_verified": false,
+        "image_size": 224,
+        "num_steps": 10,
+        "variant": "full",
+        "rtc_training_max_delay": 0,
+        "precision": "baseline",
+        "precision_status": "baseline",
+        "weight_types": [
+          "BF16",
+          "F32"
+        ]
+      }
+    },
+    {
+      "model": "full",
+      "precision": "fp16-activations",
+      "spec": {
+        "checkpoint": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+        "camera_order": [
+          "observation.images.wrist",
+          "observation.images.top"
+        ],
+        "state_dim": 7,
+        "action_dim": 7,
+        "chunk_size": 50,
+        "action_names": [
+          "joint_1.pos",
+          "joint_2.pos",
+          "joint_3.pos",
+          "joint_4.pos",
+          "joint_5.pos",
+          "joint_6.pos",
+          "gripper.pos"
+        ],
+        "action_space": "absolute_joint",
+        "joint_unit": "degrees",
+        "gripper_unit": "mm",
+        "contract_verified": false,
+        "image_size": 224,
+        "num_steps": 10,
+        "variant": "full",
+        "rtc_training_max_delay": 0,
+        "precision": "fp16-activations",
+        "precision_status": "experimental",
+        "weight_types": [
+          "BF16",
+          "F32"
+        ]
+      }
+    },
+    {
+      "model": "full",
+      "precision": "q8-prefix-mlp",
+      "spec": {
+        "checkpoint": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mlp-q8.gguf",
+        "camera_order": [
+          "observation.images.wrist",
+          "observation.images.top"
+        ],
+        "state_dim": 7,
+        "action_dim": 7,
+        "chunk_size": 50,
+        "action_names": [
+          "joint_1.pos",
+          "joint_2.pos",
+          "joint_3.pos",
+          "joint_4.pos",
+          "joint_5.pos",
+          "joint_6.pos",
+          "gripper.pos"
+        ],
+        "action_space": "absolute_joint",
+        "joint_unit": "degrees",
+        "gripper_unit": "mm",
+        "contract_verified": false,
+        "image_size": 224,
+        "num_steps": 10,
+        "variant": "full",
+        "rtc_training_max_delay": 0,
+        "precision": "q8-prefix-mlp",
+        "precision_status": "experimental",
+        "weight_types": [
+          "BF16",
+          "F32",
+          "Q8_0"
+        ]
+      }
+    }
+  ]
+}

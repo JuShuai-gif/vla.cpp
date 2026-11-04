@@ -1,0 +1,24 @@
+test_action_source_uses_original_index_including_delay (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_action_source_uses_original_index_including_delay) ... ok
+test_age_bounds_and_sample_timestamp_choose_correct_target (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_age_bounds_and_sample_timestamp_choose_correct_target) ... ok
+test_compacted_stages_match_legacy_cli_and_pure_analysis (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_compacted_stages_match_legacy_cli_and_pure_analysis) ... ok
+test_drops_errors_and_abnormal_end_are_visible (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_drops_errors_and_abnormal_end_are_visible) ... ok
+test_duplicate_cached_feedback_is_not_an_independent_measurement (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_duplicate_cached_feedback_is_not_an_independent_measurement) ... ok
+test_feedback_during_target_send_is_ambiguous_and_excluded (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_feedback_during_target_send_is_ambiguous_and_excluded) ... ok
+test_gripper_units_and_clamped_effective_target (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_gripper_units_and_clamped_effective_target) ... ok
+test_incomplete_tail_cli_and_markdown (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_incomplete_tail_cli_and_markdown) ... ok
+test_invalid_action_references_mark_report_partial (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_invalid_action_references_mark_report_partial) ... ok
+test_invalid_windows_fail (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_invalid_windows_fail) ... ok
+test_last_feedback_is_before_next_send_and_retains_lag (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_last_feedback_is_before_next_send_and_retains_lag) ... ok
+test_missing_dispatch_does_not_create_a_false_adjacent_jump (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_missing_dispatch_does_not_create_a_false_adjacent_jump) ... ok
+test_plan_boundaries_are_separate_from_within_plan_changes (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_plan_boundaries_are_separate_from_within_plan_changes) ... ok
+test_robot_io_errors_and_status_counts_ignore_feedback_timestamp (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_robot_io_errors_and_status_counts_ignore_feedback_timestamp) ... ok
+test_sampling_frequency_inference_and_empty_counts (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_sampling_frequency_inference_and_empty_counts) ... ok
+test_unknown_effective_target_never_uses_request_or_older_target (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_unknown_effective_target_never_uses_request_or_older_target) ... ok
+test_window_keeps_prior_target_and_plan_context (test_rknn_diagnostics_analysis.DiagnosticsAnalysisTests.test_window_keeps_prior_target_and_plan_context) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.019s
+
+OK
+Report: /home/skysi/code/robot_runtime-quant/validation/tmp/tmp_h0g2l7i/report.json
+Summary: /home/skysi/code/robot_runtime-quant/validation/tmp/tmp_h0g2l7i/report.md

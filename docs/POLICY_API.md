@@ -67,3 +67,30 @@ F32 bilinear image resize. No Torch MUSA/CUDA runtime is required.
 tokenization with this API. Tests: `tests/py/test_policy_api.py` and
 `tests/py/test_pi05_io.py`. For the Piper adapter and device setup, see
 `robot_runtime/docs/VLA_CPP.md` in the adjacent repository.
+
+
+## Precision profiles
+
+Both public functions accept `precision=None` as a keyword argument:
+
+```python
+spec = inspect_policy("policy.json", precision="q8-prefix-mlp")
+with load_policy("policy.json", precision="q8-prefix-mlp", task="...") as policy:
+    actions = policy.predict(images, state=state)
+```
+
+Policy JSON may declare `default_precision` (otherwise `baseline`) and
+`precision_profiles`. Each named entry accepts `model`, `manifest`,
+`runtime` overrides and `status` (`experimental` by default; `validated`
+only after deployment acceptance). The reserved baseline uses the original
+model/runtime configuration. All relative paths resolve beside the policy JSON.
+Unknown names and missing selected assets fail explicitly. Quantized GGUF files
+require the converter's verified manifest; load checks its SHA256 before native
+allocation. Inspection checks tensor names, shapes and types without GPU I/O.
+
+`PolicySpec.precision`, `precision_status` and `weight_types` describe the
+selection; resolved parameters separately report on-disk weight types,
+floating resident weight dtype and activation dtype. A packed Q8 tensor stays
+Q8 even when runtime.weight_dtype is f16. Different native options require a
+fresh process. robot_runtime forwards its precision parameter and refuses
+experimental profiles during live execution; offline loading remains available.

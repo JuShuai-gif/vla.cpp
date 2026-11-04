@@ -1,0 +1,22 @@
+         261 function calls in 0.452 seconds
+
+   Ordered by: cumulative time
+   List reduced from 39 to 14 due to restriction <14>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        5    0.282    0.056    0.452    0.090 /home/skysi/code/vla.cpp-quant/bindings/python/vla_cpp/policy.py:212(prepare_prompt)
+       15    0.000    0.000    0.168    0.011 /home/skysi/code/robot_runtime/.venv/lib/python3.12/site-packages/gguf/gguf_reader.py:57(contents)
+        5    0.151    0.030    0.168    0.034 /home/skysi/code/robot_runtime/.venv/lib/python3.12/site-packages/gguf/gguf_reader.py:59(<lambda>)
+        5    0.017    0.003    0.017    0.003 {method 'tobytes' of 'numpy.ndarray' objects}
+        5    0.001    0.000    0.001    0.000 {method 'encode' of 'tokenizers.Tokenizer' objects}
+        5    0.000    0.000    0.000    0.000 /home/skysi/code/robot_runtime/.venv/lib/python3.12/site-packages/numpy/_core/function_base.py:27(linspace)
+        5    0.000    0.000    0.000    0.000 /home/skysi/code/robot_runtime/.venv/lib/python3.12/site-packages/numpy/lib/_function_base_impl.py:5667(digitize)
+        5    0.000    0.000    0.000    0.000 {method 'all' of 'numpy.ndarray' objects}
+        5    0.000    0.000    0.000    0.000 /home/skysi/code/robot_runtime/.venv/lib/python3.12/site-packages/numpy/_core/fromnumeric.py:1459(searchsorted)
+       25    0.000    0.000    0.000    0.000 {built-in method numpy.asarray}
+        5    0.000    0.000    0.000    0.000 /home/skysi/code/robot_runtime/.venv/lib/python3.12/site-packages/numpy/_core/numerictypes.py:418(issubdtype)
+        5    0.000    0.000    0.000    0.000 /home/skysi/code/robot_runtime/.venv/lib/python3.12/site-packages/numpy/_core/fromnumeric.py:48(_wrapfunc)
+        5    0.000    0.000    0.000    0.000 /home/skysi/code/robot_runtime/.venv/lib/python3.12/site-packages/numpy/_core/_methods.py:64(_all)
+        5    0.000    0.000    0.000    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+
+

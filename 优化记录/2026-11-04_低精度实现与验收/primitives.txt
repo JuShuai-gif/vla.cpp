@@ -1,0 +1,5 @@
+dot 1 expected=10322 actual=54098
+dot 2 expected=-6110 actual=60706
+dot 3 expected=-5165 actual=38099
+dot 4 expected=-3725 actual=104051
+{"dp4a_errors":1013,"quant_errors":0,"scale_errors":0}

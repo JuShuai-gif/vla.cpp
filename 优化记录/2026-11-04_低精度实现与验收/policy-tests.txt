@@ -1,0 +1,9 @@
+test_config_paths_and_invalid_options (test_policy_api.PolicyTests.test_config_paths_and_invalid_options) ... ok
+test_load_failure_releases_session (test_policy_api.PolicyTests.test_load_failure_releases_session) ... ok
+test_named_precision_resolution_and_no_silent_fallback (test_policy_api.PolicyTests.test_named_precision_resolution_and_no_silent_fallback) ... ok
+test_native_session_rng_warmup_and_cleanup (test_policy_api.PolicyTests.test_native_session_rng_warmup_and_cleanup) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.052s
+
+OK

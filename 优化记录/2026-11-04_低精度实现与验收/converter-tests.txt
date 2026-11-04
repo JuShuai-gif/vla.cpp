@@ -1,0 +1,8 @@
+test_failed_conversion_never_publishes (test_quantize_gguf.QuantizeTest.test_failed_conversion_never_publishes) ... ok
+test_recipes_maps_and_block_alignment (test_quantize_gguf.QuantizeTest.test_recipes_maps_and_block_alignment) ... ok
+test_roundtrip_and_error_bound_all_source_dtypes (test_quantize_gguf.QuantizeTest.test_roundtrip_and_error_bound_all_source_dtypes) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.069s
+
+OK
