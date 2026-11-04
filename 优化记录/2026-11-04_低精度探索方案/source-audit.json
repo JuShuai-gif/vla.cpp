@@ -1,0 +1,2192 @@
+{
+  "scope": "Static metadata and tiny synthetic CPU pack tests only; not model accuracy/performance validation",
+  "code_commit": "04266577ff7ca0268ae660ce63c45229bb58a858",
+  "dependency_commit": "4da6337767f973e2b4d0797e5b323d77d8565e4a",
+  "source_sha256": {
+    "scripts/quantize_gguf.py": "370ab49e9349c4e177b4245a4ff61bdc6812c018b004813d9025edd285ad82f0",
+    "src/loader.cpp": "fbeb7b0d6e0878c5e1e24fdf15c42fa95f9028eaaa17de910b0c068cbc678a7b",
+    "src/models/pi05.cpp": "2f2520e6284c41b43d670e9096e8056bcfaf4b6d2e81cac6302c078ef1bc5c04",
+    "src/modules/gemma_expert.h": "4c57f25db13645a1da56d4f825722cbe00981aa00188620714b19b773ea87161",
+    "src/act_dtype.h": "469c9d0f3b62ebe233e431ecd4bd3377cb03fe2dc3524038dcb06743cdec1d10",
+    "bindings/python/vla_cpp/policy.py": "2a20c31db716f44d3bdacd99a0b31ad8d8275f7ee7180f2eb98aa1656635977d",
+    "scripts/pi05_musa_profiles.json": "b315ac7747906d29a011186d0ac1c695d45e90ae898002b3560278ec37f4bffe",
+    "build-musa-deps/llama/ggml/src/ggml-cuda/mmq.cu": "77373dc9affde43269ce2af699e587884c654ebf74abb7515912f26c9233f5a4",
+    "build-musa-deps/llama/ggml/src/ggml-cuda/common.cuh": "089c156d4f20ae7d09aef4666686e1d455e90644d9033492bad96b8bea3e01c6",
+    "build-musa-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu": "b8d1d3b46e282dd2d398fe7a79efea332d2a2e93a5f267b4fc052b47ba765da7"
+  },
+  "writer_checks": {
+    "Q8_0": {
+      "pack_unpack": true,
+      "block_values": 32,
+      "block_bytes": 34
+    },
+    "Q4_0": {
+      "pack_unpack": true,
+      "block_values": 32,
+      "block_bytes": 18
+    },
+    "Q5_0": {
+      "pack_unpack": true,
+      "block_values": 32,
+      "block_bytes": 22
+    },
+    "Q4_1": {
+      "pack_unpack": true,
+      "block_values": 32,
+      "block_bytes": 20
+    },
+    "Q5_1": {
+      "pack_unpack": true,
+      "block_values": 32,
+      "block_bytes": 24
+    }
+  },
+  "models": {
+    "pruned": {
+      "model": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+      "file_bytes": 7046776544,
+      "model_sha256": null,
+      "hash_note": "Full model SHA256 must be recorded before experiments; this audit reads metadata only",
+      "total_tensor_bytes": 7042473504,
+      "tensor_count": 627,
+      "plans": {
+        "current_default": {
+          "tensor_count": 127,
+          "source_tensor_bytes": 3973054464,
+          "estimates": {
+            "Q8_0": {
+              "estimated_total_tensor_bytes": 5177597472,
+              "tensor_payload_reduction": 0.26480412470714776
+            },
+            "Q4_0": {
+              "estimated_total_tensor_bytes": 4185513504,
+              "tensor_payload_reduction": 0.4056756476793697
+            }
+          }
+        },
+        "strict_prefix": {
+          "tensor_count": 126,
+          "source_tensor_bytes": 3963617280,
+          "estimates": {
+            "Q8_0": {
+              "estimated_total_tensor_bytes": 5184527904,
+              "tensor_payload_reduction": 0.2638200341037449
+            },
+            "Q4_0": {
+              "estimated_total_tensor_bytes": 4193623584,
+              "tensor_payload_reduction": 0.40452405229240884
+            }
+          }
+        },
+        "prefix_mlp": {
+          "tensor_count": 54,
+          "source_tensor_bytes": 3623878656,
+          "estimates": {
+            "Q8_0": {
+              "estimated_total_tensor_bytes": 5343780384,
+              "tensor_payload_reduction": 0.24120688832342396
+            },
+            "Q4_0": {
+              "estimated_total_tensor_bytes": 4437810720,
+              "tensor_payload_reduction": 0.3698505620959167
+            }
+          }
+        }
+      },
+      "unexpected_non_prefix": [
+        "mm.proj.weight"
+      ],
+      "default_selected_tensors": [
+        {
+          "name": "vlm.blk.0.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "mm.proj.weight",
+          "ggml_shape": [
+            1152,
+            2048
+          ],
+          "source_type": "F32"
+        }
+      ]
+    },
+    "full": {
+      "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+      "file_bytes": 7808406880,
+      "model_sha256": null,
+      "hash_note": "Full model SHA256 must be recorded before experiments; this audit reads metadata only",
+      "total_tensor_bytes": 7773969696,
+      "tensor_count": 819,
+      "plans": {
+        "current_default": {
+          "tensor_count": 127,
+          "source_tensor_bytes": 3973054464,
+          "estimates": {
+            "Q8_0": {
+              "estimated_total_tensor_bytes": 5909093664,
+              "tensor_payload_reduction": 0.23988722685136643
+            },
+            "Q4_0": {
+              "estimated_total_tensor_bytes": 4917009696,
+              "tensor_payload_reduction": 0.367503362081539
+            }
+          }
+        },
+        "strict_prefix": {
+          "tensor_count": 126,
+          "source_tensor_bytes": 3963617280,
+          "estimates": {
+            "Q8_0": {
+              "estimated_total_tensor_bytes": 5916024096,
+              "tensor_payload_reduction": 0.23899573482463954
+            },
+            "Q4_0": {
+              "estimated_total_tensor_bytes": 4925119776,
+              "tensor_payload_reduction": 0.36646012673111406
+            }
+          }
+        },
+        "prefix_mlp": {
+          "tensor_count": 54,
+          "source_tensor_bytes": 3623878656,
+          "estimates": {
+            "Q8_0": {
+              "estimated_total_tensor_bytes": 6075276576,
+              "tensor_payload_reduction": 0.21851038612538476
+            },
+            "Q4_0": {
+              "estimated_total_tensor_bytes": 5169306912,
+              "tensor_payload_reduction": 0.33504925872559
+            }
+          }
+        }
+      },
+      "unexpected_non_prefix": [
+        "mm.proj.weight"
+      ],
+      "default_selected_tensors": [
+        {
+          "name": "vlm.blk.0.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.0.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.1.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.2.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.3.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.4.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.5.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.6.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.7.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.8.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.9.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.10.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.11.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.12.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.13.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.14.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.15.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.16.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.attn_q.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.attn_k.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.attn_v.weight",
+          "ggml_shape": [
+            2048,
+            256
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.attn_o.weight",
+          "ggml_shape": [
+            2048,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.ffn_gate.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.ffn_up.weight",
+          "ggml_shape": [
+            2048,
+            16384
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "vlm.blk.17.ffn_down.weight",
+          "ggml_shape": [
+            16384,
+            2048
+          ],
+          "source_type": "BF16"
+        },
+        {
+          "name": "mm.proj.weight",
+          "ggml_shape": [
+            1152,
+            2048
+          ],
+          "source_type": "F32"
+        }
+      ]
+    }
+  }
+}
