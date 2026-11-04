@@ -1,0 +1,665 @@
+diff --git a/scripts/pi05_gguf.py b/scripts/pi05_gguf.py
+new file mode 100644
+index 0000000..16bfb2d
+--- /dev/null
++++ b/scripts/pi05_gguf.py
+@@ -0,0 +1,45 @@
++"""GGUF reader with bulk numeric metadata arrays, preserving contents() indexing."""
++import gguf
++
++
++class _NumericField(gguf.ReaderField):
++    def contents(self, index_or_slice=slice(None)):
++        if isinstance(index_or_slice, int):
++            index_or_slice = int(index_or_slice)
++        return self.parts[self.data[0]][index_or_slice].tolist()
++
++    def raw_bytes(self):
++        if self.types != [gguf.GGUFValueType.ARRAY, gguf.GGUFValueType.UINT8]:
++            return bytes(self.contents())
++        return self.parts[self.data[0]].tobytes()
++
++
++class GGUFReader(gguf.GGUFReader):
++    # Keep the installed reader's version/endian/tensor validation. Only replace
++    # its per-element allocation for top-level numeric metadata arrays.
++    def _get_field_parts(self, offset, raw_type):
++        nested = getattr(self, "_nested_array", False)
++        if not nested and raw_type == gguf.GGUFValueType.ARRAY:
++            subtype = self._get(offset, "uint32")
++            length = self._get(offset + 4, "uint64")
++            if len(subtype) != 1 or len(length) != 1:
++                raise ValueError("Truncated GGUF array header")
++            kind = gguf.GGUFValueType(int(subtype[0]))
++            dtype = self.gguf_scalar_to_np.get(kind)
++            if dtype is not None:
++                count = int(length[0])
++                values = self._get(offset + 12, dtype, count)
++                if len(values) != count:
++                    raise ValueError("Truncated GGUF numeric array")
++                return 12 + values.nbytes, [subtype, length, values], [2], [gguf.GGUFValueType.ARRAY, kind]
++        self._nested_array = True
++        try:
++            return super()._get_field_parts(offset, raw_type)
++        finally:
++            self._nested_array = nested
++
++    def _push_field(self, field, skip_sum=False):
++        if (len(field.types) == 2 and field.types[0] == gguf.GGUFValueType.ARRAY
++                and field.types[1] in self.gguf_scalar_to_np and len(field.data) == 1):
++            field = _NumericField(field.offset, field.name, field.parts, field.data, field.types)
++        return super()._push_field(field, skip_sum)
+diff --git a/scripts/pi05_musa_profiles.json b/scripts/pi05_musa_profiles.json
+index 6c42de4..192e967 100644
+--- a/scripts/pi05_musa_profiles.json
++++ b/scripts/pi05_musa_profiles.json
+@@ -28,7 +28,9 @@
+     "VLA_PI05_NORM_PACK": "1",
+     "VLA_PI05_GEGLU_PACK": "1",
+     "VLA_PI05_PRUNE_MEAN": "1",
+-    "VLA_MUSA_SMALL_PIPE": "shape"
++    "VLA_MUSA_SMALL_PIPE": "shape",
++    "VLA_LOAD_THREADS": "4",
++    "VLA_LOAD_DIRECT_FUSED": "1"
+   },
+   "full": {
+     "VLA_MUSA_VISION_SDPA": "1",
+@@ -57,6 +59,8 @@
+     "VLA_PI05_F32_PATCH": "1",
+     "VLA_PI05_NORM_PACK": "1",
+     "VLA_PI05_GEGLU_PACK": "1",
+-    "VLA_MUSA_SMALL_PIPE": "shape"
++    "VLA_MUSA_SMALL_PIPE": "shape",
++    "VLA_LOAD_THREADS": "4",
++    "VLA_LOAD_DIRECT_FUSED": "1"
+   }
+ }
+diff --git a/scripts/pi05_preprocess.py b/scripts/pi05_preprocess.py
+new file mode 100644
+index 0000000..09e1064
+--- /dev/null
++++ b/scripts/pi05_preprocess.py
+@@ -0,0 +1,69 @@
++"""LeRobot-compatible F32 RGB preprocessing for files or uint8 camera frames."""
++from concurrent.futures import ThreadPoolExecutor
++from functools import lru_cache
++import numpy as np
++
++
++@lru_cache(maxsize=1)
++def _image_ops():
++    import torch
++    import torch.nn.functional as F
++    torch.set_num_threads(4)
++    return torch, F
++
++
++def _read_rgb(path):
++    from PIL import Image
++    with Image.open(path) as im:
++        return np.asarray(im.convert("RGB"))
++
++
++def prepare_rgb(rgb, size, out=None):
++    """Resize a uint8 HWC RGB frame; optional out is reused and returned."""
++    rgb = np.asarray(rgb)
++    if rgb.dtype != np.uint8 or rgb.ndim != 3 or rgb.shape[2] != 3 or min(rgb.shape[:2]) < 1:
++        raise ValueError("Expected nonempty uint8 HWC RGB")
++    if not isinstance(size, int) or size < 1:
++        raise ValueError("Expected a positive image size")
++    if out is not None and (not isinstance(out, np.ndarray) or out.dtype != np.float32 or out.shape != (size, size, 3)
++                            or not out.flags.c_contiguous or not out.flags.writeable
++                            or np.shares_memory(rgb, out)):
++        raise ValueError("out must be independent writable contiguous F32 [size,size,3]")
++    pixels = rgb.astype(np.float32, order="C")
++    pixels /= 255.0
++    h, w = rgb.shape[:2]
++    if (h, w) == (size, size):
++        if out is None:
++            return pixels
++        np.copyto(out, pixels)
++        return out
++    torch, F = _image_ops()
++    ratio = max(w / size, h / size)
++    rh, rw = max(1, int(h / ratio)), max(1, int(w / ratio))
++    tensor = torch.from_numpy(pixels).permute(2, 0, 1)[None]
++    tensor = F.interpolate(tensor, size=(rh, rw), mode="bilinear", align_corners=False).clamp_(0, 1)
++    top, left = (size - rh) // 2, (size - rw) // 2
++    if out is None:
++        out = np.zeros((size, size, 3), dtype=np.float32)
++    else:
++        out.fill(0)
++    out[top:top+rh, left:left+rw] = tensor[0].permute(1, 2, 0).numpy()
++    return out
++
++
++def prepare_image(path, size):
++    return prepare_rgb(_read_rgb(path), size)
++
++
++@lru_cache(maxsize=1)
++def _decoders():
++    return ThreadPoolExecutor(max_workers=2, thread_name_prefix="pi05-image")
++
++
++def prepare_images(paths, size):
++    """Decode both cameras concurrently; map preserves the checkpoint's order."""
++    paths = list(paths)
++    if len(paths) < 2:
++        return [prepare_image(p, size) for p in paths]
++    frames = list(_decoders().map(_read_rgb, paths))
++    return [prepare_rgb(rgb, size) for rgb in frames]
+diff --git a/scripts/run_pi05.py b/scripts/run_pi05.py
+index 82af28e..eade6b7 100644
+--- a/scripts/run_pi05.py
++++ b/scripts/run_pi05.py
+@@ -10,14 +10,28 @@ import os
+ from pathlib import Path
+ import sys
+ import tempfile
++from functools import lru_cache
+ 
+-import gguf
++from pi05_gguf import GGUFReader
++from pi05_preprocess import prepare_image, prepare_images
+ import numpy as np
+ 
+ REPO = Path(__file__).resolve().parents[1]
+ sys.path.insert(0, str(REPO / "bindings/python"))
+ 
+ 
++@lru_cache(maxsize=2)
++def _tokenizer(kind, model, length):
++    if kind == "json":
++        from tokenizers import Tokenizer
++        tok = Tokenizer.from_str(model)
++        tok.no_padding()
++        tok.enable_truncation(max_length=length)
++        return tok
++    import sentencepiece as spm
++    return spm.SentencePieceProcessor(model_proto=model)
++
++
+ def prepare_prompt(reader, text, state):
+     tensors = {t.name: t for t in reader.tensors}
+     q01 = np.asarray(tensors["state_q01"].data, dtype=np.float32).reshape(-1)
+@@ -33,41 +47,18 @@ def prepare_prompt(reader, text, state):
+     prompt = f"Task: {text}, State: {' '.join(map(str, bins.tolist()))};\nAction: "
+     length = int(reader.fields["pi05.tokenizer_max_length"].contents())
+     if "pi05.tokenizer.hf_json" in reader.fields:
+-        from tokenizers import Tokenizer
+-        tok = Tokenizer.from_str(reader.fields["pi05.tokenizer.hf_json"].contents())
+-        tok.no_padding()
+-        tok.enable_truncation(max_length=length)
++        tok = _tokenizer("json", reader.fields["pi05.tokenizer.hf_json"].contents(), length)
+         ids = tok.encode(prompt).ids
+     elif "pi05.tokenizer.spm_model" in reader.fields:
+-        import sentencepiece as spm
+-        model = bytes(reader.fields["pi05.tokenizer.spm_model"].contents())
+-        tok = spm.SentencePieceProcessor(model_proto=model)
++        field = reader.fields["pi05.tokenizer.spm_model"]
++        model = field.raw_bytes() if hasattr(field, "raw_bytes") else bytes(field.contents())
++        tok = _tokenizer("spm", model, length)
+         ids = ([tok.bos_id()] + tok.encode(prompt))[:length]
+     else:
+         raise ValueError("GGUF has no local tokenizer; use convert_pi05_local.py")
+     return prompt, ids
+ 
+ 
+-def prepare_image(path, size):
+-    # Match LeRobot's float32 bilinear resize (align_corners=False), centered zero pad.
+-    import torch
+-    import torch.nn.functional as F
+-    from PIL import Image
+-    torch.set_num_threads(4)
+-    with Image.open(path) as im:
+-        rgb = np.asarray(im.convert("RGB"), dtype=np.float32) / 255.0
+-    h, w = rgb.shape[:2]
+-    if (h, w) != (size, size):
+-        ratio = max(w / size, h / size)
+-        rh, rw = max(1, int(h / ratio)), max(1, int(w / ratio))
+-        tensor = torch.from_numpy(rgb.copy()).permute(2, 0, 1)[None]
+-        tensor = F.interpolate(tensor, size=(rh, rw), mode="bilinear", align_corners=False).clamp(0, 1)
+-        top, left = (size - rh) // 2, (size - rw) // 2
+-        tensor = F.pad(tensor, (left, size - rw - left, top, size - rh - top))
+-        rgb = tensor[0].permute(1, 2, 0).numpy()
+-    return np.ascontiguousarray(rgb, dtype=np.float32)
+-
+-
+ def main():
+     ap = argparse.ArgumentParser(description=__doc__)
+     ap.add_argument("--model", required=True, type=Path)
+@@ -94,7 +85,7 @@ def main():
+     os.environ.setdefault("VLA_N_THREADS", "4")
+     build = "build-musa-official" if args.musa_optimized else "build-musa-m1000"
+     os.environ.setdefault("VLA_LIBRARY", str(REPO / build / "libvla.so"))
+-    reader = gguf.GGUFReader(str(args.model))
++    reader = GGUFReader(str(args.model))
+     if reader.fields["general.architecture"].contents() != "pi05":
+         raise ValueError("Expected a pi05 GGUF")
+     optimized_profile = None
+@@ -123,7 +114,7 @@ def main():
+     state = np.asarray([float(x) for x in args.state.split(",")], dtype=np.float32)
+     prompt, tokens = prepare_prompt(reader, args.text, state)
+     size = int(reader.fields["pi05.image_size"].contents())
+-    images = [prepare_image(provided[k], size) for k in cameras]
++    images = prepare_images([provided[k] for k in cameras], size)
+     del reader
+     runtime = {"runtime": {"weight_dtype": args.weight_dtype, "act_dtype": args.act_dtype,
+                            "mm_prec": "default" if args.act_dtype == "f16" else "f32", "flash_attn": args.flash_attn}}
+diff --git a/src/gguf_reader.h b/src/gguf_reader.h
+index 9916c9b..1ff6694 100644
+--- a/src/gguf_reader.h
++++ b/src/gguf_reader.h
+@@ -22,6 +22,9 @@
+ #include "ggml.h"
+ #include "gguf.h"
+ 
++#include <algorithm>
++#include <cstdlib>
++#include <thread>
+ #include <cstdint>
+ #include <cstdio>
+ #include <cstring>
+@@ -180,6 +183,51 @@ struct gguf_reader {
+             if (!read_raw(name, o.data(), o.size())) return {};
+             return o;
+         }
++        const ggml_tensor * src = meta(name);
++        if (!gemma_norm && src &&
++            (src->type == GGML_TYPE_F32 || src->type == GGML_TYPE_F16 || src->type == GGML_TYPE_BF16)) {
++            const int64_t n = ggml_nelements(src);
++            std::vector<uint8_t> raw(ggml_nbytes(src));
++            if (!read_raw(name, raw.data(), raw.size())) return {};
++            if (src->type == GGML_TYPE_F32 && target == GGML_TYPE_F32) return raw;
++            std::vector<uint8_t> out((size_t)n * ggml_type_size(target));
++            constexpr int64_t chunk = 65536;
++            const int64_t blocks = (n + chunk - 1) / chunk;
++            const char * value = std::getenv("VLA_LOAD_THREADS");
++            if (!value) value = std::getenv("VLA_N_THREADS");
++            const int requested = value ? std::max(1, std::min(16, std::atoi(value))) : 1;
++            const int threads = n < 1048576 ? 1 : (int) std::min<int64_t>(requested, blocks);
++            // Identical row converters and SIMD-aligned chunks preserve rounding,
++            // including NaNs; do not shortcut F16/BF16 round trips by memcpy.
++            std::vector<std::vector<float>> scratch(threads);
++            if (src->type != GGML_TYPE_F32 && target != GGML_TYPE_F32)
++                for (auto & v : scratch) v.resize((size_t) std::min(n, chunk));
++            auto convert = [&](int worker) {
++                for (int64_t b=blocks*worker/threads; b<blocks*(worker+1)/threads; ++b) {
++                    const int64_t i=b*chunk, count=std::min(chunk, n-i);
++                    float * f = target==GGML_TYPE_F32 ? (float *)out.data()+i :
++                                src->type==GGML_TYPE_F32 ? (float *)raw.data()+i : scratch[worker].data();
++                    if (src->type==GGML_TYPE_BF16)
++                        ggml_bf16_to_fp32_row((const ggml_bf16_t *)raw.data()+i, f, count);
++                    else if (src->type==GGML_TYPE_F16)
++                        ggml_fp16_to_fp32_row((const ggml_fp16_t *)raw.data()+i, f, count);
++                    if (target==GGML_TYPE_F16)
++                        ggml_fp32_to_fp16_row(f, (ggml_fp16_t *)out.data()+i, count);
++                    else if (target==GGML_TYPE_BF16)
++                        ggml_fp32_to_bf16_row(f, (ggml_bf16_t *)out.data()+i, count);
++                }
++            };
++            std::vector<std::thread> pool;
++            try {
++                for (int i=1; i<threads; ++i) pool.emplace_back(convert, i);
++                convert(0);
++            } catch (...) {
++                for (auto & thread : pool) thread.join();
++                throw;
++            }
++            for (auto & thread : pool) thread.join();
++            return out;
++        }
+         std::vector<float> f = read_f32(name);
+         if (f.empty()) return {};
+         const int64_t n = (int64_t) f.size();
+diff --git a/src/loader.cpp b/src/loader.cpp
+index 5482685..6142b10 100644
+--- a/src/loader.cpp
++++ b/src/loader.cpp
+@@ -20,6 +20,7 @@
+ #include <cmath>
+ #include <cstdint>
+ #include <cstdio>
++#include <chrono>
+ 
+ namespace vla {
+ 
+@@ -267,7 +268,20 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
+         return false;
+     }
+ 
++    using clock=std::chrono::steady_clock;
++    auto stamp=clock::now();
+     ggml_backend_buffer_t buf = alloc_weights(ctx_, backend);
++    const double alloc_ms=std::chrono::duration<double,std::milli>(clock::now()-stamp).count();
++    double read_ms=0,send_ms=0;size_t sent_bytes=0;
++    auto read=[&](const std::string & name,ggml_type type,bool norm,std::vector<uint8_t> & out) {
++        auto start=clock::now();const bool ok=read_resident(name,type,norm,out);
++        read_ms+=std::chrono::duration<double,std::milli>(clock::now()-start).count();return ok;
++    };
++    auto send=[&](ggml_tensor * t,const std::vector<uint8_t> & data,size_t offset=0) {
++        auto start=clock::now();
++        ggml_backend_tensor_set(t,data.data(),offset,data.size());
++        sent_bytes+=data.size();send_ms+=std::chrono::duration<double,std::milli>(clock::now()-start).count();
++    };
+     if (!buf) {
+         std::fprintf(stderr, "vla(%s): alloc_weights failed (OOM?)\n", arch_);
+         return false;
+@@ -286,20 +300,41 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
+         const bool gn = std::find(gemma_norms_.begin(), gemma_norms_.end(), name) != gemma_norms_.end();
+ 
+         std::vector<uint8_t> bytes;
+-        if (!read_resident(name, t->type, gn, bytes) || bytes.size() != ggml_nbytes(t)) {
++        if (!read(name, t->type, gn, bytes) || bytes.size() != ggml_nbytes(t)) {
+             std::fprintf(stderr,
+                          "vla(%s): failed to load %s (got %zu bytes, expected %zu, type=%d)\n",
+                          arch_, name, bytes.size(), ggml_nbytes(t), (int) t->type);
+             return false;
+         }
+-        ggml_backend_tensor_set(t, bytes.data(), 0, bytes.size());
++        send(t,bytes);
+     }
+ 
++    const char * direct_setting=std::getenv("VLA_LOAD_DIRECT_FUSED");
++    const bool direct=direct_setting && std::atoi(direct_setting)!=0;
+     for (const Fused & f : fused_) {
++        if(direct && (f.dst->type==GGML_TYPE_F32 || f.dst->type==GGML_TYPE_F16 || f.dst->type==GGML_TYPE_BF16)) {
++            size_t offset=0;const size_t total=ggml_nbytes(f.dst);
++            for(const auto & name:f.srcs) {
++                std::vector<uint8_t> bytes;
++                if(!read(name,f.dst->type,false,bytes)) {
++                    std::fprintf(stderr,"vla(%s): fused fill: read %s failed\n",arch_,name.c_str());return false;
++                }
++                if(bytes.size()>total-offset) {
++                    std::fprintf(stderr,"vla(%s): fused fill: %s exceeds destination\n",arch_,name.c_str());return false;
++                }
++                send(f.dst,bytes,offset);offset+=bytes.size();
++            }
++            if(offset!=total) {
++                std::fprintf(stderr,"vla(%s): fused fill: %s size %zu vs %zu\n",arch_,ggml_get_name(f.dst),offset,total);
++                return false;
++            }
++            continue;
++        }
+         std::vector<uint8_t> parts;
++        parts.reserve(ggml_nbytes(f.dst));
+         for (const std::string & s : f.srcs) {
+             std::vector<uint8_t> b;
+-            if (!read_resident(s, f.dst->type, false, b)) {
++            if (!read(s, f.dst->type, false, b)) {
+                 std::fprintf(stderr, "vla(%s): fused fill: read %s failed\n", arch_, s.c_str());
+                 return false;
+             }
+@@ -310,7 +345,7 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
+                          arch_, ggml_get_name(f.dst), parts.size(), ggml_nbytes(f.dst));
+             return false;
+         }
+-        ggml_backend_tensor_set(f.dst, parts.data(), 0, parts.size());
++        send(f.dst,parts);
+     }
+ 
+     for (const Quant & f : quant_) {
+@@ -359,6 +394,9 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
+         ggml_backend_tensor_set(f.q.w, codes.data(), 0, codes.size());
+         ggml_backend_tensor_set(f.q.s, scales.data(), 0, scales.size() * sizeof(float));
+     }
++    if(const char * profile=std::getenv("VLA_PI05_PROFILE_LOAD"); profile && std::atoi(profile)!=0)
++        std::fprintf(stderr,R"(VLA_WEIGHT_LOAD {"alloc_ms":%.3f,"read_convert_ms":%.3f,"send_ms":%.3f,"bytes":%zu,"quantized_nodes":%zu})" "\n",
++            alloc_ms,read_ms,send_ms,sent_bytes,quant_.size());
+     return true;
+ }
+ 
+diff --git a/src/models/pi05.cpp b/src/models/pi05.cpp
+index 9b7ab69..f0fd81f 100644
+--- a/src/models/pi05.cpp
++++ b/src/models/pi05.cpp
+@@ -488,6 +488,11 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+                                            const Options& opts) {
+     (void) config_path;
+ 
++    using load_clock=std::chrono::steady_clock;
++    const auto load_begin=load_clock::now();
++    auto load_mark=load_begin;
++    double load_config=0,load_backend=0,load_declare=0,load_upload=0;
++    auto load_elapsed=[&](){auto now=load_clock::now();double ms=std::chrono::duration<double,std::milli>(now-load_mark).count();load_mark=now;return ms;};
+     auto m = std::make_unique<Pi05ModelArch>();
+     m->matmul_type = opts.weight_dtype.value_or(vla::default_weight_dtype(GGML_TYPE_BF16));
+ 
+@@ -521,9 +526,11 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+                 cfg.num_steps, (long long) cfg.real_state_dim, (long long) cfg.real_action_dim,
+                 (long long) cfg.n_lang, ggml_type_name(m->matmul_type));
+ 
++    load_config=load_elapsed();
+     bool is_sycl = false, is_musa = false;
+     {
+         const Backend b = backend_init("vla(pi05)", m->n_threads);
++        load_backend=load_elapsed();
+         if (!b.handle) {
+             return nullptr;
+         }
+@@ -837,8 +844,10 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+     m->W_ain  = L.f32("action_in_proj.weight");   m->b_ain  = L.f32("action_in_proj.bias");
+     m->W_aout = L.f32("action_out_proj.weight");  m->b_aout = L.f32("action_out_proj.bias");
+ 
++    load_declare=load_elapsed();
+     if (!L.upload(m->backend, &m->weight_buf))
+         return nullptr;
++    load_upload=load_elapsed();
+ 
+     if(m->musa_backend && env_flag("VLA_PI05_PREFIX_GAMMA_FOLD")) {
+         for(auto & w:m->pl.blk) {
+@@ -883,6 +892,10 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+ 
+     if (!bake_adarms(g, *m) || !load_stats(g, *m))
+         return nullptr;
++    if(env_flag("VLA_PI05_PROFILE_LOAD"))
++        std::fprintf(stderr,"VLA_PI05_LOAD {\"config_ms\":%.3f,\"backend_ms\":%.3f,\"declare_ms\":%.3f,\"upload_ms\":%.3f,\"constants_ms\":%.3f,\"total_ms\":%.3f}\n",
++            load_config,load_backend,load_declare,load_upload,load_elapsed(),
++            std::chrono::duration<double,std::milli>(load_clock::now()-load_begin).count());
+     std::printf("vla(pi05): model loaded (n_threads=%d)\n", m->n_threads);
+     return m;
+ }
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index cf030cc..e8cf342 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -235,3 +235,10 @@ if(GGML_MUSA)
+     add_test(NAME musa_prune_score COMMAND test_musa_ops --prune-score)
+     set_tests_properties(musa_packed_norm musa_prune_score PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
+ endif()
++
++
++add_executable(test_weight_loading test_weight_loading.cpp)
++target_include_directories(test_weight_loading PRIVATE ${CMAKE_SOURCE_DIR}/src)
++target_link_libraries(test_weight_loading PRIVATE vla_core)
++add_test(NAME weight_loading COMMAND test_weight_loading)
++set_tests_properties(weight_loading PROPERTIES TIMEOUT 180)
+diff --git a/tests/py/test_pi05_io.py b/tests/py/test_pi05_io.py
+new file mode 100644
+index 0000000..a361b10
+--- /dev/null
++++ b/tests/py/test_pi05_io.py
+@@ -0,0 +1,98 @@
++import importlib.util
++from pathlib import Path
++import sys,tempfile,unittest
++try:
++    import numpy as np
++    import gguf
++    from PIL import Image
++    import torch
++    import torch.nn.functional as F
++except ImportError as exc:
++    raise unittest.SkipTest("pi05 IO tests need converter/image dependencies") from exc
++# Other converter tests intentionally install lightweight module stubs on bare CI.
++if not (hasattr(np,"random") and hasattr(gguf,"ReaderField") and hasattr(torch,"set_num_threads")):
++    raise unittest.SkipTest("pi05 IO tests need real converter/image dependencies")
++repo=Path(__file__).resolve().parents[2];sys.path.insert(0,str(repo/'scripts'))
++from pi05_gguf import GGUFReader
++from pi05_preprocess import prepare_image,prepare_images,prepare_rgb
++torch.set_num_threads(4)
++
++def reference(path,size):
++    with Image.open(path)as im:rgb=np.asarray(im.convert("RGB"),dtype=np.float32)/255.0
++    h,w=rgb.shape[:2]
++    if(h,w)!=(size,size):
++        ratio=max(w/size,h/size);rh,rw=max(1,int(h/ratio)),max(1,int(w/ratio))
++        tensor=torch.from_numpy(rgb.copy()).permute(2,0,1)[None]
++        tensor=F.interpolate(tensor,size=(rh,rw),mode="bilinear",align_corners=False).clamp(0,1)
++        top,left=(size-rh)//2,(size-rw)//2
++        tensor=F.pad(tensor,(left,size-rw-left,top,size-rh-top))
++        rgb=tensor[0].permute(1,2,0).numpy()
++    return np.ascontiguousarray(rgb,dtype=np.float32)
++
++class Images(unittest.TestCase):
++    def test_pixels_and_buffers(self):
++        rng=np.random.default_rng(41)
++        with tempfile.TemporaryDirectory()as temp:
++            for h,w in [(480,640),(640,480),(224,224),(225,223),(1,17),(17,1),(7,11),(1025,127)]:
++                a=rng.integers(0,256,(h,w,3),dtype=np.uint8)
++                if h>1:a[0]=0;a[-1]=255
++                path=Path(temp)/'rgb.png';Image.fromarray(a).save(path)
++                expected=reference(path,224)
++                np.testing.assert_array_equal(prepare_image(path,224),expected)
++                out=np.full((224,224,3),np.nan,np.float32)
++                self.assertIs(prepare_rgb(a,224,out),out)
++                np.testing.assert_array_equal(out,expected)
++                np.testing.assert_array_equal(prepare_images([path,path],224)[0],expected)
++                # Camera views may have negative strides.
++                path2=Path(temp)/'flip.png';Image.fromarray(a[:,::-1]).save(path2)
++                np.testing.assert_array_equal(prepare_rgb(a[:,::-1],224,out),reference(path2,224))
++
++    def test_camera_order_and_formats(self):
++        rng=np.random.default_rng(7)
++        with tempfile.TemporaryDirectory()as temp:
++            paths=[]
++            for mode,shape in [('L',(37,59)),('RGBA',(59,37,4)),('RGB',(480,640,3))]:
++                a=rng.integers(0,256,shape,dtype=np.uint8);path=Path(temp)/(mode+'.png')
++                Image.fromarray(a,mode=mode).save(path);paths.append(path)
++            for path,a in zip(paths,prepare_images(paths,224)):
++                np.testing.assert_array_equal(a,reference(path,224))
++            jpeg=Path(temp)/'rgb.jpg';Image.open(paths[-1]).convert('RGB').save(jpeg)
++            np.testing.assert_array_equal(prepare_image(jpeg,224),reference(jpeg,224))
++
++    def test_validation(self):
++        for a in [np.zeros((3,3),np.uint8),np.zeros((2,3,4),np.uint8),np.zeros((0,3,3),np.uint8),np.zeros((3,3,3),np.float32)]:
++            with self.assertRaises(ValueError):prepare_rgb(a,224)
++        with self.assertRaises(ValueError):prepare_rgb(np.zeros((2,2,3),np.uint8),224,[])
++
++class Metadata(unittest.TestCase):
++    def test_contents_endian_and_payload(self):
++        for endian in [gguf.GGUFEndian.LITTLE,gguf.GGUFEndian.BIG]:
++            with tempfile.TemporaryDirectory()as temp:
++                path=Path(temp)/'test.gguf'
++                w=gguf.GGUFWriter(path,'pi05',endianess=endian)
++                w.add_key_value('bytes',np.arange(65537,dtype=np.uint8).tolist(),gguf.GGUFValueType.ARRAY,sub_type=gguf.GGUFValueType.UINT8)
++                w.add_array('numbers',[1,-4,17])
++                w.add_array('byte_values',[0,128,255])
++                w.add_array('floats',[.1,.5,-1.25])
++                w.add_array('strings',['top','wrist'])
++                w.add_tensor('state_q01',np.arange(7,dtype=np.float32));w.write_header_to_file()
++                w.write_kv_data_to_file();w.write_tensors_to_file();w.close()
++                old=gguf.GGUFReader(path);fast=GGUFReader(path)
++                for name in old.fields:
++                    self.assertEqual(old.fields[name].contents(),fast.fields[name].contents())
++                for key in ['bytes','numbers','floats','strings']:
++                    a,b=old.fields[key],fast.fields[key]
++                    for ix in [0,-1,False,True,slice(1,3),slice(None,None,-1)]:
++                        self.assertEqual(a.contents(ix),b.contents(ix))
++                self.assertEqual(fast.fields['bytes'].raw_bytes(),bytes(old.fields['bytes'].contents()))
++                self.assertEqual(fast.fields['byte_values'].raw_bytes(),bytes(old.fields['byte_values'].contents()))
++                with self.assertRaises(ValueError):fast.fields['numbers'].raw_bytes()
++                self.assertEqual(old.tensors[0].data.tobytes(),fast.tensors[0].data.tobytes())
++                # Reject huge/truncated numeric arrays without per-element allocation.
++                f=fast.fields['bytes'];raw=bytearray(path.read_bytes())
++                length_offset=f.offset+8+len('bytes')+4+4
++                raw[length_offset:length_offset+8]=(2**62).to_bytes(8,'big'if endian==gguf.GGUFEndian.BIG else 'little')
++                bad=Path(temp)/'bad.gguf';bad.write_bytes(raw)
++                with self.assertRaises((ValueError,OverflowError)):GGUFReader(bad)
++
++if __name__=='__main__':unittest.main()
+diff --git a/tests/test_weight_loading.cpp b/tests/test_weight_loading.cpp
+new file mode 100644
+index 0000000..4fc0be7
+--- /dev/null
++++ b/tests/test_weight_loading.cpp
+@@ -0,0 +1,78 @@
++#include "gguf_reader.h"
++#include "loader.h"
++#include "ggml-cpu.h"
++#include "gguf.h"
++#include "ggml.h"
++#include <cstdio>
++#include <cstring>
++#include <cstdlib>
++#include <filesystem>
++#include <chrono>
++#include <vector>
++
++int main() {
++    const auto path=std::filesystem::temp_directory_path()/
++        ("vla-load-"+std::to_string(std::chrono::steady_clock::now().time_since_epoch().count())+".gguf");
++    const int64_t n=1048579; // SIMD-aligned chunks plus a scalar tail.
++    auto * ctx=ggml_init({(size_t)n*8+1024*1024,nullptr,false});
++    auto * gguf=gguf_init_empty();
++    for(auto type:{GGML_TYPE_F32,GGML_TYPE_F16,GGML_TYPE_BF16}) {
++        auto * t=ggml_new_tensor_1d(ctx,type,n);ggml_set_name(t,ggml_type_name(type));
++        if(type==GGML_TYPE_F32) {
++            auto * dst=(uint32_t *)t->data;
++            for(int64_t i=0;i<n;++i)dst[i]=(uint32_t)i*1664525u+1013904223u;
++        } else {
++            auto * dst=(uint16_t *)t->data;
++            for(int64_t i=0;i<n;++i)dst[i]=(uint16_t)i; // Includes all NaN/subnormal patterns.
++        }
++        gguf_add_tensor(gguf,t);
++    }
++    if(!gguf_write_to_file(gguf,path.string().c_str(),false))return 1;
++    gguf_free(gguf);ggml_free(ctx);
++    bool ok=true;
++    {
++        vla::gguf_reader reader("load-test");
++        if(!reader.open(path.string()))return 1;
++        for(auto source:{GGML_TYPE_F32,GGML_TYPE_F16,GGML_TYPE_BF16})
++            for(auto target:{GGML_TYPE_F32,GGML_TYPE_F16,GGML_TYPE_BF16})
++                for(bool norm:{false,true}) {
++                    auto f=reader.read_f32(ggml_type_name(source));
++                    if(norm)for(auto & x:f)x+=1.f;
++                    std::vector<uint8_t> ref((size_t)n*ggml_type_size(target));
++                    if(target==GGML_TYPE_F32)std::memcpy(ref.data(),f.data(),ref.size());
++                    else if(target==GGML_TYPE_F16)ggml_fp32_to_fp16_row(f.data(),(ggml_fp16_t *)ref.data(),n);
++                    else ggml_fp32_to_bf16_row(f.data(),(ggml_bf16_t *)ref.data(),n);
++                    for(const char * threads:{"1","4"}) {
++#ifdef _WIN32
++                        _putenv_s("VLA_LOAD_THREADS",threads);
++#else
++                        setenv("VLA_LOAD_THREADS",threads,1);
++#endif
++                        auto got=reader.read_convert(ggml_type_name(source),target,norm);
++                        if(got!=ref){std::fprintf(stderr,"mismatch %s -> %s norm=%d threads=%s\\n",
++                            ggml_type_name(source),ggml_type_name(target),norm,threads);ok=false;}
++                    }
++                }
++        auto * backend=ggml_backend_cpu_init();
++        for(const char * direct:{"0","1"}) {
++#ifdef _WIN32
++            _putenv_s("VLA_LOAD_DIRECT_FUSED",direct);
++#else
++            setenv("VLA_LOAD_DIRECT_FUSED",direct,1);
++#endif
++            auto * weights=ggml_init({64*ggml_tensor_overhead(),nullptr,true});
++            vla::WeightLoader loader("load-test",reader,weights,GGML_TYPE_F16);
++            auto * merged=loader.fuse_typed(GGML_TYPE_F16,"merged",{"bf16","f32"});
++            ggml_backend_buffer_t buffer=nullptr;
++            if(!merged || !loader.upload(backend,&buffer))return 1;
++            auto ref=reader.read_convert("bf16",GGML_TYPE_F16);
++            auto tail=reader.read_convert("f32",GGML_TYPE_F16);ref.insert(ref.end(),tail.begin(),tail.end());
++            std::vector<uint8_t> got(ggml_nbytes(merged));ggml_backend_tensor_get(merged,got.data(),0,got.size());
++            if(got!=ref)ok=false;
++            ggml_backend_buffer_free(buffer);ggml_free(weights);
++        }
++        ggml_backend_free(backend);
++    }
++    std::filesystem::remove(path);
++    return ok?0:1;
++}

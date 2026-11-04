@@ -1,0 +1,23 @@
+[1/13] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+In file included from /home/skysi/code/vla.cpp/src/models/pi05.cpp:1:
+In file included from /home/skysi/code/vla.cpp/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[2/13] Linking CXX shared library libvla_core.so
+[3/13] Linking CXX shared library libvla.so
+[4/13] Linking CXX executable tests/test_config_guard
+[5/13] Linking CXX executable vla-bench
+[6/13] Linking CXX executable tests/test_foldquant_cpu_op
+[7/13] Linking CXX executable vla-cli
+[8/13] Linking CXX executable tests/vla_predict_check
+[9/13] Linking CXX executable tests/test_prompt
+[10/13] Linking CXX executable vla-server
+[11/13] Linking C executable tests/test_c_api
+[12/13] Linking CXX executable tests/test_musa_ops
+[13/13] Linking CXX executable tests/test_foldquant_dequant

@@ -20,6 +20,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
+#include <chrono>
 
 namespace vla {
 
@@ -267,7 +268,20 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
         return false;
     }
 
+    using clock=std::chrono::steady_clock;
+    auto stamp=clock::now();
     ggml_backend_buffer_t buf = alloc_weights(ctx_, backend);
+    const double alloc_ms=std::chrono::duration<double,std::milli>(clock::now()-stamp).count();
+    double read_ms=0,send_ms=0;size_t sent_bytes=0;
+    auto read=[&](const std::string & name,ggml_type type,bool norm,std::vector<uint8_t> & out) {
+        auto start=clock::now();const bool ok=read_resident(name,type,norm,out);
+        read_ms+=std::chrono::duration<double,std::milli>(clock::now()-start).count();return ok;
+    };
+    auto send=[&](ggml_tensor * t,const std::vector<uint8_t> & data,size_t offset=0) {
+        auto start=clock::now();
+        ggml_backend_tensor_set(t,data.data(),offset,data.size());
+        sent_bytes+=data.size();send_ms+=std::chrono::duration<double,std::milli>(clock::now()-start).count();
+    };
     if (!buf) {
         std::fprintf(stderr, "vla(%s): alloc_weights failed (OOM?)\n", arch_);
         return false;
@@ -286,20 +300,41 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
         const bool gn = std::find(gemma_norms_.begin(), gemma_norms_.end(), name) != gemma_norms_.end();
 
         std::vector<uint8_t> bytes;
-        if (!read_resident(name, t->type, gn, bytes) || bytes.size() != ggml_nbytes(t)) {
+        if (!read(name, t->type, gn, bytes) || bytes.size() != ggml_nbytes(t)) {
             std::fprintf(stderr,
                          "vla(%s): failed to load %s (got %zu bytes, expected %zu, type=%d)\n",
                          arch_, name, bytes.size(), ggml_nbytes(t), (int) t->type);
             return false;
         }
-        ggml_backend_tensor_set(t, bytes.data(), 0, bytes.size());
+        send(t,bytes);
     }
 
+    const char * direct_setting=std::getenv("VLA_LOAD_DIRECT_FUSED");
+    const bool direct=direct_setting && std::atoi(direct_setting)!=0;
     for (const Fused & f : fused_) {
+        if(direct && (f.dst->type==GGML_TYPE_F32 || f.dst->type==GGML_TYPE_F16 || f.dst->type==GGML_TYPE_BF16)) {
+            size_t offset=0;const size_t total=ggml_nbytes(f.dst);
+            for(const auto & name:f.srcs) {
+                std::vector<uint8_t> bytes;
+                if(!read(name,f.dst->type,false,bytes)) {
+                    std::fprintf(stderr,"vla(%s): fused fill: read %s failed\n",arch_,name.c_str());return false;
+                }
+                if(bytes.size()>total-offset) {
+                    std::fprintf(stderr,"vla(%s): fused fill: %s exceeds destination\n",arch_,name.c_str());return false;
+                }
+                send(f.dst,bytes,offset);offset+=bytes.size();
+            }
+            if(offset!=total) {
+                std::fprintf(stderr,"vla(%s): fused fill: %s size %zu vs %zu\n",arch_,ggml_get_name(f.dst),offset,total);
+                return false;
+            }
+            continue;
+        }
         std::vector<uint8_t> parts;
+        parts.reserve(ggml_nbytes(f.dst));
         for (const std::string & s : f.srcs) {
             std::vector<uint8_t> b;
-            if (!read_resident(s, f.dst->type, false, b)) {
+            if (!read(s, f.dst->type, false, b)) {
                 std::fprintf(stderr, "vla(%s): fused fill: read %s failed\n", arch_, s.c_str());
                 return false;
             }
@@ -310,7 +345,7 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
                          arch_, ggml_get_name(f.dst), parts.size(), ggml_nbytes(f.dst));
             return false;
         }
-        ggml_backend_tensor_set(f.dst, parts.data(), 0, parts.size());
+        send(f.dst,parts);
     }
 
     for (const Quant & f : quant_) {
@@ -359,6 +394,9 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
         ggml_backend_tensor_set(f.q.w, codes.data(), 0, codes.size());
         ggml_backend_tensor_set(f.q.s, scales.data(), 0, scales.size() * sizeof(float));
     }
+    if(const char * profile=std::getenv("VLA_PI05_PROFILE_LOAD"); profile && std::atoi(profile)!=0)
+        std::fprintf(stderr,R"(VLA_WEIGHT_LOAD {"alloc_ms":%.3f,"read_convert_ms":%.3f,"send_ms":%.3f,"bytes":%zu,"quantized_nodes":%zu})" "\n",
+            alloc_ms,read_ms,send_ms,sent_bytes,quant_.size());
     return true;
 }
 

@@ -1,0 +1,9 @@
+test_camera_order_and_formats (test_pi05_io.Images) ... ok
+test_pixels_and_buffers (test_pi05_io.Images) ... ok
+test_validation (test_pi05_io.Images) ... ok
+test_contents_endian_and_payload (test_pi05_io.Metadata) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.261s
+
+OK

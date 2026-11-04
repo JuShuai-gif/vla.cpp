@@ -1,0 +1,33 @@
+         119507362 function calls (115243323 primitive calls) in 82.421 seconds
+
+   Ordered by: cumulative time
+   List reduced from 130 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   82.421   82.421 /home/skysi/code/vla.cpp/优化记录/2026-11-04_模型加载与图像预处理优化/measure_pipeline.py:6(measure)
+        1    0.000    0.000   82.421   82.421 /home/skysi/code/vla.cpp/优化记录/2026-11-04_模型加载与图像预处理优化/measure_pipeline.py:16(<lambda>)
+        1    0.000    0.000   82.421   82.421 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:132(__init__)
+        1    0.197    0.197   82.317   82.317 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:289(_build_fields)
+4264080/41   14.758    0.000   81.847    1.996 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:221(_get_field_parts)
+  4268606    9.888    0.000   57.798    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:197(_get)
+ 17075681   27.213    0.000   31.384    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/memmap.py:310(__array_finalize__)
+  8537212    6.625    0.000   26.491    0.000 {method 'view' of 'numpy.ndarray' objects}
+ 12804487    9.730    0.000   21.246    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/memmap.py:357(__getitem__)
+  4264707    1.923    0.000    3.844    0.000 /usr/lib/python3.10/enum.py:359(__call__)
+ 17075680    2.256    0.000    2.256    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/multiarray.py:1410(may_share_memory)
+  4264707    1.922    0.000    1.922    0.000 /usr/lib/python3.10/enum.py:678(__new__)
+ 17075691    1.915    0.000    1.915    0.000 {built-in method builtins.hasattr}
+  4268606    1.753    0.000    1.753    0.000 {built-in method numpy.empty}
+  8528078    1.375    0.000    1.375    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:253(<genexpr>)
+  4268606    1.105    0.000    1.105    0.000 {method 'newbyteorder' of 'numpy.dtype' objects}
+  4264080    0.529    0.000    0.529    0.000 {built-in method builtins.len}
+  4265341    0.488    0.000    0.488    0.000 {method 'append' of 'list' objects}
+  4264076    0.481    0.000    0.481    0.000 {method 'get' of 'dict' objects}
+       41    0.242    0.006    0.242    0.006 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:304(<listcomp>)
+        1    0.001    0.001    0.078    0.078 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:310(_build_tensor_info)
+      627    0.003    0.000    0.075    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:259(_get_tensor_info_field)
+        1    0.005    0.005    0.025    0.025 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:318(_build_tensors)
+      675    0.001    0.000    0.017    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:217(_get_str)
+      627    0.001    0.000    0.008    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/fromnumeric.py:3328(prod)
+
+

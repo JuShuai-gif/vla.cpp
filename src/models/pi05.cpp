@@ -488,6 +488,11 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
                                            const Options& opts) {
     (void) config_path;
 
+    using load_clock=std::chrono::steady_clock;
+    const auto load_begin=load_clock::now();
+    auto load_mark=load_begin;
+    double load_config=0,load_backend=0,load_declare=0,load_upload=0;
+    auto load_elapsed=[&](){auto now=load_clock::now();double ms=std::chrono::duration<double,std::milli>(now-load_mark).count();load_mark=now;return ms;};
     auto m = std::make_unique<Pi05ModelArch>();
     m->matmul_type = opts.weight_dtype.value_or(vla::default_weight_dtype(GGML_TYPE_BF16));
 
@@ -521,9 +526,11 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
                 cfg.num_steps, (long long) cfg.real_state_dim, (long long) cfg.real_action_dim,
                 (long long) cfg.n_lang, ggml_type_name(m->matmul_type));
 
+    load_config=load_elapsed();
     bool is_sycl = false, is_musa = false;
     {
         const Backend b = backend_init("vla(pi05)", m->n_threads);
+        load_backend=load_elapsed();
         if (!b.handle) {
             return nullptr;
         }
@@ -837,8 +844,10 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
     m->W_ain  = L.f32("action_in_proj.weight");   m->b_ain  = L.f32("action_in_proj.bias");
     m->W_aout = L.f32("action_out_proj.weight");  m->b_aout = L.f32("action_out_proj.bias");
 
+    load_declare=load_elapsed();
     if (!L.upload(m->backend, &m->weight_buf))
         return nullptr;
+    load_upload=load_elapsed();
 
     if(m->musa_backend && env_flag("VLA_PI05_PREFIX_GAMMA_FOLD")) {
         for(auto & w:m->pl.blk) {
@@ -883,6 +892,10 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
 
     if (!bake_adarms(g, *m) || !load_stats(g, *m))
         return nullptr;
+    if(env_flag("VLA_PI05_PROFILE_LOAD"))
+        std::fprintf(stderr,"VLA_PI05_LOAD {\"config_ms\":%.3f,\"backend_ms\":%.3f,\"declare_ms\":%.3f,\"upload_ms\":%.3f,\"constants_ms\":%.3f,\"total_ms\":%.3f}\n",
+            load_config,load_backend,load_declare,load_upload,load_elapsed(),
+            std::chrono::duration<double,std::milli>(load_clock::now()-load_begin).count());
     std::printf("vla(pi05): model loaded (n_threads=%d)\n", m->n_threads);
     return m;
 }

@@ -1,0 +1,2 @@
+[{'stage': 'random-pruned', 'cases': 14, 'max_abs': 0}, {'stage': 'f16-entry-pruned', 'max_abs': 0}]
+[{'stage': 'random-full', 'cases': 14, 'max_abs': 0}, {'stage': 'f16-entry-full', 'max_abs': 0}]

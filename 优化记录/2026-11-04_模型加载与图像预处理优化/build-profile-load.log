@@ -1,0 +1,42 @@
+[1/13] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+FAILED: CMakeFiles/vla_core.dir/src/models/pi05.cpp.o 
+/usr/local/musa/bin/clang++ -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_CUDA -DGGML_USE_MUSA -DVLA_USE_SPM -Dvla_core_EXPORTS -I/home/skysi/code/vla.cpp/src -I/home/skysi/code/vla.cpp/build-musa-deps/llama/vendor -I/home/skysi/code/vla.cpp/build-musa-m1000/_deps/sentencepiece-src/src -I/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include -isystem /home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src -O3 -DNDEBUG -fPIC -Wall -Wextra -std=c++17 -MD -MT CMakeFiles/vla_core.dir/src/models/pi05.cpp.o -MF CMakeFiles/vla_core.dir/src/models/pi05.cpp.o.d -o CMakeFiles/vla_core.dir/src/models/pi05.cpp.o -c /home/skysi/code/vla.cpp/src/models/pi05.cpp
+In file included from /home/skysi/code/vla.cpp/src/models/pi05.cpp:1:
+In file included from /home/skysi/code/vla.cpp/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp/build-musa-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp/src/models/pi05.cpp:896:48: error: invalid suffix on literal; C++11 requires a space between literal and identifier [-Wreserved-user-defined-literal]
+        std::fprintf(stderr,"VLA_PI05_LOAD {\\"config_ms\\":%.3f,\\"backend_ms\\":%.3f,\\"declare_ms\\":%.3f,\\"upload_ms\\":%.3f,\\"constants_ms\\":%.3f,\\"total_ms\\":%.3f}\\n",
+                                               ^
+                                                
+/home/skysi/code/vla.cpp/src/models/pi05.cpp:896:48: error: expected ')'
+/home/skysi/code/vla.cpp/src/models/pi05.cpp:896:21: note: to match this '('
+        std::fprintf(stderr,"VLA_PI05_LOAD {\\"config_ms\\":%.3f,\\"backend_ms\\":%.3f,\\"declare_ms\\":%.3f,\\"upload_ms\\":%.3f,\\"constants_ms\\":%.3f,\\"total_ms\\":%.3f}\\n",
+                    ^
+/home/skysi/code/vla.cpp/src/models/pi05.cpp:896:69: error: invalid suffix on literal; C++11 requires a space between literal and identifier [-Wreserved-user-defined-literal]
+        std::fprintf(stderr,"VLA_PI05_LOAD {\\"config_ms\\":%.3f,\\"backend_ms\\":%.3f,\\"declare_ms\\":%.3f,\\"upload_ms\\":%.3f,\\"constants_ms\\":%.3f,\\"total_ms\\":%.3f}\\n",
+                                                                    ^
+                                                                     
+/home/skysi/code/vla.cpp/src/models/pi05.cpp:896:91: error: invalid suffix on literal; C++11 requires a space between literal and identifier [-Wreserved-user-defined-literal]
+        std::fprintf(stderr,"VLA_PI05_LOAD {\\"config_ms\\":%.3f,\\"backend_ms\\":%.3f,\\"declare_ms\\":%.3f,\\"upload_ms\\":%.3f,\\"constants_ms\\":%.3f,\\"total_ms\\":%.3f}\\n",
+                                                                                          ^
+                                                                                           
+/home/skysi/code/vla.cpp/src/models/pi05.cpp:896:113: error: invalid suffix on literal; C++11 requires a space between literal and identifier [-Wreserved-user-defined-literal]
+        std::fprintf(stderr,"VLA_PI05_LOAD {\\"config_ms\\":%.3f,\\"backend_ms\\":%.3f,\\"declare_ms\\":%.3f,\\"upload_ms\\":%.3f,\\"constants_ms\\":%.3f,\\"total_ms\\":%.3f}\\n",
+                                                                                                                ^
+                                                                                                                 
+/home/skysi/code/vla.cpp/src/models/pi05.cpp:896:134: error: invalid suffix on literal; C++11 requires a space between literal and identifier [-Wreserved-user-defined-literal]
+        std::fprintf(stderr,"VLA_PI05_LOAD {\\"config_ms\\":%.3f,\\"backend_ms\\":%.3f,\\"declare_ms\\":%.3f,\\"upload_ms\\":%.3f,\\"constants_ms\\":%.3f,\\"total_ms\\":%.3f}\\n",
+                                                                                                                                     ^
+                                                                                                                                      
+/home/skysi/code/vla.cpp/src/models/pi05.cpp:896:158: error: invalid suffix on literal; C++11 requires a space between literal and identifier [-Wreserved-user-defined-literal]
+        std::fprintf(stderr,"VLA_PI05_LOAD {\\"config_ms\\":%.3f,\\"backend_ms\\":%.3f,\\"declare_ms\\":%.3f,\\"upload_ms\\":%.3f,\\"constants_ms\\":%.3f,\\"total_ms\\":%.3f}\\n",
+                                                                                                                                                             ^
+                                                                                                                                                              
+1 warning and 7 errors generated.
+ninja: build stopped: subcommand failed.

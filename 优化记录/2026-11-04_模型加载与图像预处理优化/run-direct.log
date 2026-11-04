@@ -1,0 +1,4 @@
+{'stage': 'direct-0', 'model': 'pruned', 'returncode': 0}
+{'stage': 'direct-0', 'model': 'full', 'returncode': 0}
+{'stage': 'direct-1', 'model': 'pruned', 'returncode': 0}
+{'stage': 'direct-1', 'model': 'full', 'returncode': 0}

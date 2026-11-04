@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "candidate-threads-1",
+    "model": "pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "candidate-threads-1",
+    "model": "full",
+    "returncode": 0
+  },
+  {
+    "stage": "candidate-threads-4",
+    "model": "pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "candidate-threads-4",
+    "model": "full",
+    "returncode": 0
+  }
+]

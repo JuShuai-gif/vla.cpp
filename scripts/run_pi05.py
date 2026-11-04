@@ -10,12 +10,26 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+from functools import lru_cache
 
-import gguf
+from pi05_gguf import GGUFReader
+from pi05_preprocess import prepare_image, prepare_images
 import numpy as np
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "bindings/python"))
+
+
+@lru_cache(maxsize=2)
+def _tokenizer(kind, model, length):
+    if kind == "json":
+        from tokenizers import Tokenizer
+        tok = Tokenizer.from_str(model)
+        tok.no_padding()
+        tok.enable_truncation(max_length=length)
+        return tok
+    import sentencepiece as spm
+    return spm.SentencePieceProcessor(model_proto=model)
 
 
 def prepare_prompt(reader, text, state):
@@ -33,39 +47,16 @@ def prepare_prompt(reader, text, state):
     prompt = f"Task: {text}, State: {' '.join(map(str, bins.tolist()))};\nAction: "
     length = int(reader.fields["pi05.tokenizer_max_length"].contents())
     if "pi05.tokenizer.hf_json" in reader.fields:
-        from tokenizers import Tokenizer
-        tok = Tokenizer.from_str(reader.fields["pi05.tokenizer.hf_json"].contents())
-        tok.no_padding()
-        tok.enable_truncation(max_length=length)
+        tok = _tokenizer("json", reader.fields["pi05.tokenizer.hf_json"].contents(), length)
         ids = tok.encode(prompt).ids
     elif "pi05.tokenizer.spm_model" in reader.fields:
-        import sentencepiece as spm
-        model = bytes(reader.fields["pi05.tokenizer.spm_model"].contents())
-        tok = spm.SentencePieceProcessor(model_proto=model)
+        field = reader.fields["pi05.tokenizer.spm_model"]
+        model = field.raw_bytes() if hasattr(field, "raw_bytes") else bytes(field.contents())
+        tok = _tokenizer("spm", model, length)
         ids = ([tok.bos_id()] + tok.encode(prompt))[:length]
     else:
         raise ValueError("GGUF has no local tokenizer; use convert_pi05_local.py")
     return prompt, ids
-
-
-def prepare_image(path, size):
-    # Match LeRobot's float32 bilinear resize (align_corners=False), centered zero pad.
-    import torch
-    import torch.nn.functional as F
-    from PIL import Image
-    torch.set_num_threads(4)
-    with Image.open(path) as im:
-        rgb = np.asarray(im.convert("RGB"), dtype=np.float32) / 255.0
-    h, w = rgb.shape[:2]
-    if (h, w) != (size, size):
-        ratio = max(w / size, h / size)
-        rh, rw = max(1, int(h / ratio)), max(1, int(w / ratio))
-        tensor = torch.from_numpy(rgb.copy()).permute(2, 0, 1)[None]
-        tensor = F.interpolate(tensor, size=(rh, rw), mode="bilinear", align_corners=False).clamp(0, 1)
-        top, left = (size - rh) // 2, (size - rw) // 2
-        tensor = F.pad(tensor, (left, size - rw - left, top, size - rh - top))
-        rgb = tensor[0].permute(1, 2, 0).numpy()
-    return np.ascontiguousarray(rgb, dtype=np.float32)
 
 
 def main():
@@ -94,7 +85,7 @@ def main():
     os.environ.setdefault("VLA_N_THREADS", "4")
     build = "build-musa-official" if args.musa_optimized else "build-musa-m1000"
     os.environ.setdefault("VLA_LIBRARY", str(REPO / build / "libvla.so"))
-    reader = gguf.GGUFReader(str(args.model))
+    reader = GGUFReader(str(args.model))
     if reader.fields["general.architecture"].contents() != "pi05":
         raise ValueError("Expected a pi05 GGUF")
     optimized_profile = None
@@ -123,7 +114,7 @@ def main():
     state = np.asarray([float(x) for x in args.state.split(",")], dtype=np.float32)
     prompt, tokens = prepare_prompt(reader, args.text, state)
     size = int(reader.fields["pi05.image_size"].contents())
-    images = [prepare_image(provided[k], size) for k in cameras]
+    images = prepare_images([provided[k] for k in cameras], size)
     del reader
     runtime = {"runtime": {"weight_dtype": args.weight_dtype, "act_dtype": args.act_dtype,
                            "mm_prec": "default" if args.act_dtype == "f16" else "f32", "flash_attn": args.flash_attn}}

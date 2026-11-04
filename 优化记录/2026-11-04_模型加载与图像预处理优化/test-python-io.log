@@ -1,0 +1,24 @@
+test_camera_order_and_formats (test_pi05_io.Images) ... ok
+test_pixels_and_buffers (test_pi05_io.Images) ... ok
+test_validation (test_pi05_io.Images) ... ok
+test_contents_endian_and_payload (test_pi05_io.Metadata) ... ERROR
+/usr/lib/python3.10/unittest/case.py:613: ResourceWarning: unclosed file <_io.BufferedWriter name='/tmp/tmpj4tijzgp/test.gguf'>
+  outcome.errors.clear()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+
+======================================================================
+ERROR: test_contents_endian_and_payload (test_pi05_io.Metadata)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp/tests/py/test_pi05_io.py", line 72, in test_contents_endian_and_payload
+    w.write_kv_data_to_file();w.write_tensors_to_file();w.close()
+  File "/home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_writer.py", line 247, in write_kv_data_to_file
+    kv_bytes += self._pack_val(val.value, val.type, add_vtype=True, sub_type=val.sub_type)
+  File "/home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_writer.py", line 1320, in _pack_val
+    raise ValueError("Invalid GGUF metadata array, expecting sequence")
+ValueError: Invalid GGUF metadata array, expecting sequence
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.530s
+
+FAILED (errors=1)

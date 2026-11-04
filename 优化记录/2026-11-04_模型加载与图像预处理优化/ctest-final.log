@@ -1,0 +1,70 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp/build-musa-official
+Test project /home/skysi/code/vla.cpp/build-musa-official
+      Start  1: vision_common
+ 1/32 Test  #1: vision_common ....................   Passed    0.00 sec
+      Start  2: vision_prune
+ 2/32 Test  #2: vision_prune .....................   Passed    0.01 sec
+      Start  3: rope_conventions
+ 3/32 Test  #3: rope_conventions .................   Passed    0.01 sec
+      Start  4: c_api
+ 4/32 Test  #4: c_api ............................   Passed    1.61 sec
+      Start  5: dit_common
+ 5/32 Test  #5: dit_common .......................   Passed    0.00 sec
+      Start  6: graph_names
+ 6/32 Test  #6: graph_names ......................   Passed    0.00 sec
+      Start  7: qwen3vl_vit
+ 7/32 Test  #7: qwen3vl_vit ......................   Passed    0.00 sec
+      Start  8: config_guard
+ 8/32 Test  #8: config_guard .....................   Passed    1.66 sec
+      Start  9: prompt
+ 9/32 Test  #9: prompt ...........................   Passed    1.60 sec
+      Start 10: foldquant_cpu_op
+10/32 Test #10: foldquant_cpu_op .................   Passed    1.67 sec
+      Start 11: foldquant_dequant
+11/32 Test #11: foldquant_dequant ................   Passed    1.64 sec
+      Start 12: musa_ops
+12/32 Test #12: musa_ops .........................   Passed    8.93 sec
+      Start 13: musa_flatten_gemm
+13/32 Test #13: musa_flatten_gemm ................   Passed    8.89 sec
+      Start 14: musa_f32_attention
+14/32 Test #14: musa_f32_attention ...............   Passed    1.84 sec
+      Start 15: musa_strided_pack
+15/32 Test #15: musa_strided_pack ................   Passed    2.29 sec
+      Start 16: musa_vision_epilogue
+16/32 Test #16: musa_vision_epilogue .............   Passed    4.69 sec
+      Start 17: musa_mapped_io
+17/32 Test #17: musa_mapped_io ...................   Passed    1.89 sec
+      Start 18: musa_vision_pack
+18/32 Test #18: musa_vision_pack .................   Passed    9.36 sec
+      Start 19: musa_vision_sdpa
+19/32 Test #19: musa_vision_sdpa .................   Passed    9.26 sec
+      Start 20: musa_f32_patch
+20/32 Test #20: musa_f32_patch ...................   Passed    1.89 sec
+      Start 21: musa_attention256_direct
+21/32 Test #21: musa_attention256_direct .........   Passed    5.46 sec
+      Start 22: musa_attention256
+22/32 Test #22: musa_attention256 ................   Passed    5.47 sec
+      Start 23: musa_small_gemm
+23/32 Test #23: musa_small_gemm ..................   Passed    2.81 sec
+      Start 24: musa_rope_table
+24/32 Test #24: musa_rope_table ..................   Passed    2.85 sec
+      Start 25: musa_k_rope_direct
+25/32 Test #25: musa_k_rope_direct ...............   Passed    2.83 sec
+      Start 26: musa_kv_direct
+26/32 Test #26: musa_kv_direct ...................   Passed    2.80 sec
+      Start 27: musa_flash_attn
+27/32 Test #27: musa_flash_attn ..................   Passed    3.06 sec
+      Start 28: musa_cpu_selection
+28/32 Test #28: musa_cpu_selection ...............   Passed    1.61 sec
+      Start 29: musa_invalid_device
+29/32 Test #29: musa_invalid_device ..............   Passed    1.65 sec
+      Start 30: musa_packed_norm
+30/32 Test #30: musa_packed_norm .................   Passed    2.03 sec
+      Start 31: musa_prune_score
+31/32 Test #31: musa_prune_score .................   Passed    1.92 sec
+      Start 32: weight_loading
+32/32 Test #32: weight_loading ...................   Passed    1.82 sec
+
+100% tests passed, 0 tests failed out of 32
+
+Total Test time (real) =  91.57 sec

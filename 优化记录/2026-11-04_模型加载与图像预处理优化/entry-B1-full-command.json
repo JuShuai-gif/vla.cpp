@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "/home/skysi/code/vla.cpp/.venv-converter/bin/python",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u6a21\u578b\u52a0\u8f7d\u4e0e\u56fe\u50cf\u9884\u5904\u7406\u4f18\u5316/entry_probe.py",
+    "B",
+    "full",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u6a21\u578b\u52a0\u8f7d\u4e0e\u56fe\u50cf\u9884\u5904\u7406\u4f18\u5316/entry-B1-full.json"
+  ],
+  "env": {
+    "VLA_LIBRARY": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+    "VLA_N_THREADS": "4",
+    "LD_LIBRARY_PATH": "/home/skysi/code/vla.cpp/build-musa-official:/usr/local/musa/lib"
+  }
+}

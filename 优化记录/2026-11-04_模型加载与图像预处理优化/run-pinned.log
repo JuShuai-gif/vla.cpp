@@ -1,0 +1,4 @@
+{'stage': 'pin-0', 'model': 'pruned', 'returncode': 0}
+{'stage': 'pin-0', 'model': 'full', 'returncode': 0}
+{'stage': 'pin-32', 'model': 'pruned', 'returncode': 0}
+{'stage': 'pin-32', 'model': 'full', 'returncode': 0}

@@ -1,0 +1,182 @@
+[
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "pick_up\nthe cube",
+    "tokens": 43,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "",
+    "tokens": 39,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "long task long task ",
+    "tokens": 64,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "pick_up\nthe cube",
+    "tokens": 29,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "",
+    "tokens": 25,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "long task long task ",
+    "tokens": 64,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "pick_up\nthe cube",
+    "tokens": 43,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "",
+    "tokens": 39,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "long task long task ",
+    "tokens": 64,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "pick_up\nthe cube",
+    "tokens": 29,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "",
+    "tokens": 25,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "long task long task ",
+    "tokens": 64,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "pick_up\nthe cube",
+    "tokens": 43,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "",
+    "tokens": 39,
+    "equal": true
+  },
+  {
+    "model": "pi05_cube_merge_cksize50_step3_0929",
+    "task": "long task long task ",
+    "tokens": 64,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "pick_up\nthe cube",
+    "tokens": 42,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "",
+    "tokens": 38,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "long task long task ",
+    "tokens": 200,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "pick_up\nthe cube",
+    "tokens": 29,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "",
+    "tokens": 25,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "long task long task ",
+    "tokens": 200,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "pick_up\nthe cube",
+    "tokens": 43,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "",
+    "tokens": 39,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "long task long task ",
+    "tokens": 200,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "pick_up\nthe cube",
+    "tokens": 29,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "",
+    "tokens": 25,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "long task long task ",
+    "tokens": 200,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "pick_up\nthe cube",
+    "tokens": 43,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "",
+    "tokens": 39,
+    "equal": true
+  },
+  {
+    "model": "cup_cube_joint_061_a800_50k_20261022",
+    "task": "long task long task ",
+    "tokens": 200,
+    "equal": true
+  }
+]

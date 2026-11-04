@@ -1,0 +1,33 @@
+         148234 function calls (148218 primitive calls) in 0.105 seconds
+
+   Ordered by: cumulative time
+   List reduced from 130 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.105    0.105 /home/skysi/code/vla.cpp/优化记录/2026-11-04_模型加载与图像预处理优化/measure_pipeline.py:6(measure)
+        1    0.000    0.000    0.105    0.105 /home/skysi/code/vla.cpp/优化记录/2026-11-04_模型加载与图像预处理优化/measure_pipeline.py:16(<lambda>)
+        1    0.000    0.000    0.105    0.105 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:132(__init__)
+     5923    0.013    0.000    0.068    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:197(_get)
+        1    0.001    0.001    0.065    0.065 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:310(_build_tensor_info)
+      819    0.004    0.000    0.062    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:259(_get_tensor_info_field)
+        1    0.007    0.007    0.036    0.036 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:318(_build_tensors)
+    25333    0.028    0.000    0.034    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/memmap.py:310(__array_finalize__)
+    16056    0.014    0.000    0.029    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/memmap.py:357(__getitem__)
+    11846    0.010    0.000    0.025    0.000 {method 'view' of 'numpy.ndarray' objects}
+      867    0.001    0.000    0.022    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:217(_get_str)
+      819    0.001    0.000    0.012    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/fromnumeric.py:3328(prod)
+      819    0.002    0.000    0.011    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/fromnumeric.py:69(_wrapreduction)
+      819    0.000    0.000    0.009    0.000 {method 'prod' of 'numpy.ndarray' objects}
+      819    0.000    0.000    0.009    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/_methods.py:54(_prod)
+      819    0.004    0.000    0.008    0.000 {method 'reduce' of 'numpy.ufunc' objects}
+      819    0.001    0.000    0.004    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/memmap.py:340(__array_wrap__)
+    25332    0.003    0.000    0.003    0.000 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/numpy/_core/multiarray.py:1410(may_share_memory)
+        1    0.000    0.000    0.003    0.003 /home/skysi/code/vla.cpp/.venv-converter/lib/python3.10/site-packages/gguf/gguf_reader.py:289(_build_fields)
+     5923    0.003    0.000    0.003    0.000 {built-in method numpy.empty}
+    25343    0.003    0.000    0.003    0.000 {built-in method builtins.hasattr}
+      819    0.001    0.000    0.002    0.000 {function memmap.__array_wrap__ at 0xffff7ead8700}
+      830    0.001    0.000    0.002    0.000 {built-in method builtins.sum}
+      819    0.001    0.000    0.002    0.000 {method 'reshape' of 'numpy.ndarray' objects}
+     5923    0.002    0.000    0.002    0.000 {method 'newbyteorder' of 'numpy.dtype' objects}
+
+

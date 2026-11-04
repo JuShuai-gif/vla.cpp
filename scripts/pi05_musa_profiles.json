@@ -28,7 +28,9 @@
     "VLA_PI05_NORM_PACK": "1",
     "VLA_PI05_GEGLU_PACK": "1",
     "VLA_PI05_PRUNE_MEAN": "1",
-    "VLA_MUSA_SMALL_PIPE": "shape"
+    "VLA_MUSA_SMALL_PIPE": "shape",
+    "VLA_LOAD_THREADS": "4",
+    "VLA_LOAD_DIRECT_FUSED": "1"
   },
   "full": {
     "VLA_MUSA_VISION_SDPA": "1",
@@ -57,6 +59,8 @@
     "VLA_PI05_F32_PATCH": "1",
     "VLA_PI05_NORM_PACK": "1",
     "VLA_PI05_GEGLU_PACK": "1",
-    "VLA_MUSA_SMALL_PIPE": "shape"
+    "VLA_MUSA_SMALL_PIPE": "shape",
+    "VLA_LOAD_THREADS": "4",
+    "VLA_LOAD_DIRECT_FUSED": "1"
   }
 }

@@ -1,0 +1,307 @@
+// Copyright 2026 VinRobotics
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Shared GGUF reader for the in-tree model loaders. Reads a tensor as F32/BF16
+// (dequantizing BF16), passes packed bytes through when the resident type is not
+// float, and fetches token-embedding rows on demand. The arch name only labels
+// error messages.
+
+#pragma once
+
+#include "ggml.h"
+#include "gguf.h"
+
+#include <algorithm>
+#include <cstdlib>
+#include <thread>
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <vector>
+
+// fseeko is POSIX; the Windows CRT spells the 64-bit seek _fseeki64. A plain
+// fseek takes a 32-bit long there and cannot reach past 2 GiB into a GGUF.
+inline int vla_fseek64(FILE * fp, uint64_t off) {
+#ifdef _WIN32
+    return _fseeki64(fp, (long long) off, SEEK_SET);
+#else
+    return fseeko(fp, (off_t) off, SEEK_SET);
+#endif
+}
+
+namespace vla {
+
+struct gguf_reader {
+    const char *   arch     = "vla";
+    gguf_context * gctx     = nullptr;
+    ggml_context * meta_ctx = nullptr;
+    FILE *         fp       = nullptr;
+    size_t         data_off = 0;
+
+    explicit gguf_reader(const char * arch_ = "vla") : arch(arch_) {}
+    ~gguf_reader() {
+        if (fp)
+            std::fclose(fp);
+        if (gctx)
+            gguf_free(gctx);
+        if (meta_ctx)
+            ggml_free(meta_ctx);
+    }
+    gguf_reader(const gguf_reader &) = delete;
+    gguf_reader & operator=(const gguf_reader &) = delete;
+
+    bool open(const std::string & path) {
+        gguf_init_params p{};
+        p.no_alloc = true;
+        p.ctx      = &meta_ctx;
+        gctx = gguf_init_from_file(path.c_str(), p);
+        if (!gctx) {
+            std::fprintf(stderr, "vla(%s): gguf_init_from_file failed for %s\n", arch, path.c_str());
+            return false;
+        }
+        fp = std::fopen(path.c_str(), "rb");
+        if (!fp) {
+            std::fprintf(stderr, "vla(%s): fopen failed for %s\n", arch, path.c_str());
+            return false;
+        }
+        data_off = gguf_get_data_offset(gctx);
+        return true;
+    }
+
+    bool has(const char * k) const {
+        return gguf_find_key(gctx, k) >= 0;
+    }
+
+    // gguf_get_val_* asserts on a type mismatch, killing the process on a bad
+    // file. Check the declared type first.
+    bool typed_key(const char * k, gguf_type want, int64_t * id_out) const {
+        const int64_t id = gguf_find_key(gctx, k);
+        if (id < 0)
+            return false;
+        if (gguf_get_kv_type(gctx, id) != want) {
+            std::fprintf(stderr, "vla(%s): key %s has unexpected type %d\n",
+                         arch, k, (int) gguf_get_kv_type(gctx, id));
+            return false;
+        }
+        *id_out = id;
+        return true;
+    }
+
+    uint32_t u32(const char * k) const {
+        int64_t id;
+        return typed_key(k, GGUF_TYPE_UINT32,  &id) ? gguf_get_val_u32(gctx, id) : 0u;
+    }
+    float    f32(const char * k) const {
+        int64_t id;
+        return typed_key(k, GGUF_TYPE_FLOAT32, &id) ? gguf_get_val_f32(gctx, id) : 0.f;
+    }
+    double   f64(const char * k) const {
+        int64_t id;
+        return typed_key(k, GGUF_TYPE_FLOAT64, &id) ? gguf_get_val_f64(gctx, id) : 0.0;
+    }
+    std::string str(const char * k) const {
+        int64_t id;
+        return typed_key(k, GGUF_TYPE_STRING, &id) ? std::string(gguf_get_val_str(gctx, id)) : std::string();
+    }
+    const ggml_tensor * meta(const char * name) const {
+        return ggml_get_tensor(meta_ctx, name);
+    }
+
+    // Resident type for a weight: keep a quantized source type (Q8_0, Q4_0, ...)
+    // so it stays packed and ggml_mul_mat dequantizes at compute; otherwise use
+    // prefer (the model's F32/BF16 matmul type, or an explicit packed type).
+    ggml_type resident_type(const ggml_tensor * src, ggml_type prefer) const {
+        return (src && ggml_is_quantized(src->type)) ? src->type : prefer;
+    }
+
+    // cap must equal the declared tensor size: a tensor with the expected ne[0] but
+    // an extra dimension would write past the caller's vector. On failure buf may be
+    // partially written.
+    bool read_raw(const char * name, void * buf, size_t cap) {
+        const int64_t id = gguf_find_tensor(gctx, name);
+        if (id < 0) {
+            std::fprintf(stderr, "vla(%s): missing tensor %s\n", arch, name);
+            return false;
+        }
+        const size_t off = data_off+gguf_get_tensor_offset(gctx, id);
+        const size_t nb  = gguf_get_tensor_size(gctx, id);
+        if (nb != cap) {
+            std::fprintf(stderr, "vla(%s): tensor %s is %zu bytes, caller expects %zu\n",
+                         arch, name, nb, cap);
+            return false;
+        }
+        if (vla_fseek64(fp, off) != 0)
+            return false;
+        return std::fread(buf, 1, nb, fp) == nb;
+    }
+
+    std::vector<float> read_f32(const char * name) {
+        const ggml_tensor * t = meta(name);
+        if (!t) { std::fprintf(stderr, "vla(%s): missing tensor %s\n", arch, name); return {}; }
+        const int64_t n = ggml_nelements(t);
+        std::vector<float> out(n);
+        if (t->type == GGML_TYPE_F32) { if (!read_raw(name, out.data(), out.size()*sizeof(float))) return {}; }
+        else if (t->type == GGML_TYPE_BF16) { std::vector<ggml_bf16_t> tmp(n); if (!read_raw(name, tmp.data(), tmp.size()*sizeof(ggml_bf16_t))) return {}; ggml_bf16_to_fp32_row(tmp.data(), out.data(), n); }
+        else if (t->type == GGML_TYPE_F16)  { std::vector<ggml_fp16_t> tmp(n); if (!read_raw(name, tmp.data(), tmp.size()*sizeof(ggml_fp16_t))) return {}; ggml_fp16_to_fp32_row(tmp.data(), out.data(), n); }
+        // A packed weight read as floats, e.g. to requantize it at load (VLA_PI05_W8A8 on a Q8_0 GGUF).
+        else if (ggml_is_quantized(t->type) && ggml_get_type_traits(t->type)->to_float) {
+            std::vector<uint8_t> tmp(ggml_nbytes(t));
+            if (!read_raw(name, tmp.data(), tmp.size())) return {};
+            ggml_get_type_traits(t->type)->to_float(tmp.data(), out.data(), n);
+        }
+        else { std::fprintf(stderr, "vla(%s): tensor %s unsupported type %d\n", arch, name, (int) t->type); return {}; }
+        return out;
+    }
+
+    // F32/BF16/F16 targets dequantize to that resident type. Any other target
+    // (I8, Q8_0, Q4_0, ...) is stored raw so ggml_mul_mat dequantizes at compute.
+    // gemma_norm adds 1.0 per weight.
+    std::vector<uint8_t> read_convert(const char * name, ggml_type target, bool gemma_norm = false) {
+        if (target != GGML_TYPE_F32 && target != GGML_TYPE_BF16 && target != GGML_TYPE_F16) {
+            if (gemma_norm) {
+                // The +1 needs unpacked floats; skipping it would silently give wrong
+                // norm weights.
+                std::fprintf(stderr, "vla(%s): %s needs the Gemma norm +1 but the target type is packed\n",
+                             arch, name);
+                return {};
+            }
+            const ggml_tensor * t = meta(name);
+            if (!t) { std::fprintf(stderr, "vla(%s): missing tensor %s\n", arch, name); return {}; }
+            std::vector<uint8_t> o(ggml_nbytes(t));
+            if (!read_raw(name, o.data(), o.size())) return {};
+            return o;
+        }
+        const ggml_tensor * src = meta(name);
+        if (!gemma_norm && src &&
+            (src->type == GGML_TYPE_F32 || src->type == GGML_TYPE_F16 || src->type == GGML_TYPE_BF16)) {
+            const int64_t n = ggml_nelements(src);
+            std::vector<uint8_t> raw(ggml_nbytes(src));
+            if (!read_raw(name, raw.data(), raw.size())) return {};
+            if (src->type == GGML_TYPE_F32 && target == GGML_TYPE_F32) return raw;
+            std::vector<uint8_t> out((size_t)n * ggml_type_size(target));
+            constexpr int64_t chunk = 65536;
+            const int64_t blocks = (n + chunk - 1) / chunk;
+            const char * value = std::getenv("VLA_LOAD_THREADS");
+            if (!value) value = std::getenv("VLA_N_THREADS");
+            const int requested = value ? std::max(1, std::min(16, std::atoi(value))) : 1;
+            const int threads = n < 1048576 ? 1 : (int) std::min<int64_t>(requested, blocks);
+            // Identical row converters and SIMD-aligned chunks preserve rounding,
+            // including NaNs; do not shortcut F16/BF16 round trips by memcpy.
+            const char * use_table=std::getenv("VLA_LOAD_BF16_LUT");
+            const bool lookup=use_table && std::atoi(use_table)!=0 && n>=1048576 &&
+                              src->type==GGML_TYPE_BF16 && target==GGML_TYPE_F16;
+            std::vector<ggml_fp16_t> table;
+            if(lookup) {
+                // Build from the same converters: exhaustive BF16 -> F16 bits,
+                // including NaNs/subnormals, with no new approximation.
+                std::vector<ggml_bf16_t> codes(65536);
+                std::vector<float> f(65536);table.resize(65536);
+                for(int i=0;i<65536;++i)codes[i].bits=(uint16_t)i;
+                ggml_bf16_to_fp32_row(codes.data(),f.data(),65536);
+                ggml_fp32_to_fp16_row(f.data(),table.data(),65536);
+            }
+            std::vector<std::vector<float>> scratch(threads);
+            if (!lookup && src->type != GGML_TYPE_F32 && target != GGML_TYPE_F32)
+                for (auto & v : scratch) v.resize((size_t) std::min(n, chunk));
+            auto convert = [&](int worker) {
+                for (int64_t b=blocks*worker/threads; b<blocks*(worker+1)/threads; ++b) {
+                    const int64_t i=b*chunk, count=std::min(chunk, n-i);
+                    if(lookup) {
+                        const auto * input=(const ggml_bf16_t *)raw.data();
+                        auto * output=(ggml_fp16_t *)out.data();
+                        for(int64_t j=i;j<i+count;++j)output[j]=table[input[j].bits];
+                        continue;
+                    }
+                    float * f = target==GGML_TYPE_F32 ? (float *)out.data()+i :
+                                src->type==GGML_TYPE_F32 ? (float *)raw.data()+i : scratch[worker].data();
+                    if (src->type==GGML_TYPE_BF16)
+                        ggml_bf16_to_fp32_row((const ggml_bf16_t *)raw.data()+i, f, count);
+                    else if (src->type==GGML_TYPE_F16)
+                        ggml_fp16_to_fp32_row((const ggml_fp16_t *)raw.data()+i, f, count);
+                    if (target==GGML_TYPE_F16)
+                        ggml_fp32_to_fp16_row(f, (ggml_fp16_t *)out.data()+i, count);
+                    else if (target==GGML_TYPE_BF16)
+                        ggml_fp32_to_bf16_row(f, (ggml_bf16_t *)out.data()+i, count);
+                }
+            };
+            std::vector<std::thread> pool;
+            try {
+                for (int i=1; i<threads; ++i) pool.emplace_back(convert, i);
+                convert(0);
+            } catch (...) {
+                for (auto & thread : pool) thread.join();
+                throw;
+            }
+            for (auto & thread : pool) thread.join();
+            return out;
+        }
+        std::vector<float> f = read_f32(name);
+        if (f.empty()) return {};
+        const int64_t n = (int64_t) f.size();
+        if (gemma_norm) for (int64_t i=0; i<n; ++i) f[i] += 1.0f;
+        if (target == GGML_TYPE_F32)  {
+            std::vector<uint8_t> o(n * sizeof(float));
+            std::memcpy(o.data(), f.data(), o.size());
+            return o;
+        }
+        if (target == GGML_TYPE_BF16) {
+            std::vector<uint8_t> o(n * sizeof(ggml_bf16_t));
+            ggml_fp32_to_bf16_row(f.data(), reinterpret_cast<ggml_bf16_t *>(o.data()), n);
+            return o;
+        }
+        if (target == GGML_TYPE_F16) {
+            std::vector<uint8_t> o(n * sizeof(ggml_fp16_t));
+            ggml_fp32_to_fp16_row(f.data(), reinterpret_cast<ggml_fp16_t *>(o.data()), n);
+            return o;
+        }
+        std::fprintf(stderr, "vla(%s): unsupported resident type %d for %s\n", arch, (int) target, name); return {};
+    }
+
+    bool fetch_rows_f32(const char * name, const std::vector<int32_t> & row_ids, float * dst, int64_t cols) {
+        const ggml_tensor * t = meta(name);
+        if (!t || t->ne[0] != cols || t->ne[2] != 1 || t->ne[3] != 1) {
+            std::fprintf(stderr, "vla(%s): %s shape unfit for row-fetch\n", arch, name);
+            return false;
+        }
+        if (t->type != GGML_TYPE_F32 && t->type != GGML_TYPE_BF16) {
+            std::fprintf(stderr, "vla(%s): %s type %d not f32/bf16 for row-fetch\n", arch, name, (int) t->type);
+            return false;
+        }
+        const int64_t rows = t->ne[1];
+        const int64_t id   = gguf_find_tensor(gctx, name);
+        const size_t  base = data_off+gguf_get_tensor_offset(gctx, id);
+        const size_t  elsz = (t->type == GGML_TYPE_F32) ? 4u : 2u;
+        const size_t  rb   = (size_t) cols * elsz;
+        std::vector<uint8_t> row(rb);
+        for (size_t k=0; k<row_ids.size(); ++k) {
+            const int32_t r = row_ids[k];
+            if (r < 0 || r >= rows) {
+                std::fprintf(stderr, "vla(%s): row %d out of range for %s\n", arch, r, name);
+                return false;
+            }
+            if (vla_fseek64(fp, base+(size_t) r * rb) != 0)
+                return false;
+            if (std::fread(row.data(), 1, rb, fp) != rb)
+                return false;
+            if (elsz == 4)
+                std::memcpy(dst+k * cols, row.data(), rb);
+            else
+                ggml_bf16_to_fp32_row(reinterpret_cast<ggml_bf16_t *>(row.data()), dst+k * cols, cols);
+        }
+        return true;
+    }
+};
+
+}  // namespace vla

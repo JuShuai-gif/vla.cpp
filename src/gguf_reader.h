@@ -22,6 +22,9 @@
 #include "ggml.h"
 #include "gguf.h"
 
+#include <algorithm>
+#include <cstdlib>
+#include <thread>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -179,6 +182,51 @@ struct gguf_reader {
             std::vector<uint8_t> o(ggml_nbytes(t));
             if (!read_raw(name, o.data(), o.size())) return {};
             return o;
+        }
+        const ggml_tensor * src = meta(name);
+        if (!gemma_norm && src &&
+            (src->type == GGML_TYPE_F32 || src->type == GGML_TYPE_F16 || src->type == GGML_TYPE_BF16)) {
+            const int64_t n = ggml_nelements(src);
+            std::vector<uint8_t> raw(ggml_nbytes(src));
+            if (!read_raw(name, raw.data(), raw.size())) return {};
+            if (src->type == GGML_TYPE_F32 && target == GGML_TYPE_F32) return raw;
+            std::vector<uint8_t> out((size_t)n * ggml_type_size(target));
+            constexpr int64_t chunk = 65536;
+            const int64_t blocks = (n + chunk - 1) / chunk;
+            const char * value = std::getenv("VLA_LOAD_THREADS");
+            if (!value) value = std::getenv("VLA_N_THREADS");
+            const int requested = value ? std::max(1, std::min(16, std::atoi(value))) : 1;
+            const int threads = n < 1048576 ? 1 : (int) std::min<int64_t>(requested, blocks);
+            // Identical row converters and SIMD-aligned chunks preserve rounding,
+            // including NaNs; do not shortcut F16/BF16 round trips by memcpy.
+            std::vector<std::vector<float>> scratch(threads);
+            if (src->type != GGML_TYPE_F32 && target != GGML_TYPE_F32)
+                for (auto & v : scratch) v.resize((size_t) std::min(n, chunk));
+            auto convert = [&](int worker) {
+                for (int64_t b=blocks*worker/threads; b<blocks*(worker+1)/threads; ++b) {
+                    const int64_t i=b*chunk, count=std::min(chunk, n-i);
+                    float * f = target==GGML_TYPE_F32 ? (float *)out.data()+i :
+                                src->type==GGML_TYPE_F32 ? (float *)raw.data()+i : scratch[worker].data();
+                    if (src->type==GGML_TYPE_BF16)
+                        ggml_bf16_to_fp32_row((const ggml_bf16_t *)raw.data()+i, f, count);
+                    else if (src->type==GGML_TYPE_F16)
+                        ggml_fp16_to_fp32_row((const ggml_fp16_t *)raw.data()+i, f, count);
+                    if (target==GGML_TYPE_F16)
+                        ggml_fp32_to_fp16_row(f, (ggml_fp16_t *)out.data()+i, count);
+                    else if (target==GGML_TYPE_BF16)
+                        ggml_fp32_to_bf16_row(f, (ggml_bf16_t *)out.data()+i, count);
+                }
+            };
+            std::vector<std::thread> pool;
+            try {
+                for (int i=1; i<threads; ++i) pool.emplace_back(convert, i);
+                convert(0);
+            } catch (...) {
+                for (auto & thread : pool) thread.join();
+                throw;
+            }
+            for (auto & thread : pool) thread.join();
+            return out;
         }
         std::vector<float> f = read_f32(name);
         if (f.empty()) return {};

@@ -1,0 +1,42 @@
+{
+  "pruned": {
+    "A": {
+      "metadata_ms": 47000.934191499255,
+      "cpp_load_ms": 12588.61182849796,
+      "first_predict_ms": 7656.8270175012,
+      "first_action_from_entry_ms": 70262.26112050063,
+      "max_rss_kib": 2824118.0,
+      "resident_mean_ms": 461.0881100001279,
+      "resident_p95_ms": 462.3421119482373
+    },
+    "B": {
+      "metadata_ms": 48.9541979986825,
+      "cpp_load_ms": 8152.399407503253,
+      "first_predict_ms": 7643.463614502252,
+      "first_action_from_entry_ms": 17436.82409500252,
+      "max_rss_kib": 2443544.0,
+      "resident_mean_ms": 461.2203288999808,
+      "resident_p95_ms": 462.023119150399
+    }
+  },
+  "full": {
+    "A": {
+      "metadata_ms": 63.016615997185,
+      "cpp_load_ms": 12706.418372497865,
+      "first_predict_ms": 7924.364243994205,
+      "first_action_from_entry_ms": 23891.854076999152,
+      "max_rss_kib": 2442894.0,
+      "resident_mean_ms": 754.8076001001391,
+      "resident_p95_ms": 756.1242505515111
+    },
+    "B": {
+      "metadata_ms": 62.07713600088027,
+      "cpp_load_ms": 8788.32594999767,
+      "first_predict_ms": 8109.489198002848,
+      "first_action_from_entry_ms": 20048.445243999595,
+      "max_rss_kib": 2682408.0,
+      "resident_mean_ms": 754.6252626003479,
+      "resident_p95_ms": 755.4809803976241
+    }
+  }
+}

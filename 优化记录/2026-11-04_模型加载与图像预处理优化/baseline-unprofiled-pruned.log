@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp/优化记录/2026-11-04_模型加载与图像预处理优化/measure_pipeline.py", line 23, in <module>
+    prof.disable();s=io.StringIO();pstats.Stats(prof,stream=s).sort_stats('cumtime').print_stats(25);(out/'metadata-profile.txt').write_text(s.getvalue())
+  File "/usr/lib/python3.10/pstats.py", line 114, in __init__
+    self.init(arg)
+  File "/usr/lib/python3.10/pstats.py", line 128, in init
+    self.load_stats(arg)
+  File "/usr/lib/python3.10/pstats.py", line 154, in load_stats
+    raise TypeError("Cannot create or construct a %r object from %r"
+TypeError: Cannot create or construct a <class 'pstats.Stats'> object from <cProfile.Profile object at 0xffff60f87940>

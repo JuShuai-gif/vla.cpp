@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/home/skysi/code/vla.cpp/.venv-converter/bin/python",
+    "/home/skysi/code/vla.cpp/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u6a21\u578b\u52a0\u8f7d\u4e0e\u56fe\u50cf\u9884\u5904\u7406\u4f18\u5316/measure_pipeline.py",
+    "pruned",
+    "pin-0"
+  ],
+  "env": {
+    "VLA_LOAD_THREADS": "4",
+    "VLA_LOAD_PINNED_MIB": "0",
+    "VLA_PI05_PROFILE_LOAD": "1"
+  }
+}

@@ -1,0 +1,13 @@
+[1/13] Building CXX object CMakeFiles/vla_core.dir/src/loader.cpp.o
+[2/13] Linking CXX shared library libvla_core.so
+[3/13] Linking CXX shared library libvla.so
+[4/13] Linking CXX executable tests/test_config_guard
+[5/13] Linking CXX executable tests/vla_predict_check
+[6/13] Linking CXX executable tests/test_foldquant_cpu_op
+[7/13] Linking CXX executable vla-server
+[8/13] Linking C executable tests/test_c_api
+[9/13] Linking CXX executable vla-cli
+[10/13] Linking CXX executable tests/test_prompt
+[11/13] Linking CXX executable vla-bench
+[12/13] Linking CXX executable tests/test_foldquant_dequant
+[13/13] Linking CXX executable tests/test_musa_ops

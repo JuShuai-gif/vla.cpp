@@ -1,0 +1,13 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+{"model": "full", "stage": "baseline", "timings": {"import_numpy_gguf_ms": 111.85563699837076, "python_gguf_metadata_ms": 105.3336129989475, "prepare_prompt_ms": 1681.6903780054417, "first_image_pair_ms": 1297.0721540041268, "warm_image_pair_mean_ms": 12.640334334234163, "warm_image_pair_p95_ms": 12.833818003491615, "binding_import_ms": 1.1460700043244287, "cpp_model_load_ms": 12498.753555999428}, "preprocess_wall_ms": [13.122607000696007, 12.78189000004204, 12.83021000563167, 12.545451994810719, 12.574052001582459, 12.736451004457194, 12.801329998183064, 12.564532000396866, 12.64189100038493, 12.541453004814684, 12.698891005129553, 12.59417199617019, 12.824130004446488, 12.504973004979547, 12.69237099768361, 12.36049400176853, 12.526333004643675, 12.585771997692063, 12.718691003101412, 12.575171997013967, 12.374135003483389, 12.578131994814612, 12.525892998382915, 12.40233299904503, 12.655892001930624, 12.703692002105527, 12.83677000174066, 12.643371999729425, 12.6698120002402, 12.599132001923863], "predict_wall_ms": [8259.466224997595, 774.0517540005385, 759.9904769958812, 759.793887998967, 760.4210100034834, 760.1122999985819], "dtype_counts": {"GGMLQuantizationType.BF16": 253, "GGMLQuantizationType.F32": 566}, "tokens": [2, 7071, 235292, 4788, 908, 573, 28660, 235269, 3040, 235292, 235248, 235274, 235276, 235304, 235248, 235274, 235304, 235318, 235248, 235274, 235318, 235276, 235248, 235274, 235284, 235274, 235248, 235274, 235308, 235318, 235248, 235324, 235318, 235248, 235274, 235321, 235318, 235289, 108, 4022, 235292, 235248], "camera_order": ["observation.images.wrist", "observation.images.top"], "max_rss_kib": 2455240, "gpu_reference_max_abs": 0, "note": "Python GGUF metadata timing includes cProfile overhead; C++ load and preprocessing unprofiled. Disk cache not dropped."}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 5.05 GiB
+vla(pi05): model loaded (n_threads=4)

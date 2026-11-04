@@ -1,0 +1,12 @@
+{
+  "base_commit": "d7f90acdddb002b773ff2df5ed49b5ce0f8e26f7",
+  "versions": {
+    "gguf": "0.19.0",
+    "numpy": "2.2.6",
+    "torch": "2.6.0+cpu",
+    "Pillow": "12.3.0",
+    "sentencepiece": "0.2.2",
+    "tokenizers": "0.23.3"
+  },
+  "power_profile_at_end": "performance"
+}

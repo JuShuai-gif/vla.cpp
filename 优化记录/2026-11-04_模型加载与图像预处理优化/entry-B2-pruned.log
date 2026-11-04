@@ -1,0 +1,15 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+Saved 50 x 7 actions to /home/skysi/code/vla.cpp/优化记录/2026-11-04_模型加载与图像预处理优化/entry-B2-pruned.actions.json; cameras=['observation.images.top', 'observation.images.wrist']
+{'metadata_ms': 47.278595993702766, 'cpp_load_ms': 8118.223901001329, 'first_predict_ms': 7619.7331939984, 'first_action_from_entry_ms': 17325.33434400102, 'resident_ms': [461.6573579987744, 460.77295799477724, 460.8112779969815, 461.03747699817177, 460.67399700405076, 460.5941970003187, 460.43239700520644, 460.07451699551893, 461.11043699784204, 460.51267600705614, 460.7867559971055, 461.73131500108866, 460.77543599676574, 461.34283499850426, 460.7303550001234, 461.4258349974989, 461.1697939981241, 461.5516749981907, 460.9739139996236, 460.28203400055645], 'variant': 'B', 'model': 'pruned', 'max_rss_kib': 2441332, 'loaded_core': ['/home/skysi/code/vla.cpp/build-musa-official/libvla_core.so']}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=3 real_state=7 real_action=7 max_len=64 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): visual token pruning 256 -> 136 per image (attention, spatial order)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 4.71 GiB
+vla(pi05): model loaded (n_threads=4)

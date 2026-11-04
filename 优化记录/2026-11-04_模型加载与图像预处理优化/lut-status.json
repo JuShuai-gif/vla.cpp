@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "lut-0",
+    "model": "pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "lut-0",
+    "model": "full",
+    "returncode": 0
+  },
+  {
+    "stage": "lut-1",
+    "model": "pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "lut-1",
+    "model": "full",
+    "returncode": 0
+  }
+]

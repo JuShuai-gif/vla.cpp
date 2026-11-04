@@ -235,3 +235,10 @@ if(GGML_MUSA)
     add_test(NAME musa_prune_score COMMAND test_musa_ops --prune-score)
     set_tests_properties(musa_packed_norm musa_prune_score PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
 endif()
+
+
+add_executable(test_weight_loading test_weight_loading.cpp)
+target_include_directories(test_weight_loading PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_link_libraries(test_weight_loading PRIVATE vla_core)
+add_test(NAME weight_loading COMMAND test_weight_loading)
+set_tests_properties(weight_loading PROPERTIES TIMEOUT 180)

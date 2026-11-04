@@ -1,0 +1,34 @@
+[
+  {
+    "stage": "entry-A1-pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "entry-A1-full",
+    "returncode": 0
+  },
+  {
+    "stage": "entry-B1-pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "entry-B1-full",
+    "returncode": 0
+  },
+  {
+    "stage": "entry-B2-pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "entry-B2-full",
+    "returncode": 0
+  },
+  {
+    "stage": "entry-A2-pruned",
+    "returncode": 0
+  },
+  {
+    "stage": "entry-A2-full",
+    "returncode": 0
+  }
+]
