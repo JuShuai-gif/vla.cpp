@@ -183,3 +183,24 @@ separation. Without a BF16 reference it reports diagnostic drift only and cannot
 mark offline accuracy passed. A failed baseline process stops the remaining
 suite; reports written before a shutdown crash are not accepted. Offline
 acceptance does not promote a profile to live deployment.
+
+### Experimental native INT8 on M1000
+
+An explicit precision profile with quant_route="native_int8" requires
+int8_parameters pointing to an export manifest from
+scripts/export_int8_parameters.py. This route uses W8A8 matrix arithmetic with
+INT32 accumulation for the 18 action-expert GateUp projections. Other projections
+remain floating point; this is a mixed-precision model, not a fully INT8 model.
+The outer runtime settings stay F16 weights/F32 activations/F32 floating GEMM
+accumulation. Resolved parameters identify the INT8 scope and accumulator type.
+
+Calibration manifests must match the original floating GGUF SHA256 and contain
+all layer parameter files with matching hashes. Parameters may use calibrated
+per-channel smoothing and optional excluded-channel F16 correction. Dynamic
+per-token activation quantization and all corrections execute inside prediction.
+The MP22-only route rejects unsupported backends and does not silently use CPU
+fallback. Baseline selection clears inherited INT8 and load-time-decode settings.
+
+Current profiles remain experimental. Operator accuracy or speed alone is not
+model acceptance. See the INT8 experiment archive for BF16 action comparisons,
+full-model measurements, failed experiments, and remaining validation.

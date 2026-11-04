@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "mode": "expert_gateup",
+  "split": "calibration",
+  "source_sha256": "ae7a7ad36082a83dc743cdaa1d1f21813af7b4e20bf340d82bd90c7f10537e51",
+  "calibration_sha256": "33598b790781cafa50c81ee37907b4314fb057707d73801625e3e99d4719c7c8",
+  "calibration_path": "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/full-120/importance.json",
+  "scaling": "smoothquant",
+  "alpha": 0.75,
+  "outlier_count": 0,
+  "layers": {
+    "aex.blk.0.ffn_gateup": {
+      "sha256": "6d39338c4fc0b380b7ac32e6d0fa605c07bc9a3bf54a01a199ee29996675e033",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.1.ffn_gateup": {
+      "sha256": "6687b1af74fe6f9d28e71d3ee6c96d0b0c3011eed3c48e2969ff3c2f20b5750e",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.2.ffn_gateup": {
+      "sha256": "38c765d4948ef3d9f787b2ff94a4fc9e3fb3afe2daf865092d002c94445a00e2",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.3.ffn_gateup": {
+      "sha256": "da2942fa972d817a4882fc85a9c04b1a6be1f3424378833633be81ce20f4635d",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.4.ffn_gateup": {
+      "sha256": "b440f5c23bb1925a3b88a79a40f4ed8b0807ecd06303a69ff90f44e50fa17010",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.5.ffn_gateup": {
+      "sha256": "a6226610a40c8c5f2121133ca56e4c35434869ec95349d1a62272c384d074720",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.6.ffn_gateup": {
+      "sha256": "025ab351fd57392301b83472fa61387207fe0ab2012e35c5e53d7c77a86901cc",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.7.ffn_gateup": {
+      "sha256": "644d9cf4a7aeae345e3e9a179ffa866893fee5c6d905998b4ce234263383684c",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.8.ffn_gateup": {
+      "sha256": "d670d55769dd579d615f2d5aed42ee8ffd7dd27127b0833a0ae58e42cbce2d1c",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.9.ffn_gateup": {
+      "sha256": "a6de6aa574f1c1be4f5f7d331a9b3f7a1a95a32a49f2d84b6edb6c66b5926832",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.10.ffn_gateup": {
+      "sha256": "a553f137e81dec8b1b76afae1ab025e2076117a2d3df12e5cbf9bc3a050f72fa",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.11.ffn_gateup": {
+      "sha256": "1604136afcb8c88aa50ce4c021155bec9bbd4e60adc4921db867b9108e6e610f",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.12.ffn_gateup": {
+      "sha256": "40ffc6aea76b290a5ffeddd1cc9d9e5d12f2158cc41d5da7f99ab83832ea1350",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.13.ffn_gateup": {
+      "sha256": "37f438a54fde6246d4e99880c35a640d62a9249e603fd78001fd70773275e3c8",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.14.ffn_gateup": {
+      "sha256": "de101cea79aafedc18cb77c9bf3eb7f45fbbe828dcba91510cc91e70e7ddb908",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.15.ffn_gateup": {
+      "sha256": "7875aada2cff7d160f4ca3d8e5d0267d13d0165bd45a5d4b109815ca52279a8b",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.16.ffn_gateup": {
+      "sha256": "80bae276a5117aa087e4997a09844d47072c0b62a0bc9bb7e256d2faf00f51da",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.17.ffn_gateup": {
+      "sha256": "9613b56ebd6178b2b874f9482ea26e6b20499c6313473274418228e9f5b9313f",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    }
+  }
+}

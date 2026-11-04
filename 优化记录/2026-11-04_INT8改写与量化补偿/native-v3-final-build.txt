@@ -1,0 +1,79 @@
+[1/35] Linking CXX executable tests/test_rope_conventions
+[2/35] Linking CXX executable tests/test_vision_prune
+[3/35] Linking CXX executable tests/test_graph_names
+[4/35] Linking CXX executable tests/test_dit_common
+[5/35] Linking CXX shared library bin/libllama.so.0.5.0
+[6/35] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[7/35] Linking CXX shared library bin/libllama-common.so.0.5.0
+[8/35] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[9/35] Linking CXX shared library bin/libmtmd.so.0.5.0
+[10/35] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[11/35] Linking CXX shared library libvlm_core.so
+[12/35] Building CXX object tests/CMakeFiles/test_qwen3vl_vit.dir/test_qwen3vl_vit.cpp.o
+In file included from /home/skysi/code/vla.cpp-quant/tests/test_qwen3vl_vit.cpp:17:
+In file included from /home/skysi/code/vla.cpp-quant/src/modules/qwen3vl_vit.h:21:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/attn.h:23:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[13/35] Linking CXX executable tests/test_qwen3vl_vit
+[14/35] Building CXX object CMakeFiles/vla_core.dir/src/loader.cpp.o
+/home/skysi/code/vla.cpp-quant/src/loader.cpp:295:38: warning: missing field 'inverse' initializer [-Wmissing-field-initializers]
+    quant_.push_back(Quant{q, K, srcs});
+                                     ^
+1 warning generated.
+[15/35] Linking CXX shared library libvla_core.so
+[16/35] Building CXX object tests/CMakeFiles/test_weight_loading.dir/test_weight_loading.cpp.o
+[17/35] Linking CXX shared library libvla.so
+[18/35] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+In file included from /home/skysi/code/vla.cpp-quant/tests/test_musa_ops.cpp:1:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp-quant/tests/test_musa_ops.cpp:580:39: warning: 'ggml_mul_mat_set_prec' is deprecated: use ggml_prec_set_acc() instead [-Wdeprecated-declarations]
+        out=ggml_mul_mat(g.ctx,wf,xf);ggml_mul_mat_set_prec(out,GGML_PREC_F32);
+                                      ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml.h:1489:5: note: 'ggml_mul_mat_set_prec' has been explicitly marked deprecated here
+    GGML_DEPRECATED(GGML_API void ggml_mul_mat_set_prec(
+    ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml.h:192:61: note: expanded from macro 'GGML_DEPRECATED'
+#    define GGML_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+                                                            ^
+2 warnings generated.
+[19/35] Linking CXX executable vlm-server
+[20/35] Linking CXX executable vla-server
+[21/35] Linking CXX executable vla-cli
+[22/35] Linking CXX executable vla-bench
+[23/35] Linking CXX executable tests/vla_predict_check
+[24/35] Linking C executable tests/test_c_api
+[25/35] Linking CXX executable tests/test_config_guard
+[26/35] Linking CXX executable tests/test_prompt
+[27/35] Linking CXX executable tests/test_foldquant_cpu_op
+[28/35] Linking CXX executable tests/test_foldquant_dequant
+[29/35] Linking CXX executable tests/test_quant_calibration
+[30/35] Linking CXX executable tests/test_musa_ops
+[31/35] Linking CXX executable tests/test_weight_loading
+[32/35] Linking CXX executable tests/bench_musa_quant
+[33/35] Building CXX object tests/CMakeFiles/test_musa_int8.dir/test_musa_int8.cpp.o
+In file included from /home/skysi/code/vla.cpp-quant/tests/test_musa_int8.cpp:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:6:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[34/35] Linking CXX executable tests/bench_musa_native_int8
+[35/35] Linking CXX executable tests/test_musa_int8

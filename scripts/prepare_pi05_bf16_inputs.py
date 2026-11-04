@@ -18,11 +18,12 @@ def main():
     ap.add_argument('--corpus',type=Path,required=True)
     ap.add_argument('--samples',type=int,default=30)
     ap.add_argument('--output-dir',type=Path,required=True)
+    ap.add_argument('--split',choices=('development','heldout'),default='development')
     args=ap.parse_args()
     cfg,spec,reader=_inspect(args.config,'baseline')
     corpus=json.loads(args.corpus.read_text())
-    rows=[r for r in corpus['rows'] if r['split']=='development'][:args.samples]
-    if args.samples<1 or len(rows)!=args.samples:raise ValueError('Insufficient development observations')
+    rows=[r for r in corpus['rows'] if r['split']==args.split][:args.samples]
+    if args.samples<1 or len(rows)!=args.samples:raise ValueError('Insufficient selected-split observations')
     args.output_dir.mkdir(parents=True,exist_ok=False)
     rng=np.random.default_rng(cfg['seed']);items=[]
     for i,row in enumerate(rows):
@@ -40,7 +41,7 @@ def main():
                           input_sha256=row['sha256'],task_sha256=hashlib.sha256(row['task'].encode()).hexdigest(),
                           token_sha256=digest(tokens),noise_sha256=digest(noise),episode=row['episode'],prompt=prompt))
     meta=dict(schema_version=1,source_model=cfg['model'],camera_order=list(spec.camera_order),num_steps=spec.num_steps,
-              image_size=spec.image_size,split='development',rows=items,seed=cfg['seed'],
+              image_size=spec.image_size,split=args.split,rows=items,seed=cfg['seed'],
               preprocessing='production prepare_rgb F32 RGB [0,1], prepare_prompt; no native inference',
               source_script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
     (args.output_dir/'manifest.json').write_text(json.dumps(meta,indent=2)+'\n')

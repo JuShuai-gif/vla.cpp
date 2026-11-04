@@ -1,0 +1,487 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2165298..ba5c67e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -394,7 +394,8 @@ elseif(GGML_MUSA)
+     target_compile_definitions(vla_core PUBLIC GGML_USE_MUSA)
+     target_include_directories(vla_core SYSTEM PRIVATE ${llama_SOURCE_DIR}/ggml/src)
+     target_sources(ggml-musa PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu
+-                                    ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_epilogue.cu)
++                                    ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_epilogue.cu
++                                    ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_int8.cu)
+     option(VLA_MUSA_MUDNN_ATTN "Enable optional muDNN vision attention on MUSA" OFF)
+     if(VLA_MUSA_MUDNN_ATTN)
+         find_library(VLA_MUDNN_LIBRARY NAMES mudnn HINTS /usr/local/musa/lib REQUIRED)
+@@ -416,6 +417,7 @@ elseif(GGML_MUSA)
+         string(APPEND _vla_musa_epilogue_flags " --cuda-gpu-arch=mp_${ARCH}")
+     endforeach()
+     set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu
++        ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_int8.cu
+         TARGET_DIRECTORY ggml-musa PROPERTIES
+         LANGUAGE CXX COMPILE_FLAGS "${_vla_musa_flags}"
+         INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/src")
+diff --git a/bindings/python/vla_cpp/policy.py b/bindings/python/vla_cpp/policy.py
+index dd0646d..ccc1b8c 100644
+--- a/bindings/python/vla_cpp/policy.py
++++ b/bindings/python/vla_cpp/policy.py
+@@ -54,13 +54,13 @@ def _config(path, precision=None):
+         raise ValueError("precision_profiles must be an object; baseline is reserved")
+     for name, entry in profiles.items():
+         if (not isinstance(name, str) or not name.strip() or not isinstance(entry, dict)
+-                or set(entry) - {"model", "runtime", "manifest", "status", "quant_route"}
++                or set(entry) - {"model", "runtime", "manifest", "status", "quant_route", "int8_parameters"}
+                 or entry.get("status", "experimental") not in ("experimental", "validated")):
+             raise ValueError("Invalid precision profile")
+         if "runtime" in entry and not isinstance(entry["runtime"], dict):
+             raise ValueError("Precision runtime must be an object")
+-        if entry.get("quant_route", "auto") not in ("auto", "blas", "load_f16"):
+-            raise ValueError("quant_route must be auto, blas or load_f16")
++        if entry.get("quant_route", "auto") not in ("auto", "blas", "load_f16", "native_int8"):
++            raise ValueError("quant_route must be auto, blas, load_f16 or native_int8")
+     selected = precision if precision is not None else cfg.get("default_precision", "baseline")
+     if not isinstance(selected, str) or selected not in ("baseline", *profiles):
+         raise ValueError(f"Unknown precision {selected!r}; choices: {['baseline', *profiles]}")
+@@ -74,9 +74,13 @@ def _config(path, precision=None):
+         cfg["runtime"] = {**cfg.get("runtime", {}), **entry["runtime"]}
+     if "manifest" in entry:
+         cfg["quant_manifest"] = entry["manifest"]
+-    for key in ("model", "library", "optimization_profile", "quant_manifest"):
++    if "int8_parameters" in entry:
++        cfg["int8_parameters"]=entry["int8_parameters"]
++    if (cfg["quant_route"]=="native_int8") != bool(cfg.get("int8_parameters")):
++        raise ValueError("native_int8 requires its explicit calibration manifest")
++    for key in ("model", "library", "optimization_profile", "quant_manifest", "int8_parameters"):
+         value = cfg.get(key)
+-        if key in ("optimization_profile", "quant_manifest") and value is None:
++        if key in ("optimization_profile", "quant_manifest", "int8_parameters") and value is None:
+             continue
+         if not isinstance(value, str) or not value.strip():
+             raise ValueError(f"Policy requires {key}")
+@@ -98,6 +102,8 @@ def _config(path, precision=None):
+         raise ValueError("Validated MUSA profiles require F16 weights/F32 activations/F32 accumulation/FA")
+     if cfg["quant_route"] == "load_f16" and runtime["weight_dtype"] != "f16":
+         raise ValueError("load_f16 requires F16 resident weights")
++    if cfg["quant_route"]=="native_int8" and (runtime["weight_dtype"]!="f16" or runtime["act_dtype"]!="f32" or runtime["mm_prec"]!="f32"):
++        raise ValueError("native_int8 requires F16 base weights, F32 activations/accumulation")
+     cfg["runtime"] = runtime
+     cfg.setdefault("seed", 0)
+     cfg.setdefault("threads", 4)
+@@ -166,6 +172,21 @@ def _inspect(config_path, precision=None):
+         if not isinstance(expected, str) or len(expected) != 64:
+             raise ValueError("Quantization manifest requires output_sha256")
+         cfg["model_sha256"] = expected
++    if cfg.get("int8_parameters"):
++        if packed:raise ValueError("native_int8 requires the original floating source model")
++        path=Path(cfg["int8_parameters"])
++        manifest=json.loads(path.read_text())
++        expected={f"aex.blk.{i}.ffn_gateup" for i in range(field("pi05.n_layers"))}
++        if (manifest.get("schema_version")!=1 or manifest.get("split")!="calibration"
++                or manifest.get("mode")!="expert_gateup" or set(manifest.get("layers",{}))!=expected
++                or len(manifest.get("source_sha256",""))!=64):
++            raise ValueError("Invalid native INT8 calibration manifest")
++        for name,row in manifest["layers"].items():
++            data=path.parent/(name+".i8p")
++            if not data.is_file() or hashlib.sha256(data.read_bytes()).hexdigest()!=row.get("sha256"):
++                raise ValueError("Native INT8 parameter SHA256 mismatch")
++        cfg["model_sha256"]=manifest["source_sha256"]
++        cfg["int8_parameter_dir"]=str(path.parent)
+     for name in ("state_q01", "state_q99"):
+         if name not in tensors:
+             raise ValueError(f"Missing {name}")
+@@ -297,7 +318,8 @@ class Policy:
+             env = {k: None for k in _inactive | set().union(*(v.keys() for v in profiles.values()))}
+             env.update(profiles.get(self.spec.variant, {}))
+             env["VLA_LOAD_QUANT_F16"] = "1" if cfg["quant_route"] == "load_f16" else None
+-            env["GGML_MUSA_QUANT_ROUTE"] = "blas" if cfg["quant_route"] == "load_f16" else cfg["quant_route"]
++            env["VLA_PI05_INT8_PARAMETERS"]=cfg.get("int8_parameter_dir")
++            env["GGML_MUSA_QUANT_ROUTE"] = {"load_f16":"blas","native_int8":"auto"}.get(cfg["quant_route"],cfg["quant_route"])
+             env.update(VLA_LIBRARY=cfg["library"], VLA_DEVICE=cfg["device"], VLA_N_THREADS=str(cfg["threads"]))
+             settings = (cfg["library"], cfg["runtime"], env)
+             if _process_settings is not None and _process_settings != settings:
+@@ -336,7 +358,8 @@ class Policy:
+                 "checkpoint": self.spec.checkpoint, "task": self.task, "precision": self.spec.precision,
+                 "precision_status": self.spec.precision_status, "weight_types_on_disk": self.spec.weight_types,
+                 "floating_weight_dtype": cfg["runtime"]["weight_dtype"],
+-                "quantized_gemm_resident_dtype": "f16" if cfg["quant_route"] == "load_f16" else "packed",
++                "quantized_gemm_resident_dtype": {"load_f16":"f16","native_int8":"int8"}.get(cfg["quant_route"],"packed"),
++                "int8_parameters": cfg.get("int8_parameters"),
+                 "act_dtype": cfg["runtime"]["act_dtype"], "quant_route": cfg["quant_route"], "device_requested": cfg["device"], "seed": cfg["seed"],
+                 "num_steps": self.spec.num_steps, "optimization_variant": self.spec.variant if profiles else None,
+                 "source_contract_verified": self.spec.contract_verified}.items()}
+diff --git a/scripts/calibrate_pi05.py b/scripts/calibrate_pi05.py
+index d99372a..23cb57e 100644
+--- a/scripts/calibrate_pi05.py
++++ b/scripts/calibrate_pi05.py
+@@ -33,6 +33,7 @@ def main():
+     ap.add_argument("--corpus", type=Path, required=True)
+     ap.add_argument("--samples", type=int, default=120)
+     ap.add_argument("--output-dir", type=Path, required=True)
++    ap.add_argument("--capture-inputs", help="comma-separated exact resident weight names; diagnostic F32 input dumps")
+     args = ap.parse_args()
+     if args.samples < 1:
+         ap.error("samples must be positive")
+@@ -51,6 +52,8 @@ def main():
+     profiles = json.loads(Path(cfg["optimization_profile"]).read_text())
+     for settings in profiles.values():
+         settings["VLA_PI05_CALIBRATION_DIR"] = str(raw)
++        if args.capture_inputs:
++            settings["VLA_PI05_CALIBRATION_INPUTS"] = args.capture_inputs
+     (root / "optimization.json").write_text(json.dumps(profiles, indent=2) + "\n")
+     cfg["optimization_profile"] = str(root / "optimization.json")
+     cfg["default_precision"] = "baseline"
+diff --git a/src/loader.cpp b/src/loader.cpp
+index 6142b10..2a2f2ed 100644
+--- a/src/loader.cpp
++++ b/src/loader.cpp
+@@ -221,6 +221,40 @@ WeightLoader::QWeight WeightLoader::quant_i8(const std::string & out_name, const
+     return quant(out_name, srcs, 8, 0);
+ }
+ 
++WeightLoader::QWeight WeightLoader::quant_i8_compensated(const std::string & name,
++        const std::vector<std::string> & srcs,const std::string & parameters) {
++    const auto * source=srcs.empty()?nullptr:g_.meta(srcs.front().c_str());
++    if(!source){fail("INT8 source missing");return {};}
++    FILE * fp=std::fopen(parameters.c_str(),"rb");
++    uint32_t header[3]={};
++    if(!fp){fail("INT8 parameter file missing");return {};}
++    bool valid=std::fread(header,sizeof(header),1,fp)==1 && header[0]==0x31503849 &&
++        header[1]==source->ne[0] && header[1]%32==0 && header[2]<header[1];
++    std::vector<float> inverse;std::vector<int32_t> indices;
++    if(valid){
++        inverse.resize(header[1]);indices.resize(header[2]);
++        valid=std::fread(inverse.data(),4,inverse.size(),fp)==inverse.size() &&
++              std::fread(indices.data(),4,indices.size(),fp)==indices.size() && std::fgetc(fp)==EOF;
++    }
++    std::fclose(fp);
++    std::vector<bool> excluded(valid?header[1]:0,false);
++    if(valid)for(auto i:indices){if(i<0 || i>=int(header[1]) || excluded[i]){valid=false;break;}excluded[i]=true;}
++    if(valid)for(size_t i=0;i<inverse.size();++i)
++        if(!std::isfinite(inverse[i]) || (excluded[i]?inverse[i]!=0:inverse[i]<=0)){valid=false;break;}
++    if(!valid){fail("invalid INT8 parameters");return {};}
++    auto q=quant_i8(name,srcs);
++    if(!q || q.w->ne[1]%128){fail("unsupported INT8 matrix shape");return {};}
++    q.inverse=ggml_new_tensor_1d(ctx_,GGML_TYPE_F32,header[1]);
++    ggml_set_name(q.inverse,(name+".inverse").c_str());
++    if(!indices.empty()){
++        q.extra=ggml_new_tensor_2d(ctx_,GGML_TYPE_F16,indices.size(),q.w->ne[1]);
++        q.indices=ggml_new_tensor_1d(ctx_,GGML_TYPE_I32,indices.size());
++        ggml_set_name(q.extra,(name+".extra").c_str());ggml_set_name(q.indices,(name+".indices").c_str());
++    }
++    auto & item=quant_.back();item.q=q;item.inverse=std::move(inverse);item.indices=std::move(indices);
++    return q;
++}
++
+ WeightLoader::QWeight WeightLoader::quant_i4(const std::string & out_name, const std::vector<std::string> & srcs,
+                                              int64_t group) {
+     return quant(out_name, srcs, 4, group);
+@@ -293,7 +327,7 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
+         const bool fused = std::any_of(fused_.begin(), fused_.end(),
+                                        [&](const Fused & f) { return f.dst == t; }) ||
+                            std::any_of(quant_.begin(), quant_.end(),
+-                                       [&](const Quant & f) { return f.q.w == t || f.q.s == t; });
++                                       [&](const Quant & f) { return f.q.w == t || f.q.s == t || f.q.inverse==t || f.q.extra==t || f.q.indices==t; });
+         if (fused)
+             continue;
+ 
+@@ -350,6 +384,43 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
+ 
+     for (const Quant & f : quant_) {
+         const int64_t K = f.K;
++        if(f.q.inverse){
++            const int64_t M=f.q.w->ne[1],R=f.indices.size();
++            std::vector<int8_t> packed(M*K);std::vector<float> scales(M);
++            std::vector<ggml_fp16_t> extra(M*R);
++            int64_t offset=0;
++            for(const auto & name:f.srcs){
++                auto values=g_.read_convert(name.c_str(),GGML_TYPE_F16);
++                const auto * w=(const ggml_fp16_t*)values.data();
++                const int64_t rows=values.size()/(K*2);
++                if(values.empty() || values.size()%(K*2) || rows>M-offset){fail("INT8 source read failed");return false;}
++                for(int64_t i=0;i<rows;++i){
++                    const int64_t m=offset+i;float maximum=0;
++                    std::vector<float> scaled(K);
++                    for(int64_t k=0;k<K;++k){
++                        scaled[k]=f.inverse[k]>0?ggml_fp16_to_fp32(w[i*K+k])/f.inverse[k]:0;
++                        maximum=std::max(maximum,std::fabs(scaled[k]));
++                    }
++                    scales[m]=maximum>0?maximum/127.f:1.f;
++                    for(int64_t k=0;k<K;++k){
++                        const size_t dest=((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+
++                            ((m%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
++                        packed[dest]=(int8_t)std::lrint(std::min(127.f,std::max(-127.f,scaled[k]/scales[m])));
++                    }
++                    for(int64_t j=0;j<R;++j)extra[m*R+j]=w[i*K+f.indices[j]];
++                }
++                offset+=rows;
++            }
++            if(offset!=M){fail("INT8 row count mismatch");return false;}
++            ggml_backend_tensor_set(f.q.w,packed.data(),0,packed.size());
++            ggml_backend_tensor_set(f.q.s,scales.data(),0,scales.size()*4);
++            ggml_backend_tensor_set(f.q.inverse,f.inverse.data(),0,f.inverse.size()*4);
++            if(R){
++                ggml_backend_tensor_set(f.q.extra,extra.data(),0,extra.size()*2);
++                ggml_backend_tensor_set(f.q.indices,f.indices.data(),0,f.indices.size()*4);
++            }
++            continue;
++        }
+         const int64_t g = f.q.bits == 4 ? f.q.group : K;
+         const float   qmax = f.q.bits == 4 ? 7.0f : 127.0f;
+         std::vector<int8_t> codes;   // INT8: one per byte; INT4: packed below
+diff --git a/src/loader.h b/src/loader.h
+index 7689767..3f4ddcf 100644
+--- a/src/loader.h
++++ b/src/loader.h
+@@ -66,11 +66,14 @@ public:
+     // Quantized from F32 at upload (layers/qlinear.h runs them).
+     struct QWeight {
+         ggml_tensor * w = nullptr, * s = nullptr;
++        ggml_tensor * inverse = nullptr, * extra = nullptr, * indices = nullptr;
+         int           bits = 8;
+         int64_t       group = 0;  // INT4: K-elements per scale (0: per channel)
+         explicit operator bool() const { return w != nullptr; }
+     };
+     QWeight quant_i8(const std::string & out_name, const std::vector<std::string> & srcs);
++    QWeight quant_i8_compensated(const std::string & name, const std::vector<std::string> & srcs,
++                                 const std::string & parameters);
+     // The same as symmetric INT4 (codes -7..7, two per byte along K, low nibble
+     // first: I8 [K/2, N]) with one F32 scale per `group` K-elements and output
+     // channel (F32 [N, K/group], scale[g * N + n]); group 0 = one per channel.
+@@ -129,6 +132,8 @@ private:
+         QWeight                  q;
+         int64_t                  K = 0;
+         std::vector<std::string> srcs;
++        std::vector<float> inverse;
++        std::vector<int32_t> indices;
+     };
+     std::vector<Quant>       quant_;
+ };
+diff --git a/src/models/pi05.cpp b/src/models/pi05.cpp
+index aacc052..c90fb94 100644
+--- a/src/models/pi05.cpp
++++ b/src/models/pi05.cpp
+@@ -773,6 +773,20 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+                 w.rope_pack.scale     = 1.0f / std::sqrt((float) cfg.head_dim);
+             }
+ 
++    const char * native_int8=std::getenv("VLA_PI05_INT8_PARAMETERS");
++    if(native_int8){
++#ifdef GGML_USE_MUSA
++        if(!is_musa || !musa_small_gemm_supported() || fq.present ||
++           m->matmul_type!=GGML_TYPE_F16 || m->act_type!=GGML_TYPE_F32){
++            std::fprintf(stderr,"vla(pi05): native INT8 requires MP22, F16 weights/F32 activations, no FoldQuant\n");
++            return nullptr;
++        }
++#else
++        std::fprintf(stderr,"vla(pi05): native INT8 requires a MUSA build\n");return nullptr;
++#endif
++        std::printf("vla(pi05): native W8A8 expert GateUp in %lld layers, calibrated parameters %s\n",
++                    (long long)cfg.n_layers,native_int8);
++    }
+     m->ex_layers.resize(cfg.n_layers);
+     for (int64_t i=0; i<cfg.n_layers; ++i) {
+         GemmaLayerW & w = m->ex_layers[i];
+@@ -790,7 +804,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+             if (!w.fq_q != !w.fq_k || !w.fq_q != !w.fq_v || !w.fq_gate != !w.fq_up)
+                 L.fail("FoldQuant: an expert layer's q/k/v (and gate/up) must all be INT or all float");
+         }
+-        gemma_declare_float(L, w, "aex.blk." + std::to_string(ii), fuse_proj, q8_aex, aex_w4_group);
++        gemma_declare_float(L, w, "aex.blk." + std::to_string(ii), fuse_proj, q8_aex, aex_w4_group, native_int8);
+         if (m->fq_fast && w.fq_qkv) {
+             // q/k/v GEMM, RoPE and the cached-KV attention as one node (gemma_attn).
+             // VLA_FQ_NO_ROPE_ATTN=1 keeps them apart (A/B runs).
+diff --git a/src/modules/gemma_expert.h b/src/modules/gemma_expert.h
+index 6ec984a..1af8926 100644
+--- a/src/modules/gemma_expert.h
++++ b/src/modules/gemma_expert.h
+@@ -31,6 +31,7 @@
+ #include "layers/fmha_kv.h"
+ #include "layers/fq_rope_attn.h"
+ #include "layers/qlinear.h"
++#include "layers/musa_int8.h"
+ #include "loader.h"
+ #include "model.h"
+ #include "modules/siglip_vit.h"
+@@ -94,7 +95,7 @@ struct GemmaLayerW {
+ // alone. int8: the four GEMMs as W8A8 instead (layers/qlinear.h); w4_group != 0
+ // makes their weights INT4 with that many K-elements per scale (< 0: per channel).
+ inline void gemma_declare_float(WeightLoader & L, GemmaLayerW & w, const std::string & b, bool fuse,
+-                                bool int8 = false, int64_t w4_group = 0) {
++                                bool int8 = false, int64_t w4_group = 0, const char * native_int8 = nullptr) {
+     const char * p = b.c_str();
+     if (int8 && !w.fq_q && !w.fq_qkv && !w.fq_o && !w.fq_gate && !w.fq_gu && !w.fq_down) {
+         // q|k|v and gate|up fused as with fuse.
+@@ -120,7 +121,10 @@ inline void gemma_declare_float(WeightLoader & L, GemmaLayerW & w, const std::st
+     if (!w.fq_o)
+         w.Wo = L.gemm("%s.attn_o.weight", p);
+     if (!w.fq_gate && !w.fq_gu) {
+-        if (fuse) {
++        if(native_int8) {
++            w.q_gu=L.quant_i8_compensated(b+".ffn_gateup.int8",{b+".ffn_gate.weight",b+".ffn_up.weight"},
++                                          std::string(native_int8)+"/"+b+".ffn_gateup.i8p");
++        } else if (fuse) {
+             w.Wgu = L.fuse_gemm((b + ".ffn_gateup.weight").c_str(), {b + ".ffn_gate.weight", b + ".ffn_up.weight"});
+         } else {
+             w.Wgate = L.gemm("%s.ffn_gate.weight", p);
+@@ -657,11 +661,12 @@ inline ggml_tensor * gemma_mlp(ggml_context * ctx, const GemmaLayerW & w, ggml_t
+         gate = fq_gemm(ctx, w.fq_gate, xq);
+         up   = fq_gemm(ctx, w.fq_up,   xq);
+     } else if (w.Wgu || w.q_gu) {
+-        ggml_tensor * gu = w.q_gu ? qlinear(ctx, w.q_gu, x_norm, nullptr, nullptr, at) : mm_act(ctx, w.Wgu, x_norm, at);
++        ggml_tensor * gu = w.q_gu.inverse ? musa_int8_linear(ctx,w.q_gu,x_norm) :
++            w.q_gu ? qlinear(ctx, w.q_gu, x_norm, nullptr, nullptr, at) : mm_act(ctx, w.Wgu, x_norm, at);
+ #ifdef GGML_USE_MUSA
+         // Read gate|up directly from the merged GEMM, like FlashRT's merged
+         // gated activation path. Avoid two CONT copies before GEGLU.
+-        if (w.Wgu && w.Wdown && !w.fq_down && !w.q_down &&
++        if ((w.Wgu || w.q_gu.inverse) && w.Wdown && !w.fq_down && !w.q_down &&
+             (gu->type == GGML_TYPE_F32 || gu->type == GGML_TYPE_F16)) {
+             auto * inter = ggml_geglu(ctx, gu);
+             // The MUSA F16-weight GEMM already narrows F32 activations to F16.
+diff --git a/src/musa/vla_musa_fused.cu b/src/musa/vla_musa_fused.cu
+index 3c15cc0..2248fbe 100644
+--- a/src/musa/vla_musa_fused.cu
++++ b/src/musa/vla_musa_fused.cu
+@@ -144,6 +144,7 @@ bool gemma_sdpa(const ggml_tensor * t) {
+ }
+ 
+ bool supports(const ggml_tensor * t) {
++    if(musa_int8_supports(t))return true;
+     if (gemma_sdpa(t)) return true;
+     if (vision_sdpa(t)) return true;
+     if (vector_pack(t)) return true;
+@@ -822,6 +823,7 @@ __global__ void prefetch_lines(const unsigned * w,unsigned * sink,size_t words)
+ }
+ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
+     if (!supports(t)) return false;
++    if(musa_int8_supports(t))return musa_int8_forward(t,stream_ptr);
+     const auto stream = (musaStream_t) stream_ptr;
+     if (gemma_sdpa(t)) return run_gemma_sdpa(t,stream);
+ #ifdef VLA_MUSA_MUDNN_ATTN
+diff --git a/src/musa/vla_musa_ops.h b/src/musa/vla_musa_ops.h
+index 31a75c3..22b5ea5 100644
+--- a/src/musa/vla_musa_ops.h
++++ b/src/musa/vla_musa_ops.h
+@@ -13,6 +13,8 @@ struct ggml_tensor;
+ namespace vla {
+ #ifdef GGML_USE_MUSA
+ bool musa_register_fused_ops();
++bool musa_int8_supports(const ggml_tensor * t);
++bool musa_int8_forward(ggml_tensor * t,void * stream);
+ bool musa_small_gemm_supported();
+ void * musa_weight_prefetch_create();
+ void musa_weight_prefetch_destroy(void * state);
+diff --git a/src/quant_calibration.h b/src/quant_calibration.h
+index fe9c859..53b3609 100644
+--- a/src/quant_calibration.h
++++ b/src/quant_calibration.h
+@@ -81,6 +81,19 @@ inline bool write_quant_calibration(const char * phase, ggml_cgraph * graph, int
+                 else { ggml_bf16_t value;value.bits=packed[j];values[j]=ggml_bf16_to_fp32(value); }
+             }
+         }
++        // Optional diagnostic input replay; never used by ordinary inference.
++        const char * capture=std::getenv("VLA_PI05_CALIBRATION_INPUTS");
++        if (capture && (std::string(",")+capture+",").find(","+std::string(w->name)+",")!=std::string::npos) {
++            const std::string input_path=path+"."+std::to_string(i)+".f32";
++            FILE * input=std::fopen(input_path.c_str(),"wbx");
++            if (!input) {valid=false;break;}
++            const uint64_t shape[2]={rows,K};
++            bool written=std::fwrite(shape,sizeof(shape),1,input)==1 &&
++                         std::fwrite(values.data(),sizeof(float),rows*K,input)==rows*K;
++            if (std::fclose(input)!=0) written=false;
++            if (!written) {valid=false;break;}
++            std::fprintf(f,"\"input_file\":%s,",calibration_json_string(input_path.c_str()).c_str());
++        }
+         std::vector<double> sum2(K,0.0),maximum(K,0.0);
+         for (size_t j=0;j<rows*K;++j) {
+             const double v=values[j]; if (!std::isfinite(v)) {valid=false;break;}
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 36b7d2c..12b242d 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -265,3 +265,12 @@ if(GGML_MUSA)
+     target_link_libraries(test_quant_calibration PRIVATE vla_core)
+     add_test(NAME quant_calibration COMMAND test_quant_calibration ${CMAKE_CURRENT_BINARY_DIR}/quant-calibration-test)
+ endif()
++
++if(GGML_MUSA)
++    add_executable(bench_musa_native_int8 bench_musa_native_int8.cpp)
++    target_link_libraries(bench_musa_native_int8 PRIVATE vla_core)
++    add_executable(test_musa_int8 test_musa_int8.cpp)
++    target_link_libraries(test_musa_int8 PRIVATE vla_core)
++    add_test(NAME musa_native_int8 COMMAND test_musa_int8)
++    set_tests_properties(musa_native_int8 PROPERTIES SKIP_RETURN_CODE 77 TIMEOUT 180)
++endif()
+diff --git a/tests/py/test_policy_api.py b/tests/py/test_policy_api.py
+index d4a507d..0182987 100644
+--- a/tests/py/test_policy_api.py
++++ b/tests/py/test_policy_api.py
+@@ -70,6 +70,18 @@ class PolicyTests(unittest.TestCase):
+         with self.assertRaisesRegex(ValueError,"F16 resident"):
+             policy._config(self.path,"q8-cached")
+ 
++    def test_native_int8_requires_explicit_parameters_and_float_baseline(self):
++        cfg=dict(self.config,precision_profiles={"native":{"quant_route":"native_int8"}})
++        self.path.write_text(json.dumps(cfg))
++        with self.assertRaisesRegex(ValueError,"calibration manifest"):policy._config(self.path,"native")
++        (self.path.parent/"int8.json").write_text("{}")
++        cfg["precision_profiles"]["native"]["int8_parameters"]="int8.json"
++        self.path.write_text(json.dumps(cfg))
++        self.assertEqual(policy._config(self.path,"native")["quant_route"],"native_int8")
++        cfg["precision_profiles"]["native"]["runtime"]={"act_dtype":"f16"}
++        self.path.write_text(json.dumps(cfg))
++        with self.assertRaisesRegex(ValueError,"F32 activations"):policy._config(self.path,"native")
++
+     def test_prompt_cache_reuses_metadata_but_not_state_or_task(self):
+         def field(value):
+             return SimpleNamespace(contents=Mock(return_value=value))
+@@ -107,9 +119,10 @@ class PolicyTests(unittest.TestCase):
+              patch('vla_cpp._ffi.load_library',return_value=fake_lib), \
+              patch.object(vla_cpp,'Model',return_value=native):
+             images={name:np.zeros((4,4,3),np.uint8) for name in spec.camera_order}
+-            with patch.dict(os.environ, {"VLA_LOAD_QUANT_F16":"1","GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
++            with patch.dict(os.environ, {"VLA_PI05_INT8_PARAMETERS":"/unselected","VLA_LOAD_QUANT_F16":"1","GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
+                 self.assertEqual(os.environ["GGML_MUSA_QUANT_ROUTE"],"auto")
+                 self.assertNotIn("VLA_LOAD_QUANT_F16",os.environ)
++                self.assertNotIn("VLA_PI05_INT8_PARAMETERS",os.environ)
+                 self.assertNotIn("GGML_CUDA_CUBLAS_COMPUTE_TYPE",os.environ)
+                 self.assertNotIn("GGML_MUSA_GRAPH_RECREATE",os.environ)
+                 with self.assertRaisesRegex(RuntimeError,'one resident'):vla_cpp.load_policy(self.path)
+diff --git a/tests/test_quant_calibration.cpp b/tests/test_quant_calibration.cpp
+index e0fdbfc..f1806e5 100644
+--- a/tests/test_quant_calibration.cpp
++++ b/tests/test_quant_calibration.cpp
+@@ -4,6 +4,7 @@
+ #include "ggml-alloc.h"
+ #include "ggml-cpu.h"
+ 
++#include <cstring>
+ #include <filesystem>
+ #include <fstream>
+ #include <sstream>
+@@ -27,6 +28,7 @@ int main(int argc,char **argv) {
+     auto *buffer=ggml_backend_alloc_ctx_tensors(ctx,cpu);
+     float values[64];for(int j=0;j<64;++j)values[j]=float(j%32+j/32);
+     ggml_backend_tensor_set(x,values,0,sizeof(values));
++    setenv("VLA_PI05_CALIBRATION_INPUTS","vlm.blk.0.ffn_gate.weight",1);
+     CHECK(vla::write_quant_calibration("prefix",graph,0,ggml_graph_n_nodes(graph)));
+     const auto captured=root/"0-prefix.jsonl";
+     {std::ifstream in(captured);std::string text((std::istreambuf_iterator<char>(in)),{});
+@@ -34,12 +36,18 @@ int main(int argc,char **argv) {
+      for(int j=0;j<32;++j){maximum<<(j?",":"")<<j+1;squares<<(j?",":"")<<j*j+(j+1)*(j+1);}maximum<<"]";squares<<"]";
+      CHECK(text.find(maximum.str())!=std::string::npos && text.find(squares.str())!=std::string::npos);
+      CHECK(text.find("\"rows\":2")!=std::string::npos);}
++    const auto input=root/"0-prefix.jsonl.0.f32";
++    {std::ifstream in(input,std::ios::binary);uint64_t shape[2];float got[64];
++     CHECK(bool(in.read((char*)shape,sizeof(shape))));CHECK(shape[0]==2 && shape[1]==32);
++     CHECK(bool(in.read((char*)got,sizeof(got))));CHECK(std::memcmp(got,values,sizeof(values))==0);}
+     const auto retained=root/"1-prefix.jsonl";
+     {std::ofstream out(retained);out<<"preserve";}
+     CHECK(!vla::write_quant_calibration("prefix",graph,0,ggml_graph_n_nodes(graph)));
+     {std::ifstream in(retained);std::string contents;in>>contents;CHECK(contents=="preserve");}
+     ggml_backend_buffer_free(buffer);ggml_free(ctx);ggml_backend_free(cpu);
+     unsetenv("VLA_PI05_CALIBRATION_DIR");
++    unsetenv("VLA_PI05_CALIBRATION_INPUTS");
++    std::filesystem::remove(input);
+     std::filesystem::remove(captured);std::filesystem::remove(retained);std::filesystem::remove(root);
+     return 0;
+ }

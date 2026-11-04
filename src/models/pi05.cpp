@@ -287,7 +287,7 @@ ggml_tensor * build_expert_layer(
         ggml_tensor * h1 = nullptr;
         ggml_tensor * xm = nullptr;
         if (fr && at == GGML_TYPE_F32)
-            xm = pack ? packed_norm(ctx,x_in,o,mod_attn,mod_ffn,fr->eps,1,&h1) :
+            xm = pack ? packed_norm(ctx,x_in,o,mod_attn,mod_ffn,fr->eps,1,&h1,w.q_gu.inverse) :
                         fused_res_adarms(ctx, x_in, o, mod_attn, mod_ffn, *fr, &h1);
         else {
             h1 = fused_gateres(ctx, x_in, o, mod_attn, *fg);
@@ -773,6 +773,20 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
                 w.rope_pack.scale     = 1.0f / std::sqrt((float) cfg.head_dim);
             }
 
+    const char * native_int8=std::getenv("VLA_PI05_INT8_PARAMETERS");
+    if(native_int8){
+#ifdef GGML_USE_MUSA
+        if(!is_musa || !musa_small_gemm_supported() || fq.present ||
+           m->matmul_type!=GGML_TYPE_F16 || m->act_type!=GGML_TYPE_F32){
+            std::fprintf(stderr,"vla(pi05): native INT8 requires MP22, F16 weights/F32 activations, no FoldQuant\n");
+            return nullptr;
+        }
+#else
+        std::fprintf(stderr,"vla(pi05): native INT8 requires a MUSA build\n");return nullptr;
+#endif
+        std::printf("vla(pi05): native W8A8 expert GateUp in %lld layers, calibrated parameters %s\n",
+                    (long long)cfg.n_layers,native_int8);
+    }
     m->ex_layers.resize(cfg.n_layers);
     for (int64_t i=0; i<cfg.n_layers; ++i) {
         GemmaLayerW & w = m->ex_layers[i];
@@ -790,7 +804,7 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
             if (!w.fq_q != !w.fq_k || !w.fq_q != !w.fq_v || !w.fq_gate != !w.fq_up)
                 L.fail("FoldQuant: an expert layer's q/k/v (and gate/up) must all be INT or all float");
         }
-        gemma_declare_float(L, w, "aex.blk." + std::to_string(ii), fuse_proj, q8_aex, aex_w4_group);
+        gemma_declare_float(L, w, "aex.blk." + std::to_string(ii), fuse_proj, q8_aex, aex_w4_group, native_int8);
         if (m->fq_fast && w.fq_qkv) {
             // q/k/v GEMM, RoPE and the cached-KV attention as one node (gemma_attn).
             // VLA_FQ_NO_ROPE_ATTN=1 keeps them apart (A/B runs).

@@ -394,7 +394,8 @@ elseif(GGML_MUSA)
     target_compile_definitions(vla_core PUBLIC GGML_USE_MUSA)
     target_include_directories(vla_core SYSTEM PRIVATE ${llama_SOURCE_DIR}/ggml/src)
     target_sources(ggml-musa PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu
-                                    ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_epilogue.cu)
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_epilogue.cu
+                                    ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_int8.cu)
     option(VLA_MUSA_MUDNN_ATTN "Enable optional muDNN vision attention on MUSA" OFF)
     if(VLA_MUSA_MUDNN_ATTN)
         find_library(VLA_MUDNN_LIBRARY NAMES mudnn HINTS /usr/local/musa/lib REQUIRED)
@@ -416,6 +417,7 @@ elseif(GGML_MUSA)
         string(APPEND _vla_musa_epilogue_flags " --cuda-gpu-arch=mp_${ARCH}")
     endforeach()
     set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_fused.cu
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/musa/vla_musa_int8.cu
         TARGET_DIRECTORY ggml-musa PROPERTIES
         LANGUAGE CXX COMPILE_FLAGS "${_vla_musa_flags}"
         INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/src")

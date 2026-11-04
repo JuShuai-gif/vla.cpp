@@ -70,6 +70,18 @@ class PolicyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"F16 resident"):
             policy._config(self.path,"q8-cached")
 
+    def test_native_int8_requires_explicit_parameters_and_float_baseline(self):
+        cfg=dict(self.config,precision_profiles={"native":{"quant_route":"native_int8"}})
+        self.path.write_text(json.dumps(cfg))
+        with self.assertRaisesRegex(ValueError,"calibration manifest"):policy._config(self.path,"native")
+        (self.path.parent/"int8.json").write_text("{}")
+        cfg["precision_profiles"]["native"]["int8_parameters"]="int8.json"
+        self.path.write_text(json.dumps(cfg))
+        self.assertEqual(policy._config(self.path,"native")["quant_route"],"native_int8")
+        cfg["precision_profiles"]["native"]["runtime"]={"act_dtype":"f16"}
+        self.path.write_text(json.dumps(cfg))
+        with self.assertRaisesRegex(ValueError,"F32 activations"):policy._config(self.path,"native")
+
     def test_prompt_cache_reuses_metadata_but_not_state_or_task(self):
         def field(value):
             return SimpleNamespace(contents=Mock(return_value=value))
@@ -107,9 +119,10 @@ class PolicyTests(unittest.TestCase):
              patch('vla_cpp._ffi.load_library',return_value=fake_lib), \
              patch.object(vla_cpp,'Model',return_value=native):
             images={name:np.zeros((4,4,3),np.uint8) for name in spec.camera_order}
-            with patch.dict(os.environ, {"VLA_LOAD_QUANT_F16":"1","GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
+            with patch.dict(os.environ, {"VLA_PI05_INT8_PARAMETERS":"/unselected","VLA_LOAD_QUANT_F16":"1","GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
                 self.assertEqual(os.environ["GGML_MUSA_QUANT_ROUTE"],"auto")
                 self.assertNotIn("VLA_LOAD_QUANT_F16",os.environ)
+                self.assertNotIn("VLA_PI05_INT8_PARAMETERS",os.environ)
                 self.assertNotIn("GGML_CUDA_CUBLAS_COMPUTE_TYPE",os.environ)
                 self.assertNotIn("GGML_MUSA_GRAPH_RECREATE",os.environ)
                 with self.assertRaisesRegex(RuntimeError,'one resident'):vla_cpp.load_policy(self.path)

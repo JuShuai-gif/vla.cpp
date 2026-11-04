@@ -1,0 +1,8 @@
+test_bad_calibration_rejected (test_int8_compensation.CompensationTests.test_bad_calibration_rejected) ... ok
+test_smoothing_and_compensation_reduce_outlier_error (test_int8_compensation.CompensationTests.test_smoothing_and_compensation_reduce_outlier_error) ... ok
+test_zero_input_and_outlier_reconstruction (test_int8_compensation.CompensationTests.test_zero_input_and_outlier_reconstruction) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.082s
+
+OK

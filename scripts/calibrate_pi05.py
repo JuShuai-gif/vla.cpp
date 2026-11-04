@@ -33,6 +33,7 @@ def main():
     ap.add_argument("--corpus", type=Path, required=True)
     ap.add_argument("--samples", type=int, default=120)
     ap.add_argument("--output-dir", type=Path, required=True)
+    ap.add_argument("--capture-inputs", help="comma-separated exact resident weight names; diagnostic F32 input dumps")
     args = ap.parse_args()
     if args.samples < 1:
         ap.error("samples must be positive")
@@ -51,6 +52,8 @@ def main():
     profiles = json.loads(Path(cfg["optimization_profile"]).read_text())
     for settings in profiles.values():
         settings["VLA_PI05_CALIBRATION_DIR"] = str(raw)
+        if args.capture_inputs:
+            settings["VLA_PI05_CALIBRATION_INPUTS"] = args.capture_inputs
     (root / "optimization.json").write_text(json.dumps(profiles, indent=2) + "\n")
     cfg["optimization_profile"] = str(root / "optimization.json")
     cfg["default_precision"] = "baseline"

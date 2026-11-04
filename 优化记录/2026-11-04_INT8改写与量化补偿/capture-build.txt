@@ -1,0 +1,4 @@
+[1/4] Linking CXX shared library libvla_core.so
+[2/4] Linking CXX shared library libvla.so
+[3/4] Building CXX object tests/CMakeFiles/test_quant_calibration.dir/test_quant_calibration.cpp.o
+[4/4] Linking CXX executable tests/test_quant_calibration

@@ -81,6 +81,19 @@ inline bool write_quant_calibration(const char * phase, ggml_cgraph * graph, int
                 else { ggml_bf16_t value;value.bits=packed[j];values[j]=ggml_bf16_to_fp32(value); }
             }
         }
+        // Optional diagnostic input replay; never used by ordinary inference.
+        const char * capture=std::getenv("VLA_PI05_CALIBRATION_INPUTS");
+        if (capture && (std::string(",")+capture+",").find(","+std::string(w->name)+",")!=std::string::npos) {
+            const std::string input_path=path+"."+std::to_string(i)+".f32";
+            FILE * input=std::fopen(input_path.c_str(),"wbx");
+            if (!input) {valid=false;break;}
+            const uint64_t shape[2]={rows,K};
+            bool written=std::fwrite(shape,sizeof(shape),1,input)==1 &&
+                         std::fwrite(values.data(),sizeof(float),rows*K,input)==rows*K;
+            if (std::fclose(input)!=0) written=false;
+            if (!written) {valid=false;break;}
+            std::fprintf(f,"\"input_file\":%s,",calibration_json_string(input_path.c_str()).c_str());
+        }
         std::vector<double> sum2(K,0.0),maximum(K,0.0);
         for (size_t j=0;j<rows*K;++j) {
             const double v=values[j]; if (!std::isfinite(v)) {valid=false;break;}

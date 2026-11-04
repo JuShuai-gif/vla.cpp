@@ -1,0 +1,170 @@
+[
+  {
+    "variant": "pruned",
+    "precision": "baseline",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/bench_pi05_precision.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/pruned-native-policy.json",
+      "--corpus",
+      "validation/quant/data/real-v1/manifest.json",
+      "--samples",
+      "30",
+      "--warmup",
+      "3",
+      "--precision",
+      "baseline",
+      "--output",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/v3-pruned-baseline.json"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 43.74664354324341,
+    "native_ms": {
+      "p50": 485.1972275009757,
+      "p95": 489.0246125498379,
+      "p99": 491.72511490858597,
+      "min": 459.9909579992527,
+      "max": 492.3822899982042,
+      "mean": 480.3574762662417
+    },
+    "predict_ms": {
+      "p50": 488.95744850051415,
+      "p95": 493.5458439989816,
+      "p99": 495.5810603111604,
+      "min": 464.69947999867145,
+      "max": 496.0246910013666,
+      "mean": 484.5761710669952
+    },
+    "load_seconds": 11.311934506000398,
+    "offline_accuracy_pass": true,
+    "minimum_action_cosine": 0.9999659986470442,
+    "native_p50_reduction": 0.0
+  },
+  {
+    "variant": "pruned",
+    "precision": "int8-expert-smooth",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/bench_pi05_precision.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/pruned-native-policy.json",
+      "--corpus",
+      "validation/quant/data/real-v1/manifest.json",
+      "--samples",
+      "30",
+      "--warmup",
+      "3",
+      "--precision",
+      "int8-expert-smooth",
+      "--output",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/v3-pruned-int8-expert-smooth.json"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 66.38565325737,
+    "native_ms": {
+      "p50": 490.6191919999401,
+      "p95": 498.9540440017663,
+      "p99": 500.05251439994026,
+      "min": 464.3370040030277,
+      "max": 500.3602159995353,
+      "mean": 486.6541219666639
+    },
+    "predict_ms": {
+      "p50": 494.5749939997768,
+      "p95": 503.9136695500929,
+      "p99": 504.09374760063656,
+      "min": 468.3307250015787,
+      "max": 504.1418180007895,
+      "mean": 490.9149475668528
+    },
+    "load_seconds": 33.87270595299924,
+    "offline_accuracy_pass": true,
+    "minimum_action_cosine": 0.999967083300968,
+    "native_p50_reduction": -0.011174763975652535
+  },
+  {
+    "variant": "full",
+    "precision": "baseline",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/bench_pi05_precision.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/full-native-policy.json",
+      "--corpus",
+      "validation/quant/data/real-v1/manifest.json",
+      "--samples",
+      "30",
+      "--warmup",
+      "3",
+      "--precision",
+      "baseline",
+      "--output",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/v3-full-baseline.json"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 58.31991124153137,
+    "native_ms": {
+      "p50": 796.9192039981863,
+      "p95": 829.6502605489877,
+      "p99": 833.7984548203531,
+      "min": 755.0945099974342,
+      "max": 835.4795390005165,
+      "mean": 800.2271366659746
+    },
+    "predict_ms": {
+      "p50": 801.2700259987469,
+      "p95": 834.4975945512488,
+      "p99": 838.660038110902,
+      "min": 758.943711000029,
+      "max": 839.9873800008208,
+      "mean": 804.6039236664607
+    },
+    "load_seconds": 11.760724162999395,
+    "offline_accuracy_pass": true,
+    "minimum_action_cosine": 0.9999776593327064,
+    "native_p50_reduction": 0.0
+  },
+  {
+    "variant": "full",
+    "precision": "int8-expert-smooth",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/bench_pi05_precision.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/full-native-policy.json",
+      "--corpus",
+      "validation/quant/data/real-v1/manifest.json",
+      "--samples",
+      "30",
+      "--warmup",
+      "3",
+      "--precision",
+      "int8-expert-smooth",
+      "--output",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/v3-full-int8-expert-smooth.json"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 85.87133884429932,
+    "native_ms": {
+      "p50": 815.6198779997794,
+      "p95": 846.9246591990668,
+      "p99": 854.9225049074812,
+      "min": 769.6479610021925,
+      "max": 856.2782319968392,
+      "mean": 820.4752552998494
+    },
+    "predict_ms": {
+      "p50": 819.9665199990704,
+      "p95": 851.9501931983541,
+      "p99": 859.4471085094119,
+      "min": 773.7324819972855,
+      "max": 860.3193939998164,
+      "mean": 824.7463302338778
+    },
+    "load_seconds": 37.770479621998675,
+    "offline_accuracy_pass": true,
+    "minimum_action_cosine": 0.9999785680425707,
+    "native_p50_reduction": -0.02346621076235933
+  }
+]

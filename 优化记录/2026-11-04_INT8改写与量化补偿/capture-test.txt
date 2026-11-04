@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp-quant/build-musa-quant
+Test project /home/skysi/code/vla.cpp-quant/build-musa-quant
+    Start 39: quant_calibration
+1/1 Test #39: quant_calibration ................   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.01 sec

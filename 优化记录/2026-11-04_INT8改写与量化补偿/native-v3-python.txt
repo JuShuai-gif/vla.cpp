@@ -1,0 +1,149 @@
+test_foldquant_ref (unittest.loader._FailedTest.test_foldquant_ref) ... ERROR
+test_awq_style_search_requires_separate_calibration_statistics (test_int8_compensation.CompensationTests.test_awq_style_search_requires_separate_calibration_statistics) ... ERROR
+test_bad_calibration_rejected (test_int8_compensation.CompensationTests.test_bad_calibration_rejected) ... ERROR
+test_smoothing_and_compensation_reduce_outlier_error (test_int8_compensation.CompensationTests.test_smoothing_and_compensation_reduce_outlier_error) ... ERROR
+test_zero_input_and_outlier_reconstruction (test_int8_compensation.CompensationTests.test_zero_input_and_outlier_reconstruction) ... ERROR
+test_pi05_io (unittest.loader.ModuleSkipped.test_pi05_io) ... skipped 'pi05 IO tests need real converter/image dependencies'
+test_policy_api (unittest.loader._FailedTest.test_policy_api) ... ERROR
+test_precision_bench (unittest.loader._FailedTest.test_precision_bench) ... ERROR
+test_quantize_gguf (unittest.loader._FailedTest.test_quantize_gguf) ... ERROR
+test_quantized_model_converter (unittest.loader._FailedTest.test_quantized_model_converter) ... ERROR
+
+======================================================================
+ERROR: test_foldquant_ref (unittest.loader._FailedTest.test_foldquant_ref)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_foldquant_ref
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_foldquant_ref.py", line 22, in <module>
+    import pytest
+ModuleNotFoundError: No module named 'pytest'
+
+
+======================================================================
+ERROR: test_awq_style_search_requires_separate_calibration_statistics (test_int8_compensation.CompensationTests.test_awq_style_search_requires_separate_calibration_statistics)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_int8_compensation.py", line 26, in test_awq_style_search_requires_separate_calibration_statistics
+    with self.assertRaises(ValueError):prepare(w,a,.5,method="awq")
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/vla.cpp-quant/scripts/int8_compensation.py", line 15, in prepare
+    if w.ndim!=2 or a.shape!=(w.shape[1],) or not np.isfinite(w).all() or not np.isfinite(a).all() or (a<0).any():
+       ^^^^^^
+AttributeError: 'NoneType' object has no attribute 'ndim'
+
+======================================================================
+ERROR: test_bad_calibration_rejected (test_int8_compensation.CompensationTests.test_bad_calibration_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_int8_compensation.py", line 33, in test_bad_calibration_rejected
+    for a,alpha,count in [(np.ones(31),.5,0),(np.full(32,np.nan),.5,0),(np.ones(32),1.5,0),(np.ones(32),.5,32)]:
+                                              ^^^^^^^
+AttributeError: module 'numpy' has no attribute 'full'
+
+======================================================================
+ERROR: test_smoothing_and_compensation_reduce_outlier_error (test_int8_compensation.CompensationTests.test_smoothing_and_compensation_reduce_outlier_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_int8_compensation.py", line 16, in test_smoothing_and_compensation_reduce_outlier_error
+    rng=np.random.default_rng(5)
+        ^^^^^^^^^
+AttributeError: module 'numpy' has no attribute 'random'
+
+======================================================================
+ERROR: test_zero_input_and_outlier_reconstruction (test_int8_compensation.CompensationTests.test_zero_input_and_outlier_reconstruction)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_int8_compensation.py", line 7, in test_zero_input_and_outlier_reconstruction
+    rng=np.random.default_rng(3)
+        ^^^^^^^^^
+AttributeError: module 'numpy' has no attribute 'random'
+
+======================================================================
+ERROR: test_policy_api (unittest.loader._FailedTest.test_policy_api)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_policy_api
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_policy_api.py", line 12, in <module>
+    from vla_cpp import policy
+  File "/home/skysi/code/vla.cpp-quant/bindings/python/vla_cpp/policy.py", line 15, in <module>
+    from .pi05_gguf import GGUFReader
+  File "/home/skysi/code/vla.cpp-quant/bindings/python/vla_cpp/pi05_gguf.py", line 5, in <module>
+    class _NumericField(gguf.ReaderField):
+                        ^^^^^^^^^^^^^^^^
+AttributeError: module 'gguf' has no attribute 'ReaderField'
+
+
+======================================================================
+ERROR: test_precision_bench (unittest.loader._FailedTest.test_precision_bench)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_precision_bench
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_precision_bench.py", line 9, in <module>
+    from bench_pi05_precision import compare, cosine_quality
+  File "/home/skysi/code/vla.cpp-quant/scripts/bench_pi05_precision.py", line 18, in <module>
+    from pi05_gguf import GGUFReader  # installs the repository binding path
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/vla.cpp-quant/scripts/pi05_gguf.py", line 6, in <module>
+    from vla_cpp.pi05_gguf import GGUFReader
+  File "/home/skysi/code/vla.cpp-quant/bindings/python/vla_cpp/pi05_gguf.py", line 5, in <module>
+    class _NumericField(gguf.ReaderField):
+                        ^^^^^^^^^^^^^^^^
+AttributeError: module 'gguf' has no attribute 'ReaderField'
+
+
+======================================================================
+ERROR: test_quantize_gguf (unittest.loader._FailedTest.test_quantize_gguf)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_quantize_gguf
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_quantize_gguf.py", line 12, in <module>
+    from quantize_gguf import convert, GGUFReader, make_plan, to_f32, unique_keys
+  File "/home/skysi/code/vla.cpp-quant/scripts/quantize_gguf.py", line 36, in <module>
+    from pi05_gguf import GGUFReader
+  File "/home/skysi/code/vla.cpp-quant/scripts/pi05_gguf.py", line 6, in <module>
+    from vla_cpp.pi05_gguf import GGUFReader
+  File "/home/skysi/code/vla.cpp-quant/bindings/python/vla_cpp/pi05_gguf.py", line 5, in <module>
+    class _NumericField(gguf.ReaderField):
+                        ^^^^^^^^^^^^^^^^
+AttributeError: module 'gguf' has no attribute 'ReaderField'
+
+
+======================================================================
+ERROR: test_quantized_model_converter (unittest.loader._FailedTest.test_quantized_model_converter)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_quantized_model_converter
+Traceback (most recent call last):
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/robot_runtime/runtime/python312/lib/python3.12/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_quantized_model_converter.py", line 28, in <module>
+    import pytest
+ModuleNotFoundError: No module named 'pytest'
+
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.002s
+
+FAILED (errors=9, skipped=1)

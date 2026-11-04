@@ -4,6 +4,7 @@
 #include "ggml-alloc.h"
 #include "ggml-cpu.h"
 
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -27,6 +28,7 @@ int main(int argc,char **argv) {
     auto *buffer=ggml_backend_alloc_ctx_tensors(ctx,cpu);
     float values[64];for(int j=0;j<64;++j)values[j]=float(j%32+j/32);
     ggml_backend_tensor_set(x,values,0,sizeof(values));
+    setenv("VLA_PI05_CALIBRATION_INPUTS","vlm.blk.0.ffn_gate.weight",1);
     CHECK(vla::write_quant_calibration("prefix",graph,0,ggml_graph_n_nodes(graph)));
     const auto captured=root/"0-prefix.jsonl";
     {std::ifstream in(captured);std::string text((std::istreambuf_iterator<char>(in)),{});
@@ -34,12 +36,18 @@ int main(int argc,char **argv) {
      for(int j=0;j<32;++j){maximum<<(j?",":"")<<j+1;squares<<(j?",":"")<<j*j+(j+1)*(j+1);}maximum<<"]";squares<<"]";
      CHECK(text.find(maximum.str())!=std::string::npos && text.find(squares.str())!=std::string::npos);
      CHECK(text.find("\"rows\":2")!=std::string::npos);}
+    const auto input=root/"0-prefix.jsonl.0.f32";
+    {std::ifstream in(input,std::ios::binary);uint64_t shape[2];float got[64];
+     CHECK(bool(in.read((char*)shape,sizeof(shape))));CHECK(shape[0]==2 && shape[1]==32);
+     CHECK(bool(in.read((char*)got,sizeof(got))));CHECK(std::memcmp(got,values,sizeof(values))==0);}
     const auto retained=root/"1-prefix.jsonl";
     {std::ofstream out(retained);out<<"preserve";}
     CHECK(!vla::write_quant_calibration("prefix",graph,0,ggml_graph_n_nodes(graph)));
     {std::ifstream in(retained);std::string contents;in>>contents;CHECK(contents=="preserve");}
     ggml_backend_buffer_free(buffer);ggml_free(ctx);ggml_backend_free(cpu);
     unsetenv("VLA_PI05_CALIBRATION_DIR");
+    unsetenv("VLA_PI05_CALIBRATION_INPUTS");
+    std::filesystem::remove(input);
     std::filesystem::remove(captured);std::filesystem::remove(retained);std::filesystem::remove(root);
     return 0;
 }

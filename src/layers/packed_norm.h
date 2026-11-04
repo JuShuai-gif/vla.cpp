@@ -5,7 +5,7 @@
 #include "layers/small_gemm.h"
 namespace vla {
 constexpr uint32_t PACKED_NORM_MAGIC=0x4e50524d;
-struct PackedNormSpec {uint32_t magic=PACKED_NORM_MAGIC;float eps=1e-6f;int kind=0;};
+struct PackedNormSpec {uint32_t magic=PACKED_NORM_MAGIC;float eps=1e-6f;int kind=0;int quantized=0;};
 inline PackedNormSpec packed_norm_spec(const ggml_tensor * t) {
  PackedNormSpec s;std::memcpy(&s,(const char *)t->op_params+32,sizeof(s));return s;
 }
@@ -28,6 +28,7 @@ inline ggml_tensor * packed_typed_view(ggml_context * C,ggml_tensor * blob,ggml_
 }
 inline void packed_norm_cpu(ggml_tensor * t,int ith,int nth,void *) {
  const auto s=packed_norm_spec(t);const auto * x=t->src[0];
+ GGML_ASSERT(!s.quantized);
  const int h=x->ne[0],rows=x->ne[1];
  const float * xp=(const float *)x->data,* op=s.kind?(const float *)t->src[1]->data:nullptr;
  const float * gate=s.kind==1?(const float *)t->src[2]->data:nullptr;
@@ -50,7 +51,7 @@ inline void packed_norm_cpu(ggml_tensor * t,int ith,int nth,void *) {
  }
 }
 inline ggml_tensor * packed_norm(ggml_context * C,ggml_tensor * x,ggml_tensor * o,
-        ggml_tensor * gate,ggml_tensor * mod,float eps,int kind,ggml_tensor ** residual=nullptr) {
+        ggml_tensor * gate,ggml_tensor * mod,float eps,int kind,ggml_tensor ** residual=nullptr,ggml_tensor * inverse=nullptr) {
  GGML_ASSERT(x->type==GGML_TYPE_F32 && ggml_is_contiguous(x) && x->ne[1]>0 && x->ne[1]<=64 &&
              x->ne[2]==1 && x->ne[3]==1 && kind>=0 && kind<=2 && mod->ne[0]==3*x->ne[0]);
  GGML_ASSERT(mod->type==GGML_TYPE_F32 && ggml_is_contiguous(mod) && (!kind || residual));
@@ -58,12 +59,13 @@ inline ggml_tensor * packed_norm(ggml_context * C,ggml_tensor * x,ggml_tensor * 
  GGML_ASSERT(!kind || (o && o->type==GGML_TYPE_F32 && ggml_is_contiguous(o)));
  GGML_ASSERT(kind!=1 || (ggml_are_same_shape(x,o) && gate && gate->ne[0]==3*x->ne[0]));
  GGML_ASSERT(kind!=2 || ggml_nelements(o)==x->ne[0]);
- ggml_tensor * args[]={x,kind?o:mod,kind==1?gate:mod,mod};
+ GGML_ASSERT(!inverse || (kind==1 && inverse->type==GGML_TYPE_F32 && ggml_nelements(inverse)==x->ne[0] && x->ne[0]%32==0));
+ ggml_tensor * args[]={x,kind?o:mod,kind==1?gate:mod,mod,inverse};
  static const uint32_t magic=PACKED_NORM_MAGIC;
  const size_t offset=kind?ggml_nelements(x)*4:0;
- auto * blob=ggml_custom_4d(C,GGML_TYPE_I8,offset+x->ne[0]*64*2,1,1,1,args,
-                           kind==1?4:kind==2?3:2,packed_norm_cpu,GGML_N_TASKS_MAX,(void *)&magic);
- custom_parameter_snapshot(blob,PackedNormSpec{PACKED_NORM_MAGIC,eps,kind});
+ auto * blob=ggml_custom_4d(C,GGML_TYPE_I8,offset+x->ne[0]*64*2+(inverse?(x->ne[0]+4)*64:0),1,1,1,args,
+                           inverse?5:kind==1?4:kind==2?3:2,packed_norm_cpu,GGML_N_TASKS_MAX,(void *)&magic);
+ custom_parameter_snapshot(blob,PackedNormSpec{PACKED_NORM_MAGIC,eps,kind,inverse?1:0});
  if(kind)*residual=packed_typed_view(C,blob,GGML_TYPE_F32,x->ne[0],x->ne[1],0);
  auto * pad=packed_typed_view(C,blob,GGML_TYPE_F16,x->ne[0],64,offset);
  return ggml_view_2d(C,pad,x->ne[0],x->ne[1],pad->nb[1],0);

@@ -1,0 +1,30 @@
+[
+  {
+    "name": "native-v2-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-musa-quant",
+      "-j4",
+      "--target",
+      "test_musa_int8",
+      "bench_musa_native_int8",
+      "vla"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "native-v2-test",
+    "command": [
+      "/home/skysi/code/vla.cpp-quant/build-musa-quant/tests/test_musa_int8"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "graph-gemm-v2",
+    "command": [
+      "/home/skysi/code/vla.cpp-quant/build-musa-quant/tests/bench_musa_native_int8"
+    ],
+    "returncode": 0
+  }
+]

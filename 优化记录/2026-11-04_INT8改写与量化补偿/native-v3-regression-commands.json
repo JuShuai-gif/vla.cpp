@@ -1,0 +1,36 @@
+[
+  {
+    "name": "native-v3-final-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-musa-quant",
+      "-j4"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "native-v3-ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-musa-quant",
+      "--output-on-failure",
+      "-j1"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "native-v3-python",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/py",
+      "-v"
+    ],
+    "returncode": 1
+  }
+]

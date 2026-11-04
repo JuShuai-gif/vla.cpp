@@ -1,0 +1,168 @@
+[mtgpu as info] Compiling entry function '_Z8quantizePKfPaPfiiib' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 75, Attr 2, Shared 69, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 532 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8epiloguePKiPKfS2_Pfii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 20, Attr 2, Shared 30, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z10cast_inputPKfP6__halfi' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 6, Attr 2, Shared 23, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi32ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 70, Attr 2, Shared 40, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi32ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 70, Attr 2, Shared 40, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi32ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 70, Attr 2, Shared 40, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi64ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 114, Attr 2, Shared 42, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi64ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 114, Attr 2, Shared 42, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi64ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 114, Attr 2, Shared 42, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi32ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 122, Attr 2, Shared 49, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi32ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 122, Attr 2, Shared 49, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi32ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 122, Attr 2, Shared 49, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi64ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 188, Attr 2, Shared 44, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi64ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 188, Attr 2, Shared 44, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi64ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 188, Attr 2, Shared 44, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi128ELi32ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 203, Attr 2, Shared 58, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi128ELi32ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 203, Attr 2, Shared 58, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi128ELi32ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 203, Attr 2, Shared 58, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi128ELi64ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 254, Attr 14, Shared 53, Coef 0, Slot 1, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 352 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 352 Bytes
+[mtgpu as info] Spill store: 352 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi128ELi64ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 254, Attr 14, Shared 53, Coef 0, Slot 1, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 352 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 352 Bytes
+[mtgpu as info] Spill store: 352 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi128ELi64ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 254, Attr 14, Shared 53, Coef 0, Slot 1, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 352 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 352 Bytes
+[mtgpu as info] Spill store: 352 Bytes
+

@@ -1,0 +1,2735 @@
+{
+  "variant": "pruned",
+  "source_sha256": "a386cf4364d1af982bc17505689dd169aca3fb13718fce7ba30001b2d1221504",
+  "capture_manifest_sha256": "4cce111634f6f465509e34a7853f7db443c606de91e05364e7823531613b1430",
+  "scope": "operator output accuracy, not BF16 policy-action acceptance",
+  "weights": [
+    {
+      "variant": "pruned",
+      "weight": "aex.blk.0.ffn_gateup.weight",
+      "shape": [
+        8192,
+        1024
+      ],
+      "calibration_fit_rows": 192,
+      "calibration_output_channels": 512,
+      "fits": [
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": null,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.01900303631112929,
+            "minimum_token_cosine": 0.9996982526218656,
+            "mean_token_cosine": 0.9998171905285921,
+            "max_abs": 0.169403076171875
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.25,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.011830457049269662,
+            "minimum_token_cosine": 0.9998948239424998,
+            "mean_token_cosine": 0.9999287947138739,
+            "max_abs": 0.10328209400177002
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.5,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.007485263675307411,
+            "minimum_token_cosine": 0.9999589667584933,
+            "mean_token_cosine": 0.9999715606698901,
+            "max_abs": 0.06548818945884705
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.75,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.006633672080402353,
+            "minimum_token_cosine": 0.999969939219653,
+            "mean_token_cosine": 0.9999779355477312,
+            "max_abs": 0.08542537689208984
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.25,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.008189555727066,
+            "minimum_token_cosine": 0.999951545670524,
+            "mean_token_cosine": 0.999966304516807,
+            "max_abs": 0.07388806343078613
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.006887407870878556,
+            "minimum_token_cosine": 0.9999681839672026,
+            "mean_token_cosine": 0.9999765431807273,
+            "max_abs": 0.07688188552856445
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.75,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.013735865930274857,
+            "minimum_token_cosine": 0.99986274434953,
+            "mean_token_cosine": 0.9999072139469076,
+            "max_abs": 0.2071700096130371
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.75,
+            "outlier_count": 16
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.0037401612905158324,
+            "minimum_token_cosine": 0.9999892646342134,
+            "mean_token_cosine": 0.9999930074800559,
+            "max_abs": 0.03715801239013672
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.75,
+            "outlier_count": 32
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.003594192530048138,
+            "minimum_token_cosine": 0.9999900432401772,
+            "mean_token_cosine": 0.9999935389897411,
+            "max_abs": 0.03639483451843262
+          }
+        }
+      ],
+      "development": [
+        {
+          "label": "plain",
+          "config": {
+            "method": "smoothquant",
+            "alpha": null,
+            "outlier_count": 0
+          },
+          "outlier_indices": [],
+          "observations": [
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/14-denoise.jsonl.489.f32",
+              "input_sha256": "8e702d152888e9000f9ea366c981f8831f174852bcce44d79cddb610fa6cf64d",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.1195396309188528e-07,
+                "minimum_token_cosine": 0.9999999999999706,
+                "mean_token_cosine": 0.9999999999999778,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.018793366945903528,
+                "minimum_token_cosine": 0.9997604558631307,
+                "mean_token_cosine": 0.9998263439648373,
+                "max_abs": 0.1926645040512085
+              },
+              "native_ms": [
+                0.520039975643158,
+                0.4723599851131439,
+                0.4742799997329712,
+                0.47247999906539917,
+                0.5311200022697449
+              ],
+              "f16_ms": [
+                0.5685200095176697,
+                0.5650399923324585,
+                0.5515999794006348,
+                0.5544400215148926,
+                0.5676400065422058
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/14-denoise.jsonl.1148.f32",
+              "input_sha256": "b926f76af8d094711c43e34922b79dea04e8150090a10abfe5b4855d7ee1e3b6",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.133051846712475e-07,
+                "minimum_token_cosine": 0.9999999999999704,
+                "mean_token_cosine": 0.9999999999999777,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.019659327836617283,
+                "minimum_token_cosine": 0.9997721381643072,
+                "mean_token_cosine": 0.9998087215876936,
+                "max_abs": 0.15897297859191895
+              },
+              "native_ms": [
+                0.4708000123500824,
+                0.5270400047302246,
+                0.4792400002479553,
+                0.5289199948310852,
+                0.4728800058364868
+              ],
+              "f16_ms": [
+                0.5613999962806702,
+                0.5615599751472473,
+                0.571880042552948,
+                0.5665600299835205,
+                0.5599199533462524
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/14-denoise.jsonl.1807.f32",
+              "input_sha256": "eb8632ba90f1028fb13b82b6bf18d82564a6ddf50ddf51a6e14e7a493390176a",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.2033535398108256e-07,
+                "minimum_token_cosine": 0.9999999999999707,
+                "mean_token_cosine": 0.9999999999999762,
+                "max_abs": 2.384185791015625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.021950628568540635,
+                "minimum_token_cosine": 0.9997240482037375,
+                "mean_token_cosine": 0.999761702760564,
+                "max_abs": 0.14073717594146729
+              },
+              "native_ms": [
+                0.473440021276474,
+                0.4737600088119507,
+                0.5297200083732605,
+                0.4773600101470947,
+                0.5286000370979309
+              ],
+              "f16_ms": [
+                0.5661600232124329,
+                0.5631600022315979,
+                0.5830000042915344,
+                0.5610799789428711,
+                0.5671199560165405
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/17-denoise.jsonl.489.f32",
+              "input_sha256": "7df463a194d35e3c8e016335bed1cf9bcba317362ef9d129c3491f6ccb6890bb",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.056019388821855e-07,
+                "minimum_token_cosine": 0.9999999999999735,
+                "mean_token_cosine": 0.999999999999979,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.01921812780199322,
+                "minimum_token_cosine": 0.9997642543505522,
+                "mean_token_cosine": 0.999818184045643,
+                "max_abs": 0.219285249710083
+              },
+              "native_ms": [
+                0.47176000475883484,
+                0.47279998660087585,
+                0.47127997875213623,
+                0.5194000005722046,
+                0.4692400097846985
+              ],
+              "f16_ms": [
+                0.563319981098175,
+                0.5584799647331238,
+                0.5713199973106384,
+                0.5673199892044067,
+                0.5662800073623657
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/17-denoise.jsonl.1148.f32",
+              "input_sha256": "ea77c923cbad8550b00911d514d0e96744e25717e412e2e34d629fe53456581c",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.121979485291915e-07,
+                "minimum_token_cosine": 0.9999999999999732,
+                "mean_token_cosine": 0.9999999999999778,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.020305882231288663,
+                "minimum_token_cosine": 0.9997499203194887,
+                "mean_token_cosine": 0.9997972042680833,
+                "max_abs": 0.18437886238098145
+              },
+              "native_ms": [
+                0.48660001158714294,
+                0.47407999634742737,
+                0.47523999214172363,
+                0.47652000188827515,
+                0.5255999565124512
+              ],
+              "f16_ms": [
+                0.5608400106430054,
+                0.5699599981307983,
+                0.561519980430603,
+                0.5550400018692017,
+                0.5666000247001648
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/17-denoise.jsonl.1807.f32",
+              "input_sha256": "676a93f4d3237df8d268441e7974073726bf7e65cc7270e957a0bcbb6b93ccd4",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.18105038853801e-07,
+                "minimum_token_cosine": 0.9999999999999695,
+                "mean_token_cosine": 0.9999999999999768,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0226802164941018,
+                "minimum_token_cosine": 0.9996830152819148,
+                "mean_token_cosine": 0.9997457475347638,
+                "max_abs": 0.15497958660125732
+              },
+              "native_ms": [
+                0.47247999906539917,
+                0.5233200192451477,
+                0.47328001260757446,
+                0.5244799852371216,
+                0.47624000906944275
+              ],
+              "f16_ms": [
+                0.562440037727356,
+                0.5648800134658813,
+                0.57423996925354,
+                0.5852800011634827,
+                0.5591999888420105
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/20-denoise.jsonl.489.f32",
+              "input_sha256": "30955f5d33b650b834604706f7d92bcca4aa0602acfbf10bfad1acc0e6c292ad",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.084180554960589e-07,
+                "minimum_token_cosine": 0.9999999999999721,
+                "mean_token_cosine": 0.9999999999999784,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.019344565875045835,
+                "minimum_token_cosine": 0.9997698673897348,
+                "mean_token_cosine": 0.9998160451836611,
+                "max_abs": 0.1774730086326599
+              },
+              "native_ms": [
+                0.4745599925518036,
+                0.47200000286102295,
+                0.5270799994468689,
+                0.4755200147628784,
+                0.5302799940109253
+              ],
+              "f16_ms": [
+                0.5691199898719788,
+                0.5697999596595764,
+                0.5723599791526794,
+                0.568120002746582,
+                0.5714399814605713
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/20-denoise.jsonl.1148.f32",
+              "input_sha256": "f20f7114593460aee99bfa97c7a8099a99e63f3e52dc9e02e7cf4f1cc961904c",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.1241464464867688e-07,
+                "minimum_token_cosine": 0.999999999999972,
+                "mean_token_cosine": 0.9999999999999778,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.020053251402697266,
+                "minimum_token_cosine": 0.9997495757277727,
+                "mean_token_cosine": 0.9998014557199568,
+                "max_abs": 0.18370509147644043
+              },
+              "native_ms": [
+                0.4705599844455719,
+                0.4726400077342987,
+                0.4793599843978882,
+                0.5181199908256531,
+                0.4731999933719635
+              ],
+              "f16_ms": [
+                0.5570800304412842,
+                0.5599600076675415,
+                0.5746399760246277,
+                0.5657200217247009,
+                0.5613999962806702
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/20-denoise.jsonl.1807.f32",
+              "input_sha256": "b543db148915369512469718f4f4e2c9168f250a0ab82d2f7b96db39296b3cb2",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.1572193938220355e-07,
+                "minimum_token_cosine": 0.9999999999999712,
+                "mean_token_cosine": 0.9999999999999772,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.02219420046242848,
+                "minimum_token_cosine": 0.9996868973902732,
+                "mean_token_cosine": 0.9997575099176315,
+                "max_abs": 0.1440892219543457
+              },
+              "native_ms": [
+                0.47547999024391174,
+                0.468720018863678,
+                0.4720799922943115,
+                0.4752799868583679,
+                0.5255600214004517
+              ],
+              "f16_ms": [
+                0.569159984588623,
+                0.5712399482727051,
+                0.5643600225448608,
+                0.5646399855613708,
+                0.5670799612998962
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/23-denoise.jsonl.489.f32",
+              "input_sha256": "7520cb71a0964d27e2d70a8185c805e4a5d934bad75822211e76f1950ebd5c0e",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.1011534832941185e-07,
+                "minimum_token_cosine": 0.9999999999999719,
+                "mean_token_cosine": 0.9999999999999781,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.019299540438735194,
+                "minimum_token_cosine": 0.9997330436488724,
+                "mean_token_cosine": 0.9998160312768597,
+                "max_abs": 0.18458698689937592
+              },
+              "native_ms": [
+                0.47679999470710754,
+                0.47724002599716187,
+                0.47863999009132385,
+                0.5240400433540344,
+                0.4742000102996826
+              ],
+              "f16_ms": [
+                0.5606400370597839,
+                0.5661600232124329,
+                0.5604000091552734,
+                0.5639200210571289,
+                0.5592799782752991
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/23-denoise.jsonl.1148.f32",
+              "input_sha256": "ab95d7b71d0267ae29fa6f3b70384da98885f7d2e14cdc0a49e5b195a370523b",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.1041398025469293e-07,
+                "minimum_token_cosine": 0.9999999999999717,
+                "mean_token_cosine": 0.9999999999999781,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.02056199352109993,
+                "minimum_token_cosine": 0.999734134296327,
+                "mean_token_cosine": 0.9997916957333234,
+                "max_abs": 0.17172622680664062
+              },
+              "native_ms": [
+                0.4776799976825714,
+                0.47387999296188354,
+                0.4747200012207031,
+                0.4766400158405304,
+                0.530959963798523
+              ],
+              "f16_ms": [
+                0.5644000172615051,
+                0.5750799775123596,
+                0.5594000220298767,
+                0.5628800392150879,
+                0.5645999908447266
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/23-denoise.jsonl.1807.f32",
+              "input_sha256": "a40882b9daf090e3a148702013ecdba97122c16345f8097894c5298b814c7782",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.2060539980684671e-07,
+                "minimum_token_cosine": 0.9999999999999707,
+                "mean_token_cosine": 0.9999999999999765,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.022750132108480075,
+                "minimum_token_cosine": 0.9996798410964508,
+                "mean_token_cosine": 0.9997438256627852,
+                "max_abs": 0.143153116106987
+              },
+              "native_ms": [
+                0.4779199957847595,
+                0.4803600013256073,
+                0.4763999879360199,
+                0.5239199995994568,
+                0.47252002358436584
+              ],
+              "f16_ms": [
+                0.5592399835586548,
+                0.5661600232124329,
+                0.568120002746582,
+                0.5894799828529358,
+                0.5565599799156189
+              ]
+            }
+          ],
+          "native_p50_ms": 0.4763199985027313,
+          "f16_p50_ms": 0.5649600028991699,
+          "minimum_token_cosine": 0.9996798410964508,
+          "mean_relative_l2": 0.020567602807244328
+        },
+        {
+          "label": "scaled",
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.75,
+            "outlier_count": 0
+          },
+          "outlier_indices": [],
+          "observations": [
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/14-denoise.jsonl.489.f32",
+              "input_sha256": "8e702d152888e9000f9ea366c981f8831f174852bcce44d79cddb610fa6cf64d",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.2657418070774576e-07,
+                "minimum_token_cosine": 0.9999999999999687,
+                "mean_token_cosine": 0.9999999999999747,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0066534117826596755,
+                "minimum_token_cosine": 0.9999744975851944,
+                "mean_token_cosine": 0.9999780033049797,
+                "max_abs": 0.08543014526367188
+              },
+              "native_ms": [
+                0.47599998116493225,
+                0.46728000044822693,
+                0.5334399938583374,
+                0.4773600101470947,
+                0.5288000106811523
+              ],
+              "f16_ms": [
+                0.5784800052642822,
+                0.5616000294685364,
+                0.5634399652481079,
+                0.5702800154685974,
+                0.5726000070571899
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/14-denoise.jsonl.1148.f32",
+              "input_sha256": "b926f76af8d094711c43e34922b79dea04e8150090a10abfe5b4855d7ee1e3b6",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.2678884915798582e-07,
+                "minimum_token_cosine": 0.9999999999999695,
+                "mean_token_cosine": 0.9999999999999746,
+                "max_abs": 2.384185791015625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006809672193026326,
+                "minimum_token_cosine": 0.9999736234412065,
+                "mean_token_cosine": 0.9999770913423045,
+                "max_abs": 0.0886683464050293
+              },
+              "native_ms": [
+                0.47780001163482666,
+                0.4767199754714966,
+                0.47176000475883484,
+                0.47143998742103577,
+                0.47707998752593994
+              ],
+              "f16_ms": [
+                0.5594800114631653,
+                0.5670000314712524,
+                0.5682799816131592,
+                0.5592399835586548,
+                0.5617200136184692
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/14-denoise.jsonl.1807.f32",
+              "input_sha256": "eb8632ba90f1028fb13b82b6bf18d82564a6ddf50ddf51a6e14e7a493390176a",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.3252078118888149e-07,
+                "minimum_token_cosine": 0.9999999999999681,
+                "mean_token_cosine": 0.9999999999999736,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.007348424670406641,
+                "minimum_token_cosine": 0.9999696469052389,
+                "mean_token_cosine": 0.9999732376366144,
+                "max_abs": 0.08948254585266113
+              },
+              "native_ms": [
+                0.4729999899864197,
+                0.46911999583244324,
+                0.5332800149917603,
+                0.4750399887561798,
+                0.527400016784668
+              ],
+              "f16_ms": [
+                0.5655999779701233,
+                0.5627999901771545,
+                0.5605199933052063,
+                0.5678399801254272,
+                0.5644800066947937
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/17-denoise.jsonl.489.f32",
+              "input_sha256": "7df463a194d35e3c8e016335bed1cf9bcba317362ef9d129c3491f6ccb6890bb",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.2121853576417494e-07,
+                "minimum_token_cosine": 0.9999999999999686,
+                "mean_token_cosine": 0.9999999999999757,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006604320917426898,
+                "minimum_token_cosine": 0.9999757005805912,
+                "mean_token_cosine": 0.9999783731221139,
+                "max_abs": 0.10163617134094238
+              },
+              "native_ms": [
+                0.4787999987602234,
+                0.4765999913215637,
+                0.47275999188423157,
+                0.4750399887561798,
+                0.48027998208999634
+              ],
+              "f16_ms": [
+                0.5683599710464478,
+                0.5672799944877625,
+                0.5676800012588501,
+                0.5620800256729126,
+                0.5600799918174744
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/17-denoise.jsonl.1148.f32",
+              "input_sha256": "ea77c923cbad8550b00911d514d0e96744e25717e412e2e34d629fe53456581c",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.2544862766565844e-07,
+                "minimum_token_cosine": 0.9999999999999687,
+                "mean_token_cosine": 0.9999999999999748,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006739546739008577,
+                "minimum_token_cosine": 0.9999744183563358,
+                "mean_token_cosine": 0.9999774853476205,
+                "max_abs": 0.08024978637695312
+              },
+              "native_ms": [
+                0.47543999552726746,
+                0.46700000762939453,
+                0.5306000113487244,
+                0.47336000204086304,
+                0.5179200172424316
+              ],
+              "f16_ms": [
+                0.5678399801254272,
+                0.55867999792099,
+                0.5651600360870361,
+                0.5773199796676636,
+                0.560200035572052
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/17-denoise.jsonl.1807.f32",
+              "input_sha256": "676a93f4d3237df8d268441e7974073726bf7e65cc7270e957a0bcbb6b93ccd4",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.360577379423925e-07,
+                "minimum_token_cosine": 0.999999999999965,
+                "mean_token_cosine": 0.9999999999999729,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.007323158201549925,
+                "minimum_token_cosine": 0.9999695871143153,
+                "mean_token_cosine": 0.9999736668061486,
+                "max_abs": 0.07731223106384277
+              },
+              "native_ms": [
+                0.4930800199508667,
+                0.4742799997329712,
+                0.4735199809074402,
+                0.4737600088119507,
+                0.4750399887561798
+              ],
+              "f16_ms": [
+                0.5635600090026855,
+                0.5770400166511536,
+                0.5673600435256958,
+                0.5647200345993042,
+                0.5758000016212463
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/20-denoise.jsonl.489.f32",
+              "input_sha256": "30955f5d33b650b834604706f7d92bcca4aa0602acfbf10bfad1acc0e6c292ad",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.237326944563104e-07,
+                "minimum_token_cosine": 0.9999999999999695,
+                "mean_token_cosine": 0.9999999999999752,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006656216144329795,
+                "minimum_token_cosine": 0.9999743682844963,
+                "mean_token_cosine": 0.9999779911510999,
+                "max_abs": 0.08431196212768555
+              },
+              "native_ms": [
+                0.4787200093269348,
+                0.5278799533843994,
+                0.5414800047874451,
+                0.4824800193309784,
+                0.5337200164794922
+              ],
+              "f16_ms": [
+                0.5667999982833862,
+                0.5586000084877014,
+                0.5575600266456604,
+                0.5837199687957764,
+                0.5836399793624878
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/20-denoise.jsonl.1148.f32",
+              "input_sha256": "f20f7114593460aee99bfa97c7a8099a99e63f3e52dc9e02e7cf4f1cc961904c",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.2478822236582397e-07,
+                "minimum_token_cosine": 0.9999999999999671,
+                "mean_token_cosine": 0.9999999999999751,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006766319171525075,
+                "minimum_token_cosine": 0.9999731477967794,
+                "mean_token_cosine": 0.9999773521939731,
+                "max_abs": 0.07915639877319336
+              },
+              "native_ms": [
+                0.48080000281333923,
+                0.4826800227165222,
+                0.5386800169944763,
+                0.5059199929237366,
+                0.48235997557640076
+              ],
+              "f16_ms": [
+                0.5895600318908691,
+                0.5754799842834473,
+                0.5861600041389465,
+                0.5803200006484985,
+                0.5750399827957153
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/20-denoise.jsonl.1807.f32",
+              "input_sha256": "b543db148915369512469718f4f4e2c9168f250a0ab82d2f7b96db39296b3cb2",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.3258401748661508e-07,
+                "minimum_token_cosine": 0.9999999999999664,
+                "mean_token_cosine": 0.9999999999999736,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0074031962280846145,
+                "minimum_token_cosine": 0.9999690089384317,
+                "mean_token_cosine": 0.9999731023757653,
+                "max_abs": 0.0882258415222168
+              },
+              "native_ms": [
+                0.47443997859954834,
+                0.4743199944496155,
+                0.5282000303268433,
+                0.5196799635887146,
+                0.5302000045776367
+              ],
+              "f16_ms": [
+                0.5781599879264832,
+                0.5645599961280823,
+                0.5799999833106995,
+                0.5773999691009521,
+                0.5702400207519531
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/23-denoise.jsonl.489.f32",
+              "input_sha256": "7520cb71a0964d27e2d70a8185c805e4a5d934bad75822211e76f1950ebd5c0e",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.2206844108939807e-07,
+                "minimum_token_cosine": 0.9999999999999704,
+                "mean_token_cosine": 0.9999999999999758,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006641074468322242,
+                "minimum_token_cosine": 0.9999742116279279,
+                "mean_token_cosine": 0.9999780901084256,
+                "max_abs": 0.09259653091430664
+              },
+              "native_ms": [
+                0.48796001076698303,
+                0.4742799997329712,
+                0.48159998655319214,
+                0.46856001019477844,
+                0.5274800062179565
+              ],
+              "f16_ms": [
+                0.5828400254249573,
+                0.5732399821281433,
+                0.5730000138282776,
+                0.5750799775123596,
+                0.574400007724762
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/23-denoise.jsonl.1148.f32",
+              "input_sha256": "ab95d7b71d0267ae29fa6f3b70384da98885f7d2e14cdc0a49e5b195a370523b",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.2359058104818024e-07,
+                "minimum_token_cosine": 0.9999999999999685,
+                "mean_token_cosine": 0.9999999999999755,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006808586511114582,
+                "minimum_token_cosine": 0.9999742544275328,
+                "mean_token_cosine": 0.9999771226002605,
+                "max_abs": 0.1065225601196289
+              },
+              "native_ms": [
+                0.4883999824523926,
+                0.5443600416183472,
+                0.5467199683189392,
+                0.49004000425338745,
+                0.5350799560546875
+              ],
+              "f16_ms": [
+                0.5934799909591675,
+                0.5830000042915344,
+                0.5746399760246277,
+                0.5810399651527405,
+                0.5791199803352356
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/23-denoise.jsonl.1807.f32",
+              "input_sha256": "a40882b9daf090e3a148702013ecdba97122c16345f8097894c5298b814c7782",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.3463228221070783e-07,
+                "minimum_token_cosine": 0.9999999999999665,
+                "mean_token_cosine": 0.9999999999999731,
+                "max_abs": 2.6226043701171875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.007383641106964785,
+                "minimum_token_cosine": 0.9999692957993834,
+                "mean_token_cosine": 0.9999731676631572,
+                "max_abs": 0.08467960357666016
+              },
+              "native_ms": [
+                0.48416000604629517,
+                0.4880400002002716,
+                0.5037200450897217,
+                0.5075199604034424,
+                0.48691999912261963
+              ],
+              "f16_ms": [
+                0.5694000124931335,
+                0.5896400213241577,
+                0.5580399632453918,
+                0.6173999905586243,
+                0.5708400011062622
+              ]
+            }
+          ],
+          "native_p50_ms": 0.48197998106479645,
+          "f16_p50_ms": 0.5698200166225433,
+          "minimum_token_cosine": 0.9999690089384317,
+          "mean_relative_l2": 0.006928130677868262
+        },
+        {
+          "label": "compensated",
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.75,
+            "outlier_count": 32
+          },
+          "outlier_indices": [
+            7,
+            142,
+            172,
+            182,
+            198,
+            249,
+            263,
+            287,
+            323,
+            341,
+            345,
+            359,
+            364,
+            397,
+            430,
+            450,
+            469,
+            492,
+            497,
+            503,
+            566,
+            575,
+            606,
+            610,
+            652,
+            687,
+            694,
+            705,
+            765,
+            776,
+            839,
+            885
+          ],
+          "observations": [
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/14-denoise.jsonl.489.f32",
+              "input_sha256": "8e702d152888e9000f9ea366c981f8831f174852bcce44d79cddb610fa6cf64d",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.652614017788597e-07,
+                "minimum_token_cosine": 0.9999999999999842,
+                "mean_token_cosine": 0.999999999999988,
+                "max_abs": 2.384185791015625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0038367810995404133,
+                "minimum_token_cosine": 0.9999903356853441,
+                "mean_token_cosine": 0.9999926313359034,
+                "max_abs": 0.04521632194519043
+              },
+              "native_ms": [
+                0.6787599921226501,
+                0.6773599982261658,
+                0.6849200129508972,
+                0.6823999881744385,
+                0.6812000274658203
+              ],
+              "f16_ms": [
+                0.5725600123405457,
+                0.595039963722229,
+                0.6119999885559082,
+                0.6061199903488159,
+                0.6228799819946289
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/14-denoise.jsonl.1148.f32",
+              "input_sha256": "b926f76af8d094711c43e34922b79dea04e8150090a10abfe5b4855d7ee1e3b6",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.6360875449493932e-07,
+                "minimum_token_cosine": 0.999999999999985,
+                "mean_token_cosine": 0.9999999999999883,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0037457652421948543,
+                "minimum_token_cosine": 0.9999905742510182,
+                "mean_token_cosine": 0.9999929978413387,
+                "max_abs": 0.03705930709838867
+              },
+              "native_ms": [
+                0.6984000205993652,
+                0.6878399848937988,
+                0.6520799994468689,
+                0.66975998878479,
+                0.6477999687194824
+              ],
+              "f16_ms": [
+                0.9760400056838989,
+                0.6000800132751465,
+                0.5907999873161316,
+                0.5960000157356262,
+                0.6001200079917908
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/14-denoise.jsonl.1807.f32",
+              "input_sha256": "eb8632ba90f1028fb13b82b6bf18d82564a6ddf50ddf51a6e14e7a493390176a",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.6161119961624864e-07,
+                "minimum_token_cosine": 0.9999999999999857,
+                "mean_token_cosine": 0.9999999999999893,
+                "max_abs": 1.6689300537109375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.003787321324935233,
+                "minimum_token_cosine": 0.9999901917742114,
+                "mean_token_cosine": 0.9999928630790268,
+                "max_abs": 0.03157830238342285
+              },
+              "native_ms": [
+                0.6823999881744385,
+                0.7393999695777893,
+                0.6788800358772278,
+                0.680120050907135,
+                0.6810799837112427
+              ],
+              "f16_ms": [
+                0.6021999716758728,
+                0.5935199856758118,
+                0.5900799632072449,
+                0.6002799868583679,
+                0.6166800260543823
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/17-denoise.jsonl.489.f32",
+              "input_sha256": "7df463a194d35e3c8e016335bed1cf9bcba317362ef9d129c3491f6ccb6890bb",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.6348467960292436e-07,
+                "minimum_token_cosine": 0.9999999999999828,
+                "mean_token_cosine": 0.9999999999999883,
+                "max_abs": 2.384185791015625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0037551645096521387,
+                "minimum_token_cosine": 0.999989969811976,
+                "mean_token_cosine": 0.9999929220456264,
+                "max_abs": 0.039855360984802246
+              },
+              "native_ms": [
+                0.6828399896621704,
+                0.6793200373649597,
+                0.6837199926376343,
+                0.6866399645805359,
+                0.6819600462913513
+              ],
+              "f16_ms": [
+                0.6070799827575684,
+                0.5994000434875488,
+                0.6033200025558472,
+                0.5972000360488892,
+                0.6027200222015381
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/17-denoise.jsonl.1148.f32",
+              "input_sha256": "ea77c923cbad8550b00911d514d0e96744e25717e412e2e34d629fe53456581c",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.6197616077540243e-07,
+                "minimum_token_cosine": 0.9999999999999848,
+                "mean_token_cosine": 0.9999999999999888,
+                "max_abs": 2.1457672119140625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0036534322820160016,
+                "minimum_token_cosine": 0.9999901166597731,
+                "mean_token_cosine": 0.9999933151427065,
+                "max_abs": 0.040412187576293945
+              },
+              "native_ms": [
+                0.6881999969482422,
+                0.68367999792099,
+                0.6874799728393555,
+                0.6834800243377686,
+                0.6778799891471863
+              ],
+              "f16_ms": [
+                0.6029599905014038,
+                0.6087599992752075,
+                0.6036399602890015,
+                0.5986000299453735,
+                0.5996000170707703
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/17-denoise.jsonl.1807.f32",
+              "input_sha256": "676a93f4d3237df8d268441e7974073726bf7e65cc7270e957a0bcbb6b93ccd4",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.6091072429672497e-07,
+                "minimum_token_cosine": 0.9999999999999846,
+                "mean_token_cosine": 0.9999999999999895,
+                "max_abs": 1.6689300537109375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0037050948696786368,
+                "minimum_token_cosine": 0.9999906314305923,
+                "mean_token_cosine": 0.9999931709157706,
+                "max_abs": 0.031437039375305176
+              },
+              "native_ms": [
+                0.680840015411377,
+                0.6815199851989746,
+                0.6812799572944641,
+                0.6858800053596497,
+                0.6891600489616394
+              ],
+              "f16_ms": [
+                0.6013999581336975,
+                0.5982800126075745,
+                0.5991199612617493,
+                0.6022399663925171,
+                0.5907999873161316
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/20-denoise.jsonl.489.f32",
+              "input_sha256": "30955f5d33b650b834604706f7d92bcca4aa0602acfbf10bfad1acc0e6c292ad",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.633792396593312e-07,
+                "minimum_token_cosine": 0.9999999999999833,
+                "mean_token_cosine": 0.9999999999999883,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.003730058525212271,
+                "minimum_token_cosine": 0.9999890888079092,
+                "mean_token_cosine": 0.9999929912139309,
+                "max_abs": 0.03848433494567871
+              },
+              "native_ms": [
+                0.680679976940155,
+                0.6771999597549438,
+                0.6838400363922119,
+                0.6831200122833252,
+                0.6834400296211243
+              ],
+              "f16_ms": [
+                0.6021199822425842,
+                0.5989199876785278,
+                0.6075599789619446,
+                0.5996800065040588,
+                0.6042400002479553
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/20-denoise.jsonl.1148.f32",
+              "input_sha256": "f20f7114593460aee99bfa97c7a8099a99e63f3e52dc9e02e7cf4f1cc961904c",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.59493367451718e-07,
+                "minimum_token_cosine": 0.9999999999999855,
+                "mean_token_cosine": 0.999999999999989,
+                "max_abs": 2.1457672119140625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.003700141461269249,
+                "minimum_token_cosine": 0.9999906167523477,
+                "mean_token_cosine": 0.9999931416241548,
+                "max_abs": 0.03927493095397949
+              },
+              "native_ms": [
+                0.6859599947929382,
+                0.6842799782752991,
+                0.6827200055122375,
+                0.6791599988937378,
+                0.6827999949455261
+              ],
+              "f16_ms": [
+                0.6053600311279297,
+                0.6056399941444397,
+                0.5921199917793274,
+                0.5906400084495544,
+                0.615119993686676
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/20-denoise.jsonl.1807.f32",
+              "input_sha256": "b543db148915369512469718f4f4e2c9168f250a0ab82d2f7b96db39296b3cb2",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.6062714982596188e-07,
+                "minimum_token_cosine": 0.9999999999999858,
+                "mean_token_cosine": 0.9999999999999895,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0038057892104760723,
+                "minimum_token_cosine": 0.9999905955350556,
+                "mean_token_cosine": 0.9999927898371594,
+                "max_abs": 0.03185105323791504
+              },
+              "native_ms": [
+                0.7022800445556641,
+                0.6555200219154358,
+                0.6479600071907043,
+                0.6428799629211426,
+                0.6489599943161011
+              ],
+              "f16_ms": [
+                0.5923199653625488,
+                0.6105999946594238,
+                0.6046000123023987,
+                0.5957599878311157,
+                0.5690799951553345
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/23-denoise.jsonl.489.f32",
+              "input_sha256": "7520cb71a0964d27e2d70a8185c805e4a5d934bad75822211e76f1950ebd5c0e",
+              "occurrence": 0,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.649138627011317e-07,
+                "minimum_token_cosine": 0.9999999999999841,
+                "mean_token_cosine": 0.9999999999999883,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.003716878840074447,
+                "minimum_token_cosine": 0.9999894814572113,
+                "mean_token_cosine": 0.9999930570924995,
+                "max_abs": 0.04410862922668457
+              },
+              "native_ms": [
+                0.6839199662208557,
+                0.6821199655532837,
+                0.6837199926376343,
+                0.6816399693489075,
+                0.6858800053596497
+              ],
+              "f16_ms": [
+                0.6025599837303162,
+                0.5973199605941772,
+                0.5990000367164612,
+                0.6053600311279297,
+                0.5992000102996826
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/23-denoise.jsonl.1148.f32",
+              "input_sha256": "ab95d7b71d0267ae29fa6f3b70384da98885f7d2e14cdc0a49e5b195a370523b",
+              "occurrence": 1,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.6531388261597426e-07,
+                "minimum_token_cosine": 0.999999999999984,
+                "mean_token_cosine": 0.999999999999988,
+                "max_abs": 2.1457672119140625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0036581918438980112,
+                "minimum_token_cosine": 0.9999906297969069,
+                "mean_token_cosine": 0.9999933024501029,
+                "max_abs": 0.036865949630737305
+              },
+              "native_ms": [
+                0.6817600131034851,
+                0.6837199926376343,
+                0.7369599938392639,
+                0.6767599582672119,
+                0.681879997253418
+              ],
+              "f16_ms": [
+                0.603600025177002,
+                0.6070000529289246,
+                0.6025999784469604,
+                0.6025999784469604,
+                0.6095200181007385
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/23-denoise.jsonl.1807.f32",
+              "input_sha256": "a40882b9daf090e3a148702013ecdba97122c16345f8097894c5298b814c7782",
+              "occurrence": 2,
+              "shape": [
+                50,
+                1024
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.6394680501050656e-07,
+                "minimum_token_cosine": 0.9999999999999853,
+                "mean_token_cosine": 0.9999999999999889,
+                "max_abs": 1.430511474609375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0037956072598864976,
+                "minimum_token_cosine": 0.9999900616832281,
+                "mean_token_cosine": 0.999992822738609,
+                "max_abs": 0.030408143997192383
+              },
+              "native_ms": [
+                0.6562399864196777,
+                0.736240029335022,
+                0.68340003490448,
+                0.7320800423622131,
+                0.6834400296211243
+              ],
+              "f16_ms": [
+                0.6164399981498718,
+                0.6009200215339661,
+                0.6057199835777283,
+                0.6021199822425842,
+                0.5949999690055847
+              ]
+            }
+          ],
+          "native_p50_ms": 0.682559996843338,
+          "f16_p50_ms": 0.6021199822425842,
+          "minimum_token_cosine": 0.9999890888079092,
+          "mean_relative_l2": 0.0037408522057361527
+        }
+      ]
+    },
+    {
+      "variant": "pruned",
+      "weight": "vlm.blk.0.ffn_gateup.weight",
+      "shape": [
+        32768,
+        2048
+      ],
+      "calibration_fit_rows": 64,
+      "calibration_output_channels": 512,
+      "fits": [
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": null,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.04746178851086917,
+            "minimum_token_cosine": 0.9978813481633807,
+            "mean_token_cosine": 0.9988718460710222,
+            "max_abs": 0.3919408321380615
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.25,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.02783152700331508,
+            "minimum_token_cosine": 0.9993759127915411,
+            "mean_token_cosine": 0.9996012354014359,
+            "max_abs": 0.30582672357559204
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.5,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.01380502320288089,
+            "minimum_token_cosine": 0.9998641469176754,
+            "mean_token_cosine": 0.9999028750001758,
+            "max_abs": 0.1215333342552185
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.75,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.010673562324607293,
+            "minimum_token_cosine": 0.9999169179002523,
+            "mean_token_cosine": 0.9999426949892039,
+            "max_abs": 0.12146496772766113
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.25,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.01632141349898932,
+            "minimum_token_cosine": 0.9997386414840822,
+            "mean_token_cosine": 0.9998659904335082,
+            "max_abs": 0.13607525825500488
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.008029736386271873,
+            "minimum_token_cosine": 0.9999514131139825,
+            "mean_token_cosine": 0.9999677422968165,
+            "max_abs": 0.08658498525619507
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.75,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.013979216978189107,
+            "minimum_token_cosine": 0.9998423106762169,
+            "mean_token_cosine": 0.9999007143360683,
+            "max_abs": 0.1920088529586792
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 16
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.0065758859978345754,
+            "minimum_token_cosine": 0.9999672541252929,
+            "mean_token_cosine": 0.999977876871785,
+            "max_abs": 0.08067798614501953
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 32
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.006321594399629863,
+            "minimum_token_cosine": 0.9999695071448986,
+            "mean_token_cosine": 0.9999795213323674,
+            "max_abs": 0.07176244258880615
+          }
+        }
+      ],
+      "development": [
+        {
+          "label": "plain",
+          "config": {
+            "method": "smoothquant",
+            "alpha": null,
+            "outlier_count": 0
+          },
+          "outlier_indices": [],
+          "observations": [
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/13-prefix.jsonl.23.f32",
+              "input_sha256": "9c7697b156daa0857447c2fa2a63d642c4f52c105c9bd204e21f133d52f633ac",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.9840889255629825e-07,
+                "minimum_token_cosine": 0.9999999999999702,
+                "mean_token_cosine": 0.9999999999999802,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.04852649183199556,
+                "minimum_token_cosine": 0.995530111932362,
+                "mean_token_cosine": 0.9988164100209604,
+                "max_abs": 0.9504857808351517
+              },
+              "native_ms": [
+                7.082479953765869,
+                7.047920227050781,
+                7.059040069580078,
+                7.043560028076172,
+                7.082759857177734
+              ],
+              "f16_ms": [
+                6.808279991149902,
+                6.8013997077941895,
+                6.76908016204834,
+                6.801239967346191,
+                6.766520023345947
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/16-prefix.jsonl.23.f32",
+              "input_sha256": "8546561a5cbe81010fb4848264462df268be4edf2b3378ebb2e4c66b81deab69",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.9850483532793217e-07,
+                "minimum_token_cosine": 0.9999999999999731,
+                "mean_token_cosine": 0.9999999999999802,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.047238191296653395,
+                "minimum_token_cosine": 0.9960268631071367,
+                "mean_token_cosine": 0.998890742422409,
+                "max_abs": 0.8439483642578125
+              },
+              "native_ms": [
+                7.05620002746582,
+                7.043920040130615,
+                7.048159599304199,
+                7.040719985961914,
+                7.035640239715576
+              ],
+              "f16_ms": [
+                6.7240400314331055,
+                6.749799728393555,
+                6.723039627075195,
+                6.68612003326416,
+                6.738959789276123
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/19-prefix.jsonl.23.f32",
+              "input_sha256": "6c7816548e035e98ff4cf70950febc1511ed5e8732639748dea78dce54a78901",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.9557411979100445e-07,
+                "minimum_token_cosine": 0.9999999999999725,
+                "mean_token_cosine": 0.9999999999999808,
+                "max_abs": 3.337860107421875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.04661677609068436,
+                "minimum_token_cosine": 0.9958639489265978,
+                "mean_token_cosine": 0.9989104180296767,
+                "max_abs": 0.8211334943771362
+              },
+              "native_ms": [
+                7.041720390319824,
+                7.035320281982422,
+                7.045000076293945,
+                7.037199974060059,
+                7.041200160980225
+              ],
+              "f16_ms": [
+                6.707520008087158,
+                6.763279914855957,
+                6.712960243225098,
+                6.695200443267822,
+                6.758360385894775
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/22-prefix.jsonl.23.f32",
+              "input_sha256": "bd1a9e7cf2e2825c026dd9f85f0ee5f7b09d92dd630e74050f0394358d53491e",
+              "occurrence": 0,
+              "shape": [
+                318,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.9883253773248652e-07,
+                "minimum_token_cosine": 0.9999999999999726,
+                "mean_token_cosine": 0.9999999999999803,
+                "max_abs": 3.5762786865234375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.04838908158943099,
+                "minimum_token_cosine": 0.9956200437479933,
+                "mean_token_cosine": 0.9988207048502036,
+                "max_abs": 0.8988856077194214
+              },
+              "native_ms": [
+                7.050840377807617,
+                7.055279731750488,
+                7.042880058288574,
+                7.042679786682129,
+                7.026040077209473
+              ],
+              "f16_ms": [
+                6.736880302429199,
+                6.775880336761475,
+                6.728000164031982,
+                6.745039939880371,
+                6.7748799324035645
+              ]
+            }
+          ],
+          "native_p50_ms": 7.0437400341033936,
+          "f16_p50_ms": 6.747419834136963,
+          "minimum_token_cosine": 0.995530111932362,
+          "mean_relative_l2": 0.04769263520219108
+        },
+        {
+          "label": "scaled",
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 0
+          },
+          "outlier_indices": [],
+          "observations": [
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/13-prefix.jsonl.23.f32",
+              "input_sha256": "9c7697b156daa0857447c2fa2a63d642c4f52c105c9bd204e21f133d52f633ac",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.189279005221875e-07,
+                "minimum_token_cosine": 0.9999999999999637,
+                "mean_token_cosine": 0.999999999999976,
+                "max_abs": 3.814697265625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.008269706280935561,
+                "minimum_token_cosine": 0.9997442624824151,
+                "mean_token_cosine": 0.9999658884507953,
+                "max_abs": 0.2486327514052391
+              },
+              "native_ms": [
+                7.055679798126221,
+                7.068600177764893,
+                7.090280055999756,
+                7.136839866638184,
+                7.080240249633789
+              ],
+              "f16_ms": [
+                6.702640056610107,
+                6.696439743041992,
+                6.652640342712402,
+                6.664840221405029,
+                6.707520008087158
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/16-prefix.jsonl.23.f32",
+              "input_sha256": "8546561a5cbe81010fb4848264462df268be4edf2b3378ebb2e4c66b81deab69",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.1629053047331238e-07,
+                "minimum_token_cosine": 0.9999999999999649,
+                "mean_token_cosine": 0.9999999999999767,
+                "max_abs": 2.86102294921875e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.008196396189929829,
+                "minimum_token_cosine": 0.9997741696638586,
+                "mean_token_cosine": 0.9999668183578787,
+                "max_abs": 0.27620456367731094
+              },
+              "native_ms": [
+                7.060999870300293,
+                7.070919990539551,
+                7.050480365753174,
+                7.055200099945068,
+                7.050920009613037
+              ],
+              "f16_ms": [
+                6.7249603271484375,
+                6.669600009918213,
+                6.674439907073975,
+                6.693079948425293,
+                6.712200164794922
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/19-prefix.jsonl.23.f32",
+              "input_sha256": "6c7816548e035e98ff4cf70950febc1511ed5e8732639748dea78dce54a78901",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.1245966038498388e-07,
+                "minimum_token_cosine": 0.9999999999999641,
+                "mean_token_cosine": 0.9999999999999774,
+                "max_abs": 3.814697265625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.008098121410025088,
+                "minimum_token_cosine": 0.9997523993309466,
+                "mean_token_cosine": 0.9999673280403665,
+                "max_abs": 0.22368896007537842
+              },
+              "native_ms": [
+                7.051239967346191,
+                7.06063985824585,
+                7.034759998321533,
+                7.04364013671875,
+                7.042999744415283
+              ],
+              "f16_ms": [
+                6.679800033569336,
+                6.686079978942871,
+                6.694360256195068,
+                6.667200088500977,
+                6.683359622955322
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/22-prefix.jsonl.23.f32",
+              "input_sha256": "bd1a9e7cf2e2825c026dd9f85f0ee5f7b09d92dd630e74050f0394358d53491e",
+              "occurrence": 0,
+              "shape": [
+                318,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.1813555483432138e-07,
+                "minimum_token_cosine": 0.9999999999999654,
+                "mean_token_cosine": 0.9999999999999764,
+                "max_abs": 3.5762786865234375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.008231076159444461,
+                "minimum_token_cosine": 0.9997322501176802,
+                "mean_token_cosine": 0.9999662403561116,
+                "max_abs": 0.24865171313285828
+              },
+              "native_ms": [
+                7.117640018463135,
+                7.107719898223877,
+                7.118720054626465,
+                7.107800006866455,
+                7.117839813232422
+              ],
+              "f16_ms": [
+                6.711639881134033,
+                6.741519927978516,
+                6.668999671936035,
+                6.692479610443115,
+                6.690760135650635
+              ]
+            }
+          ],
+          "native_p50_ms": 7.064800024032593,
+          "f16_p50_ms": 6.691619873046875,
+          "minimum_token_cosine": 0.9997322501176802,
+          "mean_relative_l2": 0.008198825010083736
+        },
+        {
+          "label": "compensated",
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 32
+          },
+          "outlier_indices": [
+            50,
+            51,
+            108,
+            221,
+            394,
+            491,
+            536,
+            565,
+            604,
+            738,
+            752,
+            779,
+            981,
+            1027,
+            1156,
+            1197,
+            1288,
+            1317,
+            1380,
+            1419,
+            1523,
+            1665,
+            1703,
+            1713,
+            1804,
+            1826,
+            1842,
+            1884,
+            1946,
+            1967,
+            2019,
+            2044
+          ],
+          "observations": [
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/13-prefix.jsonl.23.f32",
+              "input_sha256": "9c7697b156daa0857447c2fa2a63d642c4f52c105c9bd204e21f133d52f633ac",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.5308957137560044e-07,
+                "minimum_token_cosine": 0.9999999999999839,
+                "mean_token_cosine": 0.9999999999999889,
+                "max_abs": 2.2649765014648438e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006415927640669209,
+                "minimum_token_cosine": 0.999971653826403,
+                "mean_token_cosine": 0.9999791417574906,
+                "max_abs": 0.28751464933156967
+              },
+              "native_ms": [
+                8.542920112609863,
+                8.560040473937988,
+                8.584000587463379,
+                8.577400207519531,
+                8.578439712524414
+              ],
+              "f16_ms": [
+                6.733399868011475,
+                6.852080345153809,
+                6.74891996383667,
+                6.7740797996521,
+                6.78439998626709
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/16-prefix.jsonl.23.f32",
+              "input_sha256": "8546561a5cbe81010fb4848264462df268be4edf2b3378ebb2e4c66b81deab69",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.5437319820158982e-07,
+                "minimum_token_cosine": 0.9999999999999839,
+                "mean_token_cosine": 0.9999999999999887,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006516056298739152,
+                "minimum_token_cosine": 0.9999722138136388,
+                "mean_token_cosine": 0.9999784678151109,
+                "max_abs": 0.27833790332078934
+              },
+              "native_ms": [
+                8.577239990234375,
+                8.554519653320312,
+                8.601480484008789,
+                8.586600303649902,
+                8.60103988647461
+              ],
+              "f16_ms": [
+                6.782400131225586,
+                6.767920017242432,
+                6.825999736785889,
+                6.773200035095215,
+                6.794280052185059
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/19-prefix.jsonl.23.f32",
+              "input_sha256": "6c7816548e035e98ff4cf70950febc1511ed5e8732639748dea78dce54a78901",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.5378907039975518e-07,
+                "minimum_token_cosine": 0.9999999999999827,
+                "mean_token_cosine": 0.9999999999999889,
+                "max_abs": 2.1457672119140625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.006343747121348584,
+                "minimum_token_cosine": 0.9999725883115499,
+                "mean_token_cosine": 0.9999795372275583,
+                "max_abs": 0.28368425369262695
+              },
+              "native_ms": [
+                8.533639907836914,
+                8.568639755249023,
+                8.586959838867188,
+                8.572160720825195,
+                8.583800315856934
+              ],
+              "f16_ms": [
+                6.746200084686279,
+                6.754240036010742,
+                6.819639682769775,
+                6.813960075378418,
+                6.831199645996094
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/22-prefix.jsonl.23.f32",
+              "input_sha256": "bd1a9e7cf2e2825c026dd9f85f0ee5f7b09d92dd630e74050f0394358d53491e",
+              "occurrence": 0,
+              "shape": [
+                318,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 1.546574334209942e-07,
+                "minimum_token_cosine": 0.9999999999999842,
+                "mean_token_cosine": 0.9999999999999889,
+                "max_abs": 2.384185791015625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.0063445723405737495,
+                "minimum_token_cosine": 0.9999727213481717,
+                "mean_token_cosine": 0.9999795660505715,
+                "max_abs": 0.28909772634506226
+              },
+              "native_ms": [
+                8.580840110778809,
+                8.564360618591309,
+                8.579679489135742,
+                8.527359962463379,
+                8.591239929199219
+              ],
+              "f16_ms": [
+                6.826600074768066,
+                6.762360095977783,
+                6.736199855804443,
+                6.758039951324463,
+                6.768239974975586
+              ]
+            }
+          ],
+          "native_p50_ms": 8.577919960021973,
+          "f16_p50_ms": 6.773639917373657,
+          "minimum_token_cosine": 0.999971653826403,
+          "mean_relative_l2": 0.006405075850332674
+        }
+      ]
+    },
+    {
+      "variant": "pruned",
+      "weight": "vlm.blk.9.ffn_gateup.weight",
+      "shape": [
+        32768,
+        2048
+      ],
+      "calibration_fit_rows": 64,
+      "calibration_output_channels": 512,
+      "fits": [
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": null,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.02230276290073247,
+            "minimum_token_cosine": 0.9995606540420668,
+            "mean_token_cosine": 0.9997388617653231,
+            "max_abs": 0.10010701417922974
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.25,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.018070271706072193,
+            "minimum_token_cosine": 0.9996967899396783,
+            "mean_token_cosine": 0.9998284324416373,
+            "max_abs": 0.07800412178039551
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.5,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.014483488735274904,
+            "minimum_token_cosine": 0.9998207598339929,
+            "mean_token_cosine": 0.999890881651953,
+            "max_abs": 0.07678288221359253
+          }
+        },
+        {
+          "config": {
+            "method": "smoothquant",
+            "alpha": 0.75,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.015338006278205526,
+            "minimum_token_cosine": 0.9998440181365803,
+            "mean_token_cosine": 0.9998798163809643,
+            "max_abs": 0.10059268027544022
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.25,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.012362122342248967,
+            "minimum_token_cosine": 0.9998658117482117,
+            "mean_token_cosine": 0.9999206373097317,
+            "max_abs": 0.054076313972473145
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.009755335779674875,
+            "minimum_token_cosine": 0.9999240937069629,
+            "mean_token_cosine": 0.9999520119834017,
+            "max_abs": 0.06837141513824463
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.75,
+            "outlier_count": 0
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.012614243724778812,
+            "minimum_token_cosine": 0.9998838062863947,
+            "mean_token_cosine": 0.9999200721308215,
+            "max_abs": 0.11669015884399414
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 16
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.009633170621778701,
+            "minimum_token_cosine": 0.9999263150113229,
+            "mean_token_cosine": 0.9999531488235793,
+            "max_abs": 0.07053995132446289
+          }
+        },
+        {
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 32
+          },
+          "calibration_metrics": {
+            "relative_l2": 0.009597447967502956,
+            "minimum_token_cosine": 0.9999277224227515,
+            "mean_token_cosine": 0.9999535199208427,
+            "max_abs": 0.07353949546813965
+          }
+        }
+      ],
+      "development": [
+        {
+          "label": "plain",
+          "config": {
+            "method": "smoothquant",
+            "alpha": null,
+            "outlier_count": 0
+          },
+          "outlier_indices": [],
+          "observations": [
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/13-prefix.jsonl.257.f32",
+              "input_sha256": "102ada2085f57d19ae37c6ad4de5526b7a85fa3c8af83f4f8546f5d84e714f42",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.545583451176786e-07,
+                "minimum_token_cosine": 0.9999999999999527,
+                "mean_token_cosine": 0.9999999999999681,
+                "max_abs": 1.6689300537109375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.023885711195867392,
+                "minimum_token_cosine": 0.9941578849894465,
+                "mean_token_cosine": 0.9997107750634392,
+                "max_abs": 1.1079202890396118
+              },
+              "native_ms": [
+                7.104040145874023,
+                7.078080177307129,
+                7.128200054168701,
+                7.1406402587890625,
+                7.085040092468262
+              ],
+              "f16_ms": [
+                6.806080341339111,
+                6.7099199295043945,
+                6.772039890289307,
+                6.735439777374268,
+                6.789360046386719
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/16-prefix.jsonl.257.f32",
+              "input_sha256": "9018c64adc0c7ce80e4939d2891b4d616c4c055ef1bd5329ac5a8993dd263b5a",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.578596465738957e-07,
+                "minimum_token_cosine": 0.9999999999999548,
+                "mean_token_cosine": 0.999999999999967,
+                "max_abs": 1.6689300537109375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.023969961120975852,
+                "minimum_token_cosine": 0.9940391076112173,
+                "mean_token_cosine": 0.9997074493069881,
+                "max_abs": 0.8617180585861206
+              },
+              "native_ms": [
+                7.181560039520264,
+                7.2027997970581055,
+                7.199239730834961,
+                7.178079605102539,
+                7.146240234375
+              ],
+              "f16_ms": [
+                6.723599910736084,
+                6.804440021514893,
+                6.703120231628418,
+                6.77131986618042,
+                6.738639831542969
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/19-prefix.jsonl.257.f32",
+              "input_sha256": "da85e063928abf66ec79e036f9dcccae88fd9623690467e038eb830d1e70ec50",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.529558413490246e-07,
+                "minimum_token_cosine": 0.9999999999999546,
+                "mean_token_cosine": 0.9999999999999685,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.02247911649454641,
+                "minimum_token_cosine": 0.9939528775657303,
+                "mean_token_cosine": 0.9997395324850723,
+                "max_abs": 0.9827783107757568
+              },
+              "native_ms": [
+                7.173920154571533,
+                7.205719947814941,
+                7.202280044555664,
+                7.1839599609375,
+                7.203680038452148
+              ],
+              "f16_ms": [
+                6.788959980010986,
+                6.737839698791504,
+                6.726359844207764,
+                6.735879898071289,
+                6.747759819030762
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/22-prefix.jsonl.257.f32",
+              "input_sha256": "b33aeb23b2eed00ad06a9f0b79df71fdca6f242014c35b7d81c2261ace3c963c",
+              "occurrence": 0,
+              "shape": [
+                318,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.5497866044970703e-07,
+                "minimum_token_cosine": 0.9999999999999536,
+                "mean_token_cosine": 0.9999999999999681,
+                "max_abs": 1.6689300537109375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.024026530475425373,
+                "minimum_token_cosine": 0.9942650215935979,
+                "mean_token_cosine": 0.9997085747919392,
+                "max_abs": 0.9833180904388428
+              },
+              "native_ms": [
+                7.123600006103516,
+                7.1397600173950195,
+                7.100679874420166,
+                7.105479717254639,
+                7.096399784088135
+              ],
+              "f16_ms": [
+                6.73259973526001,
+                6.7383198738098145,
+                6.8032002449035645,
+                6.808040142059326,
+                6.866519927978516
+              ]
+            }
+          ],
+          "native_p50_ms": 7.143440246582031,
+          "f16_p50_ms": 6.743199825286865,
+          "minimum_token_cosine": 0.9939528775657303,
+          "mean_relative_l2": 0.023590329821703757
+        },
+        {
+          "label": "scaled",
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 0
+          },
+          "outlier_indices": [],
+          "observations": [
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/13-prefix.jsonl.257.f32",
+              "input_sha256": "102ada2085f57d19ae37c6ad4de5526b7a85fa3c8af83f4f8546f5d84e714f42",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.5755467357214014e-07,
+                "minimum_token_cosine": 0.9999999999999521,
+                "mean_token_cosine": 0.9999999999999674,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.010834902942244987,
+                "minimum_token_cosine": 0.997456572993399,
+                "mean_token_cosine": 0.9999412324980443,
+                "max_abs": 0.33177636563777924
+              },
+              "native_ms": [
+                7.1001200675964355,
+                7.094719886779785,
+                7.094319820404053,
+                7.078999996185303,
+                7.086319923400879
+              ],
+              "f16_ms": [
+                6.839079856872559,
+                6.889520168304443,
+                6.796559810638428,
+                6.822479724884033,
+                6.794600009918213
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/16-prefix.jsonl.257.f32",
+              "input_sha256": "9018c64adc0c7ce80e4939d2891b4d616c4c055ef1bd5329ac5a8993dd263b5a",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.624585850808375e-07,
+                "minimum_token_cosine": 0.999999999999952,
+                "mean_token_cosine": 0.9999999999999659,
+                "max_abs": 2.384185791015625e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.010748302199074721,
+                "minimum_token_cosine": 0.9974570365639999,
+                "mean_token_cosine": 0.9999422712256228,
+                "max_abs": 0.3104790151119232
+              },
+              "native_ms": [
+                7.031400203704834,
+                7.048480033874512,
+                7.0654401779174805,
+                7.052279949188232,
+                7.059279918670654
+              ],
+              "f16_ms": [
+                6.780679702758789,
+                6.808159828186035,
+                6.789279937744141,
+                6.782400131225586,
+                6.822039604187012
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/19-prefix.jsonl.257.f32",
+              "input_sha256": "da85e063928abf66ec79e036f9dcccae88fd9623690467e038eb830d1e70ec50",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.5589731813497795e-07,
+                "minimum_token_cosine": 0.9999999999999544,
+                "mean_token_cosine": 0.9999999999999677,
+                "max_abs": 1.6689300537109375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.010581817615108973,
+                "minimum_token_cosine": 0.9974867281594789,
+                "mean_token_cosine": 0.999942937863262,
+                "max_abs": 0.2927333787083626
+              },
+              "native_ms": [
+                7.077320098876953,
+                7.24392032623291,
+                7.263239860534668,
+                7.024519920349121,
+                7.031199932098389
+              ],
+              "f16_ms": [
+                6.7138800621032715,
+                6.6905598640441895,
+                6.7332000732421875,
+                6.704799652099609,
+                6.776120185852051
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/22-prefix.jsonl.257.f32",
+              "input_sha256": "b33aeb23b2eed00ad06a9f0b79df71fdca6f242014c35b7d81c2261ace3c963c",
+              "occurrence": 0,
+              "shape": [
+                318,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.5882142935741856e-07,
+                "minimum_token_cosine": 0.9999999999999553,
+                "mean_token_cosine": 0.9999999999999669,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.010726437191902909,
+                "minimum_token_cosine": 0.9976703990809627,
+                "mean_token_cosine": 0.999943014454461,
+                "max_abs": 0.30893877148628235
+              },
+              "native_ms": [
+                7.048799991607666,
+                7.04748010635376,
+                7.051199913024902,
+                7.049079895019531,
+                7.055079936981201
+              ],
+              "f16_ms": [
+                6.786759853363037,
+                6.767520427703857,
+                6.790999889373779,
+                6.7932000160217285,
+                6.717879772186279
+              ]
+            }
+          ],
+          "native_p50_ms": 7.057179927825928,
+          "f16_p50_ms": 6.788019895553589,
+          "minimum_token_cosine": 0.997456572993399,
+          "mean_relative_l2": 0.010722864987082897
+        },
+        {
+          "label": "compensated",
+          "config": {
+            "method": "awq",
+            "alpha": 0.5,
+            "outlier_count": 32
+          },
+          "outlier_indices": [
+            42,
+            302,
+            385,
+            436,
+            466,
+            470,
+            495,
+            503,
+            556,
+            591,
+            604,
+            614,
+            681,
+            738,
+            775,
+            843,
+            947,
+            1029,
+            1195,
+            1207,
+            1277,
+            1545,
+            1653,
+            1706,
+            1744,
+            1816,
+            1817,
+            1870,
+            1874,
+            1954,
+            2015,
+            2046
+          ],
+          "observations": [
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/13-prefix.jsonl.257.f32",
+              "input_sha256": "102ada2085f57d19ae37c6ad4de5526b7a85fa3c8af83f4f8546f5d84e714f42",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.5333837568022415e-07,
+                "minimum_token_cosine": 0.999999999999958,
+                "mean_token_cosine": 0.9999999999999682,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.009912264651720945,
+                "minimum_token_cosine": 0.999930068089971,
+                "mean_token_cosine": 0.9999507619939852,
+                "max_abs": 0.10799652338027954
+              },
+              "native_ms": [
+                8.554679870605469,
+                8.54931926727295,
+                8.548799514770508,
+                8.572160720825195,
+                8.525679588317871
+              ],
+              "f16_ms": [
+                6.793479919433594,
+                6.805920124053955,
+                6.775680065155029,
+                6.815320014953613,
+                6.739480018615723
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/16-prefix.jsonl.257.f32",
+              "input_sha256": "9018c64adc0c7ce80e4939d2891b4d616c4c055ef1bd5329ac5a8993dd263b5a",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.569270351873478e-07,
+                "minimum_token_cosine": 0.9999999999999533,
+                "mean_token_cosine": 0.9999999999999674,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.009785645192807791,
+                "minimum_token_cosine": 0.9999270841587189,
+                "mean_token_cosine": 0.9999520151381542,
+                "max_abs": 0.10358905792236328
+              },
+              "native_ms": [
+                8.553000450134277,
+                8.58340072631836,
+                8.523720741271973,
+                8.53480052947998,
+                8.551360130310059
+              ],
+              "f16_ms": [
+                6.768280029296875,
+                6.703999996185303,
+                6.74891996383667,
+                6.811759948730469,
+                6.761040210723877
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/19-prefix.jsonl.257.f32",
+              "input_sha256": "da85e063928abf66ec79e036f9dcccae88fd9623690467e038eb830d1e70ec50",
+              "occurrence": 0,
+              "shape": [
+                317,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.523145553527456e-07,
+                "minimum_token_cosine": 0.9999999999999585,
+                "mean_token_cosine": 0.9999999999999688,
+                "max_abs": 1.9073486328125e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.009732257499217573,
+                "minimum_token_cosine": 0.999934223580312,
+                "mean_token_cosine": 0.9999523878737513,
+                "max_abs": 0.12850606441497803
+              },
+              "native_ms": [
+                8.52415943145752,
+                8.521559715270996,
+                8.542759895324707,
+                8.539839744567871,
+                8.540200233459473
+              ],
+              "f16_ms": [
+                6.7526397705078125,
+                6.768320083618164,
+                6.78439998626709,
+                6.798880100250244,
+                6.711400032043457
+              ]
+            },
+            {
+              "input_file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/pruned/raw/22-prefix.jsonl.257.f32",
+              "input_sha256": "b33aeb23b2eed00ad06a9f0b79df71fdca6f242014c35b7d81c2261ace3c963c",
+              "occurrence": 0,
+              "shape": [
+                318,
+                2048
+              ],
+              "native_vs_math": {
+                "relative_l2": 2.5382852330919406e-07,
+                "minimum_token_cosine": 0.9999999999999537,
+                "mean_token_cosine": 0.9999999999999681,
+                "max_abs": 1.6689300537109375e-06
+              },
+              "vs_f16": {
+                "relative_l2": 0.009785773293987252,
+                "minimum_token_cosine": 0.9999197917467376,
+                "mean_token_cosine": 0.9999520059610074,
+                "max_abs": 0.12460112571716309
+              },
+              "native_ms": [
+                8.557120323181152,
+                8.543839454650879,
+                8.53219985961914,
+                8.580679893493652,
+                8.55392074584961
+              ],
+              "f16_ms": [
+                6.743839740753174,
+                6.782639980316162,
+                6.765520095825195,
+                6.741079807281494,
+                6.757400035858154
+              ]
+            }
+          ],
+          "native_p50_ms": 8.546319484710693,
+          "f16_p50_ms": 6.766900062561035,
+          "minimum_token_cosine": 0.9999197917467376,
+          "mean_relative_l2": 0.009803985159433391
+        }
+      ]
+    }
+  ]
+}

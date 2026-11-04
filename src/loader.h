@@ -66,11 +66,14 @@ public:
     // Quantized from F32 at upload (layers/qlinear.h runs them).
     struct QWeight {
         ggml_tensor * w = nullptr, * s = nullptr;
+        ggml_tensor * inverse = nullptr, * extra = nullptr, * indices = nullptr;
         int           bits = 8;
         int64_t       group = 0;  // INT4: K-elements per scale (0: per channel)
         explicit operator bool() const { return w != nullptr; }
     };
     QWeight quant_i8(const std::string & out_name, const std::vector<std::string> & srcs);
+    QWeight quant_i8_compensated(const std::string & name, const std::vector<std::string> & srcs,
+                                 const std::string & parameters);
     // The same as symmetric INT4 (codes -7..7, two per byte along K, low nibble
     // first: I8 [K/2, N]) with one F32 scale per `group` K-elements and output
     // channel (F32 [N, K/group], scale[g * N + n]); group 0 = one per channel.
@@ -129,6 +132,8 @@ private:
         QWeight                  q;
         int64_t                  K = 0;
         std::vector<std::string> srcs;
+        std::vector<float> inverse;
+        std::vector<int32_t> indices;
     };
     std::vector<Quant>       quant_;
 };

@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "mode": "expert_gateup",
+  "split": "calibration",
+  "source_sha256": "a386cf4364d1af982bc17505689dd169aca3fb13718fce7ba30001b2d1221504",
+  "calibration_sha256": "9fe80b7efa38b20bb21c1a65c85d497efe4f5b0ab91f2981fdd88f8866ac585a",
+  "calibration_path": "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/pruned-120/importance.json",
+  "scaling": "smoothquant",
+  "alpha": 0.75,
+  "outlier_count": 0,
+  "layers": {
+    "aex.blk.0.ffn_gateup": {
+      "sha256": "bba356e429d90a1c4758bf5db515a3fa6b9660bcd3a772b9d7ef93290efe74ef",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.1.ffn_gateup": {
+      "sha256": "b80623b0288950f806471b9b3cbccefcff5410429acd7756573dcade6441670f",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.2.ffn_gateup": {
+      "sha256": "820a1f842049b8611c05639342e0fa35bbe5fad7cabc6fb1faffb6fa11a1c86f",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.3.ffn_gateup": {
+      "sha256": "5bf674b7ffdd7692ba2d1def5173631951465324986ff6e2e0a0d8f21afab240",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.4.ffn_gateup": {
+      "sha256": "9cce29fcd231b48c3727c5fcd27938953897820c91a6110a63119e21c297ad19",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.5.ffn_gateup": {
+      "sha256": "d23a13754a804118d5248cdf87e1e01ab2945efbe3bcc193ec5a4cf5ba6c84fc",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.6.ffn_gateup": {
+      "sha256": "7acbe1d0866e0af6490d5940b5fcba3a9e21ba79311f84fffeeb00e280e39c2d",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.7.ffn_gateup": {
+      "sha256": "b18ce116f476ffdade28088f669785d785ed0e05dca05ead413d05963d3c5a49",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.8.ffn_gateup": {
+      "sha256": "214332f899e2226551bdbfad1a04a86119bc499dfec696d3843b44d085979185",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.9.ffn_gateup": {
+      "sha256": "54810df2197eb5ca574fa658b886948c7467eca8529acf4a57f8500c82a7f199",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.10.ffn_gateup": {
+      "sha256": "058d69fe51847e150d92f4318e81b666236f5f55bb582e617ac4d69333d8b247",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.11.ffn_gateup": {
+      "sha256": "d4f7fa527b6166f30800c5103e1ab59e36454b6d0bdaed82290dbcff2a2de282",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.12.ffn_gateup": {
+      "sha256": "0542de962dc770db801766b82b9528720acab73df015621f59472b7763b42904",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.13.ffn_gateup": {
+      "sha256": "15941d750124be6b1e3ac33c2b5dc2801d0bc7e8be48c158852606dbc2d2a359",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.14.ffn_gateup": {
+      "sha256": "bd82de4e60e0e9e2cdf25dacaafbd5c2a076321ee3779236cd57e49a89541eb1",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.15.ffn_gateup": {
+      "sha256": "d7ab5b4dcf5504ea2f86f7084437768bcfa7db1465ac16121cf91c98de0719c7",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.16.ffn_gateup": {
+      "sha256": "dbf832421179248c2513833b98e995bcc06da92fe40f780613338d65cf19682c",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    },
+    "aex.blk.17.ffn_gateup": {
+      "sha256": "0b54c4fb26b542d33f10112fda7903b5c2391219b1f0040852696921aa3f463d",
+      "shape": [
+        8192,
+        1024
+      ],
+      "outlier_indices": []
+    }
+  }
+}

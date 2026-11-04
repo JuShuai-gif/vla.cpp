@@ -1,0 +1,79 @@
+{
+  "schema_version": 2,
+  "policy_backend": "vla_cpp",
+  "robot_layout": "single",
+  "devices": {
+    "arms": {
+      "single": null
+    },
+    "cameras": {
+      "top": null,
+      "wrist": null
+    }
+  },
+  "active_profile": "pruned",
+  "profiles": {
+    "pruned": {
+      "policy_config": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/pruned-native-policy.json",
+      "inference_backend": "standard",
+      "task": "pick up the cube",
+      "warmup_steps": 3,
+      "execution_horizon": 50,
+      "execution_period": 0.03333333333333333,
+      "replan_threshold": 0,
+      "rtc_blend_steps": 5,
+      "enable_filter_smooth": false,
+      "enable_rtc_smooth": false,
+      "warmstep": false,
+      "rl_joint_offsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "joint_unit": "degrees",
+      "gripper_mapping": "linear",
+      "camera_map": {
+        "observation.images.top": "top",
+        "observation.images.wrist": "wrist"
+      },
+      "execute_robot": false,
+      "dry_run": true,
+      "precision": "int8-expert-smooth"
+    },
+    "full": {
+      "policy_config": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/full-native-policy.json",
+      "inference_backend": "standard",
+      "task": "pick up the cube",
+      "warmup_steps": 3,
+      "execution_horizon": 50,
+      "execution_period": 0.03333333333333333,
+      "replan_threshold": 0,
+      "rtc_blend_steps": 5,
+      "enable_filter_smooth": false,
+      "enable_rtc_smooth": false,
+      "warmstep": false,
+      "rl_joint_offsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "joint_unit": "degrees",
+      "gripper_mapping": "linear",
+      "camera_map": {
+        "observation.images.top": "top",
+        "observation.images.wrist": "wrist"
+      },
+      "execute_robot": false,
+      "dry_run": true,
+      "precision": "int8-expert-smooth"
+    }
+  },
+  "last_checks": {},
+  "python_executable": "/home/skysi/code/robot_runtime/.venv/bin/python"
+}

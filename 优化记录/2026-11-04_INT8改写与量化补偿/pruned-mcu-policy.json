@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "model": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+  "library": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
+  "optimization_profile": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/mcu-optimization-profile.json",
+  "device": "0",
+  "seed": 0,
+  "threads": 4,
+  "runtime": {
+    "weight_dtype": "f16",
+    "act_dtype": "f32",
+    "mm_prec": "f32",
+    "flash_attn": true
+  },
+  "source_contract": {
+    "action_names": [
+      "joint_1.pos",
+      "joint_2.pos",
+      "joint_3.pos",
+      "joint_4.pos",
+      "joint_5.pos",
+      "joint_6.pos",
+      "gripper.pos"
+    ],
+    "action_space": "absolute_joint",
+    "joint_unit": "degrees",
+    "gripper_unit": "mm",
+    "verified": false
+  },
+  "precision_profiles": {
+    "int8-expert-plain": {
+      "quant_route": "native_int8",
+      "int8_parameters": "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-plain/manifest.json",
+      "status": "experimental"
+    },
+    "int8-expert-smooth": {
+      "quant_route": "native_int8",
+      "int8_parameters": "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-smooth/manifest.json",
+      "status": "experimental"
+    },
+    "int8-expert-compensated": {
+      "quant_route": "native_int8",
+      "int8_parameters": "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-compensated/manifest.json",
+      "status": "experimental"
+    }
+  }
+}

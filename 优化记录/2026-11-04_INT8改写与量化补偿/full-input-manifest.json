@@ -1,0 +1,1037 @@
+{
+  "variant": "full",
+  "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "model_sha256": "ae7a7ad36082a83dc743cdaa1d1f21813af7b4e20bf340d82bd90c7f10537e51",
+  "selected": [
+    "vlm.blk.0.ffn_gateup.weight",
+    "vlm.blk.9.ffn_gateup.weight",
+    "vlm.blk.17.ffn_down.weight",
+    "aex.blk.0.ffn_gateup.weight"
+  ],
+  "observations": [
+    {
+      "split": "calibration",
+      "observation": "ep00009-f00018.npz",
+      "episode": 9,
+      "sha256": "2bf5bcd424cdc2c6975527d61394756f4ca3728d07412a4dd3fdf267ba417c7d",
+      "captures": [
+        {
+          "weight": "vlm.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/1-prefix.jsonl.23.f32",
+          "sha256": "57bb8cf2492de932f7be9b45ca3a7b5eae791d0d699cd13c8a5c41cbb3b0a0df",
+          "shape": [
+            556,
+            2048
+          ]
+        },
+        {
+          "weight": "vlm.blk.9.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/1-prefix.jsonl.257.f32",
+          "sha256": "c15de0d306955b3e06ebc3e50c96b51c23ca889fc20a0372f306a502f8f36076",
+          "shape": [
+            556,
+            2048
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.488.f32",
+          "sha256": "cf3ebde3e69a00958b772b83e00f8a181db331023d1dc68ac185276c6d134cbb",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 1,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.1139.f32",
+          "sha256": "557e1acc2247e61fc25479c7091a7ac490cd0a5fb122a3dd579e6d9981fa2ae0",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 2,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.1790.f32",
+          "sha256": "52121c20e2c8c25cd36b7cf1b88f1da3e5e5b60b8c0bf71aab9a6a2b540af771",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 3,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.2441.f32",
+          "sha256": "4b4b1023edcc6d27b50f86f75ae14b5ff4b6c52088239af5d4f299ebf21eab95",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 4,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.3092.f32",
+          "sha256": "5c4ebd47878598496ac864df8c8e9d578aa73a0ff0ed84f5e29b7abc91697157",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 5,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.3743.f32",
+          "sha256": "2657c0e9b794bb2fd17df313368b3118fd9284fb980b2b8d6db08bdf3f1d3a8b",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 6,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.4394.f32",
+          "sha256": "066fe82cd0910f12f7a2a7e5a879ae9df7c92dddb7c408549e9f4600d7bd747d",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 7,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.5045.f32",
+          "sha256": "890c821e0b142143df2e9c4863cfe8c7a94361883991124613788dcac5799d5f",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 8,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.5696.f32",
+          "sha256": "0e59539be7d7eeb96f3eef7bd8a41691acce2453ff97404ba93577eb0c06789d",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 9,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/2-denoise.jsonl.6347.f32",
+          "sha256": "251334f7d6a1828d2be0104f084a5188ea161c46c1029b41af303aaa5beea6ad",
+          "shape": [
+            50,
+            1024
+          ]
+        }
+      ]
+    },
+    {
+      "split": "calibration",
+      "observation": "ep00009-f00092.npz",
+      "episode": 9,
+      "sha256": "f06bf690217e12ecd5697555d537511fd3a3642c28ad5cb9c88d582f4aa3d335",
+      "captures": [
+        {
+          "weight": "vlm.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/4-prefix.jsonl.23.f32",
+          "sha256": "e1b5a1c4bffd612e086d9e4b0b91cc62e338d8f9a388f83113595cef7d503cc9",
+          "shape": [
+            556,
+            2048
+          ]
+        },
+        {
+          "weight": "vlm.blk.9.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/4-prefix.jsonl.257.f32",
+          "sha256": "8ee970349e6bb8d0b57191d6f8f5abc58b66a80fbafc9c2409fddb9ea0529a06",
+          "shape": [
+            556,
+            2048
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.488.f32",
+          "sha256": "18eabada482d44a16ec8bffaae43dbc66bd7cb93c4ee29f47860d6d046ca421f",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 1,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.1139.f32",
+          "sha256": "10ccdb0c99862d28b2636dde3803557c163ddbb599a81c7426605797ff36d7f5",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 2,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.1790.f32",
+          "sha256": "4cdc761f03ede58b3f067f5e8eca4d92fa7e44628983c2aed5fc6ba2976e4219",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 3,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.2441.f32",
+          "sha256": "e5f8c86b6d6f5179e73f26089aea7b7270518b4f36cb68460e202ffebd85cecc",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 4,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.3092.f32",
+          "sha256": "7d9e55051d1f9fd53cfbce78d1c39b45313479f4e8a65197327185055f9090b8",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 5,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.3743.f32",
+          "sha256": "b07fe7af9628cd45be0dbcdc11fe8899b2e7dbabde61d5d17b5c2ce1d20e01c9",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 6,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.4394.f32",
+          "sha256": "370831415a49208ad3fb2ea5ef97c02e15ff75d937c19c99c47cf15d8364f21e",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 7,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.5045.f32",
+          "sha256": "9d5d7401433de5277a58e7055f86b69d9a67ab4f196aac188eaa55f0d11122cb",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 8,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.5696.f32",
+          "sha256": "c53d1b4860368ff2d29076b0d66a798a740065ac91c79d1f274def7f1871296c",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 9,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/5-denoise.jsonl.6347.f32",
+          "sha256": "1cd152d37dc0b47d43a5caa243d5f42fddc893798e1fd937364c5588e8bc6d4c",
+          "shape": [
+            50,
+            1024
+          ]
+        }
+      ]
+    },
+    {
+      "split": "calibration",
+      "observation": "ep00009-f00165.npz",
+      "episode": 9,
+      "sha256": "a91ed2af189cccfcca9e53185365088a1ad90e7d432b6ae173c5f35eeeedd7e0",
+      "captures": [
+        {
+          "weight": "vlm.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/7-prefix.jsonl.23.f32",
+          "sha256": "74cb333e8dca1c0dae3c211e7f02980cec5f45bc386039cd3427bef8762fd3f3",
+          "shape": [
+            555,
+            2048
+          ]
+        },
+        {
+          "weight": "vlm.blk.9.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/7-prefix.jsonl.257.f32",
+          "sha256": "b05d7e64ed46f3ce402bf0eadbef59676679669e78e9526fef0d3cfb1d5e8e91",
+          "shape": [
+            555,
+            2048
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.488.f32",
+          "sha256": "8f0c3225fb957647c7d3c062ecd293a71e02f97dcf46a39d06c4982030e6fba4",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 1,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.1139.f32",
+          "sha256": "ead4c07db0a877719e4bcbe7ea1afe831f64250b565c3bc9d8bffb2d8c281375",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 2,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.1790.f32",
+          "sha256": "637aa36d512c22f4508d700f7efc09a8eb46b779d252f093501c4adf045ffc15",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 3,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.2441.f32",
+          "sha256": "3203824a500920eba28d80843a3b249c949726385ddc352b9bc098a4a99305d6",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 4,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.3092.f32",
+          "sha256": "9c33b187c24def66123212fa9ba408bbfa40ab9511b8e70c2e9737a220cbe01d",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 5,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.3743.f32",
+          "sha256": "85cfe51302574c8d29c08744ddf87cc34e3b9efd96905d2a951165c39e2d8d01",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 6,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.4394.f32",
+          "sha256": "62a7d2c180b10b67151888f1bbc98da114ca54355b7acfd2306ae79ab3e58d82",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 7,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.5045.f32",
+          "sha256": "d6dcd9af04805a475b8def62d518da9cff3f4169cf6cff6db37cf7d62a76fd95",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 8,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.5696.f32",
+          "sha256": "031c15ca9f870723ec2ac54e75b403da949dae3a0040d71a47b4070a9d42744e",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 9,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/8-denoise.jsonl.6347.f32",
+          "sha256": "12f8992befd07d235846acb00ae2620d884482b8f41d87e6de812e71a30fded0",
+          "shape": [
+            50,
+            1024
+          ]
+        }
+      ]
+    },
+    {
+      "split": "calibration",
+      "observation": "ep00012-f00018.npz",
+      "episode": 12,
+      "sha256": "0354f1b4e0ef2ce47e44d1bbd60a6a250c0a9201a255560974b2d736311cab60",
+      "captures": [
+        {
+          "weight": "vlm.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/10-prefix.jsonl.23.f32",
+          "sha256": "ad95becc6d45584b40b3474cc88bfccf0476dc4e5f4e5573fc1f3a2f16d25b47",
+          "shape": [
+            556,
+            2048
+          ]
+        },
+        {
+          "weight": "vlm.blk.9.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/10-prefix.jsonl.257.f32",
+          "sha256": "6861c2f7bf216695b570365d11a1b83266caaa95310984f06063557ae939d6d4",
+          "shape": [
+            556,
+            2048
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.488.f32",
+          "sha256": "0caf65a0b167af0f86d84776d99e6ca04e67011b304802177d9451a8cce4abf6",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 1,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.1139.f32",
+          "sha256": "ddd9b97a0bfb8a763dcec42aa420569a93687422427ad358a41ed055f94bcedf",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 2,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.1790.f32",
+          "sha256": "8bec1ba708628842d23865916a48cda0ef7cec1412cf20e54e88864f818d12a4",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 3,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.2441.f32",
+          "sha256": "651a8ffb8bdb49f406995a74d14ae444b9ceaeed747d9b767594c49828f1f148",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 4,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.3092.f32",
+          "sha256": "f2f5d17f4d13a4a88fa3adfef47f75e5d6b7eef2eea40fcdce8c9aab8c080727",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 5,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.3743.f32",
+          "sha256": "f11996436a3e60106a7c2f3ddf895b92e025f00f1a439d7e9080dfaf03a08d74",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 6,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.4394.f32",
+          "sha256": "31b4d9abc56b034f4ee746263bcf2f277a744571c37e71fb12c96d18ef2d5365",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 7,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.5045.f32",
+          "sha256": "1f080a8559cfcc1407511f9736eba00e8cb40ff6735b08ec96d75dd538b1465f",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 8,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.5696.f32",
+          "sha256": "c61a81693225af46f91479425d5ef242eeac5f065ac5e18a70b217142b8a3cf9",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 9,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/11-denoise.jsonl.6347.f32",
+          "sha256": "94485cc0232e9868b5b1981c61a4fb9ff5d7a8ea441801c704864dbaeede7fa9",
+          "shape": [
+            50,
+            1024
+          ]
+        }
+      ]
+    },
+    {
+      "split": "development",
+      "observation": "ep00005-f00019.npz",
+      "episode": 5,
+      "sha256": "7afdae9b5ee92242c5bdbf8daf17d087422244c8b689696534f08bbe86dd77f6",
+      "captures": [
+        {
+          "weight": "vlm.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/13-prefix.jsonl.23.f32",
+          "sha256": "6abbf15a4e238ab1d7ceb35fa0ea048f38062265c575109743a6db2399279c01",
+          "shape": [
+            555,
+            2048
+          ]
+        },
+        {
+          "weight": "vlm.blk.9.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/13-prefix.jsonl.257.f32",
+          "sha256": "bb2cfd54a701a1dc4798c2f9e007999de54420886c743cedcf21e054b556444a",
+          "shape": [
+            555,
+            2048
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.488.f32",
+          "sha256": "1917914b3f5c2f4cbcf7f087bbd625f82aac14bcf5dfcceba90ca47fe5c24cdd",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 1,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.1139.f32",
+          "sha256": "761015c19867369f60114ce108905c33a6a145f919b7c9abad1bcd2aa211cfc1",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 2,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.1790.f32",
+          "sha256": "2e5346e57691525d2073fed371351fd9b20f536934b9dd98e3642c96f5a133bc",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 3,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.2441.f32",
+          "sha256": "2c73c5472348d7b3949ab65e894380189ca0852d8ea3ec1f7dbc43e56c6b71b8",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 4,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.3092.f32",
+          "sha256": "9cf1641150a35686a10850b1c20f62e036e73dac2cfefb4d84f98933bf71ab72",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 5,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.3743.f32",
+          "sha256": "1e47a86540a0b4cbe50bb3f76e39b2fc1b515944d6bcad545b1cad58b356ee96",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 6,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.4394.f32",
+          "sha256": "1f2241611a3be986b8ab7db4c168fe92f0d3169430b594a9bd897895070ba3bd",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 7,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.5045.f32",
+          "sha256": "10e3023cdb90c26b28cfa47680f9260a18a1e580e30d282d4b238c6c3e40a561",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 8,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.5696.f32",
+          "sha256": "739289641bf50da3e84cb5fa9a40c363a0403edf8855ed39571cd14324adeaad",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 9,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/14-denoise.jsonl.6347.f32",
+          "sha256": "be14d96e39bde8f09af0e029953e4da931a0543979cd8ddc2f47954d8a9a0b46",
+          "shape": [
+            50,
+            1024
+          ]
+        }
+      ]
+    },
+    {
+      "split": "development",
+      "observation": "ep00005-f00093.npz",
+      "episode": 5,
+      "sha256": "f3ec55ae7a2e8c88e1890f162131fd03931b5d0265e1a4f331548f743128cca6",
+      "captures": [
+        {
+          "weight": "vlm.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/16-prefix.jsonl.23.f32",
+          "sha256": "587bf210d2f8c6c4593b85192f955ae7f0dee5fbc6e9e4d7a49b8db0638414ab",
+          "shape": [
+            556,
+            2048
+          ]
+        },
+        {
+          "weight": "vlm.blk.9.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/16-prefix.jsonl.257.f32",
+          "sha256": "5d87e2c4034d7d1d1eaafd6bf0271ec9e9def340f57d9453478a63cb021865b3",
+          "shape": [
+            556,
+            2048
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.488.f32",
+          "sha256": "9a57eb028e5df2f8a0c0445c98cf3d57517d6b57277e910251730c047d5f79f6",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 1,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.1139.f32",
+          "sha256": "e109f8dfa648ee8e1cee24861f06738c9b7533eb5e248bd877b7c46bdfc10d86",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 2,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.1790.f32",
+          "sha256": "6ddf80160e159882c3cbcd033c5685ce450d60a2189d0cdeb3b436e063dd338c",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 3,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.2441.f32",
+          "sha256": "46618e620212e9dc368af4372a01a58dc0ccdfdb6cb060d1a4f09383ad81b5e1",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 4,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.3092.f32",
+          "sha256": "c738b211b548c44817f0ec761dadaa0b48d838a3b87bf00af7a5ddc5535e3cff",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 5,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.3743.f32",
+          "sha256": "4a9f54dcf1c68787ea404c24615a342473fdb071d57cac7722f895a9a0015f8d",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 6,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.4394.f32",
+          "sha256": "795f1a57229b07c62ff21e657b1b5517dc32ffe2e308a3ec0294f0fb156d8a3f",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 7,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.5045.f32",
+          "sha256": "5b24b60637d0fff5e9f2681bea634601181520ae5aec59bb31bcb5ee15611972",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 8,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.5696.f32",
+          "sha256": "7546d4d7de714897a1fe215a23e96cfea6a10fbd058d92e639f5f9e15f3ee57c",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 9,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/17-denoise.jsonl.6347.f32",
+          "sha256": "137f825ee7f419089b17b9450b5bff222e2aec6b96ed4bb2ca611d152ce88343",
+          "shape": [
+            50,
+            1024
+          ]
+        }
+      ]
+    },
+    {
+      "split": "development",
+      "observation": "ep00005-f00167.npz",
+      "episode": 5,
+      "sha256": "4f0b9217dbcc1cf40e807e02e4459c0ac029d96591ca555849fd67afa597a8be",
+      "captures": [
+        {
+          "weight": "vlm.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/19-prefix.jsonl.23.f32",
+          "sha256": "5eb466f3205a8fb47e5b123a940daa9a608ca5caf53067f034b120d177625a6e",
+          "shape": [
+            555,
+            2048
+          ]
+        },
+        {
+          "weight": "vlm.blk.9.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/19-prefix.jsonl.257.f32",
+          "sha256": "bff618dbe8505fa9f7c1d6ba38ee806c57e70d3b873cab6a6936a3f2a3c312df",
+          "shape": [
+            555,
+            2048
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.488.f32",
+          "sha256": "7adb79cb142d610fab8252342da10321095e8c6051aa09a2fe6ff7de86ee8a88",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 1,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.1139.f32",
+          "sha256": "7a8ba68a4cf8b380487c1017c390c1e12d67df5cc2a34fa3ac19de862ff046a7",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 2,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.1790.f32",
+          "sha256": "e016bbb650f49c50f36007ce54f38a57c6335052a588c869329367a129a3770b",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 3,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.2441.f32",
+          "sha256": "4b7b5224060bb73d3ea1f1dcacb171452db3b27c3c4fe9246dad6c3dc890a66a",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 4,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.3092.f32",
+          "sha256": "9063b9c71100b502d0fcf14ab0b49da99eaab78362dde52b18812652c3b1d41f",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 5,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.3743.f32",
+          "sha256": "ddf5955fcea037addf2910eda0181d36deff8d9f642f568e2c9a9a838bc38ba7",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 6,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.4394.f32",
+          "sha256": "af2fdad62d95c9416609359754f28539a45e3fea7bd7c648abf22786c95797a7",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 7,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.5045.f32",
+          "sha256": "3f8f7fab3d221aa67f9d7d4b5a2c69dd92235c698e6cd6595666d90e7f597c44",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 8,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.5696.f32",
+          "sha256": "368745ae8856336ea8e13a35ea895914b484374fcfc05bb11058bf9b39970184",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 9,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/20-denoise.jsonl.6347.f32",
+          "sha256": "11ca4fd4584abe2ea3a7cdefcfc7683c9de86d8dc2c3296b908e771d8975571f",
+          "shape": [
+            50,
+            1024
+          ]
+        }
+      ]
+    },
+    {
+      "split": "development",
+      "observation": "ep00016-f00024.npz",
+      "episode": 16,
+      "sha256": "8031f03566c36c58c5378c3d156d33e56622847491be16c21f6c8e1b577828c9",
+      "captures": [
+        {
+          "weight": "vlm.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/22-prefix.jsonl.23.f32",
+          "sha256": "94514aca4f49682d1621ccb2301df3614ab8a5871e110498189fd5ee726039a7",
+          "shape": [
+            557,
+            2048
+          ]
+        },
+        {
+          "weight": "vlm.blk.9.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/22-prefix.jsonl.257.f32",
+          "sha256": "1363f606986c7c28f90c12465ca6015ca2db26a9f0f49c275f56d5a9902a78b5",
+          "shape": [
+            557,
+            2048
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 0,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.488.f32",
+          "sha256": "1ccaeaa2d5df37ca4aebeb5f9172055ce8e4d4ca965717bb3b69c9e721327969",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 1,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.1139.f32",
+          "sha256": "33930674ade0f21f52c8262ef348d978e5efe66720850b5ae142a483a88bbe62",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 2,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.1790.f32",
+          "sha256": "e8969612e7cf6397b26bc694a8ec24208b3cf6caf7dbbff13ccc46c93e6d3d17",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 3,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.2441.f32",
+          "sha256": "fa304adc03ecf89c3a89b8a309e9aa0be45d1c51cd2b8845b62a853e7654c18a",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 4,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.3092.f32",
+          "sha256": "859c38b3ea5cc86eadbe602fdf75fd72ef5da45121705c4f22bdbc99872bb573",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 5,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.3743.f32",
+          "sha256": "593972243ad60211a4f1f2d538c6e42351c5229b8815e33a3500833591ae56d2",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 6,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.4394.f32",
+          "sha256": "ffeebe1a9305f1a6403a2310b7915f2b16e52fbb11a68272b04c33f3fe6bcc10",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 7,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.5045.f32",
+          "sha256": "d713a5edb7ecc5adf036e9c0da25573fb08ec2f15f99ed554eb598ebcdd65fee",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 8,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.5696.f32",
+          "sha256": "fa70eda98439d05f835cfb9b17360d0c39525b53463aa9f4916b921ddd35051c",
+          "shape": [
+            50,
+            1024
+          ]
+        },
+        {
+          "weight": "aex.blk.0.ffn_gateup.weight",
+          "occurrence": 9,
+          "file": "/home/skysi/code/vla.cpp-quant/validation/quant/int8-compensation-inputs/full/raw/23-denoise.jsonl.6347.f32",
+          "sha256": "9955612efb567c0547ba93ceb2a7f82940ca64d5f8a23216a0e4182f927807d8",
+          "shape": [
+            50,
+            1024
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "reason": "Narrow diagnostic to pruned expert shapes; full all-kernel metric replays exceed useful collection scope.",
+  "processes": [
+    [
+      392777,
+      "/opt/moore-threads/moore-perf-compute/1.2.2/target-linux-aarch64/mcu --dump-mode normal --kernel-name regex:(small_gemm_kernel|packed_norm_kernel|packed_geglu_kernel|row_wmma|int8_native.*pack|vla_r2_begin|vla_r2_end) -o /home/skysi/code/vla.cpp-quant/validation/quant/native-int8-mcu/v3-mcu-full-baseline /home/skysi/code/robot_runtime/.venv/bin/python /home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/profile_native.py full baseline"
+    ],
+    [
+      397201,
+      "/home/skysi/code/robot_runtime/.venv/bin/python /home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/profile_native.py full baseline"
+    ]
+  ]
+}

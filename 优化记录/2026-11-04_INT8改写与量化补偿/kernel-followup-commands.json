@@ -1,0 +1,29 @@
+[
+  {
+    "name": "graph-gemm-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-musa-quant",
+      "-j4",
+      "--target",
+      "bench_musa_native_int8"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "graph-gemm-v1",
+    "command": [
+      "/home/skysi/code/vla.cpp-quant/build-musa-quant/tests/bench_musa_native_int8"
+    ],
+    "returncode": 0
+  },
+  {
+    "name": "accumulator-run",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/run_accumulators.py"
+    ],
+    "returncode": 0
+  }
+]

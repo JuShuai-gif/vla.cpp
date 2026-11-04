@@ -31,6 +31,7 @@
 #include "layers/fmha_kv.h"
 #include "layers/fq_rope_attn.h"
 #include "layers/qlinear.h"
+#include "layers/musa_int8.h"
 #include "loader.h"
 #include "model.h"
 #include "modules/siglip_vit.h"
@@ -94,7 +95,7 @@ struct GemmaLayerW {
 // alone. int8: the four GEMMs as W8A8 instead (layers/qlinear.h); w4_group != 0
 // makes their weights INT4 with that many K-elements per scale (< 0: per channel).
 inline void gemma_declare_float(WeightLoader & L, GemmaLayerW & w, const std::string & b, bool fuse,
-                                bool int8 = false, int64_t w4_group = 0) {
+                                bool int8 = false, int64_t w4_group = 0, const char * native_int8 = nullptr) {
     const char * p = b.c_str();
     if (int8 && !w.fq_q && !w.fq_qkv && !w.fq_o && !w.fq_gate && !w.fq_gu && !w.fq_down) {
         // q|k|v and gate|up fused as with fuse.
@@ -120,7 +121,10 @@ inline void gemma_declare_float(WeightLoader & L, GemmaLayerW & w, const std::st
     if (!w.fq_o)
         w.Wo = L.gemm("%s.attn_o.weight", p);
     if (!w.fq_gate && !w.fq_gu) {
-        if (fuse) {
+        if(native_int8) {
+            w.q_gu=L.quant_i8_compensated(b+".ffn_gateup.int8",{b+".ffn_gate.weight",b+".ffn_up.weight"},
+                                          std::string(native_int8)+"/"+b+".ffn_gateup.i8p");
+        } else if (fuse) {
             w.Wgu = L.fuse_gemm((b + ".ffn_gateup.weight").c_str(), {b + ".ffn_gate.weight", b + ".ffn_up.weight"});
         } else {
             w.Wgate = L.gemm("%s.ffn_gate.weight", p);
@@ -657,11 +661,19 @@ inline ggml_tensor * gemma_mlp(ggml_context * ctx, const GemmaLayerW & w, ggml_t
         gate = fq_gemm(ctx, w.fq_gate, xq);
         up   = fq_gemm(ctx, w.fq_up,   xq);
     } else if (w.Wgu || w.q_gu) {
-        ggml_tensor * gu = w.q_gu ? qlinear(ctx, w.q_gu, x_norm, nullptr, nullptr, at) : mm_act(ctx, w.Wgu, x_norm, at);
+#ifdef GGML_USE_MUSA
+        if(w.q_gu.inverse && !w.q_gu.extra && w.Wdown && !w.fq_down && !w.q_down &&
+           x_norm->ne[1]<=64 && at==GGML_TYPE_F32 && w.Wdown->type==GGML_TYPE_F16 &&
+           env_flag("VLA_MUSA_GEGLU_F16") && std::getenv("VLA_PI05_GEGLU_PACK") &&
+           std::getenv("VLA_MUSA_SMALL_GEMM") && !w.prefetch_next)
+            return mm_f32(ctx,w.Wdown,musa_int8_linear(ctx,w.q_gu,x_norm,true));
+#endif
+        ggml_tensor * gu = w.q_gu.inverse ? musa_int8_linear(ctx,w.q_gu,x_norm) :
+            w.q_gu ? qlinear(ctx, w.q_gu, x_norm, nullptr, nullptr, at) : mm_act(ctx, w.Wgu, x_norm, at);
 #ifdef GGML_USE_MUSA
         // Read gate|up directly from the merged GEMM, like FlashRT's merged
         // gated activation path. Avoid two CONT copies before GEGLU.
-        if (w.Wgu && w.Wdown && !w.fq_down && !w.q_down &&
+        if ((w.Wgu || w.q_gu.inverse) && w.Wdown && !w.fq_down && !w.q_down &&
             (gu->type == GGML_TYPE_F32 || gu->type == GGML_TYPE_F16)) {
             auto * inter = ggml_geglu(ctx, gu);
             // The MUSA F16-weight GEMM already narrows F32 activations to F16.

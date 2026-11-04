@@ -1,0 +1,10 @@
+{
+  "head": "d97946b28eadafef0ad409e759237281944736e9",
+  "protected_files": {
+    "/home/skysi/code/robot_runtime/configs/vla_piper_live.json": "4e239709e6a5a1cae28c68391ef194548e6554ad4ea1bfee6da62d3614ac5d42",
+    "/home/skysi/code/robot_runtime/configs/vla_piper.json": "18338608c3cc96210c40a962b2192ed130e5b587a4b6bffcf8cbecf41763c43f",
+    "/home/skysi/code/robot_runtime/configs/policies/vla_full.json": "ff2923ae3ef7b5e3e4ffb7e7592f67c318215493f8fd858356bc95aa55b9b91b",
+    "/home/skysi/code/robot_runtime/configs/policies/vla_pruned.json": "876a4beb271698e705eda37d54a579900ab0a0fb92d1ffe7d89c430ad77d5e65",
+    "/home/skysi/code/vla.cpp/build-musa-official/libvla.so": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1"
+  }
+}

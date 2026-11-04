@@ -144,6 +144,7 @@ bool gemma_sdpa(const ggml_tensor * t) {
 }
 
 bool supports(const ggml_tensor * t) {
+    if(musa_int8_supports(t))return true;
     if (gemma_sdpa(t)) return true;
     if (vision_sdpa(t)) return true;
     if (vector_pack(t)) return true;
@@ -193,8 +194,10 @@ bool supports(const ggml_tensor * t) {
                            ggml_nelements(t->src[2])!=3*x->ne[0]))return false;
         if(spec.kind==2 && ggml_nelements(t->src[1])!=x->ne[0])return false;
         const auto * mod=t->src[spec.kind==1?3:spec.kind==2?2:1];
+        if(spec.quantized && (spec.kind!=1 || !dense_f32(t->src[4]) ||
+           ggml_nelements(t->src[4])!=x->ne[0] || x->ne[0]%32))return false;
         return dense_f32(mod) && ggml_nelements(mod)==3*x->ne[0] &&
-               ggml_nbytes(t)==(spec.kind?ggml_nelements(x)*4:0)+x->ne[0]*64*2;
+               ggml_nbytes(t)==(spec.kind?ggml_nelements(x)*4:0)+x->ne[0]*64*2+(spec.quantized?(x->ne[0]+4)*64:0);
     }
     if(m==SMALL_PACK_MAGIC) {
         const auto * x=t->src[0];
@@ -742,13 +745,24 @@ __global__ void packed_geglu_kernel(const float * x,half * y,int h,int rows) {
  y[r*h+i]=__float2half_rn(value);
 }
 
-template<int Kind>
+template<int Kind,bool Quantized=false>
 __global__ void packed_norm_kernel(const float * x,const float * o,const float * gate,
-        const float * mod,char * blob,int h,int rows,float eps) {
+        const float * mod,char * blob,int h,int rows,float eps,const float * inverse=nullptr) {
  const int tid=threadIdx.x,r=blockIdx.x;const size_t row=(size_t)r*h;
  float * residual=(float *)blob;
  half * norm=(half *)(blob+(Kind?h*rows*4:0));
- if(r>=rows){for(int i=tid;i<h;i+=WG)norm[row+i]=__float2half_rn(0.f);return;}
+ signed char * q=(signed char *)(norm+h*64);float * scales=(float *)(q+h*64);
+ if(r>=rows){
+  for(int i=tid;i<h;i+=WG){
+   norm[row+i]=__float2half_rn(0.f);
+   if constexpr(Quantized){
+    const size_t dest=((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
+    q[dest]=0;
+   }
+  }
+  if constexpr(Quantized)if(tid==0)scales[r]=1.f;
+  return;
+ }
  __shared__ float sums[WG];float sum=0;
  for(int i=tid;i<h;i+=WG) {
   const float a=Kind==1?x[row+i]+o[row+i]*gate[2*h+i]:Kind==2?x[row+i]+o[i]:x[row+i];
@@ -760,6 +774,18 @@ __global__ void packed_norm_kernel(const float * x,const float * o,const float *
  for(int i=tid;i<h;i+=WG) {
   const float n=(Kind?residual[row+i]:x[row+i])*inv;
   norm[row+i]=__float2half_rn((n+n*mod[i])+mod[h+i]);
+ }
+ if constexpr(Quantized){
+  __syncthreads();float mx=0;
+  for(int i=tid;i<h;i+=WG)mx=fmaxf(mx,fabsf(float(norm[row+i])*inverse[i]));
+  sums[tid]=mx;__syncthreads();
+  for(int d=WG/2;d;d>>=1){if(tid<d)sums[tid]=fmaxf(sums[tid],sums[tid+d]);__syncthreads();}
+  const float scale=sums[0]>0?__fdiv_rn(sums[0],127.f):1.f;
+  if(tid==0)scales[r]=scale;
+  for(int i=tid;i<h;i+=WG){
+   const size_t dest=((size_t)(r/32)*(h/32)+i/32)*1024+(r%32/16)*512+((r%16)*4+(i%16)/4+(i%32/16)*64)*4+i%4;
+   q[dest]=(signed char)rintf(fminf(127.f,fmaxf(-127.f,__fdiv_rn(float(norm[row+i])*inverse[i],scale))));
+  }
  }
 }
 
@@ -822,6 +848,7 @@ __global__ void prefetch_lines(const unsigned * w,unsigned * sink,size_t words) 
 }
 bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
     if (!supports(t)) return false;
+    if(musa_int8_supports(t))return musa_int8_forward(t,stream_ptr);
     const auto stream = (musaStream_t) stream_ptr;
     if (gemma_sdpa(t)) return run_gemma_sdpa(t,stream);
 #ifdef VLA_MUSA_MUDNN_ATTN
@@ -837,7 +864,8 @@ bool forward(ggml_tensor * t, void * stream_ptr, void * blas_ptr) {
         const float * gate=spec.kind==1?(const float *)t->src[2]->data:nullptr;
         const float * mod=(const float *)t->src[spec.kind==1?3:spec.kind==2?2:1]->data;
 #define PACKED_NORM_CASE(K) case K: packed_norm_kernel<K><<<64,WG,0,stream>>>(x,o,gate,mod,(char *)t->data,a->ne[0],a->ne[1],spec.eps);break
-        switch(spec.kind){PACKED_NORM_CASE(0);PACKED_NORM_CASE(1);PACKED_NORM_CASE(2);}
+        if(spec.quantized)packed_norm_kernel<1,true><<<64,WG,0,stream>>>(x,o,gate,mod,(char *)t->data,a->ne[0],a->ne[1],spec.eps,(const float*)t->src[4]->data);
+        else switch(spec.kind){PACKED_NORM_CASE(0);PACKED_NORM_CASE(1);PACKED_NORM_CASE(2);}
 #undef PACKED_NORM_CASE
     } else if(magic(t)==SMALL_PACK_MAGIC) {
         const auto * a=t->src[0];const int k=a->ne[0],n=a->ne[1];

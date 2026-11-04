@@ -1,0 +1,104 @@
+[
+  {
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/export_int8_parameters.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/pruned-load-policy.json",
+      "--importance",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/pruned-120/importance.json",
+      "--output-dir",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-plain"
+    ],
+    "returncode": 0,
+    "stdout": "{\"directory\": \"/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-plain\", \"layers\": 18, \"alpha\": null, \"outliers\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/export_int8_parameters.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/pruned-load-policy.json",
+      "--importance",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/pruned-120/importance.json",
+      "--output-dir",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-smooth",
+      "--alpha",
+      "0.75"
+    ],
+    "returncode": 0,
+    "stdout": "{\"directory\": \"/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-smooth\", \"layers\": 18, \"alpha\": 0.75, \"outliers\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/export_int8_parameters.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/pruned-load-policy.json",
+      "--importance",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/pruned-120/importance.json",
+      "--output-dir",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-compensated",
+      "--alpha",
+      "0.75",
+      "--outliers",
+      "32"
+    ],
+    "returncode": 0,
+    "stdout": "{\"directory\": \"/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-expert-compensated\", \"layers\": 18, \"alpha\": 0.75, \"outliers\": 32}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/export_int8_parameters.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/full-load-policy.json",
+      "--importance",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/full-120/importance.json",
+      "--output-dir",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-expert-plain"
+    ],
+    "returncode": 0,
+    "stdout": "{\"directory\": \"/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-expert-plain\", \"layers\": 18, \"alpha\": null, \"outliers\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/export_int8_parameters.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/full-load-policy.json",
+      "--importance",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/full-120/importance.json",
+      "--output-dir",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-expert-smooth",
+      "--alpha",
+      "0.75"
+    ],
+    "returncode": 0,
+    "stdout": "{\"directory\": \"/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-expert-smooth\", \"layers\": 18, \"alpha\": 0.75, \"outliers\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/export_int8_parameters.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/full-load-policy.json",
+      "--importance",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/full-120/importance.json",
+      "--output-dir",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-expert-compensated",
+      "--alpha",
+      "0.75",
+      "--outliers",
+      "32"
+    ],
+    "returncode": 0,
+    "stdout": "{\"directory\": \"/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-expert-compensated\", \"layers\": 18, \"alpha\": 0.75, \"outliers\": 32}\n",
+    "stderr": ""
+  }
+]

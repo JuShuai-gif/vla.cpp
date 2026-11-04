@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp-quant/build-musa-quant
+Test project /home/skysi/code/vla.cpp-quant/build-musa-quant
+    Start 40: musa_native_int8
+1/1 Test #40: musa_native_int8 .................   Passed    2.20 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   2.20 sec

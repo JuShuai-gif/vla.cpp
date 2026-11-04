@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/home/skysi/code/robot_runtime/.venv/bin/python",
+    "-m",
+    "unittest",
+    "-v",
+    "test_policy_api",
+    "test_precision_bench",
+    "test_quantize_gguf",
+    "test_pi05_io",
+    "test_int8_compensation"
+  ],
+  "returncode": 0
+}

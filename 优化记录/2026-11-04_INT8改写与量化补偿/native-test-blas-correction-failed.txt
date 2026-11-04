@@ -1,0 +1,66 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp-quant/build-musa-quant
+Test project /home/skysi/code/vla.cpp-quant/build-musa-quant
+    Start 40: musa_native_int8
+1/1 Test #40: musa_native_int8 .................Subprocess aborted***Exception:  10.86 sec
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup reset
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_cuda_compute_forward: MUL_MAT failed
+MUSA error: operation failed due to a previous error during capture
+  current device: 0, in function ggml_cuda_compute_forward at /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:2569
+  err
+native-int8-test: backend = MUSA (device 0: M1000)
+R=0 N=1 type=f32 max_error=0
+R=0 N=50 type=f32 max_error=0
+R=0 N=64 type=f32 max_error=0
+R=0 N=65 type=f32 max_error=0
+R=0 N=161 type=f32 max_error=0
+R=0 N=1 type=f16 max_error=0
+R=0 N=50 type=f16 max_error=0
+R=0 N=64 type=f16 max_error=0
+R=0 N=65 type=f16 max_error=0
+R=0 N=161 type=f16 max_error=0
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/ggml-cuda.cu:109: MUSA error
+[New LWP 349098]
+[New LWP 349101]
+[New LWP 349102]
+[New LWP 349103]
+[New LWP 349104]
+[New LWP 349105]
+[New LWP 349106]
+[New LWP 349107]
+[New LWP 349108]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+0x0000ffff9a2e9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	../sysdeps/unix/sysv/linux/wait4.c: 没有那个文件或目录.
+#0  0x0000ffff9a2e9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	in ../sysdeps/unix/sysv/linux/wait4.c
+#1  0x0000ffff9a70a3ac in ggml_print_backtrace () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#2  0x0000ffff9a70a5f8 in ggml_abort () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#3  0x0000ffff9a8adf08 in ggml_cuda_error(char const*, char const*, char const*, int, char const*) () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-musa.so.0
+#4  0x0000ffff9a8bb170 in ggml_cuda_graph_evaluate_and_capture(ggml_backend_cuda_context*, ggml_cgraph*, bool, bool, void const*) () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-musa.so.0
+#5  0x0000ffff9a8b4720 in ggml_backend_cuda_graph_compute(ggml_backend*, ggml_cgraph*) () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-musa.so.0
+#6  0x0000ffff9a724b04 in ggml_backend_graph_compute () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#7  0x0000000000403cac in main ()
+[Inferior 1 (process 349093) detached]
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =  10.86 sec
+
+The following tests FAILED:
+	 40 - musa_native_int8 (Subprocess aborted)
+Errors while running CTest

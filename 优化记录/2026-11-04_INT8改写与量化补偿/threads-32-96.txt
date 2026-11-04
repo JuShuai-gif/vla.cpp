@@ -1,0 +1,4 @@
+{"mode":0,"gpu_samples_ms":[0.109440,0.109040,0.109160,0.108840,0.108480,0.109440,0.109160,0.109240,0.109320,0.109040]}
+{"path":"row-W8A8-WMMA-direct","K":96,"M":64,"N":50,"gpu_p50_ms":0.109160,"checks":3200,"failed":3164,"max_error":4300457}
+device warpSize=128 WMMA threads=32
+tile=32x64 warps=1 prefetch_steps=2

@@ -54,13 +54,13 @@ def _config(path, precision=None):
         raise ValueError("precision_profiles must be an object; baseline is reserved")
     for name, entry in profiles.items():
         if (not isinstance(name, str) or not name.strip() or not isinstance(entry, dict)
-                or set(entry) - {"model", "runtime", "manifest", "status", "quant_route"}
+                or set(entry) - {"model", "runtime", "manifest", "status", "quant_route", "int8_parameters"}
                 or entry.get("status", "experimental") not in ("experimental", "validated")):
             raise ValueError("Invalid precision profile")
         if "runtime" in entry and not isinstance(entry["runtime"], dict):
             raise ValueError("Precision runtime must be an object")
-        if entry.get("quant_route", "auto") not in ("auto", "blas", "load_f16"):
-            raise ValueError("quant_route must be auto, blas or load_f16")
+        if entry.get("quant_route", "auto") not in ("auto", "blas", "load_f16", "native_int8"):
+            raise ValueError("quant_route must be auto, blas, load_f16 or native_int8")
     selected = precision if precision is not None else cfg.get("default_precision", "baseline")
     if not isinstance(selected, str) or selected not in ("baseline", *profiles):
         raise ValueError(f"Unknown precision {selected!r}; choices: {['baseline', *profiles]}")
@@ -74,9 +74,13 @@ def _config(path, precision=None):
         cfg["runtime"] = {**cfg.get("runtime", {}), **entry["runtime"]}
     if "manifest" in entry:
         cfg["quant_manifest"] = entry["manifest"]
-    for key in ("model", "library", "optimization_profile", "quant_manifest"):
+    if "int8_parameters" in entry:
+        cfg["int8_parameters"]=entry["int8_parameters"]
+    if (cfg["quant_route"]=="native_int8") != bool(cfg.get("int8_parameters")):
+        raise ValueError("native_int8 requires its explicit calibration manifest")
+    for key in ("model", "library", "optimization_profile", "quant_manifest", "int8_parameters"):
         value = cfg.get(key)
-        if key in ("optimization_profile", "quant_manifest") and value is None:
+        if key in ("optimization_profile", "quant_manifest", "int8_parameters") and value is None:
             continue
         if not isinstance(value, str) or not value.strip():
             raise ValueError(f"Policy requires {key}")
@@ -98,6 +102,8 @@ def _config(path, precision=None):
         raise ValueError("Validated MUSA profiles require F16 weights/F32 activations/F32 accumulation/FA")
     if cfg["quant_route"] == "load_f16" and runtime["weight_dtype"] != "f16":
         raise ValueError("load_f16 requires F16 resident weights")
+    if cfg["quant_route"]=="native_int8" and (runtime["weight_dtype"]!="f16" or runtime["act_dtype"]!="f32" or runtime["mm_prec"]!="f32"):
+        raise ValueError("native_int8 requires F16 base weights, F32 activations/accumulation")
     cfg["runtime"] = runtime
     cfg.setdefault("seed", 0)
     cfg.setdefault("threads", 4)
@@ -166,6 +172,21 @@ def _inspect(config_path, precision=None):
         if not isinstance(expected, str) or len(expected) != 64:
             raise ValueError("Quantization manifest requires output_sha256")
         cfg["model_sha256"] = expected
+    if cfg.get("int8_parameters"):
+        if packed:raise ValueError("native_int8 requires the original floating source model")
+        path=Path(cfg["int8_parameters"])
+        manifest=json.loads(path.read_text())
+        expected={f"aex.blk.{i}.ffn_gateup" for i in range(field("pi05.n_layers"))}
+        if (manifest.get("schema_version")!=1 or manifest.get("split")!="calibration"
+                or manifest.get("mode")!="expert_gateup" or set(manifest.get("layers",{}))!=expected
+                or len(manifest.get("source_sha256",""))!=64):
+            raise ValueError("Invalid native INT8 calibration manifest")
+        for name,row in manifest["layers"].items():
+            data=path.parent/(name+".i8p")
+            if not data.is_file() or hashlib.sha256(data.read_bytes()).hexdigest()!=row.get("sha256"):
+                raise ValueError("Native INT8 parameter SHA256 mismatch")
+        cfg["model_sha256"]=manifest["source_sha256"]
+        cfg["int8_parameter_dir"]=str(path.parent)
     for name in ("state_q01", "state_q99"):
         if name not in tensors:
             raise ValueError(f"Missing {name}")
@@ -297,7 +318,8 @@ class Policy:
             env = {k: None for k in _inactive | set().union(*(v.keys() for v in profiles.values()))}
             env.update(profiles.get(self.spec.variant, {}))
             env["VLA_LOAD_QUANT_F16"] = "1" if cfg["quant_route"] == "load_f16" else None
-            env["GGML_MUSA_QUANT_ROUTE"] = "blas" if cfg["quant_route"] == "load_f16" else cfg["quant_route"]
+            env["VLA_PI05_INT8_PARAMETERS"]=cfg.get("int8_parameter_dir")
+            env["GGML_MUSA_QUANT_ROUTE"] = {"load_f16":"blas","native_int8":"auto"}.get(cfg["quant_route"],cfg["quant_route"])
             env.update(VLA_LIBRARY=cfg["library"], VLA_DEVICE=cfg["device"], VLA_N_THREADS=str(cfg["threads"]))
             settings = (cfg["library"], cfg["runtime"], env)
             if _process_settings is not None and _process_settings != settings:
@@ -336,7 +358,10 @@ class Policy:
                 "checkpoint": self.spec.checkpoint, "task": self.task, "precision": self.spec.precision,
                 "precision_status": self.spec.precision_status, "weight_types_on_disk": self.spec.weight_types,
                 "floating_weight_dtype": cfg["runtime"]["weight_dtype"],
-                "quantized_gemm_resident_dtype": "f16" if cfg["quant_route"] == "load_f16" else "packed",
+                "quantized_gemm_resident_dtype": {"load_f16":"f16","native_int8":"int8"}.get(cfg["quant_route"],"packed"),
+                "int8_parameters": cfg.get("int8_parameters"),
+                "int8_scope": "expert_gateup" if cfg["quant_route"]=="native_int8" else None,
+                "int8_accumulator_dtype": "int32" if cfg["quant_route"]=="native_int8" else None,
                 "act_dtype": cfg["runtime"]["act_dtype"], "quant_route": cfg["quant_route"], "device_requested": cfg["device"], "seed": cfg["seed"],
                 "num_steps": self.spec.num_steps, "optimization_variant": self.spec.variant if profiles else None,
                 "source_contract_verified": self.spec.contract_verified}.items()}

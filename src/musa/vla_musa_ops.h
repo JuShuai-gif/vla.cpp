@@ -13,6 +13,8 @@ struct ggml_tensor;
 namespace vla {
 #ifdef GGML_USE_MUSA
 bool musa_register_fused_ops();
+bool musa_int8_supports(const ggml_tensor * t);
+bool musa_int8_forward(ggml_tensor * t,void * stream);
 bool musa_small_gemm_supported();
 void * musa_weight_prefetch_create();
 void musa_weight_prefetch_destroy(void * state);

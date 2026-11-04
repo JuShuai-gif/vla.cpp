@@ -1,0 +1,43 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+native-int8-test: backend = MUSA (device 0: M1000)
+R=0 N=1 type=f32 max_error=0
+R=0 N=50 type=f32 max_error=0
+R=0 N=64 type=f32 max_error=0
+R=0 N=65 type=f32 max_error=0
+R=0 N=161 type=f32 max_error=0
+R=0 N=1 type=f16 max_error=0
+R=0 N=50 type=f16 max_error=0
+R=0 N=64 type=f16 max_error=0
+R=0 N=65 type=f16 max_error=0
+R=0 N=161 type=f16 max_error=0
+R=16 N=1 type=f32 max_error=5.7220459e-06
+R=16 N=50 type=f32 max_error=7.62939453e-06
+R=16 N=64 type=f32 max_error=7.62939453e-06
+R=16 N=65 type=f32 max_error=7.62939453e-06
+R=16 N=161 type=f32 max_error=7.62939453e-06
+R=16 N=1 type=f16 max_error=5.7220459e-06
+R=16 N=50 type=f16 max_error=7.62939453e-06
+R=16 N=64 type=f16 max_error=7.62939453e-06
+R=16 N=65 type=f16 max_error=7.62939453e-06
+R=16 N=161 type=f16 max_error=7.62939453e-06

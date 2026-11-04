@@ -221,6 +221,40 @@ WeightLoader::QWeight WeightLoader::quant_i8(const std::string & out_name, const
     return quant(out_name, srcs, 8, 0);
 }
 
+WeightLoader::QWeight WeightLoader::quant_i8_compensated(const std::string & name,
+        const std::vector<std::string> & srcs,const std::string & parameters) {
+    const auto * source=srcs.empty()?nullptr:g_.meta(srcs.front().c_str());
+    if(!source){fail("INT8 source missing");return {};}
+    FILE * fp=std::fopen(parameters.c_str(),"rb");
+    uint32_t header[3]={};
+    if(!fp){fail("INT8 parameter file missing");return {};}
+    bool valid=std::fread(header,sizeof(header),1,fp)==1 && header[0]==0x31503849 &&
+        header[1]==source->ne[0] && header[1]%32==0 && header[2]<header[1];
+    std::vector<float> inverse;std::vector<int32_t> indices;
+    if(valid){
+        inverse.resize(header[1]);indices.resize(header[2]);
+        valid=std::fread(inverse.data(),4,inverse.size(),fp)==inverse.size() &&
+              std::fread(indices.data(),4,indices.size(),fp)==indices.size() && std::fgetc(fp)==EOF;
+    }
+    std::fclose(fp);
+    std::vector<bool> excluded(valid?header[1]:0,false);
+    if(valid)for(auto i:indices){if(i<0 || i>=int(header[1]) || excluded[i]){valid=false;break;}excluded[i]=true;}
+    if(valid)for(size_t i=0;i<inverse.size();++i)
+        if(!std::isfinite(inverse[i]) || (excluded[i]?inverse[i]!=0:(inverse[i]<1e-6f || inverse[i]>1e6f))){valid=false;break;}
+    if(!valid){fail("invalid INT8 parameters");return {};}
+    auto q=quant_i8(name,srcs);
+    if(!q || q.w->ne[1]%128){fail("unsupported INT8 matrix shape");return {};}
+    q.inverse=ggml_new_tensor_1d(ctx_,GGML_TYPE_F32,header[1]);
+    ggml_set_name(q.inverse,(name+".inverse").c_str());
+    if(!indices.empty()){
+        q.extra=ggml_new_tensor_2d(ctx_,GGML_TYPE_F16,indices.size(),q.w->ne[1]);
+        q.indices=ggml_new_tensor_1d(ctx_,GGML_TYPE_I32,indices.size());
+        ggml_set_name(q.extra,(name+".extra").c_str());ggml_set_name(q.indices,(name+".indices").c_str());
+    }
+    auto & item=quant_.back();item.q=q;item.inverse=std::move(inverse);item.indices=std::move(indices);
+    return q;
+}
+
 WeightLoader::QWeight WeightLoader::quant_i4(const std::string & out_name, const std::vector<std::string> & srcs,
                                              int64_t group) {
     return quant(out_name, srcs, 4, group);
@@ -293,7 +327,7 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
         const bool fused = std::any_of(fused_.begin(), fused_.end(),
                                        [&](const Fused & f) { return f.dst == t; }) ||
                            std::any_of(quant_.begin(), quant_.end(),
-                                       [&](const Quant & f) { return f.q.w == t || f.q.s == t; });
+                                       [&](const Quant & f) { return f.q.w == t || f.q.s == t || f.q.inverse==t || f.q.extra==t || f.q.indices==t; });
         if (fused)
             continue;
 
@@ -350,6 +384,43 @@ bool WeightLoader::upload(ggml_backend_t backend, ggml_backend_buffer_t * out_bu
 
     for (const Quant & f : quant_) {
         const int64_t K = f.K;
+        if(f.q.inverse){
+            const int64_t M=f.q.w->ne[1],R=f.indices.size();
+            std::vector<int8_t> packed(M*K);std::vector<float> scales(M);
+            std::vector<ggml_fp16_t> extra(M*R);
+            int64_t offset=0;
+            for(const auto & name:f.srcs){
+                auto values=g_.read_convert(name.c_str(),GGML_TYPE_F16);
+                const auto * w=(const ggml_fp16_t*)values.data();
+                const int64_t rows=values.size()/(K*2);
+                if(values.empty() || values.size()%(K*2) || rows>M-offset){fail("INT8 source read failed");return false;}
+                for(int64_t i=0;i<rows;++i){
+                    const int64_t m=offset+i;float maximum=0;
+                    std::vector<float> scaled(K);
+                    for(int64_t k=0;k<K;++k){
+                        scaled[k]=f.inverse[k]>0?ggml_fp16_to_fp32(w[i*K+k])/f.inverse[k]:0;
+                        maximum=std::max(maximum,std::fabs(scaled[k]));
+                    }
+                    scales[m]=maximum>0?maximum/127.f:1.f;
+                    for(int64_t k=0;k<K;++k){
+                        const size_t dest=((m/32)*(K/32)+k/32)*1024+(m%32/16)*512+
+                            ((m%16)*4+(k%16)/4+(k%32/16)*64)*4+k%4;
+                        packed[dest]=(int8_t)std::lrint(std::min(127.f,std::max(-127.f,scaled[k]/scales[m])));
+                    }
+                    for(int64_t j=0;j<R;++j)extra[m*R+j]=w[i*K+f.indices[j]];
+                }
+                offset+=rows;
+            }
+            if(offset!=M){fail("INT8 row count mismatch");return false;}
+            ggml_backend_tensor_set(f.q.w,packed.data(),0,packed.size());
+            ggml_backend_tensor_set(f.q.s,scales.data(),0,scales.size()*4);
+            ggml_backend_tensor_set(f.q.inverse,f.inverse.data(),0,f.inverse.size()*4);
+            if(R){
+                ggml_backend_tensor_set(f.q.extra,extra.data(),0,extra.size()*2);
+                ggml_backend_tensor_set(f.q.indices,f.indices.data(),0,f.indices.size()*4);
+            }
+            continue;
+        }
         const int64_t g = f.q.bits == 4 ? f.q.group : K;
         const float   qmax = f.q.bits == 4 ? 7.0f : 127.0f;
         std::vector<int8_t> codes;   // INT8: one per byte; INT4: packed below

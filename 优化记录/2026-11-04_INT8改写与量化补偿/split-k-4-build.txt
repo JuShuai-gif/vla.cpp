@@ -1,0 +1,142 @@
+/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/split-k-prototype.cpp:89:16: warning: constexpr if is a C++17 extension [-Wc++17-extensions]
+            if constexpr(SPLIT_K>1)((int*)y)[(size_t)blockIdx.z*M*N+(size_t)n*M+m]=cf[i][j].x[v];
+               ^
+/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/split-k-prototype.cpp:148:14: warning: constexpr if is a C++17 extension [-Wc++17-extensions]
+          if constexpr(SPLIT_K>1)reduce_split<<<((size_t)M*N+255)/256,256>>>(gi,gsw,gsx,gy,M,N);
+             ^
+[mtgpu as info] Compiling entry function '_Z8quantizePKfPaPfiiib' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 75, Attr 2, Shared 69, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 532 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8epiloguePKiPKfS2_Pfii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 20, Attr 2, Shared 30, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z10cast_inputPKfP6__halfi' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 6, Attr 2, Shared 23, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z12reduce_splitPKiPKfS2_Pfii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 23, Attr 2, Shared 30, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi32ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 37, Attr 2, Shared 45, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi32ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 37, Attr 2, Shared 45, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi32ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 37, Attr 2, Shared 45, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi64ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 51, Attr 2, Shared 46, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi64ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 51, Attr 2, Shared 46, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi32ELi64ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 51, Attr 2, Shared 46, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi32ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 56, Attr 2, Shared 51, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Sha2 warnings generated when compiling for mp_22.
+red memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi32ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 56, Attr 2, Shared 51, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi32ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 56, Attr 2, Shared 51, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi64ELi1EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 75, Attr 2, Shared 50, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi64ELi2EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 75, Attr 2, Shared 50, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+[mtgpu as info] Compiling entry function '_Z8row_wmmaILi64ELi64ELi4EEvPKaS1_PKfS3_Pfiii' for 'mp_22' 
+[mtgpu as info] Register usage(DWord = 4 Bytes): Temp 75, Attr 2, Shared 50, Coef 0, Slot 0, Internal 2
+[mtgpu as info] Shared memory: 20 Bytes
+[mtgpu as info] Local memory: 0 Bytes
+[mtgpu as info] Stack frame: 0 Bytes
+[mtgpu as info] Spill load: 0 Bytes
+[mtgpu as info] Spill store: 0 Bytes
+
+/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/split-k-prototype.cpp:89:16: warning: constexpr if is a C++17 extension [-Wc++17-extensions]
+            if constexpr(SPLIT_K>1)((int*)y)[(size_t)blockIdx.z*M*N+(size_t)n*M+m]=cf[i][j].x[v];
+               ^
+/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/split-k-prototype.cpp:148:14: warning: constexpr if is a C++17 extension [-Wc++17-extensions]
+          if constexpr(SPLIT_K>1)reduce_split<<<((size_t)M*N+255)/256,256>>>(gi,gsw,gsx,gy,M,N);
+             ^
+2 warnings generated when compiling for host.
