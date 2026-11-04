@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "architecture": "pi05",
+  "recipe": "expert",
+  "default_type": "Q8_0",
+  "quantized_tensors": 126,
+  "payload_bytes_before": 7773969696,
+  "payload_bytes_after": 7482006816,
+  "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "output": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-expert-q8.gguf",
+  "status": "verified",
+  "source_sha256": "ae7a7ad36082a83dc743cdaa1d1f21813af7b4e20bf340d82bd90c7f10537e51",
+  "output_sha256": "abb3a0504e1e8db67635e97dfd3407ad6970745f16317b770a00c1c042b6b95b"
+}

@@ -37,6 +37,40 @@ def source(path, dtype=QT.F32, nonfinite=False):
 
 
 class QuantizeTest(unittest.TestCase):
+    def test_calibrated_format_roundtrip_and_provenance(self):
+        from quant_calibration import weighted_pack
+        from quantize_gguf import file_digest
+        rng=np.random.default_rng(91)
+        x=rng.normal(size=(23,96)).astype(np.float32); x[0]=0
+        h=np.exp(rng.normal(size=96)*2)
+        for kind in ("Q4_0","Q8_0"):
+            packed, stats=weighted_pack(x,kind,h)
+            qt=getattr(QT,kind)
+            before=gguf.quants.dequantize(gguf.quants.quantize(x,qt),qt)
+            after=gguf.quants.dequantize(packed,qt)
+            self.assertTrue(np.isfinite(after).all())
+            self.assertLessEqual(float(np.sum((x-after)**2*h)),float(np.sum((x-before)**2*h)))
+            self.assertGreater(stats["changed_blocks"],0)
+        for bad in (np.zeros(96),np.ones(32),np.full(96,np.nan),-h):
+            with self.assertRaises(ValueError):weighted_pack(x,"Q4_0",bad)
+        with tempfile.TemporaryDirectory() as root:
+            root=Path(root);src=root/"src.gguf";dst=root/"q4.gguf";importance=root/"importance.json"
+            source(src)
+            report=dict(schema_version=1,split="calibration",source_sha256=file_digest(src),observations=[{"episode":1}],
+                        weights={f"vlm.blk.0.ffn_{op}.weight":{"rows":10,"sum_squares":np.linspace(1,40,64).tolist()} for op in ("gate","up","down")})
+            importance.write_text(json.dumps(report))
+            plan=convert(src,dst,"prefix-mlp","Q4_0",importance=importance)
+            self.assertEqual(plan["calibration"]["calibrated_tensors"],3)
+            self.assertEqual(plan["calibration"]["no_observed_input_rtn"],[])
+            self.assertEqual(plan["calibration"]["sha256"],file_digest(importance))
+            for tensor in GGUFReader(str(dst)).tensors:
+                if tensor.tensor_type==QT.Q4_0:self.assertTrue(np.isfinite(gguf.quants.dequantize(tensor.data,QT.Q4_0)).all())
+            report["split"]="heldout";importance.write_text(json.dumps(report))
+            with self.assertRaisesRegex(ValueError,"calibration-split"):convert(src,root/"bad.gguf",importance=importance)
+            report["split"]="calibration";report["source_sha256"]="0"*64;importance.write_text(json.dumps(report))
+            with self.assertRaisesRegex(ValueError,"source SHA256"):convert(src,root/"bad.gguf",importance=importance)
+            self.assertFalse((root/"bad.gguf").exists())
+
     def test_roundtrip_and_error_bound_all_source_dtypes(self):
         for dtype in (QT.F32, QT.F16, QT.BF16):
             with self.subTest(dtype=dtype), tempfile.TemporaryDirectory() as root:

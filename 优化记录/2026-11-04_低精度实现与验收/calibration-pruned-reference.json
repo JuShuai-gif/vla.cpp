@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "precision": "baseline",
+  "resolved_parameters": {
+    "checkpoint": {
+      "value": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+      "source": "policy config / GGUF"
+    },
+    "task": {
+      "value": "",
+      "source": "policy config / GGUF"
+    },
+    "precision": {
+      "value": "baseline",
+      "source": "policy config / GGUF"
+    },
+    "precision_status": {
+      "value": "baseline",
+      "source": "policy config / GGUF"
+    },
+    "weight_types_on_disk": {
+      "value": [
+        "BF16",
+        "F32"
+      ],
+      "source": "policy config / GGUF"
+    },
+    "floating_weight_dtype": {
+      "value": "f16",
+      "source": "policy config / GGUF"
+    },
+    "act_dtype": {
+      "value": "f32",
+      "source": "policy config / GGUF"
+    },
+    "device_requested": {
+      "value": "0",
+      "source": "policy config / GGUF"
+    },
+    "seed": {
+      "value": 0,
+      "source": "policy config / GGUF"
+    },
+    "num_steps": {
+      "value": 3,
+      "source": "policy config / GGUF"
+    },
+    "optimization_variant": {
+      "value": "pruned",
+      "source": "policy config / GGUF"
+    },
+    "source_contract_verified": {
+      "value": false,
+      "source": "policy config / GGUF"
+    }
+  },
+  "samples": 3,
+  "split": "calibration",
+  "offset": 0,
+  "warmup": 3,
+  "warmup_language_lengths": [
+    44,
+    45,
+    46
+  ],
+  "load_seconds": 15.116217319999123,
+  "input_sha256": [
+    "2bf5bcd424cdc2c6975527d61394756f4ca3728d07412a4dd3fdf267ba417c7d",
+    "f06bf690217e12ecd5697555d537511fd3a3642c28ad5cb9c88d582f4aa3d335",
+    "a91ed2af189cccfcca9e53185365088a1ad90e7d432b6ae173c5f35eeeedd7e0"
+  ],
+  "noise_sha256": [
+    "3a374c0d47c23b1a0010ad059a4612425bcb6bb523c8804aa5734a9140f1995d",
+    "3220a60129f16cb70faea5ea512c32516c56c344acd46b83985d28e9ba142dd0",
+    "26b66ddb542e5aab284701bfec4017199b3953d3a0193bc9bb4e6748e56492a6"
+  ],
+  "task_sha256": [
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184"
+  ],
+  "episodes": [
+    9,
+    9,
+    9
+  ],
+  "action_half_range": [
+    35.917503356933594,
+    70.14749908447266,
+    59.34035110473633,
+    21.1299991607666,
+    29.589000701904297,
+    43.61083984375,
+    50.0
+  ],
+  "units": {
+    "joints": "degrees",
+    "gripper": "mm",
+    "confirmed": false
+  },
+  "predict_ms": {
+    "p50": 472.4141110054916,
+    "p95": 477.89692449150607,
+    "p99": 478.3842856902629,
+    "min": 472.39514499960933,
+    "max": 478.5061259899521,
+    "mean": 474.43846066501766
+  },
+  "native_ms": {
+    "p50": 467.8890979994321,
+    "p95": 473.5731640976155,
+    "p99": 474.07841441745404,
+    "min": 467.81602200644556,
+    "max": 474.2047269974137,
+    "mean": 469.9699490010971
+  },
+  "preprocess_ms": {
+    "p50": 4.396842996357009,
+    "p95": 4.4757208044757135,
+    "p99": 4.482732165197376,
+    "min": 4.193915010546334,
+    "max": 4.484485005377792,
+    "mean": 4.358414337427045
+  },
+  "raw_predict_ms": [
+    472.39514499960933,
+    472.4141110054916,
+    478.5061259899521
+  ],
+  "raw_native_ms": [
+    467.8890979994321,
+    467.81602200644556,
+    474.2047269974137
+  ],
+  "raw_preprocess_ms": [
+    4.396842996357009,
+    4.484485005377792,
+    4.193915010546334
+  ],
+  "environment": {
+    "VLA_PI05_LAST_KV_ONLY": "1",
+    "VLA_PI05_RES_ADARMS": "1",
+    "VLA_PI05_PRUNE_MEAN": "1",
+    "VLA_PI05_ROPE_TABLE": "1",
+    "VLA_MUSA_GEMMA_FLAT_AV": "denoise",
+    "VLA_PI05_VISION_DIRECT": "1",
+    "VLA_PI05_VISION_QKV": "1",
+    "VLA_MUSA_GEMMA_FLAT_QK": "denoise",
+    "VLA_PI05_VISION_NO_OUT_COPY": "1",
+    "VLA_MUSA_VISION_EPILOGUE": "all",
+    "VLA_PI05_CROSS_ADARMS": "1",
+    "VLA_MUSA_GEMMA_ATTN": "fused-denoise",
+    "VLA_MUSA_VISION_SDPA": "1",
+    "VLA_PI05_PIN_MAIN_INPUT": "1",
+    "VLA_PI05_F32_PATCH": "1",
+    "VLA_MUSA_SMALL_GEMM": "auto",
+    "VLA_PI05_GEGLU_PACK": "1",
+    "VLA_PI05_NORM_PACK": "1",
+    "VLA_PI05_ACTION_EDGES": "1",
+    "VLA_LOAD_THREADS": "4",
+    "VLA_MUSA_ATTN_DIRECT_OUT": "1",
+    "VLA_PI05_PRUNED_BATCH": "1",
+    "VLA_MUSA_GEGLU_F16": "1",
+    "VLA_PI05_KV_REUSE": "1",
+    "VLA_PI05_U8_PATCH": "1",
+    "VLA_LOAD_DIRECT_FUSED": "1",
+    "VLA_PI05_ASYNC_VISION": "1",
+    "VLA_MUSA_VISION_PACK": "1",
+    "VLA_PI05_KV_DIRECT": "1",
+    "VLA_MUSA_SMALL_PIPE": "shape",
+    "VLA_PI05_HOST_INPUT": "pinned",
+    "VLA_LIBRARY": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
+    "VLA_DEVICE": "0",
+    "VLA_N_THREADS": "4"
+  },
+  "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+  "cpu": "aarch64",
+  "code_commit": "f58ae5290b9b94c260ade15e3c9cc0061328c3d7",
+  "dirty_diff_sha256": "24235a17ab8fd4fa5484b43021d6ec83bed2493d793933875b49913f01b299e4",
+  "scope": "resident public API, no camera acquisition, robot I/O or closed-loop evidence"
+}

@@ -1,0 +1,13 @@
+{
+  "samples": 3,
+  "bit_exact": true,
+  "max_error": 0.0,
+  "captured_weights": 338,
+  "unsupported": 0,
+  "modules": {
+    "vlm": 122,
+    "vit": 90,
+    "aex": 126
+  },
+  "denoise_records": 648
+}

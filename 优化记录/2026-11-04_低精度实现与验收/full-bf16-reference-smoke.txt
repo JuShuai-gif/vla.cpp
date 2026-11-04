@@ -1,0 +1,6 @@
+Strict checkpoint loaded; initialized buffers ['paligemma_with_expert.paligemma.model.vision_tower.vision_model.embeddings.position_ids', 'paligemma_with_expert.paligemma.model.language_model.rotary_emb.inv_freq', 'paligemma_with_expert.paligemma.model.language_model.rotary_emb.original_inv_freq', 'paligemma_with_expert.gemma_expert.model.rotary_emb.inv_freq', 'paligemma_with_expert.gemma_expert.model.rotary_emb.original_inv_freq']
+/home/skysi/.conda/envs/lerobot_musa312/lib/python3.12/site-packages/transformers/integrations/sdpa_attention.py:92: UserWarning: Expected query, key and value to all be of dtype: {Half, BFloat16}. Got Query dtype: float, Key dtype: float, and Value dtype: float instead. (Triggered internally at /home/torch_musa/build/generated_cuda_compatible/include/ATen/native/transformers/sdp_utils_cpp.h:91.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+1/3 BF16 actions 27760.6 ms
+2/3 BF16 actions 1506.5 ms
+3/3 BF16 actions 1510.7 ms

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "architecture": "pi05",
+  "recipe": "prefix-mixed",
+  "default_type": "Q8_0",
+  "quantized_tensors": 126,
+  "payload_bytes_before": 7773969696,
+  "payload_bytes_after": 5312044320,
+  "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "output": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-q8.gguf",
+  "status": "verified",
+  "source_sha256": "ae7a7ad36082a83dc743cdaa1d1f21813af7b4e20bf340d82bd90c7f10537e51",
+  "output_sha256": "11235293b5db89baee5443ea30c45f2ee242608bd7d1dd010ea5ba6a592273bb"
+}

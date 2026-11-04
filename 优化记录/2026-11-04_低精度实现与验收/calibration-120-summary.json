@@ -1,0 +1,24 @@
+{
+  "pruned": {
+    "importance": "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/pruned-120/importance.json",
+    "sha256": "9fe80b7efa38b20bb21c1a65c85d497efe4f5b0ab91f2981fdd88f8866ac585a",
+    "observations": 120,
+    "weights": 338,
+    "source_sha256": "a386cf4364d1af982bc17505689dd169aca3fb13718fce7ba30001b2d1221504",
+    "corpus_sha256": "4721c607dc0b08e764d335e3ecb25dba194b13e80b71b5ab867995c6ec31a970",
+    "split": "calibration",
+    "unsupported": [],
+    "scope": "per-channel statistics only; no performance or deployment-quality verdict"
+  },
+  "full": {
+    "importance": "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/full-120/importance.json",
+    "sha256": "33598b790781cafa50c81ee37907b4314fb057707d73801625e3e99d4719c7c8",
+    "observations": 120,
+    "weights": 410,
+    "source_sha256": "ae7a7ad36082a83dc743cdaa1d1f21813af7b4e20bf340d82bd90c7f10537e51",
+    "corpus_sha256": "4721c607dc0b08e764d335e3ecb25dba194b13e80b71b5ab867995c6ec31a970",
+    "split": "calibration",
+    "unsupported": [],
+    "scope": "per-channel statistics only; no performance or deployment-quality verdict"
+  }
+}

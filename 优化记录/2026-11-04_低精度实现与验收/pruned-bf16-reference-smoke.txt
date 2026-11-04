@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp-quant/scripts/reference_pi05_bf16.py", line 144, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/home/skysi/code/vla.cpp-quant/scripts/reference_pi05_bf16.py", line 92, in main
+    model.eval().to(a.device)
+  File "/home/skysi/.conda/envs/lerobot_musa312/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1371, in to
+    return self._apply(convert)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/.conda/envs/lerobot_musa312/lib/python3.12/site-packages/torch/nn/modules/module.py", line 930, in _apply
+    module._apply(fn)
+  File "/home/skysi/.conda/envs/lerobot_musa312/lib/python3.12/site-packages/torch/nn/modules/module.py", line 930, in _apply
+    module._apply(fn)
+  File "/home/skysi/.conda/envs/lerobot_musa312/lib/python3.12/site-packages/torch/nn/modules/module.py", line 930, in _apply
+    module._apply(fn)
+  [Previous line repeated 3 more times]
+  File "/home/skysi/.conda/envs/lerobot_musa312/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1022, in _apply
+    self._buffers[key] = fn(buf)
+                         ^^^^^^^
+  File "/home/skysi/.conda/envs/lerobot_musa312/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1364, in convert
+    raise NotImplementedError(
+NotImplementedError: Cannot copy out of meta tensor; no data! Please use torch.nn.Module.to_empty() instead of torch.nn.Module.to() when moving module from meta to a different device.

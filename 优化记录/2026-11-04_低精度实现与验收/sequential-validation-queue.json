@@ -1,0 +1,71 @@
+[
+  {
+    "name": "mudnn-int8-contract-probe",
+    "returncode": 127,
+    "elapsed_seconds": 0.003792285919189453,
+    "command": [
+      "validation/quant/mudnn-int8-contract-probe"
+    ]
+  },
+  {
+    "name": "native-ctest-final",
+    "returncode": 0,
+    "elapsed_seconds": 108.99513006210327,
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-musa-quant",
+      "--output-on-failure",
+      "-j1"
+    ]
+  },
+  {
+    "name": "runtime-pruned-q8-blas-replay",
+    "returncode": 0,
+    "elapsed_seconds": 38.9744336605072,
+    "command": [
+      "bash",
+      "-c",
+      "cd /home/skysi/code/robot_runtime-quant\nsource scripts/env.sh --config configs/vla_piper_quant.json\npython -m robot_runtime.replay --config configs/vla_piper_quant.json --profile pruned --precision q8-prefix-mlp-blas --observation /home/skysi/code/vla.cpp-quant/validation/quant/data/real-v1/ep00005-f00019.npz --warmup 3 --samples 3 --output '/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/runtime-pruned-q8-blas-replay.json'\n"
+    ]
+  },
+  {
+    "name": "runtime-full-q8-blas-replay",
+    "returncode": 0,
+    "elapsed_seconds": 44.532604694366455,
+    "command": [
+      "bash",
+      "-c",
+      "cd /home/skysi/code/robot_runtime-quant\nsource scripts/env.sh --config configs/vla_piper_quant.json\npython -m robot_runtime.replay --config configs/vla_piper_quant.json --profile full --precision q8-prefix-mlp-blas --observation /home/skysi/code/vla.cpp-quant/validation/quant/data/real-v1/ep00005-f00019.npz --warmup 3 --samples 3 --output '/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/runtime-full-q8-blas-replay.json'\n"
+    ]
+  },
+  {
+    "name": "pruned-bf16-blas-30-queue",
+    "returncode": 0,
+    "elapsed_seconds": 600.544349193573,
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/run_precision_suite.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-policy.json",
+      "--corpus",
+      "validation/quant/data/real-v1/manifest.json",
+      "--accuracy-reference",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-reference-30.json",
+      "--samples",
+      "30",
+      "--precisions",
+      "fp16-activations",
+      "q8-prefix-mlp-blas",
+      "q8-prefix-blas",
+      "q8-vision-blas",
+      "q4-mixed-blas",
+      "q8-expert-mlp-blas",
+      "q8-expert-blas",
+      "q5-mixed-blas",
+      "q4-calibrated-blas",
+      "--output-dir",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30"
+    ]
+  }
+]

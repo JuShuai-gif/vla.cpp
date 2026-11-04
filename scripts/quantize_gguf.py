@@ -178,7 +178,7 @@ def verify(reader, path, plan):
             raise ValueError(f"readback tensor mismatch: {row['name']}")
 
 
-def convert(src, dst, recipe="auto", qtype="Q8_0", overrides=None, vision=False, dry_run=False):
+def convert(src, dst, recipe="auto", qtype="Q8_0", overrides=None, vision=False, dry_run=False, importance=None):
     src, dst = Path(src).resolve(), Path(dst).resolve()
     manifest = Path(str(dst) + ".quant.json")
     if src == dst or dst.exists() or manifest.exists():
@@ -186,6 +186,22 @@ def convert(src, dst, recipe="auto", qtype="Q8_0", overrides=None, vision=False,
     reader = GGUFReader(str(src))
     plan = make_plan(reader, recipe, qtype, overrides, vision)
     plan.update(source=str(src), output=str(dst), status="planned" if dry_run else "converting")
+    calibration = None
+    if importance is not None:
+        importance = Path(importance).resolve()
+        calibration_bytes = importance.read_bytes()
+        calibration = json.loads(calibration_bytes, object_pairs_hook=unique_keys)
+        if (calibration.get("schema_version") != 1 or calibration.get("split") != "calibration"
+                or not calibration.get("observations") or not isinstance(calibration.get("weights"), dict)):
+            raise ValueError("Expected real calibration-split input statistics")
+        selected_types = {row["target_type"] for row in plan["tensors"] if row["quantize"]}
+        if selected_types - {"Q4_0", "Q8_0"}:
+            raise ValueError("Calibrated scale search supports Q4_0/Q8_0 only")
+        plan["calibration"] = dict(path=str(importance), sha256=hashlib.sha256(calibration_bytes).hexdigest(),
+                                   source_sha256=calibration.get("source_sha256"), corpus_sha256=calibration.get("corpus_sha256"),
+                                   method="activation-weighted-block-scale-search", calibrated_tensors=0,
+                                   no_observed_input_rtn=[])
+
     if dry_run:
         return plan
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -197,6 +213,9 @@ def convert(src, dst, recipe="auto", qtype="Q8_0", overrides=None, vision=False,
     published = False
     try:
         plan["source_sha256"] = file_digest(src)
+        if calibration and calibration.get("source_sha256") != plan["source_sha256"]:
+            raise ValueError("Calibration source SHA256 differs from source model")
+
         writer = gguf.GGUFWriter(str(tmp), plan["architecture"], use_temp_file=True)
         copy_kv(reader, writer)
         for t, row in zip(reader.tensors, plan["tensors"]):
@@ -205,13 +224,29 @@ def convert(src, dst, recipe="auto", qtype="Q8_0", overrides=None, vision=False,
                 values = to_f32(t)
                 if not np.isfinite(values).all():
                     raise ValueError(f"nonfinite source: {t.name}")
-                packed = gguf.quants.quantize(values, QT[row["target_type"]])
+                stat = calibration["weights"].get(t.name) if calibration else None
+                if stat is not None:
+                    from quant_calibration import weighted_pack
+                    if type(stat.get("rows")) is not int or stat["rows"] <= 0:
+                        raise ValueError(f"Invalid calibration row count: {t.name}")
+                    importance_values = np.asarray(stat["sum_squares"], np.float64) / stat["rows"]
+                    packed, row["calibration"] = weighted_pack(values, row["target_type"], importance_values)
+                    plan["calibration"]["calibrated_tensors"] += 1
+                else:
+                    packed = gguf.quants.quantize(values, QT[row["target_type"]])
+                    if calibration:
+                        row["calibration"] = "no_observed_input_rtn"
+                        plan["calibration"]["no_observed_input_rtn"].append(t.name)
+                if not np.isfinite(gguf.quants.dequantize(packed, QT[row["target_type"]])).all():
+                    raise ValueError(f"Nonfinite packed values: {t.name}")
                 row["output_sha256"] = digest(packed)
                 writer.add_tensor(t.name, packed, raw_dtype=QT[row["target_type"]])
                 del values, packed
             else:
                 row["output_sha256"] = row["source_sha256"]
                 copy_tensor(writer, t)
+        if calibration and not plan["calibration"]["calibrated_tensors"]:
+            raise ValueError("Calibration contains no selected tensor inputs")
         writer.write_header_to_file()
         writer.write_kv_data_to_file()
         writer.write_tensors_to_file()
@@ -247,10 +282,11 @@ def main():
     ap.add_argument("--map", type=Path, help="JSON object: exact tensor name -> type or KEEP")
     ap.add_argument("--vision", action="store_true", help="legacy alias for auto + vision")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--importance", type=Path, help="calibrate_pi05.py importance.json, calibration split only")
     args = ap.parse_args()
     overrides = json.loads(args.map.read_text(), object_pairs_hook=unique_keys) if args.map else None
     try:
-        plan = convert(args.src, args.dst, args.recipe, args.type, overrides, args.vision, args.dry_run)
+        plan = convert(args.src, args.dst, args.recipe, args.type, overrides, args.vision, args.dry_run, args.importance)
     except ValueError as exc:
         ap.error(str(exc))
     if args.dry_run:

@@ -1,0 +1,33 @@
+Strict checkpoint loaded; initialized buffers ['paligemma_with_expert.paligemma.model.vision_tower.vision_model.embeddings.position_ids', 'paligemma_with_expert.paligemma.model.language_model.rotary_emb.inv_freq', 'paligemma_with_expert.paligemma.model.language_model.rotary_emb.original_inv_freq', 'paligemma_with_expert.gemma_expert.model.rotary_emb.inv_freq', 'paligemma_with_expert.gemma_expert.model.rotary_emb.original_inv_freq']
+/home/skysi/.conda/envs/lerobot_musa312/lib/python3.12/site-packages/transformers/integrations/sdpa_attention.py:92: UserWarning: Expected query, key and value to all be of dtype: {Half, BFloat16}. Got Query dtype: float, Key dtype: float, and Value dtype: float instead. (Triggered internally at /home/torch_musa/build/generated_cuda_compatible/include/ATen/native/transformers/sdp_utils_cpp.h:91.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+1/30 BF16 actions 27113.8 ms
+2/30 BF16 actions 1493.9 ms
+3/30 BF16 actions 1501.7 ms
+4/30 BF16 actions 1596.4 ms
+5/30 BF16 actions 1591.5 ms
+6/30 BF16 actions 1573.6 ms
+7/30 BF16 actions 1501.3 ms
+8/30 BF16 actions 1495.6 ms
+9/30 BF16 actions 1527.3 ms
+10/30 BF16 actions 1494.0 ms
+11/30 BF16 actions 1553.8 ms
+12/30 BF16 actions 1556.8 ms
+13/30 BF16 actions 1475.2 ms
+14/30 BF16 actions 1478.0 ms
+15/30 BF16 actions 1479.6 ms
+16/30 BF16 actions 1472.7 ms
+17/30 BF16 actions 1502.0 ms
+18/30 BF16 actions 1478.9 ms
+19/30 BF16 actions 1485.7 ms
+20/30 BF16 actions 1475.1 ms
+21/30 BF16 actions 1481.7 ms
+22/30 BF16 actions 1479.3 ms
+23/30 BF16 actions 1481.0 ms
+24/30 BF16 actions 1485.7 ms
+25/30 BF16 actions 1488.6 ms
+26/30 BF16 actions 1483.3 ms
+27/30 BF16 actions 1503.9 ms
+28/30 BF16 actions 1492.6 ms
+29/30 BF16 actions 1492.2 ms
+30/30 BF16 actions 1486.0 ms

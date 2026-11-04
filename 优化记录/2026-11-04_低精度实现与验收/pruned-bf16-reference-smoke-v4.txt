@@ -1,0 +1,4 @@
+Strict checkpoint loaded; initialized buffers ['paligemma_with_expert.paligemma.model.vision_tower.vision_model.embeddings.position_ids', 'paligemma_with_expert.paligemma.model.language_model.rotary_emb.inv_freq', 'paligemma_with_expert.paligemma.model.language_model.rotary_emb.original_inv_freq', 'paligemma_with_expert.gemma_expert.model.rotary_emb.inv_freq', 'paligemma_with_expert.gemma_expert.model.rotary_emb.original_inv_freq']
+1/3 BF16 actions 27637.1 ms
+2/3 BF16 actions 724.5 ms
+3/3 BF16 actions 723.0 ms

@@ -1,0 +1,1 @@
+{"path":"row-W8A8-WMMA64-direct","K":2048,"M":32768,"N":320,"gpu_p50_ms":15.827480,"checks":4096,"failed":6,"max_error":0.00469214825}

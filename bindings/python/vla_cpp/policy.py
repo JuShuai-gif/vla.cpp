@@ -35,6 +35,7 @@ class PolicySpec:
     precision: str = "baseline"
     precision_status: str = "baseline"
     weight_types: tuple = ()
+    quant_route: str = "auto"
 
 
 def _config(path, precision=None):
@@ -53,16 +54,19 @@ def _config(path, precision=None):
         raise ValueError("precision_profiles must be an object; baseline is reserved")
     for name, entry in profiles.items():
         if (not isinstance(name, str) or not name.strip() or not isinstance(entry, dict)
-                or set(entry) - {"model", "runtime", "manifest", "status"}
+                or set(entry) - {"model", "runtime", "manifest", "status", "quant_route"}
                 or entry.get("status", "experimental") not in ("experimental", "validated")):
             raise ValueError("Invalid precision profile")
         if "runtime" in entry and not isinstance(entry["runtime"], dict):
             raise ValueError("Precision runtime must be an object")
+        if entry.get("quant_route", "auto") not in ("auto", "blas"):
+            raise ValueError("quant_route must be auto or blas")
     selected = precision if precision is not None else cfg.get("default_precision", "baseline")
     if not isinstance(selected, str) or selected not in ("baseline", *profiles):
         raise ValueError(f"Unknown precision {selected!r}; choices: {['baseline', *profiles]}")
     entry = profiles.get(selected, {})
     cfg["precision"] = selected
+    cfg["quant_route"] = entry.get("quant_route", "auto")
     cfg["precision_status"] = entry.get("status", "experimental") if selected != "baseline" else "baseline"
     if "model" in entry:
         cfg["model"] = entry["model"]
@@ -177,7 +181,8 @@ def _inspect(config_path, precision=None):
     spec = PolicySpec(cfg["model"], tuple(cameras), state_dim, action_dim, horizon,
                       tuple(names), contract["action_space"], contract["joint_unit"],
                       contract["gripper_unit"], contract["verified"], size, steps, variant,
-                      precision=cfg["precision"], precision_status=cfg["precision_status"], weight_types=weight_types)
+                      precision=cfg["precision"], precision_status=cfg["precision_status"], weight_types=weight_types,
+                      quant_route=cfg["quant_route"])
     if cfg.get("optimization_profile"):
         profiles = json.loads(Path(cfg["optimization_profile"]).read_text())
         if not isinstance(profiles, dict) or variant not in profiles:
@@ -257,7 +262,7 @@ def prepare_prompt(reader, text, state):
 # One resident policy per process prevents cross-model profile contamination.
 _session_lock = threading.Lock()
 _process_settings = None
-_inactive = {"VLA_PI05_K_ROPE_DIRECT", "VLA_PI05_PREFIX_GAMMA_FOLD", "VLA_PI05_PREFETCH_KIB",
+_inactive = {"GGML_MUSA_GRAPH_RECREATE", "GGML_CUDA_CUBLAS_COMPUTE_TYPE", "VLA_PI05_K_ROPE_DIRECT", "VLA_PI05_PREFIX_GAMMA_FOLD", "VLA_PI05_PREFETCH_KIB",
              "VLA_MUSA_GEGLU_FAST", "VLA_PI05_F16_PART", "VLA_MUSA_FLATTEN_GEMM",
              "GGML_CUDA_DISABLE_GRAPHS", "VLA_PI05_NO_SEPARATE_GRAPHS",
              "VLA_PI05_NO_VISION_BATCH", "VLA_PI05_NO_PROJ_FUSE", "VLA_PI05_NO_FUSE"}
@@ -289,6 +294,7 @@ class Policy:
             profiles = cfg.get("profiles", {})
             env = {k: None for k in _inactive | set().union(*(v.keys() for v in profiles.values()))}
             env.update(profiles.get(self.spec.variant, {}))
+            env["GGML_MUSA_QUANT_ROUTE"] = cfg["quant_route"]
             env.update(VLA_LIBRARY=cfg["library"], VLA_DEVICE=cfg["device"], VLA_N_THREADS=str(cfg["threads"]))
             settings = (cfg["library"], cfg["runtime"], env)
             if _process_settings is not None and _process_settings != settings:
@@ -327,7 +333,7 @@ class Policy:
                 "checkpoint": self.spec.checkpoint, "task": self.task, "precision": self.spec.precision,
                 "precision_status": self.spec.precision_status, "weight_types_on_disk": self.spec.weight_types,
                 "floating_weight_dtype": cfg["runtime"]["weight_dtype"],
-                "act_dtype": cfg["runtime"]["act_dtype"], "device_requested": cfg["device"], "seed": cfg["seed"],
+                "act_dtype": cfg["runtime"]["act_dtype"], "quant_route": cfg["quant_route"], "device_requested": cfg["device"], "seed": cfg["seed"],
                 "num_steps": self.spec.num_steps, "optimization_variant": self.spec.variant if profiles else None,
                 "source_contract_verified": self.spec.contract_verified}.items()}
         except BaseException:

@@ -1,0 +1,11 @@
+[1/11] Building C object _deps/llama-build/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o
+[2/11] Linking CXX shared library bin/libggml-base.so.0.25.3
+[3/11] Creating library symlink bin/libggml-base.so.0 bin/libggml-base.so
+[4/11] Linking CXX shared library bin/libggml-cpu.so.0.25.3
+[5/11] Creating library symlink bin/libggml-cpu.so.0 bin/libggml-cpu.so
+[6/11] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[7/11] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[8/11] Linking CXX shared library bin/libggml.so.0.25.3
+[9/11] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[10/11] Linking CXX shared library libvla_core.so
+[11/11] Linking CXX executable tests/test_quant_calibration

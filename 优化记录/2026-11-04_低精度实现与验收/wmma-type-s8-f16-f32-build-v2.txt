@@ -1,0 +1,1504 @@
+优化记录/2026-11-04_低精度实现与验收/wmma-dtype-probe.cpp:42:2: error: no matching function for call to 'mma_sync'
+ mma_sync(cf,af,bf,cf);store_matrix_sync(c,cf,N,mem_row_major);
+ ^~~~~~~~
+/usr/local/musa/include/crt/mma.hpp:3287:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __half, [...]>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3297:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __half, mtmusa::wmma::col_major>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.h:1834:39: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __half, [...]>' for 2nd argument
+        __MUSA_MMA_DEVICE_DECL__ void mma_sync(
+                                      ^
+/usr/local/musa/include/crt/mma.h:1841:39: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __half, mtmusa::wmma::col_major>' for 2nd argument
+        __MUSA_MMA_DEVICE_DECL__ void mma_sync(
+                                      ^
+/usr/local/musa/include/crt/mma.hpp:3307:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __half, [...]>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3317:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __half, mtmusa::wmma::col_major>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3328:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3339:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3494:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_bfloat16, [...]>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3504:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_bfloat16, mtmusa::wmma::col_major>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3514:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_bfloat16, [...]>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3524:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_bfloat16, mtmusa::wmma::col_major>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4884:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], precision::tf32, [...]>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4894:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], precision::tf32, mtmusa::wmma::col_major>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4904:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], precision::tf32, [...]>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4914:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], precision::tf32, mtmusa::wmma::col_major>' for 2nd argument
+mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5161:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_fp8_e4m3, [...]>' for 2nd argument
+TCE_MMA_SYNC(16, 16, 16, float, __mt_fp8_e4m3, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5161:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_fp8_e4m3, [...]>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5161:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_fp8_e4m3, mtmusa::wmma::col_major>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5161:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_fp8_e4m3, mtmusa::wmma::col_major>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5176:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_fp8_e5m2, [...]>' for 2nd argument
+TCE_MMA_SYNC(16, 16, 16, float, __mt_fp8_e5m2, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5176:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_fp8_e5m2, [...]>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5176:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_fp8_e5m2, mtmusa::wmma::col_major>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5176:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_fp8_e5m2, mtmusa::wmma::col_major>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5191:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_fp8_e5m2, [...]>' for 2nd argument
+TCE_MMA_SYNC(16, 16, 16, float, __mt_fp8_e5m2, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5191:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_fp8_e5m2, [...]>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5191:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_fp8_e5m2, mtmusa::wmma::col_major>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5191:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_fp8_e5m2, mtmusa::wmma::col_major>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5206:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_fp8_e4m3, [...]>' for 2nd argument
+TCE_MMA_SYNC(16, 16, 16, float, __mt_fp8_e4m3, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5206:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __mt_fp8_e4m3, [...]>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5206:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_fp8_e4m3, mtmusa::wmma::col_major>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5206:1: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __mt_fp8_e4m3, mtmusa::wmma::col_major>' for 2nd argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.h:1848:39: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, [...]>' to 'const fragment<[4 * ...], __half, [...]>' for 2nd argument
+        __MUSA_MMA_DEVICE_DECL__ void mma_sync(
+                                      ^
+/usr/local/musa/include/crt/mma.h:1855:39: note: candidate function not viable: no known conversion from 'fragment<[4 * ...], A, mtmusa::wmma::row_major>' to 'const fragment<[4 * ...], __half, mtmusa::wmma::col_major>' for 2nd argument
+        __MUSA_MMA_DEVICE_DECL__ void mma_sync(
+                                      ^
+/usr/local/musa/include/crt/mma.hpp:3245:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3255:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3350:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3361:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3372:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3392:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3265:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3275:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3382:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3402:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3413:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3433:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3453:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3473:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3540:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3550:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3560:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3570:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3581:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3592:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3603:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3614:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3626:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3636:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3646:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3656:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3667:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3678:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3689:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3700:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3711:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3721:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3731:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3741:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3752:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3772:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3792:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3812:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3833:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3843:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3853:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3863:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3879:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3889:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3899:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3909:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3920:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3931:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3942:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3953:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3965:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3975:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3985:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:3995:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4006:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4017:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4028:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4039:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4050:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4060:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4070:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4080:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4091:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4115:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4139:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4163:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, int> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4188:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4198:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4208:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4218:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4290:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 8, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 8, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4300:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 8, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 8, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4310:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 8, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 8, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4320:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 8, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 8, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4333:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 8, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 8, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4343:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 8, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 8, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4353:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 8, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 8, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4363:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 8, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 8, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4420:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4430:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4440:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4450:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4460:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4470:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4480:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4490:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4505:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4514:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4523:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4532:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4541:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4550:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4559:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4568:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 32, 16, float> &' for 1st argument
+mma_sync(fragment<accumulator, 32, 32, 16, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5141:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 8, float, __half, __half, float, wmma_type::wmma_fmma, 0)
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5141:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5141:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5141:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5142:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 16, float, __half, __half, float, wmma_type::wmma_fmma, 0)
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5142:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5142:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5142:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5143:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 16, 16, float, __half, __half, float, wmma_type::wmma_fmma, 0)
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5143:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5143:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5143:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5145:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 8, float, __mt_bfloat16, __mt_bfloat16, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5145:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5145:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5145:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5147:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 16, float, __mt_bfloat16, __mt_bfloat16, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5147:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5147:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5147:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5149:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 16, 16, float, __mt_bfloat16, __mt_bfloat16, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5149:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5149:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5149:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5153:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 16, float, __mt_fp8_e4m3, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5153:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5153:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5153:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5155:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 16, 16, float, __mt_fp8_e4m3, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5155:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5155:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5155:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5157:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(32, 8, 16, float, __mt_fp8_e4m3, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5157:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5157:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5157:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5159:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 32, 16, float, __mt_fp8_e4m3, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5159:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5159:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5159:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5163:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+TCE_MMA_SYNC(16, 16, 32, float, __mt_fp8_e4m3, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5163:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5163:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5163:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5165:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+TCE_MMA_SYNC(16, 16, 64, float, __mt_fp8_e4m3, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5165:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5165:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5165:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5168:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 16, float, __mt_fp8_e5m2, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5168:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5168:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5168:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5170:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 16, 16, float, __mt_fp8_e5m2, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5170:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5170:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5170:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5172:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(32, 8, 16, float, __mt_fp8_e5m2, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5172:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5172:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5172:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5174:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 32, 16, float, __mt_fp8_e5m2, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5174:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5174:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5174:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5178:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+TCE_MMA_SYNC(16, 16, 32, float, __mt_fp8_e5m2, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5178:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5178:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5178:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5180:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+TCE_MMA_SYNC(16, 16, 64, float, __mt_fp8_e5m2, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5180:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5180:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5180:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5183:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 16, float, __mt_fp8_e5m2, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5183:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5183:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5183:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5185:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 16, 16, float, __mt_fp8_e5m2, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5185:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5185:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5185:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5187:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(32, 8, 16, float, __mt_fp8_e5m2, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5187:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5187:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5187:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5189:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 32, 16, float, __mt_fp8_e5m2, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5189:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5189:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5189:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5193:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+TCE_MMA_SYNC(16, 16, 32, float, __mt_fp8_e5m2, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5193:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5193:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5193:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5195:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+TCE_MMA_SYNC(16, 16, 64, float, __mt_fp8_e5m2, __mt_fp8_e4m3, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5195:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5195:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5195:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5198:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 16, float, __mt_fp8_e4m3, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5198:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5198:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5198:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5200:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 16, 16, float, __mt_fp8_e4m3, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5200:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5200:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5200:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5202:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+TCE_MMA_SYNC(32, 8, 16, float, __mt_fp8_e4m3, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5202:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5202:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5202:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 32, 8, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5204:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+TCE_MMA_SYNC(8, 32, 16, float, __mt_fp8_e4m3, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5204:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5204:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5204:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 32, 16, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5208:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+TCE_MMA_SYNC(16, 16, 32, float, __mt_fp8_e4m3, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5208:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5208:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5208:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5210:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+TCE_MMA_SYNC(16, 16, 64, float, __mt_fp8_e4m3, __mt_fp8_e5m2, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5210:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5210:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5210:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5213:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, int> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 16, int, unsigned char, unsigned char, int,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5213:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5213:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5213:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5215:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, int> &' for 1st argument
+TCE_MMA_SYNC(8, 16, 16, int, unsigned char, unsigned char, int,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5215:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5215:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5215:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5218:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, int> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 16, int, signed char, signed char, int,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5218:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5218:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5218:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5220:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, int> &' for 1st argument
+TCE_MMA_SYNC(8, 16, 16, int, signed char, signed char, int,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5220:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5220:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5220:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 8, 16, 16, int> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5314:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 8, float, precision::tf32, precision::tf32, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5314:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5314:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5314:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 8, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5316:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 4, float> &' for 1st argument
+TCE_MMA_SYNC(16, 8, 4, float, precision::tf32, precision::tf32, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5316:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 4, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5316:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 4, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5316:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 8, 4, float> &' for 1st argument
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5322:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5332:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5342:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5352:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5362:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5372:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5382:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5392:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5402:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5412:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5422:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5432:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, __half> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5486:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5496:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5506:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5516:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5570:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5580:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5590:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5600:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 32, float> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5790:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 64, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5800:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 64, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5810:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 64, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5820:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 64, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5830:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 64, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5840:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 64, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5850:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 64, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5860:1: note: candidate function not viable: no known conversion from 'fragment<mtmusa::wmma::accumulator, M, N, K, C>' (aka 'fragment<mtmusa::wmma::accumulator, M, N, K, float>') to 'fragment<mtmusa::wmma::accumulator, 16, 16, 64, int> &' for 1st argument
+mma_sync(fragment<accumulator, 16, 16, 64, int> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:4924:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:4935:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:4946:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:4957:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:4968:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:4979:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:4990:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5001:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5012:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5023:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5034:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5045:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5056:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5067:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5078:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5089:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5295:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+TCE_MMA_SYNC(16, 8, 16, float, signed char, __half, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5295:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5295:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5295:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5297:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+TCE_MMA_SYNC(8, 16, 16, float, signed char, __half, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5297:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5297:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5297:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5299:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+TCE_MMA_SYNC(16, 8, 16, float, signed char, __mt_bfloat16, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5299:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5299:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5299:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5301:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+TCE_MMA_SYNC(8, 16, 16, float, signed char, __mt_bfloat16, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5301:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5301:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5301:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5304:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+TCE_MMA_SYNC(16, 8, 16, float, __half, signed char, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5304:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5304:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5304:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5306:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+TCE_MMA_SYNC(8, 16, 16, float, __half, signed char, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5306:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5306:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5306:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5308:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+TCE_MMA_SYNC(16, 8, 16, float, __mt_bfloat16, signed char, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5308:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5308:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5308:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5310:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+TCE_MMA_SYNC(8, 16, 16, float, __mt_bfloat16, signed char, float,
+^
+/usr/local/musa/include/crt/mma.hpp:5104:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5310:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5113:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5310:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5122:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5310:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+/usr/local/musa/include/crt/mma.hpp:5131:8: note: expanded from macro 'TCE_MMA_SYNC'
+  void mma_sync(fragment<accumulator, M, N, K, DType> &d,                      \
+       ^
+/usr/local/musa/include/crt/mma.hpp:5442:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5453:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5464:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5475:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5526:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+mma_sync(fragment<accumulator, 16, 16, 32, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5537:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+mma_sync(fragment<accumulator, 16, 16, 32, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5548:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+mma_sync(fragment<accumulator, 16, 16, 32, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5559:1: note: candidate function not viable: requires 5 arguments, but 4 were provided
+mma_sync(fragment<accumulator, 16, 16, 32, __half> &d,
+^
+/usr/local/musa/include/crt/mma.hpp:5610:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5621:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5632:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5643:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5654:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5665:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5676:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5687:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5698:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5709:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5720:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5731:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5742:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5753:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5764:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5775:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 16, 16, 32, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5873:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5884:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5895:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5906:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5917:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5928:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5939:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5950:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5961:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5972:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5983:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:5994:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6005:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6016:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6027:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6038:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 32, 8, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6052:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6063:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6074:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6085:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6096:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6107:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6118:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6129:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6140:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6151:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6162:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6173:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6184:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6195:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6206:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+/usr/local/musa/include/crt/mma.hpp:6217:6: note: candidate function not viable: requires 5 arguments, but 4 were provided
+void mma_sync(fragment<accumulator, 8, 32, 16, float> &d,
+     ^
+1 error generated when compiling for mp_22.

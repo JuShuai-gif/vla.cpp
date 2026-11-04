@@ -1,0 +1,10 @@
+baseline completed unassessed
+fp16-activations completed False
+q8-prefix-mlp-blas completed False
+q8-prefix-blas completed False
+q8-vision-blas completed False
+q4-mixed-blas completed False
+q8-expert-mlp-blas completed False
+q8-expert-blas completed False
+q5-mixed-blas completed False
+q4-calibrated-blas completed False

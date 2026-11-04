@@ -1,0 +1,301 @@
+[
+  {
+    "candidate": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q8-prefix-mlp-288fe3b9.json",
+    "reference": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-reference-smoke-v4.json",
+    "cosine": {
+      "threshold": 0.999,
+      "global_cosine": 0.999995654356983,
+      "chunk_cosine": [
+        0.9999966309136594,
+        0.999997218273059,
+        0.9999919725237795
+      ],
+      "per_chunk_dimension_cosine": [
+        [
+          0.9999906735188201,
+          0.9999976936414469,
+          0.9999961531724985,
+          0.9999785266115897,
+          0.9999985653167203,
+          0.9999833014749063,
+          0.9999995037766156
+        ],
+        [
+          0.9999860680723174,
+          0.999998914929425,
+          0.9999989209386181,
+          0.9999632675454957,
+          0.9999948070410843,
+          0.9999281904151519,
+          0.9999977412277423
+        ],
+        [
+          0.9998391256779566,
+          0.9980168065589476,
+          0.999991027263544,
+          0.9999581576112268,
+          0.9999990927798229,
+          0.9999307587517878,
+          0.9999994666841046
+        ]
+      ],
+      "minimum_chunk": 0.9999919725237795,
+      "minimum_by_dimension": [
+        0.9998391256779566,
+        0.9980168065589476,
+        0.999991027263544,
+        0.9999581576112268,
+        0.9999948070410843,
+        0.9999281904151519,
+        0.9999977412277423
+      ],
+      "minimum": 0.9980168065589476,
+      "failed_chunks": [],
+      "failed_chunk_dimensions": [
+        [
+          2,
+          1
+        ]
+      ],
+      "offline_cosine_pass": false,
+      "zero_norm_rule": "both zero: 1; only one zero: 0",
+      "scope": "raw physical outputs: global, each 50x7 chunk, each 50-step joint/gripper trajectory",
+      "limitation": "Direction similarity does not bound amplitude error or establish closed-loop success."
+    },
+    "max_abs": 0.6551599502563477,
+    "scope": "three development samples, source BF16 reference adapter smoke only"
+  },
+  {
+    "candidate": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q4-calibrated-37d909c7.json",
+    "reference": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-reference-smoke-v4.json",
+    "cosine": {
+      "threshold": 0.999,
+      "global_cosine": 0.9989320364496219,
+      "chunk_cosine": [
+        0.9989394435611265,
+        0.9986727101585483,
+        0.9997859939688934
+      ],
+      "per_chunk_dimension_cosine": [
+        [
+          0.9972310299980272,
+          0.9991099989050198,
+          0.9994144664117517,
+          0.9981008685526398,
+          0.9999306143471401,
+          0.9973409520656296,
+          0.999913214175631
+        ],
+        [
+          0.999753782942323,
+          0.9994501800117348,
+          0.9999628861916169,
+          0.9917332281737775,
+          0.9990810034730735,
+          0.9237444778570494,
+          0.9993830542179305
+        ],
+        [
+          0.9993644926842137,
+          0.9912439915083636,
+          0.9999033906864939,
+          0.9926270271858065,
+          0.999994437133392,
+          0.9979508946366001,
+          0.9999961474765076
+        ]
+      ],
+      "minimum_chunk": 0.9986727101585483,
+      "minimum_by_dimension": [
+        0.9972310299980272,
+        0.9912439915083636,
+        0.9994144664117517,
+        0.9917332281737775,
+        0.9990810034730735,
+        0.9237444778570494,
+        0.9993830542179305
+      ],
+      "minimum": 0.9237444778570494,
+      "failed_chunks": [
+        0,
+        1
+      ],
+      "failed_chunk_dimensions": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "offline_cosine_pass": false,
+      "zero_norm_rule": "both zero: 1; only one zero: 0",
+      "scope": "raw physical outputs: global, each 50x7 chunk, each 50-step joint/gripper trajectory",
+      "limitation": "Direction similarity does not bound amplitude error or establish closed-loop success."
+    },
+    "max_abs": 9.212512969970703,
+    "scope": "three development samples, source BF16 reference adapter smoke only"
+  },
+  {
+    "candidate": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q5-mixed-35b81ec5.json",
+    "reference": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-reference-smoke-v4.json",
+    "cosine": {
+      "threshold": 0.999,
+      "global_cosine": 0.9999361548941501,
+      "chunk_cosine": [
+        0.9998840398543035,
+        0.9999788106039431,
+        0.9999787431971363
+      ],
+      "per_chunk_dimension_cosine": [
+        [
+          0.9998667506915316,
+          0.9999322832743898,
+          0.9999784772755964,
+          0.9986592452700392,
+          0.9999860967835537,
+          0.9990079367891376,
+          0.9999826609920445
+        ],
+        [
+          0.999989166306979,
+          0.9999885890380498,
+          0.9999894003827128,
+          0.999729601274768,
+          0.9999372405981728,
+          0.9995386117456064,
+          0.9999900458521562
+        ],
+        [
+          0.9998150957640127,
+          0.9949992207380233,
+          0.999987512977675,
+          0.9999542157408486,
+          0.9999988000742902,
+          0.9999417068716201,
+          0.999999256914765
+        ]
+      ],
+      "minimum_chunk": 0.9998840398543035,
+      "minimum_by_dimension": [
+        0.9998150957640127,
+        0.9949992207380233,
+        0.9999784772755964,
+        0.9986592452700392,
+        0.9999372405981728,
+        0.9990079367891376,
+        0.9999826609920445
+      ],
+      "minimum": 0.9949992207380233,
+      "failed_chunks": [],
+      "failed_chunk_dimensions": [
+        [
+          0,
+          3
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "offline_cosine_pass": false,
+      "zero_norm_rule": "both zero: 1; only one zero: 0",
+      "scope": "raw physical outputs: global, each 50x7 chunk, each 50-step joint/gripper trajectory",
+      "limitation": "Direction similarity does not bound amplitude error or establish closed-loop success."
+    },
+    "max_abs": 3.0389175415039062,
+    "scope": "three development samples, source BF16 reference adapter smoke only"
+  },
+  {
+    "candidate": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/baseline-8ba8496a.json",
+    "reference": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-reference-smoke-v4.json",
+    "cosine": {
+      "threshold": 0.999,
+      "global_cosine": 0.9999967336215559,
+      "chunk_cosine": [
+        0.999997208442577,
+        0.9999978554978521,
+        0.9999941786793143
+      ],
+      "per_chunk_dimension_cosine": [
+        [
+          0.9999921145333628,
+          0.9999973904140323,
+          0.9999980554579244,
+          0.9999787697534923,
+          0.9999989735420156,
+          0.9999794573929202,
+          0.9999993396199041
+        ],
+        [
+          0.9999897519698343,
+          0.9999989686151528,
+          0.9999990342377543,
+          0.9999798192362513,
+          0.9999969404913848,
+          0.9999339470160445,
+          0.9999981231137492
+        ],
+        [
+          0.999844396814148,
+          0.9984812201560851,
+          0.999990948886601,
+          0.9999597457588013,
+          0.9999987453989575,
+          0.9999381355569655,
+          0.9999994773446949
+        ]
+      ],
+      "minimum_chunk": 0.9999941786793143,
+      "minimum_by_dimension": [
+        0.999844396814148,
+        0.9984812201560851,
+        0.999990948886601,
+        0.9999597457588013,
+        0.9999969404913848,
+        0.9999339470160445,
+        0.9999981231137492
+      ],
+      "minimum": 0.9984812201560851,
+      "failed_chunks": [],
+      "failed_chunk_dimensions": [
+        [
+          2,
+          1
+        ]
+      ],
+      "offline_cosine_pass": false,
+      "zero_norm_rule": "both zero: 1; only one zero: 0",
+      "scope": "raw physical outputs: global, each 50x7 chunk, each 50-step joint/gripper trajectory",
+      "limitation": "Direction similarity does not bound amplitude error or establish closed-loop success."
+    },
+    "max_abs": 0.6176223754882812,
+    "scope": "three development samples, source BF16 reference adapter smoke only"
+  }
+]

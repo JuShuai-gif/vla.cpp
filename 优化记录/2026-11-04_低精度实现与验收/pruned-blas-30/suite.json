@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "scope": "development screening",
+  "runs": [
+    {
+      "status": "process_failed",
+      "returncode": -6,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-30/baseline-8ba8496a.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-30/baseline-8ba8496a.log",
+      "elapsed_seconds": 47.328134536743164,
+      "precision": "baseline"
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-30/fp16-activations-a3af6504.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-30/fp16-activations-a3af6504.log",
+      "elapsed_seconds": 46.93650555610657,
+      "precision": "fp16-activations"
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-30/q8-prefix-mlp-blas-f3d0c3d1.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-30/q8-prefix-mlp-blas-f3d0c3d1.log",
+      "elapsed_seconds": 64.70332026481628,
+      "precision": "q8-prefix-mlp-blas"
+    },
+    {
+      "status": "process_failed",
+      "returncode": -6,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-30/q8-prefix-blas-439256a9.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-30/q8-prefix-blas-439256a9.log",
+      "elapsed_seconds": 64.13036751747131,
+      "precision": "q8-prefix-blas"
+    }
+  ],
+  "physical_quality": "unassessed",
+  "closed_loop": "unassessed",
+  "qualified_acceleration": false,
+  "interrupted": "Stopped remaining queue after baseline exit SIGABRT: corrupted size vs. prev_size. No results qualify."
+}

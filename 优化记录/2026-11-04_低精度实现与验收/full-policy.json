@@ -63,6 +63,64 @@
       "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-expert-q8.gguf",
       "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-expert-q8.gguf.quant.json",
       "status": "experimental"
+    },
+    "q5-mixed": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-q5.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-q5.gguf.quant.json",
+      "status": "experimental"
+    },
+    "q4-calibrated": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-calibrated.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-calibrated.gguf.quant.json",
+      "status": "experimental"
+    },
+    "q8-prefix-mlp-blas": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mlp-q8.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mlp-q8.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "blas"
+    },
+    "q8-prefix-blas": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-q8.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-q8.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "blas"
+    },
+    "q8-vision-blas": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-vision-q8.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-vision-q8.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "blas"
+    },
+    "q4-mixed-blas": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-q8.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-q8.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "blas"
+    },
+    "q8-expert-mlp-blas": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-expert-mlp-q8.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-expert-mlp-q8.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "blas"
+    },
+    "q8-expert-blas": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-expert-q8.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-expert-q8.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "blas"
+    },
+    "q5-mixed-blas": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-q5.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-q5.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "blas"
+    },
+    "q4-calibrated-blas": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-calibrated.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-calibrated.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "blas"
     }
   }
 }

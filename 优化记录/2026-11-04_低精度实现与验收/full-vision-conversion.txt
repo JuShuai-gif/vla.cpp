@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "architecture": "pi05",
+  "recipe": "vision",
+  "default_type": "Q8_0",
+  "quantized_tensors": 135,
+  "payload_bytes_before": 7773969696,
+  "payload_bytes_after": 6959698080,
+  "source": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "output": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-vision-q8.gguf",
+  "status": "verified",
+  "source_sha256": "ae7a7ad36082a83dc743cdaa1d1f21813af7b4e20bf340d82bd90c7f10537e51",
+  "output_sha256": "4c544f534ebce18b09224989e6002a72ae8699e1867078e9f3c2c9f97b7473cb"
+}

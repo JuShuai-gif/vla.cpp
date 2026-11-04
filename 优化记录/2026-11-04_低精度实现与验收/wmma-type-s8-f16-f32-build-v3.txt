@@ -1,0 +1,8 @@
+fatal error: error in backend: Cannot select: intrinsic %llvm.musa.int8.fp16.m16n16k16.mma
+clang-14: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+clang version 14.0.0 (git@sh-code.mthreads.com:sw/mtcc.git 61c54cd8e5c72ef146656c7beee1889a837ed7bc)
+mcc version 5.1.0
+Target: aarch64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/local/musa/bin
+clang-14: note: diagnostic msg: Error generating preprocessed source(s).

@@ -1,0 +1,1 @@
+These invocations ran the previous Q8-only binary while rebuild was still running. argv type was ignored. They are NOT Q4/Q5 validation; all printed type Q8_0. Follow-up files without stale-binary use the rebuilt executable.

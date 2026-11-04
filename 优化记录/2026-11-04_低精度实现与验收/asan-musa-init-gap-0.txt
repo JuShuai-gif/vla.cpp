@@ -1,0 +1,4 @@
+ggml_cuda_init: failed to initialize MUSA: out of memory
+quant-check: MUSA device 0 out of range (0 visible); falling back to CPU
+CreatePlatform failed!
+quant-check: backend = CPU (4 threads)

@@ -1,0 +1,13 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+sample index=0 expected=2.80491374 actual=2.80490041
+sample index=2560 expected=-13.0623849 actual=-13.0623646
+sample index=5121 expected=-0.142972806 actual=-0.142973006
+sample index=7681 expected=-5.90132575 actual=-5.90132236
+sample index=10242 expected=7.34416481 actual=7.34415007
+sample index=12803 expected=-10.9884477 actual=-10.988431
+sample index=15363 expected=8.24518433 actual=8.24516392
+sample index=17924 expected=-7.04560987 actual=-7.04560471
+quant-check: backend = MUSA (device 0: M1000)
+{"type":"q8_0","reference":"dequant-F16-BLAS","M":32768,"N":320,"K":2048,"runs":5,"p50_ms":13.009072,"checks":4096,"finite":true,"failed_values":0,"max_error":5.21931797e-05,"rmse":1.31895192e-05,"max_reference":16.7510622}

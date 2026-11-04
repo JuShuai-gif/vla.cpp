@@ -37,6 +37,7 @@
 #include "layers/attn.h"
 #include "layers/norm.h"
 #include "foldquant.h"
+#include "quant_calibration.h"
 #include "layers/fq_linear.h"
 #include "act_dtype.h"
 #include "layers/fused_ew.h"
@@ -1000,6 +1001,7 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         }
         for(auto * emb:vio.emb)ggml_build_forward_expand(vg,emb);
         for (auto * scores : vio.scores) ggml_build_forward_expand(vg, scores);
+        mark_quant_calibration(vg);
         dump_pi05_graph("vision", vg, 0, ggml_graph_n_nodes(vg));
         return vg;
     });
@@ -1103,6 +1105,7 @@ const std::vector<ggml_tensor *> * Pi05ModelArch::vision_forward(const ImageView
         std::fprintf(stderr, "vla(pi05): vision compute failed\n");
         return nullptr;
     }
+    if (!write_quant_calibration("vision",vg,0,ggml_graph_n_nodes(vg))) return nullptr;
     if (vision_keep && device_prune && env_flag("VLA_PI05_DUMP_PRUNE")) {
         for (size_t v=0;v<vio.emb.size();++v) {
             const auto * rank=vio.emb[v]->src[1];
@@ -1370,6 +1373,7 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
 
 
     ggml_build_forward_expand(gf, x_final);
+    mark_quant_calibration(gf);
     dump_pi05_graph("prefix", gf, 0, gio.prefix_nodes);
     dump_pi05_graph("denoise", gf, gio.prefix_nodes, ggml_graph_n_nodes(gf));
     return gf;
@@ -1527,6 +1531,8 @@ std::vector<float> Pi05ModelArch::predict(const Inputs& in) {
         return {};
     }
 
+    if (!write_quant_calibration("prefix",gf,0,gio.prefix_nodes) ||
+        !write_quant_calibration("denoise",gf,gio.prefix_nodes,ggml_graph_n_nodes(gf))) return {};
     pending.active=false;
     if (output_ready && noise_staging) std::memcpy(out.data(),noise_staging+x0h.size(),out.size()*sizeof(float));
     if (!output_ready) ggml_backend_tensor_get(x_final, out.data(), 0, out.size()*sizeof(float));

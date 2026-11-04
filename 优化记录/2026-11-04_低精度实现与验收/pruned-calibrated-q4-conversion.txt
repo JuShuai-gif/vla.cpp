@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "architecture": "pi05",
+  "recipe": "prefix-mixed",
+  "default_type": "Q8_0",
+  "quantized_tensors": 126,
+  "payload_bytes_before": 7042473504,
+  "payload_bytes_after": 4580548128,
+  "source": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+  "output": "/home/skysi/code/vla.cpp-quant/validation/quant/models/pruned-prefix-mixed-calibrated.gguf",
+  "status": "verified",
+  "calibration": {
+    "path": "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/pruned-120/importance.json",
+    "sha256": "9fe80b7efa38b20bb21c1a65c85d497efe4f5b0ab91f2981fdd88f8866ac585a",
+    "source_sha256": "a386cf4364d1af982bc17505689dd169aca3fb13718fce7ba30001b2d1221504",
+    "corpus_sha256": "4721c607dc0b08e764d335e3ecb25dba194b13e80b71b5ab867995c6ec31a970",
+    "method": "activation-weighted-block-scale-search",
+    "calibrated_tensors": 122,
+    "no_observed_input_rtn": [
+      "vlm.blk.17.attn_o.weight",
+      "vlm.blk.17.ffn_gate.weight",
+      "vlm.blk.17.ffn_up.weight",
+      "vlm.blk.17.ffn_down.weight"
+    ]
+  },
+  "source_sha256": "a386cf4364d1af982bc17505689dd169aca3fb13718fce7ba30001b2d1221504",
+  "output_sha256": "f257031b3fe99aa727cf2cf680d1b4e99e236acda2a56cf509154df6f5589a6b"
+}

@@ -1,0 +1,17 @@
+[1/7] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[2/7] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[3/7] Linking CXX shared library bin/libggml.so.0.25.3
+[4/7] Building CXX object tests/CMakeFiles/bench_musa_quant.dir/bench_musa_quant.cpp.o
+/home/skysi/code/vla.cpp-quant/tests/bench_musa_quant.cpp:40:5: warning: 'ggml_mul_mat_set_prec' is deprecated: use ggml_prec_set_acc() instead [-Wdeprecated-declarations]
+    ggml_mul_mat_set_prec(out, GGML_PREC_F32);
+    ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml.h:1489:5: note: 'ggml_mul_mat_set_prec' has been explicitly marked deprecated here
+    GGML_DEPRECATED(GGML_API void ggml_mul_mat_set_prec(
+    ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml.h:192:61: note: expanded from macro 'GGML_DEPRECATED'
+#    define GGML_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+                                                            ^
+1 warning generated.
+[5/7] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[6/7] Linking CXX shared library libvla_core.so
+[7/7] Linking CXX executable tests/bench_musa_quant

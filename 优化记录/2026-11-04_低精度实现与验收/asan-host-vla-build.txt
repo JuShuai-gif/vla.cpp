@@ -1,0 +1,9 @@
+[1/9] Building CXX object _deps/sentencepiece-build/src/CMakeFiles/sentencepiece-static.dir/util.cc.o
+[2/9] Building CXX object _deps/sentencepiece-build/src/CMakeFiles/sentencepiece-static.dir/normalizer.cc.o
+[3/9] Building CXX object _deps/sentencepiece-build/src/CMakeFiles/sentencepiece-static.dir/word_model.cc.o
+[4/9] Building CXX object _deps/sentencepiece-build/src/CMakeFiles/sentencepiece-static.dir/unigram_model.cc.o
+[5/9] Building CXX object _deps/sentencepiece-build/src/CMakeFiles/sentencepiece-static.dir/sentencepiece_processor.cc.o
+[6/9] Building CXX object _deps/sentencepiece-build/src/CMakeFiles/sentencepiece-static.dir/home/skysi/code/vla.cpp/build-musa-m1000/_deps/sentencepiece-src/third_party/absl/flags/flag.cc.o
+[7/9] Linking CXX static library _deps/sentencepiece-build/src/libsentencepiece.a
+[8/9] Linking CXX shared library libvla_core.so
+[9/9] Linking CXX shared library libvla.so

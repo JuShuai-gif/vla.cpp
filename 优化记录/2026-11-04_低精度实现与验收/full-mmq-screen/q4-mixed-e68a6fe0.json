@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "precision": "q4-mixed",
+  "resolved_parameters": {
+    "checkpoint": {
+      "value": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mixed-q8.gguf",
+      "source": "policy config / GGUF"
+    },
+    "task": {
+      "value": "",
+      "source": "policy config / GGUF"
+    },
+    "precision": {
+      "value": "q4-mixed",
+      "source": "policy config / GGUF"
+    },
+    "precision_status": {
+      "value": "experimental",
+      "source": "policy config / GGUF"
+    },
+    "weight_types_on_disk": {
+      "value": [
+        "BF16",
+        "F32",
+        "Q4_0",
+        "Q8_0"
+      ],
+      "source": "policy config / GGUF"
+    },
+    "floating_weight_dtype": {
+      "value": "f16",
+      "source": "policy config / GGUF"
+    },
+    "act_dtype": {
+      "value": "f32",
+      "source": "policy config / GGUF"
+    },
+    "quant_route": {
+      "value": "auto",
+      "source": "policy config / GGUF"
+    },
+    "device_requested": {
+      "value": "0",
+      "source": "policy config / GGUF"
+    },
+    "seed": {
+      "value": 0,
+      "source": "policy config / GGUF"
+    },
+    "num_steps": {
+      "value": 10,
+      "source": "policy config / GGUF"
+    },
+    "optimization_variant": {
+      "value": "full",
+      "source": "policy config / GGUF"
+    },
+    "source_contract_verified": {
+      "value": false,
+      "source": "policy config / GGUF"
+    }
+  },
+  "samples": 3,
+  "split": "development",
+  "offset": 0,
+  "warmup": 3,
+  "warmup_language_lengths": [
+    43,
+    44
+  ],
+  "load_seconds": 28.373454957996728,
+  "input_sha256": [
+    "7afdae9b5ee92242c5bdbf8daf17d087422244c8b689696534f08bbe86dd77f6",
+    "f3ec55ae7a2e8c88e1890f162131fd03931b5d0265e1a4f331548f743128cca6",
+    "4f0b9217dbcc1cf40e807e02e4459c0ac029d96591ca555849fd67afa597a8be"
+  ],
+  "noise_sha256": [
+    "3a374c0d47c23b1a0010ad059a4612425bcb6bb523c8804aa5734a9140f1995d",
+    "3220a60129f16cb70faea5ea512c32516c56c344acd46b83985d28e9ba142dd0",
+    "26b66ddb542e5aab284701bfec4017199b3953d3a0193bc9bb4e6748e56492a6"
+  ],
+  "token_sha256": [
+    "82c78466f1b84616f58d0c1e833b5bb0835aa3baac6d94875586794af99684c5",
+    "87a7baa6f40284adf48ec35b88517c77265628b850199407b93aef9fc41c71b1",
+    "923cdd8eed256823695901f174dd0648ccd921dd907538cb18bb03b7064e49df"
+  ],
+  "language_lengths": [
+    43,
+    44,
+    43
+  ],
+  "artifact_sha256": {
+    "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/full-policy.json": "9080552e9528b605ba93ed4bb626c0f78b474a36a54ab3919345c75ceceff264",
+    "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so": "38714c0a4d4404b463c3a4f0bcc4dc7a761a55ca332511ed6adff42260589746",
+    "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla_core.so": "0e37bd8fcffb6e650b08ca0146f6129c534ebea3565da80445850f3a273cf5fa",
+    "/home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-musa.so.0.25.3": "33dfc444b8449dfb4a30d767c4b51e53681059861694a390be8e67cfb13dad13",
+    "/home/skysi/code/vla.cpp-quant/scripts/bench_pi05_precision.py": "bb0d50b56b1dfc4064a394a362700dd264a2b4d3e6824daee0e10212742c67b0"
+  },
+  "untracked_code_sha256": {
+    "scripts/calibrate_pi05.py": "ab8050364532a89a6cce80a34a37d2b2eebc26e36c248ea84445711c3cc09582",
+    "scripts/quant_calibration.py": "798e8d6f3f2941c0c2e8e55ced5b33af6729ed79dc7bafdd0d01c12fd348e1a1",
+    "scripts/run_precision_suite.py": "3122db41a2d1886058967b86d6c0c3e55b07e17e76fecacdcd194024e9edd876",
+    "src/quant_calibration.h": "e88cb808ddb5cbb8aaa5adf357653fef3167c4f5a362cfec3fb79e692c85bb4e",
+    "tests/bench_musa_row_quant.cpp": "6221194c69d2a75c3b5e3bd98e8abe61b531b6925867a9137007a3f400c882a5",
+    "tests/bench_musa_wmma_quant.cpp": "5b62e521d7df35edd2c02c5afd27b892622cb4b77d88c1e1081aaa41c331be76",
+    "tests/py/test_precision_bench.py": "9c4f4769367ca96276dc206ac408ea8004ada77eeeb1ad8d99baed902508c63e",
+    "tests/test_quant_calibration.cpp": "630be4d977e37026a9811effae4bb9c35ba2bd5ddfc997ea2c04c6189cbe4429"
+  },
+  "task_sha256": [
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184"
+  ],
+  "episodes": [
+    5,
+    5,
+    5
+  ],
+  "action_half_range": [
+    39.197998046875,
+    70.07307434082031,
+    59.75749969482422,
+    14.323714256286621,
+    19.236000061035156,
+    97.90636444091797,
+    49.650001525878906
+  ],
+  "units": {
+    "joints": "degrees",
+    "gripper": "mm",
+    "confirmed": false
+  },
+  "predict_ms": {
+    "p50": 9787.140298009035,
+    "p95": 9792.140968001331,
+    "p99": 9792.585472000646,
+    "min": 9769.579617001,
+    "max": 9792.696598000475,
+    "mean": 9783.13883767017
+  },
+  "native_ms": {
+    "p50": 9783.305400997051,
+    "p95": 9788.162889106025,
+    "p99": 9788.594665826822,
+    "min": 9765.61584600131,
+    "max": 9788.702610007022,
+    "mean": 9779.207952335128
+  },
+  "preprocess_ms": {
+    "p50": 3.8142709963722154,
+    "p95": 3.861304094607476,
+    "p99": 3.8654848144506104,
+    "min": 3.7214010080788285,
+    "max": 3.866529994411394,
+    "mean": 3.8007339996208125
+  },
+  "raw_predict_ms": [
+    9787.140298009035,
+    9792.696598000475,
+    9769.579617001
+  ],
+  "raw_native_ms": [
+    9783.305400997051,
+    9788.702610007022,
+    9765.61584600131
+  ],
+  "raw_preprocess_ms": [
+    3.7214010080788285,
+    3.866529994411394,
+    3.8142709963722154
+  ],
+  "environment": {
+    "VLA_PI05_RES_ADARMS": "1",
+    "VLA_MUSA_SMALL_GEMM": "auto",
+    "VLA_MUSA_ATTN_DIRECT_OUT": "1",
+    "VLA_MUSA_VISION_EPILOGUE": "all",
+    "VLA_PI05_VISION_DIRECT": "1",
+    "VLA_PI05_U8_PATCH": "1",
+    "VLA_LOAD_DIRECT_FUSED": "1",
+    "VLA_MUSA_VISION_SDPA": "1",
+    "VLA_MUSA_GEMMA_FLAT_AV": "denoise",
+    "VLA_PI05_ACTION_LINEAR": "1",
+    "VLA_PI05_ASYNC_VISION": "1",
+    "VLA_PI05_LAST_KV_ONLY": "1",
+    "VLA_PI05_VISION_QKV": "1",
+    "VLA_MUSA_GEGLU_F16": "1",
+    "VLA_MUSA_SMALL_PIPE": "shape",
+    "VLA_PI05_HOST_INPUT": "pinned",
+    "VLA_MUSA_GEMMA_ATTN": "fused-all",
+    "VLA_PI05_NORM_PACK": "1",
+    "VLA_PI05_KV_DIRECT": "1",
+    "VLA_PI05_VISION_NO_OUT_COPY": "1",
+    "VLA_MUSA_VISION_PACK": "1",
+    "VLA_PI05_PIN_MAIN_INPUT": "1",
+    "VLA_LOAD_THREADS": "4",
+    "VLA_MUSA_GEMMA_FLAT_QK": "denoise",
+    "VLA_PI05_CROSS_ADARMS": "1",
+    "VLA_PI05_KV_REUSE": "1",
+    "VLA_PI05_ROPE_TABLE": "1",
+    "VLA_PI05_GEGLU_PACK": "1",
+    "VLA_PI05_F32_PATCH": "1",
+    "GGML_MUSA_QUANT_ROUTE": "auto",
+    "VLA_LIBRARY": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
+    "VLA_DEVICE": "0",
+    "VLA_N_THREADS": "4"
+  },
+  "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+  "cpu": "aarch64",
+  "code_commit": "f58ae5290b9b94c260ade15e3c9cc0061328c3d7",
+  "dirty_diff_sha256": "3fe587c36ee1103dd4ac8d1984873ef283a661f335a95b720636743c2b5e9407",
+  "scope": "resident public API, no camera acquisition, robot I/O or closed-loop evidence"
+}

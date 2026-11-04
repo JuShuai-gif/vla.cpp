@@ -1,0 +1,5 @@
+sample=0 expected=-0.363435 actual=-0.363435
+sample=1 expected=-3.21174 actual=-3.21174
+sample=2 expected=0.988315 actual=0.988315
+sample=3 expected=-1.40369 actual=-1.40369
+{"kernel":"Q8-WMMA-32","K":256,"M":64,"N":50,"runs":10,"gpu_p50_ms":0.155680,"activation_quant_included":true,"checks":3200,"failed":0,"finite":true,"max_error":1.26030784e-06,"rmse":1.69195791e-07}

@@ -37,7 +37,8 @@ def patch(root: Path) -> None:
             raise SystemExit(f"{path}: expected {count} anchors for {anchor!r}; check llama.cpp version")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: patched {path}")
 
     path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
@@ -67,7 +68,8 @@ static size_t ggml_backend_musa_buffer_type_get_max_size(ggml_backend_buffer_typ
             raise SystemExit(f"{path}: missing device max-size anchor")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: patched {path}")
 
 
@@ -109,7 +111,8 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
             raise SystemExit(f"{path}: missing MUSA supports hook anchor")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: patched extension hooks in {path}")
 
     # Tensor-core F16 inputs with F32 accumulation/output: avoids rounding each
@@ -125,7 +128,8 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
             raise SystemExit(f"{path}: missing MUSA F16 accumulation anchor")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: F16 GEMMs use F32 accumulation/output in {path}")
 
     original = text = path.read_text()
@@ -140,7 +144,8 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
             raise SystemExit(f"{path}: missing MUSA RMS fusion guard anchors")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: F16 RMSNorm bypasses F32-only fusion in {path}")
 
     # Host compilation has no __MUSA_ARCH__. Do not reject kernels compiled for mp_22.
@@ -154,7 +159,8 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
             raise SystemExit(f"{path}: missing MUSA host FA dispatch anchor")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: fixed host FA capability check in {path}")
 
     # Preserve the pre-mp22 rejection when the host compiler has no arch macro.
@@ -171,7 +177,8 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
             raise SystemExit(f"{path}: missing MUSA runtime FA architecture anchor")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: retained pre-mp22 FA rejection in {path}")
 
     # Uniform head strides avoid device pointer-array construction for MQA/GQA.
@@ -194,7 +201,8 @@ __attribute__((visibility("default"))) bool (*ggml_musa_ext_supports)(const ggml
             raise SystemExit(f"{path}: missing MUSA strided batch anchor")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: strided broadcast GEMM in {path}")
 
     # Avoid muBLAS host-scalar copies and stream sync for small F32 projections.
@@ -280,7 +288,8 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor 
             raise SystemExit(f"{path}: missing graph initial update anchor")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: graph-safe F32 projections and executable initialization in {path}")
 
     path = root / "ggml/src/ggml-cuda/common.cuh"
@@ -292,7 +301,8 @@ static bool ggml_musa_small_f32_matmul(const ggml_tensor * a, const ggml_tensor 
             raise SystemExit(f"{path}: missing graph source types declaration")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: graph cache tracks source dtypes in {path}")
 
 
@@ -334,7 +344,8 @@ struct vla_musa_op_timer {
             raise SystemExit(f"{path}: missing diagnostic timer anchor")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: optional device-event op diagnostics in {path}")
 
 
@@ -367,7 +378,8 @@ struct vla_musa_op_timer {
             raise SystemExit(f"{path}: missing MUSA release callback anchor")
         text = text.replace(anchor, replacement)
     if text != original:
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
         print(f"MUSA: release extension resources with backend streams in {path}")
 
 
@@ -409,7 +421,8 @@ extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffe
     if 'ggml_backend_musa_mapped_buffer(' not in text:
         assert text.count(anchor) == 1
         text = text.replace(anchor, addition + anchor)
-    path.write_text(text)
+    if path.read_text() != text:
+        path.write_text(text)
 
 
     # Batch flattening is an independent opt-in, after dtype/stride normalization.
@@ -475,7 +488,8 @@ static void vla_musa_trace_quant(const char *, const ggml_tensor *, const ggml_t
 '''
         region = region.replace('    GGML_TENSOR_BINARY_OP_LOCALS', override + '    GGML_TENSOR_BINARY_OP_LOCALS')
         text = text[:begin] + region + text[end:]
-        path.write_text(text)
+        if path.read_text() != text:
+            path.write_text(text)
 
 
 
@@ -494,7 +508,8 @@ static void vla_musa_trace_quant(const char *, const ggml_tensor *, const ggml_t
             if text.count(anchor) != 1:
                 raise SystemExit('Missing MUSA MMQ configuration anchor')
             text = text.replace(anchor, replacement)
-    path.write_text(text)
+    if path.read_text() != text:
+        path.write_text(text)
 
 
 
@@ -506,7 +521,58 @@ static void vla_musa_trace_quant(const char *, const ggml_tensor *, const ggml_t
         if text.count(anchor) != 1:
             raise SystemExit('Missing MUSA MMQ launch warp anchor')
         text = text.replace(anchor, replacement)
-    path.write_text(text)
+    if path.read_text() != text:
+        path.write_text(text)
+
+
+    # Full pi05 calibration retains ten denoise steps: more than 256 holes.
+    # This changes host allocator metadata capacity, not tensor lifetimes or GPU memory policy.
+    path = root / "ggml/src/ggml-alloc.c"
+    text = path.read_text()
+    anchor = "#define MAX_FREE_BLOCKS 256"
+    replacement = "#define MAX_FREE_BLOCKS 2048 // vla.cpp: full pi05 calibration input retention"
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit("Missing calibration allocator capacity anchor")
+        path.write_text(text.replace(anchor, replacement))
+
+
+    # Q8's optimized CUDA FP16 converter has no MUSA device body. Use the
+    # portable scalar dequantizer, which does not assume CUDA warp geometry.
+    path = root / "ggml/src/ggml-cuda/convert.cu"
+    text = path.read_text()
+    anchor = '            if (fp16_available(ggml_cuda_info().devices[ggml_cuda_get_device()].cc)) {\n                return dequantize_block_q8_0_f16_cuda;\n            }'
+    replacement = '#ifndef GGML_USE_MUSA\n' + anchor + '\n#endif'
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit("Missing Q8 FP16 conversion anchor")
+        path.write_text(text.replace(anchor, replacement))
+
+
+    # Optional diagnostic alternative to the vendor's in-place executable update.
+    path = root / "ggml/src/ggml-cuda/ggml-cuda.cu"
+    text = path.read_text()
+    anchor = 'static void ggml_cuda_graph_update_executable(ggml_backend_cuda_context * cuda_ctx, const void * graph_key) {\n    ggml_cuda_graph * graph = cuda_ctx->cuda_graph(graph_key);'
+    replacement = anchor + r'''
+#ifdef GGML_USE_MUSA
+    static const bool recreate = [] {
+        const char * value = std::getenv("GGML_MUSA_GRAPH_RECREATE");
+        if (!value || strcmp(value, "0") == 0) return false;
+        if (strcmp(value, "1") == 0) return true;
+        GGML_ABORT("GGML_MUSA_GRAPH_RECREATE must be 0 or 1");
+    }();
+    if (recreate) {
+        CUDA_CHECK(cudaGraphExecDestroy(graph->instance));
+        graph->instance = nullptr;
+        CUDA_CHECK(cudaGraphInstantiate(&graph->instance, graph->graph, NULL, NULL, 0));
+        return;
+    }
+#endif
+'''
+    if replacement not in text:
+        if text.count(anchor) != 1:
+            raise SystemExit("Missing graph executable update anchor")
+        path.write_text(text.replace(anchor, replacement))
 
 
 if __name__ == "__main__":

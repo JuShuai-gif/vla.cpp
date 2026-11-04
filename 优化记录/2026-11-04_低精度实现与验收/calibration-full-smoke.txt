@@ -1,0 +1,87 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 5.05 GiB
+vla(pi05): model loaded (n_threads=4)
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-alloc.c:136: GGML_ASSERT(chunk->n_free_blocks < MAX_FREE_BLOCKS && "out of free blocks") failed
+[New LWP 761060]
+[New LWP 761063]
+[New LWP 761064]
+[New LWP 761065]
+[New LWP 761066]
+[New LWP 761182]
+[New LWP 761183]
+[New LWP 762568]
+[New LWP 762569]
+[New LWP 762632]
+[New LWP 762633]
+[New LWP 762634]
+[New LWP 762635]
+[New LWP 762636]
+[New LWP 762637]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+0x0000ffffbe3a9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	../sysdeps/unix/sysv/linux/wait4.c: 没有那个文件或目录.
+#0  0x0000ffffbe3a9980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	in ../sysdeps/unix/sysv/linux/wait4.c
+#1  0x0000fffd9d35a3ac in ggml_print_backtrace () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#2  0x0000fffd9d35a5f8 in ggml_abort () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#3  0x0000fffd9d37211c in ggml_dyn_tallocr_free_bytes () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#4  0x0000fffd9d370e50 in ggml_gallocr_reserve_n_impl () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#5  0x0000fffd9d372464 in ggml_gallocr_alloc_graph () from /home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-base.so.0
+#6  0x0000fffda2a18cfc in bool vla::graph_cache<vla::Pi05ModelArch::MainKey, vla::Pi05ModelArch::MainIO>::ensure<vla::Pi05ModelArch::predict(vla::Inputs const&)::$_3>(ggml_backend*, vla::Pi05ModelArch::MainKey const&, unsigned long, vla::Pi05ModelArch::predict(vla::Inputs const&)::$_3&&) () from /home/skysi/code/vla.cpp-quant/build-musa-quant/libvla_core.so
+#7  0x0000fffda2a15900 in vla::Pi05ModelArch::predict(vla::Inputs const&) () from /home/skysi/code/vla.cpp-quant/build-musa-quant/libvla_core.so
+#8  0x0000ffff76ad1560 in vla_predict () from /home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so
+#9  0x0000ffff9cdb6e10 in ?? () from /lib/aarch64-linux-gnu/libffi.so.8
+#10 0x0000ffff9cdb3a94 in ?? () from /lib/aarch64-linux-gnu/libffi.so.8
+#11 0x0000ffff9cde2e08 in _call_function_pointer (argtypecount=<optimized out>, argcount=4, resmem=0xffffff91aea0, restype=0xffff9cf22378, atypes=<optimized out>, avalues=0xffffff91ae80, pProc=0xffffff91b070, flags=-1663189880) at ./Modules/_ctypes/callproc.c:932
+932	                ffi_call(&cif, (void *)pProc, resmem, avalues);
+#12 _ctypes_callproc (pProc=pProc@entry=0xffff76ad13a8 <vla_predict>, argtuple=argtuple@entry=0xfffda2bd6fc0, flags=<optimized out>, argtypes=argtypes@entry=0xffff9c55c9f0, restype=restype@entry=0xaaab065cfee0, checker=checker@entry=0x0) at ./Modules/_ctypes/callproc.c:1274
+1274	    if (-1 == _call_function_pointer(flags, pProc, avalues, atypes,
+#13 0x0000ffff9cddbc88 in PyCFuncPtr_call (self=<optimized out>, inargs=<optimized out>, kwds=0x0) at ./Modules/_ctypes/_ctypes.c:4219
+4219	    result = _ctypes_callproc(pProc,
+#14 0x0000aaaaea1e8e78 in _PyObject_MakeTpCall (tstate=0xaaaaea749360 <_PyRuntime+459008>, callable=callable@entry=0xffff7527fe90, args=args@entry=0xffffbe550530, nargs=<optimized out>, keywords=keywords@entry=0x0) at Objects/call.c:240
+240	        result = _PyCFunctionWithKeywords_TrampolineCall(
+#15 0x0000aaaaea1e98ac in _PyObject_VectorcallTstate (kwnames=0x0, nargsf=<optimized out>, args=0xffffbe550530, callable=0xffff7527fe90, tstate=<optimized out>) at ./Include/internal/pycore_call.h:90
+90	        return _PyObject_MakeTpCall(tstate, callable, args, nargs, kwnames);
+#16 0x0000aaaaea185d68 in _PyEval_EvalFrameDefault (tstate=0xaaaaea749360 <_PyRuntime+459008>, frame=0xffffbe5503d8, throwflag=<optimized out>) at Python/bytecodes.c:2715
+2715	            res = PyObject_Vectorcall(
+#17 0x0000aaaaea302ffc in _PyEval_EvalFrame (throwflag=0, frame=0xffffbe550020, tstate=0xaaaaea749360 <_PyRuntime+459008>) at ./Include/internal/pycore_ceval.h:89
+89	        return _PyEval_EvalFrameDefault(tstate, frame, throwflag);
+#18 _PyEval_Vector (args=0x0, argcount=0, kwnames=0x0, locals=0xffffbd3f5900, func=0xffffbd3da160, tstate=0xaaaaea749360 <_PyRuntime+459008>) at Python/ceval.c:1685
+1685	    return _PyEval_EvalFrame(tstate, frame, 0);
+#19 PyEval_EvalCode (co=co@entry=0xffffbd220170, globals=globals@entry=0xffffbd3f5900, locals=locals@entry=0xffffbd3f5900) at Python/ceval.c:580
+580	    PyObject *res = _PyEval_Vector(tstate, func, locals, NULL, 0, NULL);
+#20 0x0000aaaaea35f7ec in run_eval_code_obj (tstate=tstate@entry=0xaaaaea749360 <_PyRuntime+459008>, co=co@entry=0xffffbd220170, globals=globals@entry=0xffffbd3f5900, locals=locals@entry=0xffffbd3f5900) at Python/pythonrun.c:1757
+1757	    v = PyEval_EvalCode((PyObject*)co, globals, locals);
+#21 0x0000aaaaea35f8e8 in run_mod (mod=mod@entry=0xaaab0638ce20, filename=filename@entry=0xffffbd3491b0, globals=globals@entry=0xffffbd3f5900, locals=locals@entry=0xffffbd3f5900, flags=flags@entry=0xffffff91b4d0, arena=arena@entry=0xffffbd31be50) at Python/pythonrun.c:1778
+1778	    PyObject *v = run_eval_code_obj(tstate, co, globals, locals);
+#22 0x0000aaaaea362660 in pyrun_file (flags=0xffffff91b4d0, closeit=1, locals=0xffffbd3f5900, globals=0xffffbd3f5900, start=257, filename=0xffffbd3491b0, fp=0xaaab06280490) at Python/pythonrun.c:1674
+1674	        ret = run_mod(mod, filename, globals, locals, flags, arena);
+#23 _PyRun_SimpleFileObject (fp=fp@entry=0xaaab06280490, filename=filename@entry=0xffffbd3491b0, closeit=closeit@entry=1, flags=flags@entry=0xffffff91b4d0) at Python/pythonrun.c:459
+459	        v = pyrun_file(fp, filename, Py_file_input, d, d,
+#24 0x0000aaaaea362bc8 in _PyRun_AnyFileObject (fp=fp@entry=0xaaab06280490, filename=filename@entry=0xffffbd3491b0, closeit=closeit@entry=1, flags=flags@entry=0xffffff91b4d0) at Python/pythonrun.c:78
+78	        res = _PyRun_SimpleFileObject(fp, filename, closeit, flags);
+#25 0x0000aaaaea38c0c0 in pymain_run_file_obj (skip_source_first_line=0, filename=0xffffbd3491b0, program_name=0xffffbd32fdb0) at Modules/main.c:361
+361	    int run = _PyRun_AnyFileObject(fp, filename, 1, &cf);
+#26 pymain_run_file (config=0xaaaaea6ebf40 <_PyRuntime+77024>) at Modules/main.c:380
+380	    int res = pymain_run_file_obj(program_name, filename,
+#27 pymain_run_python (exitcode=exitcode@entry=0xffffff91b648) at Modules/main.c:634
+634	        *exitcode = pymain_run_file(config);
+#28 0x0000aaaaea38c678 in Py_RunMain () at Modules/main.c:714
+714	    pymain_run_python(&exitcode);
+#29 pymain_main (args=0xffffff91b608) at Modules/main.c:744
+744	    return Py_RunMain();
+#30 Py_BytesMain (argc=<optimized out>, argv=<optimized out>) at Modules/main.c:768
+768	    return pymain_main(&args);
+#31 0x0000ffffbe317400 in __libc_start_call_main (main=main@entry=0xaaaaea182350 <main>, argc=argc@entry=10, argv=argv@entry=0xffffff91b808) at ../sysdeps/nptl/libc_start_call_main.h:58
+58	../sysdeps/nptl/libc_start_call_main.h: 没有那个文件或目录.
+#32 0x0000ffffbe3174d8 in __libc_start_main_impl (main=0xaaaaea182350 <main>, argc=10, argv=0xffffff91b808, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=<optimized out>) at ../csu/libc-start.c:392
+392	../csu/libc-start.c: 没有那个文件或目录.
+#33 0x0000aaaaea18eab0 in _start ()
+[Inferior 1 (process 760065) detached]

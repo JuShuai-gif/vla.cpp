@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp-quant/scripts/reference_pi05_bf16.py", line 162, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/home/skysi/code/vla.cpp-quant/scripts/reference_pi05_bf16.py", line 81, in main
+    if value.is_meta or value.shape!=old.shape or value.dtype!=old.dtype:raise ValueError("Buffer reconstruction differs")
+                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Buffer reconstruction differs

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-04",
+  "source": "User request: cosine similarity at least 99.9%; subsequent reply retracts unit certainty and permits continuing offline without units",
+  "threshold": 0.999,
+  "metric": "cosine on native denormalized 50x7 outputs in unchanged model coordinates; exclude 25 padded dimensions",
+  "gates": [
+    "every individual 7-dimensional action vector at every one of the 50 times, for every evaluated observation, cosine >=0.999 against BF16 forward actions"
+  ],
+  "units": {
+    "joints": "unconfirmed",
+    "gripper": "unconfirmed",
+    "confirmation": "earlier user statement explicitly retracted; do not treat as verified"
+  },
+  "physical_absolute_limits": "not specified; absolute errors reported in native model coordinates",
+  "closed_loop": "unassessed; hardware not connected",
+  "unit_policy": "offline paired comparison and timing continue; validate conversion before future authorized robot execution",
+  "accuracy_reference": "Unquantized original checkpoint BF16 forward actions; not optimized F16 baseline and not output casting",
+  "performance_reference": "Current original optimized F16-weight/F32-activation runtime",
+  "pairing": "Identical RGB, state, task/tokens and initial noise; complete original 3/10 denoise steps",
+  "prior_cosine_reports": "Measure drift against F16 only; not acceptance against the user-requested BF16 action reference",
+  "bf16_reference_status": "Completed 30 paired development observations for each model, 1500 seven-dimensional actions per model; source-framework BF16 forward with original F32 exceptions; no heldout or live acceptance yet",
+  "aggregation_confirmation": "Explicit user selection: 每个时刻的 7 维 action 向量均 ≥ 0.999",
+  "diagnostics_only": [
+    "global flattened output cosine",
+    "whole 50x7 chunk cosine",
+    "per-joint/gripper trajectory cosine",
+    "absolute and action-increment errors"
+  ],
+  "previous_three_gate_interpretation": "superseded by explicit per-timestep 7D rule; do not use per-dimension trajectory minima for acceptance",
+  "bf16_reference_reports": [
+    "优化记录/2026-11-04_低精度实现与验收/pruned-bf16-reference-30.json",
+    "优化记录/2026-11-04_低精度实现与验收/full-bf16-reference-30.json"
+  ]
+}

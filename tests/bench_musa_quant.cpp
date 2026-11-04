@@ -23,13 +23,16 @@ int main(int argc, char ** argv) {
     const int M = argc > 2 ? std::atoi(argv[2]) : 64;
     const int N = argc > 3 ? std::atoi(argv[3]) : 50;
     const int runs = argc > 4 ? std::atoi(argv[4]) : 10;
+    ggml_type type=GGML_TYPE_Q8_0;
+    if(argc>5){const char *name=argv[5];bool found=false;for(auto t:{GGML_TYPE_Q8_0,GGML_TYPE_Q4_0,GGML_TYPE_Q4_1,GGML_TYPE_Q5_0,GGML_TYPE_Q5_1})if(std::strcmp(name,ggml_type_name(t))==0){type=t;found=true;}if(!found)return 2;}
+    const bool ds4=type==GGML_TYPE_Q4_0||type==GGML_TYPE_Q4_1||type==GGML_TYPE_Q5_1;
     const bool blas = std::getenv("GGML_MUSA_QUANT_ROUTE") &&
                       std::strcmp(std::getenv("GGML_MUSA_QUANT_ROUTE"), "blas") == 0;
     if (K < 32 || K % 32 || M < 1 || N < 9 || runs < 1) return 2;
     auto backend = vla::backend_init("quant-check", 4);
     if (!backend.is_musa) return 77;
     auto * ctx = ggml_init({8*1024*1024, nullptr, true});
-    auto * w = ggml_new_tensor_2d(ctx, GGML_TYPE_Q8_0, K, M);
+    auto * w = ggml_new_tensor_2d(ctx, type, K, M);
     auto * x = ggml_new_tensor_2d(ctx, GGML_TYPE_F32, K, N);
     ggml_set_name(w, "quant_check_q8");
     ggml_set_input(w); ggml_set_input(x);
@@ -49,15 +52,20 @@ int main(int argc, char ** argv) {
         inputs[i] = (i%997 == 0 ? 16.0f : 1.0f)*float(int((i*40503ULL+37)%8191)-4095)/4096.0f;
     std::fill(inputs.begin(), inputs.begin()+32, 0.0f);
     std::vector<unsigned char> packed(ggml_nbytes(w));
-    if (ggml_quantize_chunk(GGML_TYPE_Q8_0, weights.data(), packed.data(), 0, M, K, nullptr) != packed.size()) return 4;
-    ggml_get_type_traits(GGML_TYPE_Q8_0)->to_float(packed.data(), decoded.data(), decoded.size());
+    if (ggml_quantize_chunk(type, weights.data(), packed.data(), 0, M, K, nullptr) != packed.size()) return 4;
+    ggml_get_type_traits(type)->to_float(packed.data(), decoded.data(), decoded.size());
+    std::vector<float> sum_correction(inputs.size()/32), act_scales(inputs.size()/32), act_sums(inputs.size()/32);
     for (size_t b=0; b<inputs.size(); b+=32) {
         float amax=0;
         for (size_t i=b; i<b+32; ++i) amax=std::max(amax,std::fabs(inputs[i]));
         const float inv=amax==0 ? 0 : 127.0f/amax;
-        const float scale=amax==0 ? 0 : 1.0f/inv;
+        float scale=amax==0 ? 0 : 1.0f/inv;
+        if(ds4)scale=ggml_fp16_to_fp32(ggml_fp32_to_fp16(scale));
         for (size_t i=b; i<b+32; ++i)
             qinputs[i]=blas ? ggml_fp16_to_fp32(ggml_fp32_to_fp16(inputs[i])) : std::round(inputs[i]*inv)*scale;
+        float sum=0,qsum=0;for(size_t i=b;i<b+32;++i){sum+=inputs[i];qsum+=qinputs[i];}
+        act_scales[b/32]=scale;act_sums[b/32]=ggml_fp16_to_fp32(ggml_fp32_to_fp16(sum));
+        sum_correction[b/32]=ggml_fp16_to_fp32(ggml_fp32_to_fp16(sum))-qsum;
     }
     if (blas) for (auto & v:decoded) v=ggml_fp16_to_fp32(ggml_fp32_to_fp16(v));
     ggml_backend_tensor_set(w, packed.data(), 0, packed.size());
@@ -79,14 +87,25 @@ int main(int argc, char ** argv) {
         const size_t m=index%M, n=index/M;
         double expected=0;
         for(int k=0;k<K;++k) expected+=double(decoded[m*K+k])*qinputs[n*K+k];
+        if(ds4&&!blas)for(int b=0;b<K/32;++b){ggml_fp16_t half;const size_t stride=ggml_type_size(type);std::memcpy(&half,packed.data()+(m*(K/32)+b)*stride+(type==GGML_TYPE_Q4_0?0:2),2);
+          float offset=ggml_fp16_to_fp32(half)*(type==GGML_TYPE_Q4_0?-8.f:1.f);expected+=double(offset)*sum_correction[n*(K/32)+b];}
+        // Q4_1/Q5_1 DP4A multiplies half2(scale, offset) in FP16 before the integer dot.
+        if(!blas&&(type==GGML_TYPE_Q4_1||type==GGML_TYPE_Q5_1)){
+          expected=0;
+          for(int b=0;b<K/32;++b){ggml_fp16_t hd,hm;const auto *block=packed.data()+(m*(K/32)+b)*ggml_type_size(type);std::memcpy(&hd,block,2);std::memcpy(&hm,block+2,2);
+            const float d=ggml_fp16_to_fp32(hd),offset=ggml_fp16_to_fp32(hm),sx=act_scales[n*(K/32)+b];int dot=0;
+            for(int k=0;k<32;++k){int wq=d?std::lrint((decoded[m*K+b*32+k]-offset)/d):0;int xq=sx?std::lrint(qinputs[n*K+b*32+k]/sx):0;dot+=wq*xq;}
+            expected+=double(dot)*ggml_fp16_to_fp32(ggml_fp32_to_fp16(d*sx))+ggml_fp16_to_fp32(ggml_fp32_to_fp16(offset*act_sums[n*(K/32)+b]));
+          }
+        }
         const double err=std::fabs(expected-result[index]);
         if (s < 8) std::fprintf(stderr, "sample index=%zu expected=%.9g actual=%.9g\n", index, expected, result[index]);
         max_error=std::max(max_error,err);max_ref=std::max(max_ref,std::fabs(expected));sum_sq+=err*err;
         if (err>0.003+0.0003*std::fabs(expected)) ++fails;
     }
     std::sort(times.begin(),times.end());
-    std::printf("{\"type\":\"Q8_0\",\"reference\":\"%s\",\"M\":%d,\"N\":%d,\"K\":%d,\"runs\":%d,\"p50_ms\":%.6f,\"checks\":%zu,\"finite\":%s,\"failed_values\":%d,\"max_error\":%.9g,\"rmse\":%.9g,\"max_reference\":%.9g}\n",
-        blas?"dequant-F16-BLAS":"MMQ-D4",M,N,K,runs,times[times.size()/2],checks,finite?"true":"false",fails,max_error,std::sqrt(sum_sq/checks),max_ref);
+    std::printf("{\"type\":\"%s\",\"reference\":\"%s\",\"M\":%d,\"N\":%d,\"K\":%d,\"runs\":%d,\"p50_ms\":%.6f,\"checks\":%zu,\"finite\":%s,\"failed_values\":%d,\"max_error\":%.9g,\"rmse\":%.9g,\"max_reference\":%.9g}\n",
+        ggml_type_name(type), blas?"dequant-F16-BLAS":ds4?"MMQ-DS4":"MMQ-D4",M,N,K,runs,times[times.size()/2],checks,finite?"true":"false",fails,max_error,std::sqrt(sum_sq/checks),max_ref);
     ggml_gallocr_free(alloc);ggml_free(ctx);ggml_backend_free(backend.handle);
     return finite && !fails ? 0 : 1;
 }

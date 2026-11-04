@@ -1,0 +1,61 @@
+ggml_cuda_init: failed to initialize MUSA: out of memory
+vla(pi05): MUSA device 0 out of range (0 visible); falling back to CPU
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=3 real_state=7 real_action=7 max_len=64 matmul_weights=f16
+CreatePlatform failed!
+vla(pi05): backend = CPU (4 threads)
+vla(pi05): visual token pruning 256 -> 136 per image (attention, spatial order)
+vla(pi05): K/V in place in F16, fused q|k|v and gate|up GEMMs (VLA_PI05_NO_KV_INPLACE=1 to disable)
+vla(pi05): resident weights = 4.71 GiB
+vla(pi05): model loaded (n_threads=4)
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cpu/ops.cpp:6118: GGML_ASSERT(nb0 == nb00) failed
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cpu/ops.cpp:6118: GGML_ASSERT(nb0 == nb00) failed
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cpu/ops.cpp:6118: GGML_ASSERT(nb0 == nb00) failed
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cpu/ops.cpp:6118: GGML_ASSERT(nb0 == nb00) failed
+[New LWP 919314]
+[New LWP 920358]
+[New LWP 920359]
+[New LWP 920360]
+[New LWP 920367]
+[New LWP 920368]
+[New LWP 920369]
+[New LWP 920370]
+[New LWP 920371]
+[New LWP 920372]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/aarch64-linux-gnu/libthread_db.so.1".
+0x0000ffffaa729980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	../sysdeps/unix/sysv/linux/wait4.c: 没有那个文件或目录.
+#0  0x0000ffffaa729980 in __GI___wait4 (pid=<optimized out>, stat_loc=0x0, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+30	in ../sysdeps/unix/sysv/linux/wait4.c
+#1  0x0000ffffaa94e7d4 in ?? () from /usr/local/musa-5.1.0/lib/clang/14.0.0/lib/linux/libclang_rt.asan-aarch64.so
+#2  0x0000fffd6df529a0 in ggml_print_backtrace () at /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml.c:235
+235	        waitpid(child_pid, NULL, 0);
+#3  0x0000fffd6df52f74 in ggml_abort (file=<optimized out>, line=<optimized out>, fmt=<optimized out>) at /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml.c:269
+269	        ggml_print_backtrace();
+#4  0x0000fffd73651524 in ggml_compute_forward_rope_flt<float> (params=<optimized out>, dst=0xfffb749c57e0, forward=<optimized out>) at /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cpu/ops.cpp:6118
+6118	    GGML_ASSERT(nb0 == nb00);
+#5  0x0000fffd73500274 in ggml_compute_forward (params=0xffffd127ac80, tensor=0xfffb749c57e0) at /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cpu/ggml-cpu.c:1921
+1921	                ggml_compute_forward_rope(params, tensor);
+#6  ggml_graph_compute_thread (data=<optimized out>) at /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cpu/ggml-cpu.c:3141
+3141	            ggml_compute_forward(&params, node);
+#7  0x0000fffd73502824 in .omp_outlined._debug__ (n_threads=<optimized out>, threadpool=@0xffffd127b730: 0xffff1fe02dc0, .global_tid.=<optimized out>, .bound_tid.=<optimized out>) at /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cpu/ggml-cpu.c:3431
+3431	            ggml_graph_compute_thread(&threadpool->workers[ith]);
+#8  .omp_outlined. (.global_tid.=<optimized out>, .bound_tid.=<optimized out>, n_threads=<optimized out>, threadpool=<optimized out>) at /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cpu/ggml-cpu.c:3415
+3415	        #pragma omp parallel num_threads(n_threads)
+#9  0x0000fffd6dec117c in __kmp_invoke_microtask () from /usr/local/musa/lib/libomp.so
+Backtrace stopped: previous frame identical to this frame (corrupt stack?)
+[Inferior 1 (process 919137) detached]
+Could not attach to process.  If your uid matches the uid of the target
+process, check the setting of /proc/sys/kernel/yama/ptrace_scope, or try
+again as the root user.  For more details, see /etc/sysctl.d/10-ptrace.conf
+warning: process 919137 is a zombie - the process has already terminated
+ptrace: 对设备不适当的 ioctl 操作.
+No stack.
+The program is not being run.
+ptrace: 没有那个进程.
+No stack.
+The program is not being run.
+ptrace: 没有那个进程.
+No stack.
+The program is not being run.

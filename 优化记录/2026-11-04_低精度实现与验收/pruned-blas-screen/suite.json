@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "scope": "development screening",
+  "runs": [
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/baseline-8ba8496a.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/baseline-8ba8496a.log",
+      "elapsed_seconds": 26.34677219390869,
+      "precision": "baseline"
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q8-prefix-mlp-288fe3b9.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q8-prefix-mlp-288fe3b9.log",
+      "elapsed_seconds": 41.18026685714722,
+      "precision": "q8-prefix-mlp",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q8-prefix-mlp-288fe3b9-comparison.json",
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q4-calibrated-37d909c7.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q4-calibrated-37d909c7.log",
+      "elapsed_seconds": 34.037641525268555,
+      "precision": "q4-calibrated",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q4-calibrated-37d909c7-comparison.json",
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q5-mixed-35b81ec5.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q5-mixed-35b81ec5.log",
+      "elapsed_seconds": 39.635069847106934,
+      "precision": "q5-mixed",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-blas-screen/q5-mixed-35b81ec5-comparison.json",
+      "performance_screen_pass": false
+    }
+  ],
+  "physical_quality": "unassessed",
+  "closed_loop": "unassessed",
+  "qualified_acceleration": false
+}

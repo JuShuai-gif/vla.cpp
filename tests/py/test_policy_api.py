@@ -1,5 +1,6 @@
 """Policy lifecycle, validation and stochastic scheduling without native hardware."""
 import json
+import os
 from pathlib import Path
 import tempfile
 from types import SimpleNamespace
@@ -49,6 +50,16 @@ class PolicyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'reserved'):
             policy._config(self.path)
 
+    def test_quant_route_is_explicit_and_validated(self):
+        cfg=dict(self.config,precision_profiles={"q8-blas":{"quant_route":"blas"}})
+        self.path.write_text(json.dumps(cfg))
+        self.assertEqual(policy._config(self.path,"q8-blas")["quant_route"],"blas")
+        self.assertEqual(policy._config(self.path,"baseline")["quant_route"],"auto")
+        cfg["precision_profiles"]["q8-blas"]["quant_route"]="typo"
+        self.path.write_text(json.dumps(cfg))
+        with self.assertRaisesRegex(ValueError,"quant_route"):
+            policy._config(self.path,"q8-blas")
+
     def test_prompt_cache_reuses_metadata_but_not_state_or_task(self):
         def field(value):
             return SimpleNamespace(contents=Mock(return_value=value))
@@ -86,7 +97,10 @@ class PolicyTests(unittest.TestCase):
              patch('vla_cpp._ffi.load_library',return_value=fake_lib), \
              patch.object(vla_cpp,'Model',return_value=native):
             images={name:np.zeros((4,4,3),np.uint8) for name in spec.camera_order}
-            with vla_cpp.load_policy(self.path,task='test') as model:
+            with patch.dict(os.environ, {"GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
+                self.assertEqual(os.environ["GGML_MUSA_QUANT_ROUTE"],"auto")
+                self.assertNotIn("GGML_CUDA_CUBLAS_COMPUTE_TYPE",os.environ)
+                self.assertNotIn("GGML_MUSA_GRAPH_RECREATE",os.environ)
                 with self.assertRaisesRegex(RuntimeError,'one resident'):vla_cpp.load_policy(self.path)
                 model.warmup(images,state=[0]*7,runs=3)
                 first=model.predict(images,state=[0]*7)

@@ -1,0 +1,26 @@
+{
+  "purpose": "optional diagnostic only; not a proven stability fix",
+  "runs": [
+    {
+      "run": 1,
+      "report": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-baseline-30-recreate-1.json",
+      "minimum_action_vector": 0.9999659986470442,
+      "failed": 0,
+      "offline_accuracy_pass": true
+    },
+    {
+      "run": 2,
+      "report": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-baseline-30-recreate-2.json",
+      "minimum_action_vector": 0.9999659986470442,
+      "failed": 0,
+      "offline_accuracy_pass": true
+    },
+    {
+      "run": 3,
+      "report": "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-baseline-30-recreate-3.json",
+      "minimum_action_vector": 0.9999659986470442,
+      "failed": 0,
+      "offline_accuracy_pass": true
+    }
+  ]
+}

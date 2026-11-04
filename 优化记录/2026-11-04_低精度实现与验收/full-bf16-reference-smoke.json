@@ -1,0 +1,2361 @@
+{
+  "schema_version": 1,
+  "reference_kind": "source-framework-bf16",
+  "precision": "original-checkpoint-bf16",
+  "source_model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+  "checkpoint": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022",
+  "source_sha256": {
+    "/home/skysi/code/vla.cpp-quant/scripts/reference_pi05_bf16.py": "1746d9bf6e50379272971f2b1ad89739d6ead1eacbe53ac8413c46221150d860",
+    "/home/skysi/hh_code/lerobot_musa/src/lerobot/policies/pi05/modeling_pi05.py": "7a2d94275f182f921b6015916d631d5a620edcb0492ed2290c2b30a2c1e00dad",
+    "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/config.json": "ed86829367ea9172f519724f53bd8483c651b9ecc79c87c30b7126405465d4be",
+    "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/model.safetensors": "e041f556e07883765a8819b9b6129cf3b65437b076e829f78e1eecef51ab6846",
+    "validation/quant/reference/full-inputs/manifest.json": "1753b2da33c3f603d825c3063c673c799cbcf54687536e8992d78e2c21d9fe7a",
+    "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/policy_postprocessor.json": "1836b08deaf94599cb18de25eec7269789894da5ea32f1dc68319bdd811df452",
+    "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/policy_postprocessor_step_0_unnormalizer_processor.safetensors": "2ed0f78a89140078e5f3a4a92fe8862f5ef0aaa4e64d3c965488315ec2dde0b2",
+    "/home/skysi/hh_code/lerobot_musa/src/lerobot/policies/pi_gemma.py": "fe287aa89ad2c826093306a89b6752ec00d19eea52a5f2b4b4d463246e294722"
+  },
+  "torch_version": "2.9.0.post1+musa5.1.2mp22",
+  "parameter_dtypes": {
+    "torch.float32": 558,
+    "torch.bfloat16": 255
+  },
+  "linear_dtypes": {
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.0.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.0.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.0.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.0.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.0.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.0.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.1.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.1.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.1.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.1.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.1.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.1.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.2.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.2.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.2.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.2.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.2.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.2.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.3.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.3.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.3.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.3.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.3.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.3.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.4.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.4.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.4.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.4.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.4.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.4.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.5.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.5.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.5.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.5.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.5.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.5.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.6.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.6.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.6.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.6.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.6.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.6.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.7.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.7.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.7.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.7.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.7.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.7.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.8.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.8.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.8.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.8.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.8.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.8.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.9.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.9.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.9.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.9.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.9.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.9.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.10.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.10.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.10.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.10.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.10.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.10.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.11.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.11.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.11.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.11.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.11.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.11.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.12.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.12.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.12.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.12.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.12.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.12.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.13.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.13.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.13.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.13.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.13.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.13.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.14.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.14.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.14.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.14.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.14.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.14.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.15.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.15.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.15.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.15.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.15.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.15.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.16.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.16.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.16.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.16.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.16.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.16.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.17.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.17.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.17.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.17.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.17.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.17.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.18.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.18.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.18.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.18.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.18.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.18.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.19.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.19.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.19.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.19.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.19.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.19.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.20.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.20.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.20.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.20.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.20.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.20.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.21.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.21.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.21.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.21.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.21.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.21.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.22.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.22.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.22.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.22.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.22.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.22.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.23.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.23.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.23.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.23.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.23.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.23.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.24.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.24.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.24.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.24.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.24.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.24.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.25.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.25.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.25.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.25.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.25.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.25.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.26.self_attn.q_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.26.self_attn.k_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.26.self_attn.v_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.26.self_attn.out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.26.mlp.fc1": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.encoder.layers.26.mlp.fc2": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.multi_modal_projector.linear": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.0.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.0.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.0.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.0.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.0.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.0.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.0.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.1.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.1.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.1.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.1.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.1.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.1.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.1.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.2.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.2.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.2.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.2.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.2.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.2.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.2.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.3.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.3.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.3.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.3.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.3.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.3.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.3.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.4.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.4.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.4.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.4.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.4.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.4.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.4.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.5.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.5.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.5.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.5.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.5.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.5.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.5.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.6.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.6.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.6.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.6.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.6.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.6.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.6.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.7.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.7.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.7.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.7.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.7.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.7.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.7.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.8.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.8.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.8.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.8.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.8.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.8.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.8.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.9.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.9.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.9.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.9.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.9.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.9.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.9.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.10.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.10.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.10.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.10.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.10.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.10.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.10.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.11.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.11.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.11.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.11.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.11.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.11.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.11.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.12.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.12.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.12.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.12.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.12.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.12.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.12.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.13.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.13.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.13.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.13.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.13.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.13.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.13.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.14.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.14.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.14.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.14.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.14.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.14.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.14.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.15.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.15.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.15.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.15.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.15.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.15.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.15.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.16.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.16.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.16.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.16.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.16.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.16.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.16.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.17.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.17.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.17.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.17.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.17.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.17.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.paligemma.model.language_model.layers.17.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "action_in_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "time_mlp_in": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "time_mlp_out": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.0.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.1.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.1.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.1.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.1.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.1.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.1.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.1.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.1.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.1.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.2.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.2.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.2.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.2.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.2.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.2.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.2.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.2.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.2.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.3.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.3.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.3.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.3.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.3.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.3.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.3.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.3.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.3.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.4.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.4.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.4.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.4.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.4.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.4.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.4.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.4.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.4.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.5.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.5.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.5.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.5.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.5.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.5.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.5.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.5.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.5.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.6.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.6.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.6.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.6.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.6.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.6.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.6.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.6.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.6.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.7.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.7.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.7.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.7.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.7.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.7.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.7.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.7.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.7.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.8.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.8.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.8.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.8.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.8.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.8.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.8.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.8.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.8.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.9.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.9.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.9.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.9.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.9.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.9.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.9.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.9.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.9.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.10.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.10.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.10.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.10.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.10.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.10.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.10.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.10.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.10.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.11.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.11.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.11.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.11.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.11.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.11.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.11.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.11.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.11.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.12.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.12.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.12.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.12.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.12.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.12.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.12.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.12.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.12.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.13.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.13.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.13.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.13.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.13.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.13.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.13.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.13.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.13.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.14.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.14.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.14.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.14.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.14.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.14.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.14.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.14.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.14.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.15.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.15.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.15.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.15.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.15.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.15.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.15.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.15.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.15.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.16.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.16.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.16.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.16.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.16.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.16.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.16.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.16.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.16.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.17.input_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.17.self_attn.q_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.17.self_attn.k_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.17.self_attn.v_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.17.self_attn.o_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.17.post_attention_layernorm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.17.mlp.gate_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.17.mlp.up_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.layers.17.mlp.down_proj": {
+      "input": "torch.bfloat16",
+      "weight": "torch.bfloat16",
+      "output": "torch.bfloat16"
+    },
+    "paligemma_with_expert.gemma_expert.model.norm.dense": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    },
+    "action_out_proj": {
+      "input": "torch.float32",
+      "weight": "torch.float32",
+      "output": "torch.float32"
+    }
+  },
+  "vision_layers": 27,
+  "vision_token_prune": 0,
+  "aliases": [],
+  "rebuilt_buffers": [
+    "paligemma_with_expert.paligemma.model.vision_tower.vision_model.embeddings.position_ids",
+    "paligemma_with_expert.paligemma.model.language_model.rotary_emb.inv_freq",
+    "paligemma_with_expert.paligemma.model.language_model.rotary_emb.original_inv_freq",
+    "paligemma_with_expert.gemma_expert.model.rotary_emb.inv_freq",
+    "paligemma_with_expert.gemma_expert.model.rotary_emb.original_inv_freq"
+  ],
+  "num_steps": 10,
+  "input_sha256": [
+    "7afdae9b5ee92242c5bdbf8daf17d087422244c8b689696534f08bbe86dd77f6",
+    "f3ec55ae7a2e8c88e1890f162131fd03931b5d0265e1a4f331548f743128cca6",
+    "4f0b9217dbcc1cf40e807e02e4459c0ac029d96591ca555849fd67afa597a8be"
+  ],
+  "noise_sha256": [
+    "3a374c0d47c23b1a0010ad059a4612425bcb6bb523c8804aa5734a9140f1995d",
+    "3220a60129f16cb70faea5ea512c32516c56c344acd46b83985d28e9ba142dd0",
+    "26b66ddb542e5aab284701bfec4017199b3953d3a0193bc9bb4e6748e56492a6"
+  ],
+  "token_sha256": [
+    "82c78466f1b84616f58d0c1e833b5bb0835aa3baac6d94875586794af99684c5",
+    "87a7baa6f40284adf48ec35b88517c77265628b850199407b93aef9fc41c71b1",
+    "923cdd8eed256823695901f174dd0648ccd921dd907538cb18bb03b7064e49df"
+  ],
+  "task_sha256": [
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184",
+    "9f43dcf918887bf7d4f7ddf8002e97b28b9724c9e216f6cefe52faca505e0184"
+  ],
+  "episodes": [
+    5,
+    5,
+    5
+  ],
+  "action_half_range": [
+    39.197998046875,
+    70.07307434082031,
+    59.75749969482422,
+    14.323714256286621,
+    19.236000061035156,
+    97.90636444091797,
+    49.650001525878906
+  ],
+  "units": {
+    "joints": "unconfirmed",
+    "gripper": "unconfirmed",
+    "confirmed": false
+  },
+  "reference_forward_ms": [
+    27760.57273200422,
+    1506.4803429995663,
+    1510.7417559920577
+  ],
+  "scope": "accuracy reference only; not a performance baseline",
+  "pruning_adaptation": null
+}

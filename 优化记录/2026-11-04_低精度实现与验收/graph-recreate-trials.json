@@ -1,0 +1,26 @@
+{
+  "purpose": "diagnostic only; no claim of fixed shutdown corruption",
+  "runs": [
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-baseline-30-recreate-1.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-baseline-30-recreate-1.txt",
+      "elapsed_seconds": 42.1649534702301
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-baseline-30-recreate-2.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-baseline-30-recreate-2.txt",
+      "elapsed_seconds": 42.35963463783264
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-baseline-30-recreate-3.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-baseline-30-recreate-3.txt",
+      "elapsed_seconds": 44.73991012573242
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "scope": "development screening",
+  "runs": [
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/baseline-8ba8496a.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/baseline-8ba8496a.log",
+      "elapsed_seconds": 43.939730167388916,
+      "precision": "baseline"
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/fp16-activations-a3af6504.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/fp16-activations-a3af6504.log",
+      "elapsed_seconds": 40.79392337799072,
+      "precision": "fp16-activations",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/fp16-activations-a3af6504-comparison.json",
+      "cosine_diagnostic_pass": true,
+      "offline_accuracy_pass": true,
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-prefix-mlp-blas-f3d0c3d1.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-prefix-mlp-blas-f3d0c3d1.log",
+      "elapsed_seconds": 60.55112171173096,
+      "precision": "q8-prefix-mlp-blas",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-prefix-mlp-blas-f3d0c3d1-comparison.json",
+      "cosine_diagnostic_pass": true,
+      "offline_accuracy_pass": true,
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-prefix-blas-439256a9.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-prefix-blas-439256a9.log",
+      "elapsed_seconds": 64.23182654380798,
+      "precision": "q8-prefix-blas",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-prefix-blas-439256a9-comparison.json",
+      "cosine_diagnostic_pass": true,
+      "offline_accuracy_pass": true,
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-vision-blas-eebf20f6.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-vision-blas-eebf20f6.log",
+      "elapsed_seconds": 66.73089790344238,
+      "precision": "q8-vision-blas",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-vision-blas-eebf20f6-comparison.json",
+      "cosine_diagnostic_pass": true,
+      "offline_accuracy_pass": true,
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q4-mixed-blas-a8c3383d.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q4-mixed-blas-a8c3383d.log",
+      "elapsed_seconds": 58.41413688659668,
+      "precision": "q4-mixed-blas",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q4-mixed-blas-a8c3383d-comparison.json",
+      "cosine_diagnostic_pass": false,
+      "offline_accuracy_pass": false,
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-expert-mlp-blas-0c8bb7f9.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-expert-mlp-blas-0c8bb7f9.log",
+      "elapsed_seconds": 72.04290175437927,
+      "precision": "q8-expert-mlp-blas",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-expert-mlp-blas-0c8bb7f9-comparison.json",
+      "cosine_diagnostic_pass": true,
+      "offline_accuracy_pass": true,
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-expert-blas-7da3d137.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-expert-blas-7da3d137.log",
+      "elapsed_seconds": 69.86317539215088,
+      "precision": "q8-expert-blas",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q8-expert-blas-7da3d137-comparison.json",
+      "cosine_diagnostic_pass": true,
+      "offline_accuracy_pass": true,
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q5-mixed-blas-173adc1a.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q5-mixed-blas-173adc1a.log",
+      "elapsed_seconds": 61.016581773757935,
+      "precision": "q5-mixed-blas",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q5-mixed-blas-173adc1a-comparison.json",
+      "cosine_diagnostic_pass": true,
+      "offline_accuracy_pass": true,
+      "performance_screen_pass": false
+    },
+    {
+      "status": "completed",
+      "returncode": 0,
+      "report": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q4-calibrated-blas-79895739.json",
+      "log": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q4-calibrated-blas-79895739.log",
+      "elapsed_seconds": 59.41239666938782,
+      "precision": "q4-calibrated-blas",
+      "comparison": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/q4-calibrated-blas-79895739-comparison.json",
+      "cosine_diagnostic_pass": false,
+      "offline_accuracy_pass": false,
+      "performance_screen_pass": false
+    }
+  ],
+  "accuracy_reference": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-reference-30.json",
+  "physical_quality": "unassessed",
+  "closed_loop": "unassessed",
+  "qualified_acceleration": false
+}

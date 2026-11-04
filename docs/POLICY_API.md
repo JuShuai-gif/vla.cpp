@@ -81,16 +81,91 @@ with load_policy("policy.json", precision="q8-prefix-mlp", task="...") as policy
 
 Policy JSON may declare `default_precision` (otherwise `baseline`) and
 `precision_profiles`. Each named entry accepts `model`, `manifest`,
-`runtime` overrides and `status` (`experimental` by default; `validated`
+`runtime` overrides, `quant_route` (`auto` or `blas`) and `status` (`experimental` by default; `validated`
 only after deployment acceptance). The reserved baseline uses the original
 model/runtime configuration. All relative paths resolve beside the policy JSON.
 Unknown names and missing selected assets fail explicitly. Quantized GGUF files
 require the converter's verified manifest; load checks its SHA256 before native
 allocation. Inspection checks tensor names, shapes and types without GPU I/O.
 
-`PolicySpec.precision`, `precision_status` and `weight_types` describe the
+`PolicySpec.precision`, `precision_status`, `quant_route` and `weight_types` describe the
 selection; resolved parameters separately report on-disk weight types,
 floating resident weight dtype and activation dtype. A packed Q8 tensor stays
 Q8 even when runtime.weight_dtype is f16. Different native options require a
 fresh process. robot_runtime forwards its precision parameter and refuses
 experimental profiles during live execution; offline loading remains available.
+
+### Reproducible offline quantization experiments
+
+`calibrate_pi05.py` reads only the episode-separated calibration split produced by
+`prepare_quant_corpus.py`. It retains GEMM inputs and records per-channel maximum
+magnitude and sums of squares, including separate occurrences at each denoise
+step. Its timing and memory use are diagnostic, not performance measurements.
+The directory must be new; raw reports and actions are retained.
+
+```sh
+python scripts/calibrate_pi05.py --config pruned-policy.json \
+  --corpus validation/quant/data/real-v1/manifest.json --samples 120 \
+  --output-dir validation/quant/calibration/pruned-120
+python scripts/quantize_gguf.py --in original.gguf --out calibrated-q4.gguf \
+  --recipe prefix-mixed --type Q8_0 \
+  --importance validation/quant/calibration/pruned-120/importance.json
+```
+
+Calibration uses a search over standard Q4_0/Q8_0 block scales, weighted by input
+second moments. It does not implement full GPTQ or AWQ, change normalization,
+reduce denoise steps, or imply a deployment-quality result. The manifest records
+calibration provenance, the actual number of calibrated tensors, and any selected
+tensors with no observed input that retain ordinary rounding (for example unused
+last-prefix-layer projections). An unrelated source model or heldout-split
+statistics are rejected. Final action error and runtime must still be measured.
+
+`bench_pi05_precision.py` records named precision, actual on-disk weight types,
+input/noise/token hashes, language lengths, library/script hashes, raw timings,
+and all 50×32 actions. Comparisons include per-joint MAE/RMSE/P95/P99/max error and
+action-increment errors. Missing physical units, limits or gripper rules remain
+unassessed. Repeated observations must use fresh processes and the same policy
+settings; an experimental profile is never automatically promoted by a report.
+
+`run_precision_suite.py --config POLICY --corpus CORPUS --precisions q8-prefix-mlp
+q4-mixed --samples 12 --output-dir NEW_DIRECTORY` runs a baseline and each named
+candidate in a fresh process. The suite records process return codes and excludes
+reports left by a native shutdown failure. Its performance check is a development
+screen only; physical quality and closed-loop status remain explicitly unassessed.
+
+
+### Quantized execution routes and offline quality
+
+A precision profile can set `"quant_route": "blas"` to decode packed weights to
+FP16 scratch space at each GEMM and use vendor BLAS with FP32 accumulation/output
+on M1000. This is a memory/storage alternative, not integer matrix acceleration.
+The decode cost is included in prediction latency. `auto` keeps ggml dispatch.
+The API sets the chosen route explicitly, and clears an inherited global BLAS
+compute-type override so it cannot silently change baseline attention precision.
+Per-profile route selection requires restarting the process.
+
+The accuracy reference is an actual original-checkpoint BF16 forward, including
+its original FP32 vision/norm exceptions. It is not the optimized F16 performance
+baseline and not a cast of the final action tensor. Use
+`prepare_pi05_bf16_inputs.py` with the runtime environment to freeze identical
+RGB/token/noise inputs, then `reference_pi05_bf16.py` in the installed LeRobot
+environment to run the original safetensors checkpoint. The reference runner
+strictly loads weights, records source hashes and observed Linear dtypes, and
+adapts the checkpoint's vision layer count and attention/hard token pruning.
+
+The user-specified acceptance gate is cosine ≥ 0.999 for **each 7-dimensional
+action vector at every one of the 50 times**, for every evaluated observation.
+Global/chunk/per-joint trajectory cosines are diagnostic only; they do not replace
+or add to that gate. Padded dimensions are excluded. Two zero vectors score 1;
+only one zero vector scores 0. Raw output units need not be confirmed for a
+paired comparison in unchanged model coordinates; absolute errors remain in
+those native coordinates until units are verified.
+
+`bench_pi05_precision.py --compare BF16_REPORT CANDIDATE_REPORT
+--performance-reference F16_BASELINE_REPORT --output NEW_REPORT` keeps accuracy
+and timing references separate and validates input/noise/token pairing for both.
+`run_precision_suite.py --accuracy-reference BF16_REPORT ...` uses the same
+separation. Without a BF16 reference it reports diagnostic drift only and cannot
+mark offline accuracy passed. A failed baseline process stops the remaining
+suite; reports written before a shutdown crash are not accepted. Offline
+acceptance does not promote a profile to live deployment.

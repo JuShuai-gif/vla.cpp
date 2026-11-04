@@ -1,0 +1,63 @@
+tests/bench_musa_row_quant.cpp:16:17: error: use of undeclared identifier 'musa'
+static void dnn(musa::dnn::Status e) {if(e!=musa::dnn::Status::SUCCESS){fprintf(stderr,"muDNN: %d\n",int(e));exit(4);}}
+                ^
+tests/bench_musa_row_quant.cpp:16:45: error: use of undeclared identifier 'musa'
+static void dnn(musa::dnn::Status e) {if(e!=musa::dnn::Status::SUCCESS){fprintf(stderr,"muDNN: %d\n",int(e));exit(4);}}
+                                            ^
+tests/bench_musa_row_quant.cpp:86:5: error: use of undeclared identifier 'musa'
+    musa::dnn::Handle dh; musa::dnn::Tensor da,db,dc; musa::dnn::MatMul mm;
+    ^
+tests/bench_musa_row_quant.cpp:86:27: error: use of undeclared identifier 'musa'
+    musa::dnn::Handle dh; musa::dnn::Tensor da,db,dc; musa::dnn::MatMul mm;
+                          ^
+tests/bench_musa_row_quant.cpp:86:55: error: use of undeclared identifier 'musa'
+    musa::dnn::Handle dh; musa::dnn::Tensor da,db,dc; musa::dnn::MatMul mm;
+                                                      ^
+tests/bench_musa_row_quant.cpp:88:32: error: use of undeclared identifier 'musa'
+    if(use_dnn){dnn(da.SetType(musa::dnn::Tensor::Type::INT8));dnn(db.SetType(musa::dnn::Tensor::Type::INT8));dnn(dc.SetType(musa::dnn::Tensor::Type::INT32));
+                               ^
+tests/bench_musa_row_quant.cpp:88:79: error: use of undeclared identifier 'musa'
+    if(use_dnn){dnn(da.SetType(musa::dnn::Tensor::Type::INT8));dnn(db.SetType(musa::dnn::Tensor::Type::INT8));dnn(dc.SetType(musa::dnn::Tensor::Type::INT32));
+                                                                              ^
+tests/bench_musa_row_quant.cpp:88:68: error: use of undeclared identifier 'db'
+    if(use_dnn){dnn(da.SetType(musa::dnn::Tensor::Type::INT8));dnn(db.SetType(musa::dnn::Tensor::Type::INT8));dnn(dc.SetType(musa::dnn::Tensor::Type::INT32));
+                                                                   ^
+tests/bench_musa_row_quant.cpp:88:126: error: use of undeclared identifier 'musa'
+    if(use_dnn){dnn(da.SetType(musa::dnn::Tensor::Type::INT8));dnn(db.SetType(musa::dnn::Tensor::Type::INT8));dnn(dc.SetType(musa::dnn::Tensor::Type::INT32));
+                                                                                                                             ^
+tests/bench_musa_row_quant.cpp:88:115: error: use of undeclared identifier 'dc'
+    if(use_dnn){dnn(da.SetType(musa::dnn::Tensor::Type::INT8));dnn(db.SetType(musa::dnn::Tensor::Type::INT8));dnn(dc.SetType(musa::dnn::Tensor::Type::INT32));
+                                                                                                                  ^
+tests/bench_musa_row_quant.cpp:89:37: error: use of undeclared identifier 'db'
+      dnn(da.SetNdInfo({NP,K}));dnn(db.SetNdInfo({M,K}));dnn(dc.SetNdInfo({NP,M}));dnn(da.SetAddr(gq));dnn(db.SetAddr(gw));dnn(dc.SetAddr(gi));
+                                    ^
+tests/bench_musa_row_quant.cpp:89:62: error: use of undeclared identifier 'dc'
+      dnn(da.SetNdInfo({NP,K}));dnn(db.SetNdInfo({M,K}));dnn(dc.SetNdInfo({NP,M}));dnn(da.SetAddr(gq));dnn(db.SetAddr(gw));dnn(dc.SetAddr(gi));
+                                                             ^
+tests/bench_musa_row_quant.cpp:89:108: error: use of undeclared identifier 'db'
+      dnn(da.SetNdInfo({NP,K}));dnn(db.SetNdInfo({M,K}));dnn(dc.SetNdInfo({NP,M}));dnn(da.SetAddr(gq));dnn(db.SetAddr(gw));dnn(dc.SetAddr(gi));
+                                                                                                           ^
+tests/bench_musa_row_quant.cpp:89:128: error: use of undeclared identifier 'dc'
+      dnn(da.SetNdInfo({NP,K}));dnn(db.SetNdInfo({M,K}));dnn(dc.SetNdInfo({NP,M}));dnn(da.SetAddr(gq));dnn(db.SetAddr(gw));dnn(dc.SetAddr(gi));
+                                                                                                                               ^
+tests/bench_musa_row_quant.cpp:90:62: error: use of undeclared identifier 'musa'
+      dnn(mm.SetTranspose(false,true));dnn(mm.SetComputeMode(musa::dnn::MatMul::ComputeMode::TENSOR));
+                                                             ^
+tests/bench_musa_row_quant.cpp:91:49: error: use of undeclared identifier 'dc'
+      dnn(mm.GetWorkspaceSize(dh,workspace_size,dc,da,db));if(workspace_size)check(musaMalloc(&workspace,workspace_size));
+                                                ^
+tests/bench_musa_row_quant.cpp:91:55: error: use of undeclared identifier 'db'
+      dnn(mm.GetWorkspaceSize(dh,workspace_size,dc,da,db));if(workspace_size)check(musaMalloc(&workspace,workspace_size));
+                                                      ^
+tests/bench_musa_row_quant.cpp:93:5: error: use of undeclared identifier 'musa'
+    musa::dnn::MemoryMaintainer allocator=[&](size_t n){if(n>workspace_size)std::abort();return musa::dnn::MemoryHandler(workspace,[](void*){});};
+    ^
+tests/bench_musa_row_quant.cpp:93:33: error: use of undeclared identifier 'allocator'; did you mean 'std::allocator'?
+    musa::dnn::MemoryMaintainer allocator=[&](size_t n){if(n>workspace_size)std::abort();return musa::dnn::MemoryHandler(workspace,[](void*){});};
+                                ^~~~~~~~~
+                                std::allocator
+/usr/lib/gcc/aarch64-linux-gnu/12/../../../../include/c++/12/bits/allocator.h:124:11: note: 'std::allocator' declared here
+    class allocator : public __allocator_base<_Tp>
+          ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated when compiling for mp_22.

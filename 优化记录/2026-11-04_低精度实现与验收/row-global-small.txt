@@ -1,0 +1,3 @@
+tile=32x64 warps=1
+{"path":"row-W8A8-WMMA-global-output","K":256,"M":64,"N":50,"gpu_p50_ms":0.130000,"checks":3200,"failed":0,"max_error":6.61948112e-07}
+{"path":"F16-BLAS","K":256,"M":64,"N":50,"gpu_p50_ms":0.109880,"checks":3200,"failed":0,"max_error":5.73694706e-06}

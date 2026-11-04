@@ -1,0 +1,47 @@
+[1/7] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/ggml-cuda/convert.cu.o
+In file included from /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/convert.cu:1:
+In file included from /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/convert.cuh:2:
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:1453:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:1454:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+5 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/convert.cu:1:
+In file included from /home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/convert.cuh:2:
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:427:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+}
+^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:876:73: warning: unused parameter 'x' [-Wunused-parameter]
+static __device__ __forceinline__ uint8_t ggml_cuda_fp32_to_ue4m3(float x) {
+                                                                        ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:886:1: warning: non-void function does not return a value [-Wreturn-type]
+}
+^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:1453:84: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    cublasHandle_t cublas_handles[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                                   ^~~~~~~
+                                                                                   {      }
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/ggml-cuda/common.cuh:1454:79: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+    void * cublas_workspaces[GGML_CUDA_MAX_DEVICES][GGML_CUDA_MAX_STREAMS] = {nullptr};
+                                                                              ^~~~~~~
+                                                                              {      }
+5 warnings generated when compiling for host.
+[2/7] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[3/7] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[4/7] Linking CXX shared library bin/libggml.so.0.25.3
+[5/7] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[6/7] Linking CXX shared library libvla_core.so
+[7/7] Linking CXX executable tests/bench_musa_quant

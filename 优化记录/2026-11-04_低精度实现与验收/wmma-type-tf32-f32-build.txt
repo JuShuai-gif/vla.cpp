@@ -1,0 +1,5 @@
+clang-14: warning: argument unused during compilation: '--cuda-gpu-arch=mp_22' [-Wunused-command-line-argument]
+优化记录/2026-11-04_低精度实现与验收/wmma-dtype-probe.cpp:2:10: fatal error: 'musa_runtime.h' file not found
+#include <musa_runtime.h>
+         ^~~~~~~~~~~~~~~~
+1 error generated.

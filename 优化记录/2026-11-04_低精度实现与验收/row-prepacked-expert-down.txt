@@ -1,0 +1,3 @@
+tile=32x64
+{"path":"row-W8A8-WMMA-prepacked","K":4096,"M":1024,"N":50,"gpu_p50_ms":0.924920,"checks":4096,"failed":0,"max_error":1.69455975e-06}
+{"path":"F16-BLAS","K":4096,"M":1024,"N":50,"gpu_p50_ms":0.511920,"checks":4096,"failed":0,"max_error":0.000151630491}

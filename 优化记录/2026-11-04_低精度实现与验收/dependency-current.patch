@@ -1,3 +1,16 @@
+diff --git a/ggml/src/ggml-alloc.c b/ggml/src/ggml-alloc.c
+index a71838e..b93aafc 100644
+--- a/ggml/src/ggml-alloc.c
++++ b/ggml/src/ggml-alloc.c
+@@ -11,7 +11,7 @@
+ #include <string.h>
+ 
+ #define MAX(a, b) ((a) > (b) ? (a) : (b))
+-#define MAX_FREE_BLOCKS 256
++#define MAX_FREE_BLOCKS 2048 // vla.cpp: full pi05 calibration input retention
+ 
+ //#define GGML_ALLOCATOR_DEBUG
+ 
 diff --git a/ggml/src/ggml-cuda/common.cuh b/ggml/src/ggml-cuda/common.cuh
 index 5363dd0..9f0b734 100644
 --- a/ggml/src/ggml-cuda/common.cuh
@@ -10,6 +23,22 @@ index 5363dd0..9f0b734 100644
          int64_t  node_src_ne[GGML_MAX_SRC][GGML_MAX_DIMS];
          size_t   node_src_nb[GGML_MAX_SRC][GGML_MAX_DIMS];
      };
+diff --git a/ggml/src/ggml-cuda/convert.cu b/ggml/src/ggml-cuda/convert.cu
+index 0619f47..6852fb0 100644
+--- a/ggml/src/ggml-cuda/convert.cu
++++ b/ggml/src/ggml-cuda/convert.cu
+@@ -559,9 +559,11 @@ to_fp16_cuda_t ggml_get_to_fp16_cuda(ggml_type type) {
+         case GGML_TYPE_Q5_1:
+             return dequantize_block_cont_cuda<QK5_1, QR5_1, dequantize_q5_1>;
+         case GGML_TYPE_Q8_0:
++#ifndef GGML_USE_MUSA
+             if (fp16_available(ggml_cuda_info().devices[ggml_cuda_get_device()].cc)) {
+                 return dequantize_block_q8_0_f16_cuda;
+             }
++#endif
+             return dequantize_block_cont_cuda<QK8_0, QR8_0, dequantize_q8_0>;
+         case GGML_TYPE_Q2_K:
+             return dequantize_row_q2_K_cuda;
 diff --git a/ggml/src/ggml-cuda/fattn.cu b/ggml/src/ggml-cuda/fattn.cu
 index ad4d1df..d36ad44 100644
 --- a/ggml/src/ggml-cuda/fattn.cu
@@ -33,7 +62,7 @@ index ad4d1df..d36ad44 100644
      const ggml_tensor * Q     = dst->src[0];
      const ggml_tensor * K     = dst->src[1];
 diff --git a/ggml/src/ggml-cuda/ggml-cuda.cu b/ggml/src/ggml-cuda/ggml-cuda.cu
-index b50d05d..b93d27c 100644
+index b50d05d..b94cac7 100644
 --- a/ggml/src/ggml-cuda/ggml-cuda.cu
 +++ b/ggml/src/ggml-cuda/ggml-cuda.cu
 @@ -721,6 +721,9 @@ ggml_backend_cuda_context::~ggml_backend_cuda_context() {
@@ -338,7 +367,29 @@ index b50d05d..b93d27c 100644
                  memcpy(prop.node_src_ne[j], cgraph->nodes[i]->src[j]->ne, sizeof(prop.node_src_ne[j]));
                  memcpy(prop.node_src_nb[j], cgraph->nodes[i]->src[j]->nb, sizeof(prop.node_src_nb[j]));
              }
-@@ -3276,8 +3466,12 @@ static bool ggml_cuda_can_fuse(const struct ggml_cgraph *                cgraph,
+@@ -2633,6 +2823,21 @@ static bool ggml_cuda_graph_update_required(ggml_backend_cuda_context * cuda_ctx
+ 
+ static void ggml_cuda_graph_update_executable(ggml_backend_cuda_context * cuda_ctx, const void * graph_key) {
+     ggml_cuda_graph * graph = cuda_ctx->cuda_graph(graph_key);
++#ifdef GGML_USE_MUSA
++    static const bool recreate = [] {
++        const char * value = std::getenv("GGML_MUSA_GRAPH_RECREATE");
++        if (!value || strcmp(value, "0") == 0) return false;
++        if (strcmp(value, "1") == 0) return true;
++        GGML_ABORT("GGML_MUSA_GRAPH_RECREATE must be 0 or 1");
++    }();
++    if (recreate) {
++        CUDA_CHECK(cudaGraphExecDestroy(graph->instance));
++        graph->instance = nullptr;
++        CUDA_CHECK(cudaGraphInstantiate(&graph->instance, graph->graph, NULL, NULL, 0));
++        return;
++    }
++#endif
++
+ 
+ #if CUDART_VERSION >= 12000
+     cudaGraphExecUpdateResultInfo result_info;
+@@ -3276,8 +3481,12 @@ static bool ggml_cuda_can_fuse(const struct ggml_cgraph *                cgraph,
              add = cgraph->nodes[node_idx+2];
          }
  
@@ -351,7 +402,7 @@ index b50d05d..b93d27c 100644
  
          //rms norm only supports F32
          if (mul->src[0]->type != GGML_TYPE_F32 ||
-@@ -3313,8 +3507,12 @@ static bool ggml_cuda_can_fuse(const struct ggml_cgraph *                cgraph,
+@@ -3313,8 +3522,12 @@ static bool ggml_cuda_can_fuse(const struct ggml_cgraph *                cgraph,
          const ggml_tensor * rms_norm = cgraph->nodes[node_idx];
          const ggml_tensor * scale    = cgraph->nodes[node_idx+1];
  
@@ -364,7 +415,7 @@ index b50d05d..b93d27c 100644
  
          float bias;
          memcpy(&bias, (const float *) scale->op_params + 1, sizeof(float));
-@@ -4403,8 +4601,7 @@ static void ggml_cuda_graph_evaluate_and_capture(ggml_backend_cuda_context * cud
+@@ -4403,8 +4616,7 @@ static void ggml_cuda_graph_evaluate_and_capture(ggml_backend_cuda_context * cud
          ggml_cuda_graph * graph = cuda_ctx->cuda_graph(graph_key);
          if (graph->instance == nullptr) { // Create executable graph from captured graph.
              CUDA_CHECK(cudaGraphInstantiate(&graph->instance, graph->graph, NULL, NULL, 0));
@@ -374,7 +425,7 @@ index b50d05d..b93d27c 100644
              ggml_cuda_graph_update_executable(cuda_ctx, graph_key);
          }
          // Launch graph
-@@ -5157,6 +5354,10 @@ static bool ggml_backend_cuda_device_supports_op(ggml_backend_dev_t dev, const g
+@@ -5157,6 +5369,10 @@ static bool ggml_backend_cuda_device_supports_op(ggml_backend_dev_t dev, const g
          }
      }
  

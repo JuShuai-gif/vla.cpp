@@ -1,0 +1,104 @@
+[
+  {
+    "type": "f16-f16-f32",
+    "build_returncode": 1,
+    "command": [
+      "/usr/local/musa/bin/mcc",
+      "-O2",
+      "-fsigned-char",
+      "--cuda-gpu-arch=mp_22",
+      "-DKIND=0",
+      "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/wmma-dtype-probe.cpp",
+      "-o",
+      "validation/quant/wmma-type-f16-f16-f32",
+      "-L/usr/local/musa/lib",
+      "-lmusart",
+      "-Wl,-rpath,/usr/local/musa/lib"
+    ]
+  },
+  {
+    "type": "bf16-bf16-f32",
+    "build_returncode": 1,
+    "command": [
+      "/usr/local/musa/bin/mcc",
+      "-O2",
+      "-fsigned-char",
+      "--cuda-gpu-arch=mp_22",
+      "-DKIND=1",
+      "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/wmma-dtype-probe.cpp",
+      "-o",
+      "validation/quant/wmma-type-bf16-bf16-f32",
+      "-L/usr/local/musa/lib",
+      "-lmusart",
+      "-Wl,-rpath,/usr/local/musa/lib"
+    ]
+  },
+  {
+    "type": "s8-s8-s32",
+    "build_returncode": 1,
+    "command": [
+      "/usr/local/musa/bin/mcc",
+      "-O2",
+      "-fsigned-char",
+      "--cuda-gpu-arch=mp_22",
+      "-DKIND=2",
+      "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/wmma-dtype-probe.cpp",
+      "-o",
+      "validation/quant/wmma-type-s8-s8-s32",
+      "-L/usr/local/musa/lib",
+      "-lmusart",
+      "-Wl,-rpath,/usr/local/musa/lib"
+    ]
+  },
+  {
+    "type": "s8-f16-f32",
+    "build_returncode": 1,
+    "command": [
+      "/usr/local/musa/bin/mcc",
+      "-O2",
+      "-fsigned-char",
+      "--cuda-gpu-arch=mp_22",
+      "-DKIND=3",
+      "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/wmma-dtype-probe.cpp",
+      "-o",
+      "validation/quant/wmma-type-s8-f16-f32",
+      "-L/usr/local/musa/lib",
+      "-lmusart",
+      "-Wl,-rpath,/usr/local/musa/lib"
+    ]
+  },
+  {
+    "type": "fp8-e4m3-f32",
+    "build_returncode": 1,
+    "command": [
+      "/usr/local/musa/bin/mcc",
+      "-O2",
+      "-fsigned-char",
+      "--cuda-gpu-arch=mp_22",
+      "-DKIND=4",
+      "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/wmma-dtype-probe.cpp",
+      "-o",
+      "validation/quant/wmma-type-fp8-e4m3-f32",
+      "-L/usr/local/musa/lib",
+      "-lmusart",
+      "-Wl,-rpath,/usr/local/musa/lib"
+    ]
+  },
+  {
+    "type": "tf32-f32",
+    "build_returncode": 1,
+    "command": [
+      "/usr/local/musa/bin/mcc",
+      "-O2",
+      "-fsigned-char",
+      "--cuda-gpu-arch=mp_22",
+      "-DKIND=5",
+      "\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/wmma-dtype-probe.cpp",
+      "-o",
+      "validation/quant/wmma-type-tf32-f32",
+      "-L/usr/local/musa/lib",
+      "-lmusart",
+      "-Wl,-rpath,/usr/local/musa/lib"
+    ]
+  }
+]

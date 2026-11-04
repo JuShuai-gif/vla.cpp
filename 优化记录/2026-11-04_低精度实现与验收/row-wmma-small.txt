@@ -1,0 +1,2 @@
+{"path":"row-W8A8-WMMA64","K":256,"M":64,"N":50,"gpu_p50_ms":0.201640,"checks":3200,"failed":0,"max_error":6.61948112e-07}
+{"path":"F16-BLAS","K":256,"M":64,"N":50,"gpu_p50_ms":0.118600,"checks":3200,"failed":0,"max_error":5.73694706e-06}
