@@ -18,7 +18,7 @@
 `pruned-replay.json/full-replay.json` 为 robot-replay 正式入口，每模型 3 次预热 + 3 次预测。
 少量时延只作接入冒烟记录，不是优化前后性能对比或稳定性能基准；期间有 CPU 离线测试负载。
 `offline-tests.log`：803 项 Python 测试，39 项可选后端/fixture 跳过，其余通过。
-资源检查、部署配置和环境 freeze 随本记录保存。日志保留原输出；生成的 NPZ/NPY 为机器本地校验数据，不随 Git 保存。
+资源检查、部署配置和环境 freeze 随本记录保存。日志保留原输出；生成的 NPZ/NPY 为本轮合成观测和预测数组，随记录保存；模型权重仍为外部文件。
 
 ## 复现
 
