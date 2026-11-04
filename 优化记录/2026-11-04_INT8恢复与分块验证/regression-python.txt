@@ -1,0 +1,23 @@
+test_config_paths_and_invalid_options (test_policy_api.PolicyTests.test_config_paths_and_invalid_options) ... ok
+test_load_f16_route_requires_f16_and_stays_opt_in (test_policy_api.PolicyTests.test_load_f16_route_requires_f16_and_stays_opt_in) ... ok
+test_load_failure_releases_session (test_policy_api.PolicyTests.test_load_failure_releases_session) ... ok
+test_named_precision_resolution_and_no_silent_fallback (test_policy_api.PolicyTests.test_named_precision_resolution_and_no_silent_fallback) ... ok
+test_native_session_rng_warmup_and_cleanup (test_policy_api.PolicyTests.test_native_session_rng_warmup_and_cleanup) ... ok
+test_prompt_cache_reuses_metadata_but_not_state_or_task (test_policy_api.PolicyTests.test_prompt_cache_reuses_metadata_but_not_state_or_task) ... ok
+test_quant_route_is_explicit_and_validated (test_policy_api.PolicyTests.test_quant_route_is_explicit_and_validated) ... ok
+test_cosine_gates_zero_norm_and_local_failures (test_precision_bench.PrecisionReportTests.test_cosine_gates_zero_norm_and_local_failures) ... ok
+test_pairing_metrics_and_zero_tolerance (test_precision_bench.PrecisionReportTests.test_pairing_metrics_and_zero_tolerance) ... ok
+test_report_written_before_process_failure_is_rejected (test_precision_bench.PrecisionReportTests.test_report_written_before_process_failure_is_rejected) ... ok
+test_calibrated_format_roundtrip_and_provenance (test_quantize_gguf.QuantizeTest.test_calibrated_format_roundtrip_and_provenance) ... ok
+test_failed_conversion_never_publishes (test_quantize_gguf.QuantizeTest.test_failed_conversion_never_publishes) ... ok
+test_recipes_maps_and_block_alignment (test_quantize_gguf.QuantizeTest.test_recipes_maps_and_block_alignment) ... ok
+test_roundtrip_and_error_bound_all_source_dtypes (test_quantize_gguf.QuantizeTest.test_roundtrip_and_error_bound_all_source_dtypes) ... ok
+test_camera_order_and_formats (test_pi05_io.Images.test_camera_order_and_formats) ... ok
+test_pixels_and_buffers (test_pi05_io.Images.test_pixels_and_buffers) ... ok
+test_validation (test_pi05_io.Images.test_validation) ... ok
+test_contents_endian_and_payload (test_pi05_io.Metadata.test_contents_endian_and_payload) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 2.854s
+
+OK

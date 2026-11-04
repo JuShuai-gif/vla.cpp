@@ -1,0 +1,12 @@
+test_config_paths_and_invalid_options (test_policy_api.PolicyTests.test_config_paths_and_invalid_options) ... ok
+test_load_f16_route_requires_f16_and_stays_opt_in (test_policy_api.PolicyTests.test_load_f16_route_requires_f16_and_stays_opt_in) ... ok
+test_load_failure_releases_session (test_policy_api.PolicyTests.test_load_failure_releases_session) ... ok
+test_named_precision_resolution_and_no_silent_fallback (test_policy_api.PolicyTests.test_named_precision_resolution_and_no_silent_fallback) ... ok
+test_native_session_rng_warmup_and_cleanup (test_policy_api.PolicyTests.test_native_session_rng_warmup_and_cleanup) ... ok
+test_prompt_cache_reuses_metadata_but_not_state_or_task (test_policy_api.PolicyTests.test_prompt_cache_reuses_metadata_but_not_state_or_task) ... ok
+test_quant_route_is_explicit_and_validated (test_policy_api.PolicyTests.test_quant_route_is_explicit_and_validated) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.062s
+
+OK

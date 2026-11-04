@@ -81,7 +81,7 @@ with load_policy("policy.json", precision="q8-prefix-mlp", task="...") as policy
 
 Policy JSON may declare `default_precision` (otherwise `baseline`) and
 `precision_profiles`. Each named entry accepts `model`, `manifest`,
-`runtime` overrides, `quant_route` (`auto` or `blas`) and `status` (`experimental` by default; `validated`
+`runtime` overrides, `quant_route` (`auto`, `blas` or `load_f16`) and `status` (`experimental` by default; `validated`
 only after deployment acceptance). The reserved baseline uses the original
 model/runtime configuration. All relative paths resolve beside the policy JSON.
 Unknown names and missing selected assets fail explicitly. Quantized GGUF files
@@ -90,8 +90,22 @@ allocation. Inspection checks tensor names, shapes and types without GPU I/O.
 
 `PolicySpec.precision`, `precision_status`, `quant_route` and `weight_types` describe the
 selection; resolved parameters separately report on-disk weight types,
-floating resident weight dtype and activation dtype. A packed Q8 tensor stays
-Q8 even when runtime.weight_dtype is f16. Different native options require a
+floating resident weight dtype, the quantized GEMM residency rule and activation
+dtype. With `auto` or `blas`, a packed Q8 tensor stays Q8 even when
+`runtime.weight_dtype` is `f16`.
+
+The opt-in `load_f16` route requires `runtime.weight_dtype: "f16"`. It decodes
+quantized GEMM weights once at load into F16 resident tensors, using the existing
+floating GEMM and fusion paths. Explicitly requested packed tensors keep their
+packed type. `resolved_parameters.quantized_gemm_resident_dtype` reports `f16`
+for this route and `packed` for the default rule; `weight_types_on_disk` still
+describes the original file. This trades the packed GPU-memory saving for removal
+of repeated dequantization. It is storage quantization with F16 computation, not
+an INT8 compute speedup. Load time includes the one-time conversion; model output
+accuracy and steady-state performance still require separate validation. It does
+not change the baseline or promote an experimental profile to validated.
+
+Different native options require a
 fresh process. robot_runtime forwards its precision parameter and refuses
 experimental profiles during live execution; offline loading remains available.
 

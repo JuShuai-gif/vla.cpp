@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "model": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+  "library": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
+  "optimization_profile": "/home/skysi/code/vla.cpp-quant/scripts/pi05_musa_profiles.json",
+  "device": "0",
+  "seed": 0,
+  "threads": 4,
+  "runtime": {
+    "weight_dtype": "f16",
+    "act_dtype": "f32",
+    "mm_prec": "f32",
+    "flash_attn": true
+  },
+  "source_contract": {
+    "action_names": [
+      "joint_1.pos",
+      "joint_2.pos",
+      "joint_3.pos",
+      "joint_4.pos",
+      "joint_5.pos",
+      "joint_6.pos",
+      "gripper.pos"
+    ],
+    "action_space": "absolute_joint",
+    "joint_unit": "degrees",
+    "gripper_unit": "mm",
+    "verified": false
+  },
+  "precision_profiles": {
+    "q8-prefix-mlp-blas": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/pruned-prefix-mlp-q8.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/pruned-prefix-mlp-q8.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "blas"
+    },
+    "q8-prefix-mlp-load-f16": {
+      "model": "/home/skysi/code/vla.cpp-quant/validation/quant/models/pruned-prefix-mlp-q8.gguf",
+      "manifest": "/home/skysi/code/vla.cpp-quant/validation/quant/models/pruned-prefix-mlp-q8.gguf.quant.json",
+      "status": "experimental",
+      "quant_route": "load_f16"
+    }
+  }
+}

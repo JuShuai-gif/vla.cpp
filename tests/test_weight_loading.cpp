@@ -27,6 +27,13 @@ int main() {
         }
         gguf_add_tensor(gguf,t);
     }
+    for(auto type:{GGML_TYPE_Q8_0,GGML_TYPE_Q4_0,GGML_TYPE_Q5_0}) {
+        auto * t=ggml_new_tensor_2d(ctx,type,32,4);ggml_set_name(t,ggml_type_name(type));
+        std::vector<float> data(128);
+        for(int i=0;i<128;++i)data[i]=float((i*17)%101-50)/13.f;
+        ggml_quantize_chunk(type,data.data(),t->data,0,4,32,nullptr);
+        gguf_add_tensor(gguf,t);
+    }
     if(!gguf_write_to_file(gguf,path.string().c_str(),false))return 1;
     gguf_free(gguf);ggml_free(ctx);
     bool ok=true;
@@ -70,6 +77,32 @@ int main() {
             std::vector<uint8_t> got(ggml_nbytes(merged));ggml_backend_tensor_get(merged,got.data(),0,got.size());
             if(got!=ref)ok=false;
             ggml_backend_buffer_free(buffer);ggml_free(weights);
+        }
+        for(const char * cache:{"0","1"})for(const char * direct:{"0","1"}) {
+#ifdef _WIN32
+            _putenv_s("VLA_LOAD_QUANT_F16",cache);_putenv_s("VLA_LOAD_DIRECT_FUSED",direct);
+#else
+            setenv("VLA_LOAD_QUANT_F16",cache,1);setenv("VLA_LOAD_DIRECT_FUSED",direct,1);
+#endif
+            for(auto type:{GGML_TYPE_Q8_0,GGML_TYPE_Q4_0,GGML_TYPE_Q5_0}) {
+                const char * name=ggml_type_name(type);
+                auto * weights=ggml_init({64*ggml_tensor_overhead(),nullptr,true});
+                vla::WeightLoader loader("load-test",reader,weights,GGML_TYPE_F16);
+                auto * single=loader.gemm("%s",name);
+                auto * merged=loader.fuse_gemm("quant-merged",{name,name});
+                const auto expected=cache[0]=='1'?GGML_TYPE_F16:type;
+                if(!single || !merged || single->type!=expected || merged->type!=expected)return 1;
+                if(reader.resident_type(reader.meta(name),type)!=type)return 1;
+                ggml_backend_buffer_t buffer=nullptr;
+                if(!loader.upload(backend,&buffer))return 1;
+                auto ref=reader.read_convert(name,expected);
+                std::vector<uint8_t> got(ggml_nbytes(single));ggml_backend_tensor_get(single,got.data(),0,got.size());
+                if(got!=ref)ok=false;
+                auto doubled=ref;doubled.insert(doubled.end(),ref.begin(),ref.end());
+                got.resize(ggml_nbytes(merged));ggml_backend_tensor_get(merged,got.data(),0,got.size());
+                if(got!=doubled)ok=false;
+                ggml_backend_buffer_free(buffer);ggml_free(weights);
+            }
         }
         ggml_backend_free(backend);
     }

@@ -59,8 +59,8 @@ def _config(path, precision=None):
             raise ValueError("Invalid precision profile")
         if "runtime" in entry and not isinstance(entry["runtime"], dict):
             raise ValueError("Precision runtime must be an object")
-        if entry.get("quant_route", "auto") not in ("auto", "blas"):
-            raise ValueError("quant_route must be auto or blas")
+        if entry.get("quant_route", "auto") not in ("auto", "blas", "load_f16"):
+            raise ValueError("quant_route must be auto, blas or load_f16")
     selected = precision if precision is not None else cfg.get("default_precision", "baseline")
     if not isinstance(selected, str) or selected not in ("baseline", *profiles):
         raise ValueError(f"Unknown precision {selected!r}; choices: {['baseline', *profiles]}")
@@ -96,6 +96,8 @@ def _config(path, precision=None):
     if cfg.get("optimization_profile") and selected == "baseline" and runtime != {
             "weight_dtype": "f16", "act_dtype": "f32", "mm_prec": "f32", "flash_attn": True}:
         raise ValueError("Validated MUSA profiles require F16 weights/F32 activations/F32 accumulation/FA")
+    if cfg["quant_route"] == "load_f16" and runtime["weight_dtype"] != "f16":
+        raise ValueError("load_f16 requires F16 resident weights")
     cfg["runtime"] = runtime
     cfg.setdefault("seed", 0)
     cfg.setdefault("threads", 4)
@@ -294,7 +296,8 @@ class Policy:
             profiles = cfg.get("profiles", {})
             env = {k: None for k in _inactive | set().union(*(v.keys() for v in profiles.values()))}
             env.update(profiles.get(self.spec.variant, {}))
-            env["GGML_MUSA_QUANT_ROUTE"] = cfg["quant_route"]
+            env["VLA_LOAD_QUANT_F16"] = "1" if cfg["quant_route"] == "load_f16" else None
+            env["GGML_MUSA_QUANT_ROUTE"] = "blas" if cfg["quant_route"] == "load_f16" else cfg["quant_route"]
             env.update(VLA_LIBRARY=cfg["library"], VLA_DEVICE=cfg["device"], VLA_N_THREADS=str(cfg["threads"]))
             settings = (cfg["library"], cfg["runtime"], env)
             if _process_settings is not None and _process_settings != settings:
@@ -333,6 +336,7 @@ class Policy:
                 "checkpoint": self.spec.checkpoint, "task": self.task, "precision": self.spec.precision,
                 "precision_status": self.spec.precision_status, "weight_types_on_disk": self.spec.weight_types,
                 "floating_weight_dtype": cfg["runtime"]["weight_dtype"],
+                "quantized_gemm_resident_dtype": "f16" if cfg["quant_route"] == "load_f16" else "packed",
                 "act_dtype": cfg["runtime"]["act_dtype"], "quant_route": cfg["quant_route"], "device_requested": cfg["device"], "seed": cfg["seed"],
                 "num_steps": self.spec.num_steps, "optimization_variant": self.spec.variant if profiles else None,
                 "source_contract_verified": self.spec.contract_verified}.items()}

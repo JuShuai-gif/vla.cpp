@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// gemm() lands in the model's matmul type, unless the GGUF holds the tensor
-// quantized, in which case it stays packed and ggml dequantizes at compute.
+// gemm() uses the model's matmul type for floating GGUF weights. Quantized
+// weights stay packed unless the reader's load-time F16 opt-in is selected.
 // A miss is recorded and surfaces once, at ok().
 
 #pragma once

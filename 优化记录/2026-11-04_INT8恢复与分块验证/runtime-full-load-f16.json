@@ -1,0 +1,192 @@
+{
+  "scope": "saved observations; no robot/camera/network I/O",
+  "platform": "Linux-6.6.10-aarch64-with-glibc2.35",
+  "observation_sha256": "f36b7ae613686bfa0066a191bfdf55e0479f13dd10fce4d9dc5629f631c1eab5",
+  "samples": 3,
+  "warmup": 3,
+  "initialization_warmup_runs": 3,
+  "seconds": 2.2847675679986423,
+  "cpu_seconds": 4.5494842800000015,
+  "maxrss_native_units": 2678548,
+  "predict_ms": {
+    "count": 3,
+    "mean": 758.4307739998621,
+    "p50": 758.9859750005417,
+    "p95": 759.1208140001982,
+    "p99": 759.1208140001982,
+    "max": 759.1208140001982
+  },
+  "backend_timings_ms": {
+    "preprocess_ms": {
+      "count": 3,
+      "mean": 4.324335999626783,
+      "p50": 4.362202998891007,
+      "p95": 4.930162998789456,
+      "p99": 4.930162998789456,
+      "max": 4.930162998789456
+    },
+    "native_call_ms": {
+      "count": 3,
+      "mean": 753.9785313341175,
+      "p50": 753.9266920011869,
+      "p95": 754.62053100091,
+      "p99": 754.62053100091,
+      "max": 754.62053100091
+    },
+    "postprocess_ms": {
+      "count": 3,
+      "mean": 0.0739733325948085,
+      "p50": 0.07439999899361283,
+      "p95": 0.0747599988244474,
+      "p99": 0.0747599988244474,
+      "max": 0.0747599988244474
+    }
+  },
+  "action_shape": [
+    50,
+    7
+  ],
+  "network_requests": 0,
+  "resolved_parameters": {
+    "checkpoint": {
+      "value": "/home/skysi/code/vla.cpp-quant/validation/quant/models/full-prefix-mlp-q8.gguf",
+      "source": "policy config / GGUF"
+    },
+    "task": {
+      "value": "pick up the cube",
+      "source": "policy config / GGUF"
+    },
+    "precision": {
+      "value": "q8-prefix-mlp-load-f16",
+      "source": "policy config / GGUF"
+    },
+    "precision_status": {
+      "value": "experimental",
+      "source": "policy config / GGUF"
+    },
+    "weight_types_on_disk": {
+      "value": [
+        "BF16",
+        "F32",
+        "Q8_0"
+      ],
+      "source": "policy config / GGUF"
+    },
+    "floating_weight_dtype": {
+      "value": "f16",
+      "source": "policy config / GGUF"
+    },
+    "quantized_gemm_resident_dtype": {
+      "value": "f16",
+      "source": "policy config / GGUF"
+    },
+    "act_dtype": {
+      "value": "f32",
+      "source": "policy config / GGUF"
+    },
+    "quant_route": {
+      "value": "load_f16",
+      "source": "policy config / GGUF"
+    },
+    "device_requested": {
+      "value": "0",
+      "source": "policy config / GGUF"
+    },
+    "seed": {
+      "value": 0,
+      "source": "policy config / GGUF"
+    },
+    "num_steps": {
+      "value": 10,
+      "source": "policy config / GGUF"
+    },
+    "optimization_variant": {
+      "value": "full",
+      "source": "policy config / GGUF"
+    },
+    "source_contract_verified": {
+      "value": false,
+      "source": "policy config / GGUF"
+    }
+  },
+  "config": {
+    "schema_version": 2,
+    "policy_backend": "vla_cpp",
+    "robot_layout": "single",
+    "devices": {
+      "arms": {
+        "single": null
+      },
+      "cameras": {
+        "top": null,
+        "wrist": null
+      }
+    },
+    "active_profile": "pruned",
+    "profiles": {
+      "pruned": {
+        "policy_config": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8恢复与分块验证/pruned-load-policy.json",
+        "inference_backend": "standard",
+        "task": "pick up the cube",
+        "warmup_steps": 3,
+        "execution_horizon": 50,
+        "execution_period": 0.03333333333333333,
+        "replan_threshold": 0,
+        "rtc_blend_steps": 5,
+        "enable_filter_smooth": false,
+        "enable_rtc_smooth": false,
+        "warmstep": false,
+        "rl_joint_offsets": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "joint_unit": "degrees",
+        "gripper_mapping": "linear",
+        "camera_map": {
+          "observation.images.top": "top",
+          "observation.images.wrist": "wrist"
+        },
+        "execute_robot": false,
+        "dry_run": true,
+        "precision": "q8-prefix-mlp-load-f16"
+      },
+      "full": {
+        "policy_config": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8恢复与分块验证/full-load-policy.json",
+        "inference_backend": "standard",
+        "task": "pick up the cube",
+        "warmup_steps": 3,
+        "execution_horizon": 50,
+        "execution_period": 0.03333333333333333,
+        "replan_threshold": 0,
+        "rtc_blend_steps": 5,
+        "enable_filter_smooth": false,
+        "enable_rtc_smooth": false,
+        "warmstep": false,
+        "rl_joint_offsets": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "joint_unit": "degrees",
+        "gripper_mapping": "linear",
+        "camera_map": {
+          "observation.images.top": "top",
+          "observation.images.wrist": "wrist"
+        },
+        "execute_robot": false,
+        "dry_run": true,
+        "precision": "q8-prefix-mlp-load-f16"
+      }
+    },
+    "last_checks": {},
+    "python_executable": "/home/skysi/code/robot_runtime/.venv/bin/python"
+  },
+  "profile": "full"
+}

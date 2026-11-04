@@ -119,11 +119,18 @@ struct gguf_reader {
         return ggml_get_tensor(meta_ctx, name);
     }
 
-    // Resident type for a weight: keep a quantized source type (Q8_0, Q4_0, ...)
-    // so it stays packed and ggml_mul_mat dequantizes at compute; otherwise use
-    // prefer (the model's F32/BF16 matmul type, or an explicit packed type).
+    // Keep quantized weights packed by default. VLA_LOAD_QUANT_F16=1 instead
+    // decodes GEMM weights requested as F16 once at load. Explicit packed types
+    // stay packed; non-quantized weights use the requested floating type.
     ggml_type resident_type(const ggml_tensor * src, ggml_type prefer) const {
-        return (src && ggml_is_quantized(src->type)) ? src->type : prefer;
+        if (src && ggml_is_quantized(src->type)) {
+            // Explicit storage-only experiment: decode once at load, then use F16 GEMM.
+            const char * cache = std::getenv("VLA_LOAD_QUANT_F16");
+            if (prefer == GGML_TYPE_F16 && cache && std::strcmp(cache, "1") == 0)
+                return GGML_TYPE_F16;
+            return src->type;
+        }
+        return prefer;
     }
 
     // cap must equal the declared tensor size: a tensor with the expected ne[0] but

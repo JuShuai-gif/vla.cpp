@@ -1,0 +1,56 @@
+{
+  "commands": {
+    "compiler": {
+      "argv": [
+        "/usr/local/musa/bin/mcc",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "clang version 14.0.0 (git@sh-code.mthreads.com:sw/mtcc.git 61c54cd8e5c72ef146656c7beee1889a837ed7bc)\nmcc version 5.1.0\nTarget: aarch64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /usr/local/musa/bin\n",
+      "stderr": ""
+    },
+    "kernel": {
+      "argv": [
+        "uname",
+        "-a"
+      ],
+      "returncode": 0,
+      "stdout": "Linux aibox 6.6.10 #1 SMP PREEMPT Thu Jul  9 05:35:20 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux\n",
+      "stderr": ""
+    },
+    "llama_head": {
+      "argv": [
+        "git",
+        "-C",
+        "/home/skysi/code/vla.cpp-quant/build-deps/llama",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "4da6337767f973e2b4d0797e5b323d77d8565e4a\n",
+      "stderr": ""
+    },
+    "runtime_quant_head": {
+      "argv": [
+        "git",
+        "-C",
+        "/home/skysi/code/robot_runtime-quant",
+        "rev-parse",
+        "HEAD"
+      ],
+      "returncode": 0,
+      "stdout": "396f10af614bdf8fb8da07d4f48ae3a6fb798ede\n",
+      "stderr": ""
+    },
+    "gpu": {
+      "argv": [
+        "mthreads-gmi"
+      ],
+      "returncode": 0,
+      "stdout": "Wed Nov  4 21:44:03 2026\n-------------------------------------------------------------------------\n    mthreads-gmi:1.4.0                 Driver Version:5.1.1-M1000\n-------------------------------------------------------------------------\nID   Name                 |PCIe                |%GPU    Mem             \n     Device Type   Perf   |Pcie Lane Width     |Temp    MPC Capable     \n                                               |        ECC Mode        \n+-----------------------------------------------------------------------+\n0    M1000                |N/A                 |25.0    13008MiB(31878MiB)\n     Physical      N/A    |N/A                 |42.3C   N/A             \n                                               |        N/A             \n-------------------------------------------------------------------------\n\n",
+      "stderr": ""
+    }
+  },
+  "sdk_realpath": "/usr/local/musa-5.1.0",
+  "power_mode": "performance"
+}

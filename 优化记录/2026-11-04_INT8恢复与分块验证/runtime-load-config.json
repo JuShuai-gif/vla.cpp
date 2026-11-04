@@ -1,0 +1,79 @@
+{
+  "schema_version": 2,
+  "policy_backend": "vla_cpp",
+  "robot_layout": "single",
+  "devices": {
+    "arms": {
+      "single": null
+    },
+    "cameras": {
+      "top": null,
+      "wrist": null
+    }
+  },
+  "active_profile": "pruned",
+  "profiles": {
+    "pruned": {
+      "policy_config": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8恢复与分块验证/pruned-load-policy.json",
+      "inference_backend": "standard",
+      "task": "pick up the cube",
+      "warmup_steps": 3,
+      "execution_horizon": 50,
+      "execution_period": 0.03333333333333333,
+      "replan_threshold": 0,
+      "rtc_blend_steps": 5,
+      "enable_filter_smooth": false,
+      "enable_rtc_smooth": false,
+      "warmstep": false,
+      "rl_joint_offsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "joint_unit": "degrees",
+      "gripper_mapping": "linear",
+      "camera_map": {
+        "observation.images.top": "top",
+        "observation.images.wrist": "wrist"
+      },
+      "execute_robot": false,
+      "dry_run": true,
+      "precision": "q8-prefix-mlp-load-f16"
+    },
+    "full": {
+      "policy_config": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8恢复与分块验证/full-load-policy.json",
+      "inference_backend": "standard",
+      "task": "pick up the cube",
+      "warmup_steps": 3,
+      "execution_horizon": 50,
+      "execution_period": 0.03333333333333333,
+      "replan_threshold": 0,
+      "rtc_blend_steps": 5,
+      "enable_filter_smooth": false,
+      "enable_rtc_smooth": false,
+      "warmstep": false,
+      "rl_joint_offsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "joint_unit": "degrees",
+      "gripper_mapping": "linear",
+      "camera_map": {
+        "observation.images.top": "top",
+        "observation.images.wrist": "wrist"
+      },
+      "execute_robot": false,
+      "dry_run": true,
+      "precision": "q8-prefix-mlp-load-f16"
+    }
+  },
+  "last_checks": {},
+  "python_executable": "/home/skysi/code/robot_runtime/.venv/bin/python"
+}

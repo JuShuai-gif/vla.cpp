@@ -1,0 +1,84 @@
+Internal ctest changing into directory: /home/skysi/code/vla.cpp-quant/build-musa-quant
+Test project /home/skysi/code/vla.cpp-quant/build-musa-quant
+      Start  1: vision_common
+ 1/39 Test  #1: vision_common ....................   Passed    0.00 sec
+      Start  2: vision_prune
+ 2/39 Test  #2: vision_prune .....................   Passed    0.01 sec
+      Start  3: rope_conventions
+ 3/39 Test  #3: rope_conventions .................   Passed    0.01 sec
+      Start  4: c_api
+ 4/39 Test  #4: c_api ............................   Passed    1.85 sec
+      Start  5: dit_common
+ 5/39 Test  #5: dit_common .......................   Passed    0.00 sec
+      Start  6: graph_names
+ 6/39 Test  #6: graph_names ......................   Passed    0.01 sec
+      Start  7: qwen3vl_vit
+ 7/39 Test  #7: qwen3vl_vit ......................   Passed    0.00 sec
+      Start  8: config_guard
+ 8/39 Test  #8: config_guard .....................   Passed    1.84 sec
+      Start  9: prompt
+ 9/39 Test  #9: prompt ...........................   Passed    1.84 sec
+      Start 10: foldquant_cpu_op
+10/39 Test #10: foldquant_cpu_op .................   Passed    1.84 sec
+      Start 11: foldquant_dequant
+11/39 Test #11: foldquant_dequant ................   Passed    1.89 sec
+      Start 12: musa_ops
+12/39 Test #12: musa_ops .........................   Passed   10.37 sec
+      Start 13: musa_flatten_gemm
+13/39 Test #13: musa_flatten_gemm ................   Passed   11.33 sec
+      Start 14: musa_f32_attention
+14/39 Test #14: musa_f32_attention ...............   Passed    2.47 sec
+      Start 15: musa_strided_pack
+15/39 Test #15: musa_strided_pack ................   Passed    2.46 sec
+      Start 16: musa_vision_epilogue
+16/39 Test #16: musa_vision_epilogue .............   Passed    5.01 sec
+      Start 17: musa_mapped_io
+17/39 Test #17: musa_mapped_io ...................   Passed    3.07 sec
+      Start 18: musa_vision_pack
+18/39 Test #18: musa_vision_pack .................   Passed   13.97 sec
+      Start 19: musa_vision_sdpa
+19/39 Test #19: musa_vision_sdpa .................   Passed    9.79 sec
+      Start 20: musa_f32_patch
+20/39 Test #20: musa_f32_patch ...................   Passed    2.09 sec
+      Start 21: musa_attention256_direct
+21/39 Test #21: musa_attention256_direct .........   Passed    5.90 sec
+      Start 22: musa_attention256
+22/39 Test #22: musa_attention256 ................   Passed    5.79 sec
+      Start 23: musa_small_gemm
+23/39 Test #23: musa_small_gemm ..................   Passed    3.37 sec
+      Start 24: musa_rope_table
+24/39 Test #24: musa_rope_table ..................   Passed    3.02 sec
+      Start 25: musa_k_rope_direct
+25/39 Test #25: musa_k_rope_direct ...............   Passed    3.35 sec
+      Start 26: musa_kv_direct
+26/39 Test #26: musa_kv_direct ...................   Passed    3.19 sec
+      Start 27: musa_flash_attn
+27/39 Test #27: musa_flash_attn ..................   Passed    3.43 sec
+      Start 28: musa_cpu_selection
+28/39 Test #28: musa_cpu_selection ...............   Passed    1.80 sec
+      Start 29: musa_invalid_device
+29/39 Test #29: musa_invalid_device ..............   Passed    1.81 sec
+      Start 30: musa_packed_norm
+30/39 Test #30: musa_packed_norm .................   Passed    2.37 sec
+      Start 31: musa_prune_score
+31/39 Test #31: musa_prune_score .................   Passed    2.41 sec
+      Start 32: weight_loading
+32/39 Test #32: weight_loading ...................   Passed    2.09 sec
+      Start 33: musa_quant_q8
+33/39 Test #33: musa_quant_q8 ....................   Passed    2.04 sec
+      Start 34: musa_quant_blas_q8_0
+34/39 Test #34: musa_quant_blas_q8_0 .............   Passed    1.95 sec
+      Start 35: musa_quant_blas_q4_0
+35/39 Test #35: musa_quant_blas_q4_0 .............   Passed    1.96 sec
+      Start 36: musa_quant_blas_q5_0
+36/39 Test #36: musa_quant_blas_q5_0 .............   Passed    2.17 sec
+      Start 37: musa_quant_q4
+37/39 Test #37: musa_quant_q4 ....................   Passed    2.11 sec
+      Start 38: musa_quant_q5
+38/39 Test #38: musa_quant_q5 ....................   Passed    1.98 sec
+      Start 39: quant_calibration
+39/39 Test #39: quant_calibration ................   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 39
+
+Total Test time (real) = 120.64 sec

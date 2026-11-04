@@ -1,0 +1,1 @@
+clang-14: error: the clang compiler does not support 'asm output for musa'

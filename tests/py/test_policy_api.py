@@ -60,6 +60,16 @@ class PolicyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"quant_route"):
             policy._config(self.path,"q8-blas")
 
+    def test_load_f16_route_requires_f16_and_stays_opt_in(self):
+        cfg=dict(self.config,precision_profiles={"q8-cached":{"quant_route":"load_f16"}})
+        self.path.write_text(json.dumps(cfg))
+        self.assertEqual(policy._config(self.path,"q8-cached")["quant_route"],"load_f16")
+        self.assertEqual(policy._config(self.path,"baseline")["quant_route"],"auto")
+        cfg["precision_profiles"]["q8-cached"]["runtime"]={"weight_dtype":"f32"}
+        self.path.write_text(json.dumps(cfg))
+        with self.assertRaisesRegex(ValueError,"F16 resident"):
+            policy._config(self.path,"q8-cached")
+
     def test_prompt_cache_reuses_metadata_but_not_state_or_task(self):
         def field(value):
             return SimpleNamespace(contents=Mock(return_value=value))
@@ -97,8 +107,9 @@ class PolicyTests(unittest.TestCase):
              patch('vla_cpp._ffi.load_library',return_value=fake_lib), \
              patch.object(vla_cpp,'Model',return_value=native):
             images={name:np.zeros((4,4,3),np.uint8) for name in spec.camera_order}
-            with patch.dict(os.environ, {"GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
+            with patch.dict(os.environ, {"VLA_LOAD_QUANT_F16":"1","GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
                 self.assertEqual(os.environ["GGML_MUSA_QUANT_ROUTE"],"auto")
+                self.assertNotIn("VLA_LOAD_QUANT_F16",os.environ)
                 self.assertNotIn("GGML_CUDA_CUBLAS_COMPUTE_TYPE",os.environ)
                 self.assertNotIn("GGML_MUSA_GRAPH_RECREATE",os.environ)
                 with self.assertRaisesRegex(RuntimeError,'one resident'):vla_cpp.load_policy(self.path)

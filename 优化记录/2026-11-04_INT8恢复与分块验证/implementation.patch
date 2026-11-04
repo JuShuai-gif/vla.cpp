@@ -1,0 +1,205 @@
+diff --git a/bindings/python/vla_cpp/policy.py b/bindings/python/vla_cpp/policy.py
+index e172c8c..dd0646d 100644
+--- a/bindings/python/vla_cpp/policy.py
++++ b/bindings/python/vla_cpp/policy.py
+@@ -59,8 +59,8 @@ def _config(path, precision=None):
+             raise ValueError("Invalid precision profile")
+         if "runtime" in entry and not isinstance(entry["runtime"], dict):
+             raise ValueError("Precision runtime must be an object")
+-        if entry.get("quant_route", "auto") not in ("auto", "blas"):
+-            raise ValueError("quant_route must be auto or blas")
++        if entry.get("quant_route", "auto") not in ("auto", "blas", "load_f16"):
++            raise ValueError("quant_route must be auto, blas or load_f16")
+     selected = precision if precision is not None else cfg.get("default_precision", "baseline")
+     if not isinstance(selected, str) or selected not in ("baseline", *profiles):
+         raise ValueError(f"Unknown precision {selected!r}; choices: {['baseline', *profiles]}")
+@@ -96,6 +96,8 @@ def _config(path, precision=None):
+     if cfg.get("optimization_profile") and selected == "baseline" and runtime != {
+             "weight_dtype": "f16", "act_dtype": "f32", "mm_prec": "f32", "flash_attn": True}:
+         raise ValueError("Validated MUSA profiles require F16 weights/F32 activations/F32 accumulation/FA")
++    if cfg["quant_route"] == "load_f16" and runtime["weight_dtype"] != "f16":
++        raise ValueError("load_f16 requires F16 resident weights")
+     cfg["runtime"] = runtime
+     cfg.setdefault("seed", 0)
+     cfg.setdefault("threads", 4)
+@@ -294,7 +296,8 @@ class Policy:
+             profiles = cfg.get("profiles", {})
+             env = {k: None for k in _inactive | set().union(*(v.keys() for v in profiles.values()))}
+             env.update(profiles.get(self.spec.variant, {}))
+-            env["GGML_MUSA_QUANT_ROUTE"] = cfg["quant_route"]
++            env["VLA_LOAD_QUANT_F16"] = "1" if cfg["quant_route"] == "load_f16" else None
++            env["GGML_MUSA_QUANT_ROUTE"] = "blas" if cfg["quant_route"] == "load_f16" else cfg["quant_route"]
+             env.update(VLA_LIBRARY=cfg["library"], VLA_DEVICE=cfg["device"], VLA_N_THREADS=str(cfg["threads"]))
+             settings = (cfg["library"], cfg["runtime"], env)
+             if _process_settings is not None and _process_settings != settings:
+@@ -333,6 +336,7 @@ class Policy:
+                 "checkpoint": self.spec.checkpoint, "task": self.task, "precision": self.spec.precision,
+                 "precision_status": self.spec.precision_status, "weight_types_on_disk": self.spec.weight_types,
+                 "floating_weight_dtype": cfg["runtime"]["weight_dtype"],
++                "quantized_gemm_resident_dtype": "f16" if cfg["quant_route"] == "load_f16" else "packed",
+                 "act_dtype": cfg["runtime"]["act_dtype"], "quant_route": cfg["quant_route"], "device_requested": cfg["device"], "seed": cfg["seed"],
+                 "num_steps": self.spec.num_steps, "optimization_variant": self.spec.variant if profiles else None,
+                 "source_contract_verified": self.spec.contract_verified}.items()}
+diff --git a/docs/POLICY_API.md b/docs/POLICY_API.md
+index b07deae..5ea8bfa 100644
+--- a/docs/POLICY_API.md
++++ b/docs/POLICY_API.md
+@@ -81,7 +81,7 @@ with load_policy("policy.json", precision="q8-prefix-mlp", task="...") as policy
+ 
+ Policy JSON may declare `default_precision` (otherwise `baseline`) and
+ `precision_profiles`. Each named entry accepts `model`, `manifest`,
+-`runtime` overrides, `quant_route` (`auto` or `blas`) and `status` (`experimental` by default; `validated`
++`runtime` overrides, `quant_route` (`auto`, `blas` or `load_f16`) and `status` (`experimental` by default; `validated`
+ only after deployment acceptance). The reserved baseline uses the original
+ model/runtime configuration. All relative paths resolve beside the policy JSON.
+ Unknown names and missing selected assets fail explicitly. Quantized GGUF files
+@@ -90,8 +90,22 @@ allocation. Inspection checks tensor names, shapes and types without GPU I/O.
+ 
+ `PolicySpec.precision`, `precision_status`, `quant_route` and `weight_types` describe the
+ selection; resolved parameters separately report on-disk weight types,
+-floating resident weight dtype and activation dtype. A packed Q8 tensor stays
+-Q8 even when runtime.weight_dtype is f16. Different native options require a
++floating resident weight dtype, the quantized GEMM residency rule and activation
++dtype. With `auto` or `blas`, a packed Q8 tensor stays Q8 even when
++`runtime.weight_dtype` is `f16`.
++
++The opt-in `load_f16` route requires `runtime.weight_dtype: "f16"`. It decodes
++quantized GEMM weights once at load into F16 resident tensors, using the existing
++floating GEMM and fusion paths. Explicitly requested packed tensors keep their
++packed type. `resolved_parameters.quantized_gemm_resident_dtype` reports `f16`
++for this route and `packed` for the default rule; `weight_types_on_disk` still
++describes the original file. This trades the packed GPU-memory saving for removal
++of repeated dequantization. It is storage quantization with F16 computation, not
++an INT8 compute speedup. Load time includes the one-time conversion; model output
++accuracy and steady-state performance still require separate validation. It does
++not change the baseline or promote an experimental profile to validated.
++
++Different native options require a
+ fresh process. robot_runtime forwards its precision parameter and refuses
+ experimental profiles during live execution; offline loading remains available.
+ 
+diff --git a/src/gguf_reader.h b/src/gguf_reader.h
+index 1ff6694..07c8daa 100644
+--- a/src/gguf_reader.h
++++ b/src/gguf_reader.h
+@@ -119,11 +119,18 @@ struct gguf_reader {
+         return ggml_get_tensor(meta_ctx, name);
+     }
+ 
+-    // Resident type for a weight: keep a quantized source type (Q8_0, Q4_0, ...)
+-    // so it stays packed and ggml_mul_mat dequantizes at compute; otherwise use
+-    // prefer (the model's F32/BF16 matmul type, or an explicit packed type).
++    // Keep quantized weights packed by default. VLA_LOAD_QUANT_F16=1 instead
++    // decodes GEMM weights requested as F16 once at load. Explicit packed types
++    // stay packed; non-quantized weights use the requested floating type.
+     ggml_type resident_type(const ggml_tensor * src, ggml_type prefer) const {
+-        return (src && ggml_is_quantized(src->type)) ? src->type : prefer;
++        if (src && ggml_is_quantized(src->type)) {
++            // Explicit storage-only experiment: decode once at load, then use F16 GEMM.
++            const char * cache = std::getenv("VLA_LOAD_QUANT_F16");
++            if (prefer == GGML_TYPE_F16 && cache && std::strcmp(cache, "1") == 0)
++                return GGML_TYPE_F16;
++            return src->type;
++        }
++        return prefer;
+     }
+ 
+     // cap must equal the declared tensor size: a tensor with the expected ne[0] but
+diff --git a/src/loader.h b/src/loader.h
+index 2f71d09..7689767 100644
+--- a/src/loader.h
++++ b/src/loader.h
+@@ -12,8 +12,8 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
+-// gemm() lands in the model's matmul type, unless the GGUF holds the tensor
+-// quantized, in which case it stays packed and ggml dequantizes at compute.
++// gemm() uses the model's matmul type for floating GGUF weights. Quantized
++// weights stay packed unless the reader's load-time F16 opt-in is selected.
+ // A miss is recorded and surfaces once, at ok().
+ 
+ #pragma once
+diff --git a/tests/py/test_policy_api.py b/tests/py/test_policy_api.py
+index 5dccecb..d4a507d 100644
+--- a/tests/py/test_policy_api.py
++++ b/tests/py/test_policy_api.py
+@@ -60,6 +60,16 @@ class PolicyTests(unittest.TestCase):
+         with self.assertRaisesRegex(ValueError,"quant_route"):
+             policy._config(self.path,"q8-blas")
+ 
++    def test_load_f16_route_requires_f16_and_stays_opt_in(self):
++        cfg=dict(self.config,precision_profiles={"q8-cached":{"quant_route":"load_f16"}})
++        self.path.write_text(json.dumps(cfg))
++        self.assertEqual(policy._config(self.path,"q8-cached")["quant_route"],"load_f16")
++        self.assertEqual(policy._config(self.path,"baseline")["quant_route"],"auto")
++        cfg["precision_profiles"]["q8-cached"]["runtime"]={"weight_dtype":"f32"}
++        self.path.write_text(json.dumps(cfg))
++        with self.assertRaisesRegex(ValueError,"F16 resident"):
++            policy._config(self.path,"q8-cached")
++
+     def test_prompt_cache_reuses_metadata_but_not_state_or_task(self):
+         def field(value):
+             return SimpleNamespace(contents=Mock(return_value=value))
+@@ -97,8 +107,9 @@ class PolicyTests(unittest.TestCase):
+              patch('vla_cpp._ffi.load_library',return_value=fake_lib), \
+              patch.object(vla_cpp,'Model',return_value=native):
+             images={name:np.zeros((4,4,3),np.uint8) for name in spec.camera_order}
+-            with patch.dict(os.environ, {"GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
++            with patch.dict(os.environ, {"VLA_LOAD_QUANT_F16":"1","GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
+                 self.assertEqual(os.environ["GGML_MUSA_QUANT_ROUTE"],"auto")
++                self.assertNotIn("VLA_LOAD_QUANT_F16",os.environ)
+                 self.assertNotIn("GGML_CUDA_CUBLAS_COMPUTE_TYPE",os.environ)
+                 self.assertNotIn("GGML_MUSA_GRAPH_RECREATE",os.environ)
+                 with self.assertRaisesRegex(RuntimeError,'one resident'):vla_cpp.load_policy(self.path)
+diff --git a/tests/test_weight_loading.cpp b/tests/test_weight_loading.cpp
+index 4fc0be7..7b4dd57 100644
+--- a/tests/test_weight_loading.cpp
++++ b/tests/test_weight_loading.cpp
+@@ -27,6 +27,13 @@ int main() {
+         }
+         gguf_add_tensor(gguf,t);
+     }
++    for(auto type:{GGML_TYPE_Q8_0,GGML_TYPE_Q4_0,GGML_TYPE_Q5_0}) {
++        auto * t=ggml_new_tensor_2d(ctx,type,32,4);ggml_set_name(t,ggml_type_name(type));
++        std::vector<float> data(128);
++        for(int i=0;i<128;++i)data[i]=float((i*17)%101-50)/13.f;
++        ggml_quantize_chunk(type,data.data(),t->data,0,4,32,nullptr);
++        gguf_add_tensor(gguf,t);
++    }
+     if(!gguf_write_to_file(gguf,path.string().c_str(),false))return 1;
+     gguf_free(gguf);ggml_free(ctx);
+     bool ok=true;
+@@ -71,6 +78,32 @@ int main() {
+             if(got!=ref)ok=false;
+             ggml_backend_buffer_free(buffer);ggml_free(weights);
+         }
++        for(const char * cache:{"0","1"})for(const char * direct:{"0","1"}) {
++#ifdef _WIN32
++            _putenv_s("VLA_LOAD_QUANT_F16",cache);_putenv_s("VLA_LOAD_DIRECT_FUSED",direct);
++#else
++            setenv("VLA_LOAD_QUANT_F16",cache,1);setenv("VLA_LOAD_DIRECT_FUSED",direct,1);
++#endif
++            for(auto type:{GGML_TYPE_Q8_0,GGML_TYPE_Q4_0,GGML_TYPE_Q5_0}) {
++                const char * name=ggml_type_name(type);
++                auto * weights=ggml_init({64*ggml_tensor_overhead(),nullptr,true});
++                vla::WeightLoader loader("load-test",reader,weights,GGML_TYPE_F16);
++                auto * single=loader.gemm("%s",name);
++                auto * merged=loader.fuse_gemm("quant-merged",{name,name});
++                const auto expected=cache[0]=='1'?GGML_TYPE_F16:type;
++                if(!single || !merged || single->type!=expected || merged->type!=expected)return 1;
++                if(reader.resident_type(reader.meta(name),type)!=type)return 1;
++                ggml_backend_buffer_t buffer=nullptr;
++                if(!loader.upload(backend,&buffer))return 1;
++                auto ref=reader.read_convert(name,expected);
++                std::vector<uint8_t> got(ggml_nbytes(single));ggml_backend_tensor_get(single,got.data(),0,got.size());
++                if(got!=ref)ok=false;
++                auto doubled=ref;doubled.insert(doubled.end(),ref.begin(),ref.end());
++                got.resize(ggml_nbytes(merged));ggml_backend_tensor_get(merged,got.data(),0,got.size());
++                if(got!=doubled)ok=false;
++                ggml_backend_buffer_free(buffer);ggml_free(weights);
++            }
++        }
+         ggml_backend_free(backend);
+     }
+     std::filesystem::remove(path);

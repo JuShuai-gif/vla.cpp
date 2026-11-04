@@ -1,0 +1,3 @@
+/usr/bin/ld: /tmp/bench_musa_row_quant_shared-494ed7.o: undefined reference to symbol 'musaGetErrorString'
+/usr/bin/ld: /usr/local/musa/lib/libmusart.so.5: error adding symbols: DSO missing from command line
+clang-14: error: linker command failed with exit code 1 (use -v to see invocation)

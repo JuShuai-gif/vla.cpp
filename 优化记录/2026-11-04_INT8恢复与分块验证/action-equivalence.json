@@ -1,0 +1,70 @@
+[
+  {
+    "variant": "pruned",
+    "check": "default_unchanged",
+    "reference": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/pruned-bf16-blas-30/baseline-8ba8496a.actions.npz",
+    "candidate": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/pruned-baseline.actions.npz",
+    "arrays": {
+      "actions": {
+        "shape": [
+          30,
+          50,
+          32
+        ],
+        "equal": true,
+        "max_abs": 0.0
+      }
+    }
+  },
+  {
+    "variant": "pruned",
+    "check": "cached_vs_per_gemm",
+    "reference": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/pruned-q8-prefix-mlp-blas.actions.npz",
+    "candidate": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/pruned-q8-prefix-mlp-load-f16.actions.npz",
+    "arrays": {
+      "actions": {
+        "shape": [
+          30,
+          50,
+          32
+        ],
+        "equal": true,
+        "max_abs": 0.0
+      }
+    }
+  },
+  {
+    "variant": "full",
+    "check": "default_unchanged",
+    "reference": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_\u4f4e\u7cbe\u5ea6\u5b9e\u73b0\u4e0e\u9a8c\u6536/full-bf16-blas-30/baseline-8ba8496a.actions.npz",
+    "candidate": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/full-baseline.actions.npz",
+    "arrays": {
+      "actions": {
+        "shape": [
+          30,
+          50,
+          32
+        ],
+        "equal": true,
+        "max_abs": 0.0
+      }
+    }
+  },
+  {
+    "variant": "full",
+    "check": "cached_vs_per_gemm",
+    "reference": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/full-q8-prefix-mlp-blas.actions.npz",
+    "candidate": "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6062\u590d\u4e0e\u5206\u5757\u9a8c\u8bc1/full-q8-prefix-mlp-load-f16.actions.npz",
+    "arrays": {
+      "actions": {
+        "shape": [
+          30,
+          50,
+          32
+        ],
+        "equal": true,
+        "max_abs": 0.0
+      }
+    }
+  }
+]
