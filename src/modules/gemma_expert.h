@@ -208,7 +208,7 @@ struct GemmaStack {
     // fuse_proj: q|k|v and gate|up as one weight each; int8: those as W8A8.
     void declare(WeightLoader & L, const char * prefix, int64_t layers, bool with_output_norm,
                  const FqModuleSpec * fq = nullptr, float rms_eps = 1e-6f, bool fuse_proj = false,
-                 bool int8 = false) {
+                 bool int8 = false, const char * native_int8 = nullptr) {
         blk.resize(layers);
         rms_spec.eps = rms_eps;
         for (int64_t i=0; i<layers; ++i) {
@@ -226,7 +226,7 @@ struct GemmaStack {
                 if (!w.fq_q != !w.fq_k || !w.fq_q != !w.fq_v || !w.fq_gate != !w.fq_up)
                     L.fail("FoldQuant: a Gemma layer's q/k/v (and gate/up) must all be INT or all float");
             }
-            gemma_declare_float(L, w, b, fuse_proj && !fq, int8 && !fq);
+            gemma_declare_float(L, w, b, fuse_proj && !fq, int8 && !fq, 0, i+1<layers?native_int8:nullptr);
         }
         if (with_output_norm)
             output_norm = L.f32_gemma_norm("%s.output_norm.weight", prefix);
@@ -663,7 +663,7 @@ inline ggml_tensor * gemma_mlp(ggml_context * ctx, const GemmaLayerW & w, ggml_t
     } else if (w.Wgu || w.q_gu) {
 #ifdef GGML_USE_MUSA
         if(w.q_gu.inverse && !w.q_gu.extra && w.Wdown && !w.fq_down && !w.q_down &&
-           x_norm->ne[1]<=64 && at==GGML_TYPE_F32 && w.Wdown->type==GGML_TYPE_F16 &&
+           at==GGML_TYPE_F32 && w.Wdown->type==GGML_TYPE_F16 &&
            env_flag("VLA_MUSA_GEGLU_F16") && std::getenv("VLA_PI05_GEGLU_PACK") &&
            std::getenv("VLA_MUSA_SMALL_GEMM") && !w.prefetch_next)
             return mm_f32(ctx,w.Wdown,musa_int8_linear(ctx,w.q_gu,x_norm,true));

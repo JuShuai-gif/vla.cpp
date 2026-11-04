@@ -1,0 +1,28 @@
+[
+  {
+    "variant": "pruned",
+    "layers": 35,
+    "weight_elements": 3169958272,
+    "int8_weight_elements": 1291845632,
+    "fraction": 0.40752764584025414,
+    "invalid_cases": {
+      "wrong_mode": "Invalid native INT8 calibration manifest",
+      "missing_prefix": "Invalid native INT8 calibration manifest",
+      "unused_layer": "Invalid native INT8 calibration manifest",
+      "corrupt_hash": "Native INT8 parameter SHA256 mismatch"
+    }
+  },
+  {
+    "variant": "full",
+    "layers": 35,
+    "weight_elements": 3352683904,
+    "int8_weight_elements": 1291845632,
+    "fraction": 0.38531685926571624,
+    "invalid_cases": {
+      "wrong_mode": "Invalid native INT8 calibration manifest",
+      "missing_prefix": "Invalid native INT8 calibration manifest",
+      "unused_layer": "Invalid native INT8 calibration manifest",
+      "corrupt_hash": "Native INT8 parameter SHA256 mismatch"
+    }
+  }
+]

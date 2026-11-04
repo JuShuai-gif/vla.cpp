@@ -1,0 +1,37 @@
+{
+  "cases": 32,
+  "all_integer_reference_checks_pass": true,
+  "best": {
+    "(512, 128, 50)": {
+      "case": "split-k-fastpack-4-512-32-64-1",
+      "int8_ms": 0.12308,
+      "float_blas_ms": 0.14264,
+      "fractional_reduction": 0.13712843522153673
+    },
+    "(1024, 8192, 50)": {
+      "case": "split-k-fastpack-1-1024-32-64-1",
+      "int8_ms": 0.3344,
+      "float_blas_ms": 0.55884,
+      "fractional_reduction": 0.401617636532818
+    },
+    "(4096, 1024, 50)": {
+      "case": "split-k-fastpack-4-4096-64-64-1",
+      "int8_ms": 0.27396,
+      "float_blas_ms": 0.50496,
+      "fractional_reduction": 0.45746197718631176
+    },
+    "(2048, 1024, 50)": {
+      "case": "split-k-fastpack-1-2048-32-64-1",
+      "int8_ms": 0.19008,
+      "float_blas_ms": 0.2856,
+      "fractional_reduction": 0.3344537815126051
+    },
+    "(2048, 32768, 320)": {
+      "case": "split-k-fastpack-1-2048-64-160-2",
+      "int8_ms": 5.98524,
+      "float_blas_ms": 6.67408,
+      "fractional_reduction": 0.10321122911322611
+    }
+  },
+  "scope": "synthetic complete pack+INT8+optional split reduction; F16 generic BLAS comparator, not end-to-end acceptance"
+}

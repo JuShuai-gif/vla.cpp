@@ -65,7 +65,7 @@ int main(int argc,char **argv){
         for(auto type:{GGML_TYPE_F32,GGML_TYPE_F16})for(int N:{1,50,64,65,161}){
             auto *ctx=ggml_init({1024*1024,nullptr,true});auto *x=ggml_new_tensor_2d(ctx,type,K,N);ggml_set_input(x);
             auto *out=vla::musa_int8_linear(ctx,q,x);ggml_set_output(out);
-            auto *fused=R==0 && N<=64?vla::musa_int8_linear(ctx,q,x,true):nullptr;
+            auto *fused=R==0?vla::musa_int8_linear(ctx,q,x,true):nullptr;
             if(fused)ggml_set_output(fused->src[0]);
             auto *graph=ggml_new_graph(ctx);ggml_build_forward_expand(graph,out);
             if(fused)ggml_build_forward_expand(graph,fused);
@@ -83,9 +83,10 @@ int main(int argc,char **argv){
                 CHECK(ggml_backend_graph_compute(b.handle,graph)==GGML_STATUS_SUCCESS);
                 ggml_backend_tensor_get(out,got.data(),0,got.size()*4);
                 if(fused){
-                    std::vector<ggml_fp16_t> values(M/2*64);
+                    const int NP=N<=64?64:((N+159)/160)*160;
+                    std::vector<ggml_fp16_t> values(M/2*NP);
                     ggml_backend_tensor_get(fused->src[0],values.data(),0,values.size()*2);
-                    for(int n=0;n<64;++n)for(int m=0;m<M/2;++m){
+                    for(int n=0;n<NP;++n)for(int m=0;m<M/2;++m){
                         float ref=0;
                         if(n<N){
                             const float g=got[n*M+m],u=got[n*M+M/2+m];

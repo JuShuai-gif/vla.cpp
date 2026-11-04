@@ -1,0 +1,46 @@
+{
+  "variant": "pruned",
+  "unique_observations": 90,
+  "pairs": 2,
+  "order": "A0 B0 B1 A1",
+  "action_repeat_exact": {
+    "baseline": true,
+    "int8-expert-smooth": true
+  },
+  "offline_accuracy_pass": true,
+  "minimum_action_cosine": 0.9999481071972929,
+  "pair_native_p50_reductions": [
+    0.015312111924610572,
+    0.012794061641189791
+  ],
+  "pair_predict_p50_reductions": [
+    0.015186113310679206,
+    0.01328129362717323
+  ],
+  "stats": {
+    "native": {
+      "mean_reduction": 0.015109303389685413,
+      "episode_bootstrap_95_percent_interval": [
+        0.012922524902801477,
+        0.017073651602999198
+      ],
+      "episodes": 30,
+      "resamples": 5000,
+      "scope": "paired observations clustered by episode; two opposite-order process pairs",
+      "pooled_p50_reduction": 0.013864118981039453
+    },
+    "predict": {
+      "mean_reduction": 0.014716441749809683,
+      "episode_bootstrap_95_percent_interval": [
+        0.012570630950729328,
+        0.016667835473512766
+      ],
+      "episodes": 30,
+      "resamples": 5000,
+      "scope": "paired observations clustered by episode; two opposite-order process pairs",
+      "pooled_p50_reduction": 0.013629834933646556
+    }
+  },
+  "criteria": "Each reverse-order pair has positive native/predict P50 gain; episode-bootstrap lower bound for mean gains >0. This is the current improvement goal, not the historical 20% target.",
+  "development_performance_pass": true
+}

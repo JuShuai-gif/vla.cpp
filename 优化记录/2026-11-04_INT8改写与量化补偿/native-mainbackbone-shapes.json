@@ -1,0 +1,48 @@
+{
+  "pruned": {
+    "hidden": 2048,
+    "intermediate": 16384,
+    "expert_h": 1024,
+    "expert_inter": 4096,
+    "n_layers": 18,
+    "tokenizer_max_length": 64,
+    "n_img_tokens": 256,
+    "tensor_shapes": {
+      "vlm.blk.0.ffn_gate.weight": [
+        2048,
+        16384
+      ],
+      "vlm.blk.0.ffn_down.weight": [
+        16384,
+        2048
+      ],
+      "aex.blk.0.ffn_down.weight": [
+        4096,
+        1024
+      ]
+    }
+  },
+  "full": {
+    "hidden": 2048,
+    "intermediate": 16384,
+    "expert_h": 1024,
+    "expert_inter": 4096,
+    "n_layers": 18,
+    "tokenizer_max_length": 200,
+    "n_img_tokens": 256,
+    "tensor_shapes": {
+      "vlm.blk.0.ffn_gate.weight": [
+        2048,
+        16384
+      ],
+      "vlm.blk.0.ffn_down.weight": [
+        16384,
+        2048
+      ],
+      "aex.blk.0.ffn_down.weight": [
+        4096,
+        1024
+      ]
+    }
+  }
+}

@@ -1,0 +1,1 @@
+{"directory": "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-main-smooth", "layers": 35, "alpha": 0.75, "outliers": 0}

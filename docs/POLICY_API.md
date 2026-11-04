@@ -204,3 +204,5 @@ fallback. Baseline selection clears inherited INT8 and load-time-decode settings
 Current profiles remain experimental. Operator accuracy or speed alone is not
 model acceptance. See the INT8 experiment archive for BF16 action comparisons,
 full-model measurements, failed experiments, and remaining validation.
+
+Native INT8 calibration manifests may also opt into expert_prefix_gateup: all expert GateUp projections plus prefix GateUp layers 0–16 (the last prefix layer only produces K/V). This remains mixed precision; attention, vision and Down projections remain floating point. Parameter manifests bind every selected layer and the original checkpoint by SHA256. It is experimental until end-to-end accuracy and timing validation passes.

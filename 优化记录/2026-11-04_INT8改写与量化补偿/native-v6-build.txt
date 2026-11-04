@@ -1,0 +1,144 @@
+[1/40] Building CXX object CMakeFiles/vla_core.dir/src/models/pi0.cpp.o
+In file included from /home/skysi/code/vla.cpp-quant/src/models/pi0.cpp:16:
+In file included from /home/skysi/code/vla.cpp-quant/src/modules/gemma_expert.h:1:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[2/40] Building CXX object tests/CMakeFiles/test_musa_ops.dir/test_musa_ops.cpp.o
+In file included from /home/skysi/code/vla.cpp-quant/tests/test_musa_ops.cpp:1:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+/home/skysi/code/vla.cpp-quant/tests/test_musa_ops.cpp:580:39: warning: 'ggml_mul_mat_set_prec' is deprecated: use ggml_prec_set_acc() instead [-Wdeprecated-declarations]
+        out=ggml_mul_mat(g.ctx,wf,xf);ggml_mul_mat_set_prec(out,GGML_PREC_F32);
+                                      ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml.h:1489:5: note: 'ggml_mul_mat_set_prec' has been explicitly marked deprecated here
+    GGML_DEPRECATED(GGML_API void ggml_mul_mat_set_prec(
+    ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml.h:192:61: note: expanded from macro 'GGML_DEPRECATED'
+#    define GGML_DEPRECATED(func, hint) func __attribute__((deprecated(hint)))
+                                                            ^
+2 warnings generated.
+[3/40] Building CXX object tests/CMakeFiles/bench_musa_native_int8.dir/bench_musa_native_int8.cpp.o
+In file included from /home/skysi/code/vla.cpp-quant/tests/bench_musa_native_int8.cpp:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:6:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[4/40] Building CXX object CMakeFiles/vla_core.dir/src/models/pi05.cpp.o
+In file included from /home/skysi/code/vla.cpp-quant/src/models/pi05.cpp:1:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[5/40] Building CXX object tests/CMakeFiles/test_musa_int8.dir/test_musa_int8.cpp.o
+In file included from /home/skysi/code/vla.cpp-quant/tests/test_musa_int8.cpp:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:6:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:5:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/small_gemm.h:7:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+1 warning generated.
+[6/40] Building CXX object _deps/llama-build/ggml/src/ggml-musa/CMakeFiles/ggml-musa.dir/__/__/__/__/__/src/musa/vla_musa_int8.cu.o
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:3:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:6:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:4:
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:4:
+/home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:9:55: warning: function 'musa_int8_cpu' could be declared with attribute 'noreturn' [-Wmissing-noreturn]
+inline void musa_int8_cpu(ggml_tensor*,int,int,void*) {
+                                                      ^
+4 warnings generated when compiling for mp_22.
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:3:
+/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_ops.h:7:12: warning: duplicate 'extern' declaration specifier [-Wduplicate-decl-specifier]
+extern "C" GGML_BACKEND_API ggml_backend_buffer_t ggml_backend_musa_mapped_buffer(
+           ^
+/home/skysi/code/vla.cpp-quant/build-deps/llama/ggml/src/../include/ggml-backend.h:14:75: note: expanded from macro 'GGML_BACKEND_API'
+#        define GGML_BACKEND_API __attribute__ ((visibility ("default"))) extern
+                                                                          ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:4:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:6:
+In file included from /home/skysi/code/vla.cpp-quant/src/layers/packed_norm.h:4:
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:261:58: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                              GGML_N_TASKS_MAX, (void *) spec);
+                                                         ^
+/home/skysi/code/vla.cpp-quant/src/layers/fused_ew.h:263:54: warning: cast from 'const void *' to 'void *' drops const qualifier [-Wcast-qual]
+                          GGML_N_TASKS_MAX, (void *) spec);
+                                                     ^
+In file included from /home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu:4:
+/home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h:9:55: warning: function 'musa_int8_cpu' could be declared with attribute 'noreturn' [-Wmissing-noreturn]
+inline void musa_int8_cpu(ggml_tensor*,int,int,void*) {
+                                                      ^
+4 warnings generated when compiling for host.
+[7/40] Linking CXX shared library bin/libggml-musa.so.0.25.3
+[8/40] Creating library symlink bin/libggml-musa.so.0 bin/libggml-musa.so
+[9/40] Linking CXX shared library bin/libggml.so.0.25.3
+[10/40] Creating library symlink bin/libggml.so.0 bin/libggml.so
+[11/40] Linking CXX executable tests/test_vision_prune
+[12/40] Linking CXX executable tests/test_rope_conventions
+[13/40] Linking CXX executable tests/test_dit_common
+[14/40] Linking CXX executable tests/test_graph_names
+[15/40] Linking CXX shared library libvla_core.so
+[16/40] Linking CXX executable tests/test_qwen3vl_vit
+[17/40] Linking CXX shared library libvla.so
+[18/40] Linking CXX shared library bin/libllama.so.0.5.0
+[19/40] Creating library symlink bin/libllama.so.0 bin/libllama.so
+[20/40] Linking CXX shared library bin/libllama-common.so.0.5.0
+[21/40] Creating library symlink bin/libllama-common.so.0 bin/libllama-common.so
+[22/40] Linking CXX shared library bin/libmtmd.so.0.5.0
+[23/40] Creating library symlink bin/libmtmd.so.0 bin/libmtmd.so
+[24/40] Linking CXX shared library libvlm_core.so
+[25/40] Linking CXX executable vla-server
+[26/40] Linking CXX executable vla-cli
+[27/40] Linking CXX executable vla-bench
+[28/40] Linking CXX executable vlm-server
+[29/40] Linking C executable tests/test_c_api
+[30/40] Linking CXX executable tests/vla_predict_check
+[31/40] Linking CXX executable tests/test_config_guard
+[32/40] Linking CXX executable tests/test_prompt
+[33/40] Linking CXX executable tests/test_foldquant_cpu_op
+[34/40] Linking CXX executable tests/test_foldquant_dequant
+[35/40] Linking CXX executable tests/test_quant_calibration
+[36/40] Linking CXX executable tests/test_musa_ops
+[37/40] Linking CXX executable tests/test_weight_loading
+[38/40] Linking CXX executable tests/bench_musa_quant
+[39/40] Linking CXX executable tests/bench_musa_native_int8
+[40/40] Linking CXX executable tests/test_musa_int8

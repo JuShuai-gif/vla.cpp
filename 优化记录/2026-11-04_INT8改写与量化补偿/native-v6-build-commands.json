@@ -1,0 +1,91 @@
+[
+  {
+    "label": "native-v6-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-musa-quant",
+      "-j",
+      "4"
+    ],
+    "returncode": 0,
+    "seconds": 26.067532777786255
+  },
+  {
+    "label": "native-v6-ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-musa-quant",
+      "-R",
+      "musa_native_int8",
+      "--output-on-failure"
+    ],
+    "returncode": 0,
+    "seconds": 6.7261598110198975
+  },
+  {
+    "label": "native-v6-python",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "-m",
+      "unittest",
+      "test_policy_api",
+      "test_precision_bench",
+      "test_quantize_gguf",
+      "test_pi05_io",
+      "test_int8_compensation"
+    ],
+    "returncode": 0,
+    "seconds": 5.275002956390381
+  },
+  {
+    "label": "native-v6-export-pruned",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/export_int8_parameters.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/pruned-main-native-policy.json",
+      "--importance",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/pruned-120/importance.json",
+      "--output-dir",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-main-smooth",
+      "--alpha",
+      "0.75",
+      "--prefix",
+      "--prefix-alpha",
+      "0.5"
+    ],
+    "returncode": 0,
+    "seconds": 42.082284688949585
+  },
+  {
+    "label": "native-v6-export-full",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "scripts/export_int8_parameters.py",
+      "--config",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/full-main-native-policy.json",
+      "--importance",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/calibration/full-120/importance.json",
+      "--output-dir",
+      "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-main-smooth",
+      "--alpha",
+      "0.75",
+      "--prefix",
+      "--prefix-alpha",
+      "0.5"
+    ],
+    "returncode": 0,
+    "seconds": 40.598376750946045
+  },
+  {
+    "label": "native-v6-models",
+    "command": [
+      "/home/skysi/code/robot_runtime/.venv/bin/python",
+      "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/run_native_models_v6.py"
+    ],
+    "returncode": 0,
+    "seconds": 257.5659177303314
+  }
+]

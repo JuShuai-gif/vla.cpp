@@ -177,8 +177,10 @@ def _inspect(config_path, precision=None):
         path=Path(cfg["int8_parameters"])
         manifest=json.loads(path.read_text())
         expected={f"aex.blk.{i}.ffn_gateup" for i in range(field("pi05.n_layers"))}
+        if manifest.get("mode")=="expert_prefix_gateup":
+            expected.update(f"vlm.blk.{i}.ffn_gateup" for i in range(field("pi05.n_layers")-1))
         if (manifest.get("schema_version")!=1 or manifest.get("split")!="calibration"
-                or manifest.get("mode")!="expert_gateup" or set(manifest.get("layers",{}))!=expected
+                or manifest.get("mode") not in ("expert_gateup","expert_prefix_gateup") or set(manifest.get("layers",{}))!=expected
                 or len(manifest.get("source_sha256",""))!=64):
             raise ValueError("Invalid native INT8 calibration manifest")
         for name,row in manifest["layers"].items():
@@ -187,6 +189,7 @@ def _inspect(config_path, precision=None):
                 raise ValueError("Native INT8 parameter SHA256 mismatch")
         cfg["model_sha256"]=manifest["source_sha256"]
         cfg["int8_parameter_dir"]=str(path.parent)
+        cfg["int8_scope"]=manifest["mode"]
     for name in ("state_q01", "state_q99"):
         if name not in tensors:
             raise ValueError(f"Missing {name}")
@@ -319,6 +322,7 @@ class Policy:
             env.update(profiles.get(self.spec.variant, {}))
             env["VLA_LOAD_QUANT_F16"] = "1" if cfg["quant_route"] == "load_f16" else None
             env["VLA_PI05_INT8_PARAMETERS"]=cfg.get("int8_parameter_dir")
+            env["VLA_PI05_INT8_PREFIX"]="1" if cfg.get("int8_scope")=="expert_prefix_gateup" else None
             env["GGML_MUSA_QUANT_ROUTE"] = {"load_f16":"blas","native_int8":"auto"}.get(cfg["quant_route"],cfg["quant_route"])
             env.update(VLA_LIBRARY=cfg["library"], VLA_DEVICE=cfg["device"], VLA_N_THREADS=str(cfg["threads"]))
             settings = (cfg["library"], cfg["runtime"], env)
@@ -360,7 +364,7 @@ class Policy:
                 "floating_weight_dtype": cfg["runtime"]["weight_dtype"],
                 "quantized_gemm_resident_dtype": {"load_f16":"f16","native_int8":"int8"}.get(cfg["quant_route"],"packed"),
                 "int8_parameters": cfg.get("int8_parameters"),
-                "int8_scope": "expert_gateup" if cfg["quant_route"]=="native_int8" else None,
+                "int8_scope": cfg.get("int8_scope"),
                 "int8_accumulator_dtype": "int32" if cfg["quant_route"]=="native_int8" else None,
                 "act_dtype": cfg["runtime"]["act_dtype"], "quant_route": cfg["quant_route"], "device_requested": cfg["device"], "seed": cfg["seed"],
                 "num_steps": self.spec.num_steps, "optimization_variant": self.spec.variant if profiles else None,

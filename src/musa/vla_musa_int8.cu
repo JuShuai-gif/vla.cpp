@@ -23,7 +23,7 @@ bool musa_int8_supports(const ggml_tensor * t){
           ggml_nelements(b)==a->ne[0] && t->ne[0]%(a->ne[0]+4)==0;
     if(k==MUSA_INT8_GEGLU){
         const auto *x=t->src[3];
-        if(!x || x->ne[1]<1 || x->ne[1]>64 || t->ne[1]!=64 || t->src[4])return false;
+        if(!x || x->ne[1]<1 || x->ne[1]>4096 || t->ne[1]!=(x->ne[1]<=64?64:((x->ne[1]+159)/160)*160) || t->src[4])return false;
     }
     if(t->src[4]){
         const auto *x=t->src[3],*extra=t->src[4],*indices=t->src[5];
@@ -59,7 +59,8 @@ bool musa_int8_forward(ggml_tensor *t,void *stream){
         const auto *w=(const signed char*)a->data,*x=(const signed char*)t->src[2]->data;
         const auto *sw=(const float*)t->src[1]->data,*sx=(const float*)(x+(size_t)NP*K);
         if(k==MUSA_INT8_GEGLU){
-            launch_int8<64,64,1,false,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
+            if(N<=64)launch_int8<64,64,1,false,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
+            else launch_int8<64,160,2,false,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
         }else if(t->src[4]){
             const auto *extra=(const half*)t->src[4]->data;const auto *indices=(const int*)t->src[5]->data;
             const int R=t->src[4]->ne[0];const bool half_input=t->src[3]->type==GGML_TYPE_F16;

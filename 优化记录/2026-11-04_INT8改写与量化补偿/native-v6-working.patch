@@ -1,0 +1,267 @@
+diff --git a/bindings/python/vla_cpp/policy.py b/bindings/python/vla_cpp/policy.py
+index 858cca9..d6a8ba3 100644
+--- a/bindings/python/vla_cpp/policy.py
++++ b/bindings/python/vla_cpp/policy.py
+@@ -177,8 +177,10 @@ def _inspect(config_path, precision=None):
+         path=Path(cfg["int8_parameters"])
+         manifest=json.loads(path.read_text())
+         expected={f"aex.blk.{i}.ffn_gateup" for i in range(field("pi05.n_layers"))}
++        if manifest.get("mode")=="expert_prefix_gateup":
++            expected.update(f"vlm.blk.{i}.ffn_gateup" for i in range(field("pi05.n_layers")-1))
+         if (manifest.get("schema_version")!=1 or manifest.get("split")!="calibration"
+-                or manifest.get("mode")!="expert_gateup" or set(manifest.get("layers",{}))!=expected
++                or manifest.get("mode") not in ("expert_gateup","expert_prefix_gateup") or set(manifest.get("layers",{}))!=expected
+                 or len(manifest.get("source_sha256",""))!=64):
+             raise ValueError("Invalid native INT8 calibration manifest")
+         for name,row in manifest["layers"].items():
+@@ -187,6 +189,7 @@ def _inspect(config_path, precision=None):
+                 raise ValueError("Native INT8 parameter SHA256 mismatch")
+         cfg["model_sha256"]=manifest["source_sha256"]
+         cfg["int8_parameter_dir"]=str(path.parent)
++        cfg["int8_scope"]=manifest["mode"]
+     for name in ("state_q01", "state_q99"):
+         if name not in tensors:
+             raise ValueError(f"Missing {name}")
+@@ -319,6 +322,7 @@ class Policy:
+             env.update(profiles.get(self.spec.variant, {}))
+             env["VLA_LOAD_QUANT_F16"] = "1" if cfg["quant_route"] == "load_f16" else None
+             env["VLA_PI05_INT8_PARAMETERS"]=cfg.get("int8_parameter_dir")
++            env["VLA_PI05_INT8_PREFIX"]="1" if cfg.get("int8_scope")=="expert_prefix_gateup" else None
+             env["GGML_MUSA_QUANT_ROUTE"] = {"load_f16":"blas","native_int8":"auto"}.get(cfg["quant_route"],cfg["quant_route"])
+             env.update(VLA_LIBRARY=cfg["library"], VLA_DEVICE=cfg["device"], VLA_N_THREADS=str(cfg["threads"]))
+             settings = (cfg["library"], cfg["runtime"], env)
+@@ -360,7 +364,7 @@ class Policy:
+                 "floating_weight_dtype": cfg["runtime"]["weight_dtype"],
+                 "quantized_gemm_resident_dtype": {"load_f16":"f16","native_int8":"int8"}.get(cfg["quant_route"],"packed"),
+                 "int8_parameters": cfg.get("int8_parameters"),
+-                "int8_scope": "expert_gateup" if cfg["quant_route"]=="native_int8" else None,
++                "int8_scope": cfg.get("int8_scope"),
+                 "int8_accumulator_dtype": "int32" if cfg["quant_route"]=="native_int8" else None,
+                 "act_dtype": cfg["runtime"]["act_dtype"], "quant_route": cfg["quant_route"], "device_requested": cfg["device"], "seed": cfg["seed"],
+                 "num_steps": self.spec.num_steps, "optimization_variant": self.spec.variant if profiles else None,
+diff --git a/docs/POLICY_API.md b/docs/POLICY_API.md
+index ec4fb02..7232d70 100644
+--- a/docs/POLICY_API.md
++++ b/docs/POLICY_API.md
+@@ -204,3 +204,5 @@ fallback. Baseline selection clears inherited INT8 and load-time-decode settings
+ Current profiles remain experimental. Operator accuracy or speed alone is not
+ model acceptance. See the INT8 experiment archive for BF16 action comparisons,
+ full-model measurements, failed experiments, and remaining validation.
++
++Native INT8 calibration manifests may also opt into expert_prefix_gateup: all expert GateUp projections plus prefix GateUp layers 0–16 (the last prefix layer only produces K/V). This remains mixed precision; attention, vision and Down projections remain floating point. Parameter manifests bind every selected layer and the original checkpoint by SHA256. It is experimental until end-to-end accuracy and timing validation passes.
+diff --git a/scripts/export_int8_parameters.py b/scripts/export_int8_parameters.py
+index f953817..2992dd2 100644
+--- a/scripts/export_int8_parameters.py
++++ b/scripts/export_int8_parameters.py
+@@ -1,4 +1,4 @@
+-"""Export calibration-bound native INT8 expert GateUp parameters, never weights."""
++"""Export calibration-bound native INT8 expert/prefix GateUp parameters, never weights."""
+ import argparse,json,struct
+ from pathlib import Path
+ import gguf
+@@ -12,6 +12,8 @@ def main():
+     ap.add_argument("--config",type=Path,required=True);ap.add_argument("--importance",type=Path,required=True)
+     ap.add_argument("--output-dir",type=Path,required=True);ap.add_argument("--alpha",type=float)
+     ap.add_argument("--outliers",type=int,default=0)
++    ap.add_argument("--prefix",action="store_true");ap.add_argument("--prefix-alpha",type=float,default=0.5)
++    ap.add_argument("--prefix-outliers",type=int,default=0)
+     args=ap.parse_args();cfg=json.loads(args.config.read_text())
+     model=(args.config.resolve().parent/Path(cfg["model"]).expanduser()).resolve()
+     calibration=json.loads(args.importance.read_text());source_sha=file_digest(model)
+@@ -19,18 +21,21 @@ def main():
+         raise ValueError("calibration must belong to the selected original checkpoint")
+     root=args.output_dir.resolve();root.mkdir(parents=True,exist_ok=False)
+     reader=GGUFReader(model);tensors={t.name:t for t in reader.tensors}
+-    manifest=dict(schema_version=1,mode="expert_gateup",split="calibration",source_sha256=source_sha,
++    manifest=dict(schema_version=1,mode="expert_prefix_gateup" if args.prefix else "expert_gateup",split="calibration",source_sha256=source_sha,
+        calibration_sha256=file_digest(args.importance),calibration_path=str(args.importance.resolve()),
+        scaling="plain" if args.alpha is None else "smoothquant",alpha=args.alpha,outlier_count=args.outliers,layers={})
+-    for i in range(reader.fields["pi05.n_layers"].contents()):
+-        name=f"aex.blk.{i}.ffn_gateup"
+-        sources=[f"aex.blk.{i}.ffn_{part}.weight" for part in ("gate","up")]
++    layers=reader.fields["pi05.n_layers"].contents()
++    sites=[("aex",i,args.alpha,args.outliers) for i in range(layers)]
++    if args.prefix:sites += [("vlm",i,args.prefix_alpha,args.prefix_outliers) for i in range(layers-1)]
++    for tower,i,alpha,outliers in sites:
++        name=f"{tower}.blk.{i}.ffn_gateup"
++        sources=[f"{tower}.blk.{i}.ffn_{part}.weight" for part in ("gate","up")]
+         w=np.concatenate([gguf.quants.dequantize(tensors[n].data,tensors[n].tensor_type).astype(np.float16).astype(np.float32) for n in sources])
+         a=np.asarray(calibration["weights"][sources[0]]["amax"],np.float32)
+-        p=prepare(w,a,args.alpha,args.outliers)
+-        data=struct.pack("<III",0x31503849,w.shape[1],args.outliers)+p["inverse"].astype("<f4").tobytes()+p["indices"].astype("<i4").tobytes()
++        p=prepare(w,a,alpha,outliers)
++        data=struct.pack("<III",0x31503849,w.shape[1],outliers)+p["inverse"].astype("<f4").tobytes()+p["indices"].astype("<i4").tobytes()
+         file=root/(name+".i8p");file.write_bytes(data)
+-        manifest["layers"][name]=dict(sha256=file_digest(file),shape=list(w.shape),outlier_indices=p["indices"].tolist())
++        manifest["layers"][name]=dict(sha256=file_digest(file),shape=list(w.shape),outlier_indices=p["indices"].tolist(),alpha=alpha,outlier_count=outliers)
+     (root/"manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
+     print(json.dumps(dict(directory=str(root),layers=len(manifest["layers"]),alpha=args.alpha,outliers=args.outliers)),flush=True)
+ if __name__=="__main__":main()
+diff --git a/src/layers/musa_int8.h b/src/layers/musa_int8.h
+index 6e0bbd7..e136587 100644
+--- a/src/layers/musa_int8.h
++++ b/src/layers/musa_int8.h
+@@ -14,7 +14,7 @@ inline ggml_tensor * musa_int8_linear(ggml_context * C,const WeightLoader::QWeig
+     GGML_ASSERT(q.inverse && q.bits==8 && K%32==0 && M%128==0 && N>0 && N<=4096 &&
+         x->ne[0]==K && x->ne[2]==1 && x->ne[3]==1 && ggml_is_contiguous(x) &&
+         (x->type==GGML_TYPE_F16 || x->type==GGML_TYPE_F32));
+-    GGML_ASSERT(!geglu || (!q.extra && N<=64));
++    GGML_ASSERT(!geglu || (!q.extra));
+     static const uint32_t pack=MUSA_INT8_PACK,gemm=MUSA_INT8_GEMM,glu=MUSA_INT8_GEGLU;
+     ggml_tensor * args[]={x,q.inverse};
+     ggml_tensor * blob=nullptr;
+@@ -28,7 +28,7 @@ inline ggml_tensor * musa_int8_linear(ggml_context * C,const WeightLoader::QWeig
+     if(!blob)blob=ggml_custom_4d(C,GGML_TYPE_I8,(K+4)*NP,1,1,1,args,2,musa_int8_cpu,1,(void*)&pack);
+     ggml_format_name(blob,"%s.activations",q.w->name);
+     ggml_tensor * inputs[]={q.w,q.s,blob,x,q.extra,q.indices};
+-    auto * out=ggml_custom_4d(C,geglu?GGML_TYPE_F16:GGML_TYPE_F32,geglu?M/2:M,geglu?64:N,1,1,inputs,q.extra?6:geglu?4:3,musa_int8_cpu,1,(void*)(geglu?&glu:&gemm));
++    auto * out=ggml_custom_4d(C,geglu?GGML_TYPE_F16:GGML_TYPE_F32,geglu?M/2:M,geglu?NP:N,1,1,inputs,q.extra?6:geglu?4:3,musa_int8_cpu,1,(void*)(geglu?&glu:&gemm));
+     ggml_format_name(out,"%s.native",q.w->name);
+     return geglu?ggml_view_2d(C,out,M/2,N,out->nb[1],0):out;
+ }
+diff --git a/src/models/pi05.cpp b/src/models/pi05.cpp
+index 04e7408..009ca7f 100644
+--- a/src/models/pi05.cpp
++++ b/src/models/pi05.cpp
+@@ -758,21 +758,6 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+     m->vis.declare(L);
+     m->vis.vit.enc.cfg.fused_ops = m->fused_ops && !m->vision_keep;
+ 
+-    m->pl.declare(L, "vlm", cfg.n_layers, false, fq.present ? &fq.llm : nullptr, cfg.rms_eps, fuse_proj, q8_vlm);
+-    // fq_fast: the prefix q/k/v GEMM, RoPE and F16 packing as one node
+-    // (gemma_attn). VLA_FQ_NO_ROPE_PACK=1 keeps them apart (A/B runs).
+-    if (m->fq_fast && cfg.n_kv_heads == 1 && cfg.head_dim == 256 && !env_flag("VLA_FQ_SYCL_GEMM") &&
+-        !env_flag("VLA_FQ_NO_ROPE_PACK"))
+-        for (GemmaLayerW & w : m->pl.blk)
+-            if (w.fq_qkv) {
+-                w.rope_pack.magic     = FQ_ROPE_PACK_MAGIC;
+-                w.rope_pack.gemm      = &w.fq_qkv.gemm;
+-                w.rope_pack.hd        = (int) cfg.head_dim;
+-                w.rope_pack.nq        = (int) cfg.n_q_heads;
+-                w.rope_pack.freq_base = cfg.rope_freq_base;
+-                w.rope_pack.scale     = 1.0f / std::sqrt((float) cfg.head_dim);
+-            }
+-
+     const char * native_int8=std::getenv("VLA_PI05_INT8_PARAMETERS");
+     if(native_int8){
+ #ifdef GGML_USE_MUSA
+@@ -787,6 +772,22 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
+         std::printf("vla(pi05): native W8A8 expert GateUp in %lld layers, calibrated parameters %s\n",
+                     (long long)cfg.n_layers,native_int8);
+     }
++    m->pl.declare(L, "vlm", cfg.n_layers, false, fq.present ? &fq.llm : nullptr, cfg.rms_eps, fuse_proj, q8_vlm,
++                  env_flag("VLA_PI05_INT8_PREFIX")?native_int8:nullptr);
++    // fq_fast: the prefix q/k/v GEMM, RoPE and F16 packing as one node
++    // (gemma_attn). VLA_FQ_NO_ROPE_PACK=1 keeps them apart (A/B runs).
++    if (m->fq_fast && cfg.n_kv_heads == 1 && cfg.head_dim == 256 && !env_flag("VLA_FQ_SYCL_GEMM") &&
++        !env_flag("VLA_FQ_NO_ROPE_PACK"))
++        for (GemmaLayerW & w : m->pl.blk)
++            if (w.fq_qkv) {
++                w.rope_pack.magic     = FQ_ROPE_PACK_MAGIC;
++                w.rope_pack.gemm      = &w.fq_qkv.gemm;
++                w.rope_pack.hd        = (int) cfg.head_dim;
++                w.rope_pack.nq        = (int) cfg.n_q_heads;
++                w.rope_pack.freq_base = cfg.rope_freq_base;
++                w.rope_pack.scale     = 1.0f / std::sqrt((float) cfg.head_dim);
++            }
++
+     m->ex_layers.resize(cfg.n_layers);
+     for (int64_t i=0; i<cfg.n_layers; ++i) {
+         GemmaLayerW & w = m->ex_layers[i];
+diff --git a/src/modules/gemma_expert.h b/src/modules/gemma_expert.h
+index 8fc711c..d81248e 100644
+--- a/src/modules/gemma_expert.h
++++ b/src/modules/gemma_expert.h
+@@ -208,7 +208,7 @@ struct GemmaStack {
+     // fuse_proj: q|k|v and gate|up as one weight each; int8: those as W8A8.
+     void declare(WeightLoader & L, const char * prefix, int64_t layers, bool with_output_norm,
+                  const FqModuleSpec * fq = nullptr, float rms_eps = 1e-6f, bool fuse_proj = false,
+-                 bool int8 = false) {
++                 bool int8 = false, const char * native_int8 = nullptr) {
+         blk.resize(layers);
+         rms_spec.eps = rms_eps;
+         for (int64_t i=0; i<layers; ++i) {
+@@ -226,7 +226,7 @@ struct GemmaStack {
+                 if (!w.fq_q != !w.fq_k || !w.fq_q != !w.fq_v || !w.fq_gate != !w.fq_up)
+                     L.fail("FoldQuant: a Gemma layer's q/k/v (and gate/up) must all be INT or all float");
+             }
+-            gemma_declare_float(L, w, b, fuse_proj && !fq, int8 && !fq);
++            gemma_declare_float(L, w, b, fuse_proj && !fq, int8 && !fq, 0, i+1<layers?native_int8:nullptr);
+         }
+         if (with_output_norm)
+             output_norm = L.f32_gemma_norm("%s.output_norm.weight", prefix);
+@@ -663,7 +663,7 @@ inline ggml_tensor * gemma_mlp(ggml_context * ctx, const GemmaLayerW & w, ggml_t
+     } else if (w.Wgu || w.q_gu) {
+ #ifdef GGML_USE_MUSA
+         if(w.q_gu.inverse && !w.q_gu.extra && w.Wdown && !w.fq_down && !w.q_down &&
+-           x_norm->ne[1]<=64 && at==GGML_TYPE_F32 && w.Wdown->type==GGML_TYPE_F16 &&
++           at==GGML_TYPE_F32 && w.Wdown->type==GGML_TYPE_F16 &&
+            env_flag("VLA_MUSA_GEGLU_F16") && std::getenv("VLA_PI05_GEGLU_PACK") &&
+            std::getenv("VLA_MUSA_SMALL_GEMM") && !w.prefetch_next)
+             return mm_f32(ctx,w.Wdown,musa_int8_linear(ctx,w.q_gu,x_norm,true));
+diff --git a/src/musa/vla_musa_int8.cu b/src/musa/vla_musa_int8.cu
+index cb09127..786fe20 100644
+--- a/src/musa/vla_musa_int8.cu
++++ b/src/musa/vla_musa_int8.cu
+@@ -23,7 +23,7 @@ bool musa_int8_supports(const ggml_tensor * t){
+           ggml_nelements(b)==a->ne[0] && t->ne[0]%(a->ne[0]+4)==0;
+     if(k==MUSA_INT8_GEGLU){
+         const auto *x=t->src[3];
+-        if(!x || x->ne[1]<1 || x->ne[1]>64 || t->ne[1]!=64 || t->src[4])return false;
++        if(!x || x->ne[1]<1 || x->ne[1]>4096 || t->ne[1]!=(x->ne[1]<=64?64:((x->ne[1]+159)/160)*160) || t->src[4])return false;
+     }
+     if(t->src[4]){
+         const auto *x=t->src[3],*extra=t->src[4],*indices=t->src[5];
+@@ -59,7 +59,8 @@ bool musa_int8_forward(ggml_tensor *t,void *stream){
+         const auto *w=(const signed char*)a->data,*x=(const signed char*)t->src[2]->data;
+         const auto *sw=(const float*)t->src[1]->data,*sx=(const float*)(x+(size_t)NP*K);
+         if(k==MUSA_INT8_GEGLU){
+-            launch_int8<64,64,1,false,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
++            if(N<=64)launch_int8<64,64,1,false,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
++            else launch_int8<64,160,2,false,true>(st,w,x,sw,sx,(float*)t->data,M,N,K,NP);
+         }else if(t->src[4]){
+             const auto *extra=(const half*)t->src[4]->data;const auto *indices=(const int*)t->src[5]->data;
+             const int R=t->src[4]->ne[0];const bool half_input=t->src[3]->type==GGML_TYPE_F16;
+diff --git a/tests/py/test_policy_api.py b/tests/py/test_policy_api.py
+index 0182987..9c76a18 100644
+--- a/tests/py/test_policy_api.py
++++ b/tests/py/test_policy_api.py
+@@ -119,10 +119,11 @@ class PolicyTests(unittest.TestCase):
+              patch('vla_cpp._ffi.load_library',return_value=fake_lib), \
+              patch.object(vla_cpp,'Model',return_value=native):
+             images={name:np.zeros((4,4,3),np.uint8) for name in spec.camera_order}
+-            with patch.dict(os.environ, {"VLA_PI05_INT8_PARAMETERS":"/unselected","VLA_LOAD_QUANT_F16":"1","GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
++            with patch.dict(os.environ, {"VLA_PI05_INT8_PREFIX":"1","VLA_PI05_INT8_PARAMETERS":"/unselected","VLA_LOAD_QUANT_F16":"1","GGML_MUSA_QUANT_ROUTE":"blas","GGML_CUDA_CUBLAS_COMPUTE_TYPE":"f16","GGML_MUSA_GRAPH_RECREATE":"1"}), vla_cpp.load_policy(self.path,task='test') as model:
+                 self.assertEqual(os.environ["GGML_MUSA_QUANT_ROUTE"],"auto")
+                 self.assertNotIn("VLA_LOAD_QUANT_F16",os.environ)
+                 self.assertNotIn("VLA_PI05_INT8_PARAMETERS",os.environ)
++                self.assertNotIn("VLA_PI05_INT8_PREFIX",os.environ)
+                 self.assertNotIn("GGML_CUDA_CUBLAS_COMPUTE_TYPE",os.environ)
+                 self.assertNotIn("GGML_MUSA_GRAPH_RECREATE",os.environ)
+                 with self.assertRaisesRegex(RuntimeError,'one resident'):vla_cpp.load_policy(self.path)
+diff --git a/tests/test_musa_int8.cpp b/tests/test_musa_int8.cpp
+index 148a2fa..193cd51 100644
+--- a/tests/test_musa_int8.cpp
++++ b/tests/test_musa_int8.cpp
+@@ -65,7 +65,7 @@ int main(int argc,char **argv){
+         for(auto type:{GGML_TYPE_F32,GGML_TYPE_F16})for(int N:{1,50,64,65,161}){
+             auto *ctx=ggml_init({1024*1024,nullptr,true});auto *x=ggml_new_tensor_2d(ctx,type,K,N);ggml_set_input(x);
+             auto *out=vla::musa_int8_linear(ctx,q,x);ggml_set_output(out);
+-            auto *fused=R==0 && N<=64?vla::musa_int8_linear(ctx,q,x,true):nullptr;
++            auto *fused=R==0?vla::musa_int8_linear(ctx,q,x,true):nullptr;
+             if(fused)ggml_set_output(fused->src[0]);
+             auto *graph=ggml_new_graph(ctx);ggml_build_forward_expand(graph,out);
+             if(fused)ggml_build_forward_expand(graph,fused);
+@@ -83,9 +83,10 @@ int main(int argc,char **argv){
+                 CHECK(ggml_backend_graph_compute(b.handle,graph)==GGML_STATUS_SUCCESS);
+                 ggml_backend_tensor_get(out,got.data(),0,got.size()*4);
+                 if(fused){
+-                    std::vector<ggml_fp16_t> values(M/2*64);
++                    const int NP=N<=64?64:((N+159)/160)*160;
++                    std::vector<ggml_fp16_t> values(M/2*NP);
+                     ggml_backend_tensor_get(fused->src[0],values.data(),0,values.size()*2);
+-                    for(int n=0;n<64;++n)for(int m=0;m<M/2;++m){
++                    for(int n=0;n<NP;++n)for(int m=0;m<M/2;++m){
+                         float ref=0;
+                         if(n<N){
+                             const float g=got[n*M+m],u=got[n*M+M/2+m];

@@ -1,0 +1,20 @@
+{
+  "base_commit": "b0c667b6d97fd4ce873b8303db6f0c9f00fbd567",
+  "hashes": {
+    "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so": "38714c0a4d4404b463c3a4f0bcc4dc7a761a55ca332511ed6adff42260589746",
+    "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla_core.so": "88ec4ebbf95d1b351878e0c431a6ecde2b913b466eac27ba53ba5eb5563a7720",
+    "/home/skysi/code/vla.cpp-quant/build-musa-quant/bin/libggml-musa.so": "119d2398d247dd5f7ce4ad7f628216d74e0426708496a664d5b79e9ee9c62a7d",
+    "/home/skysi/code/vla.cpp-quant/scripts/pi05_musa_profiles.json": "b315ac7747906d29a011186d0ac1c695d45e90ae898002b3560278ec37f4bffe",
+    "/home/skysi/code/vla.cpp-quant/scripts/export_int8_parameters.py": "80c8078e0588610c0051478bbb7bda14dfd3042e600122b767ced3a404ace29a",
+    "/home/skysi/code/vla.cpp-quant/bindings/python/vla_cpp/policy.py": "213b1d9e1364a5b3f71762eea1453f1cc86579e09dc04968fa988392c4075d46",
+    "/home/skysi/code/vla.cpp-quant/src/musa/vla_musa_int8.cu": "eb63b529b59223398f6a98721eb66a91d471f4880e54aa19a2303813fa2898e1",
+    "/home/skysi/code/vla.cpp-quant/src/layers/musa_int8.h": "613f48c65b9660146a5c393e6866ede25d7799baab9b4f8a80787913daf48e63",
+    "/home/skysi/code/vla.cpp-quant/src/modules/gemma_expert.h": "a32e299c4ff81769a31b822488a9d20263d9b91df66dab6c74617dc8bb2df96d",
+    "/home/skysi/code/vla.cpp-quant/src/models/pi05.cpp": "a2efca4e5f51ae52730f0fcc5453a1514613dd69049c61d401ccaa1f72359a29",
+    "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/pruned-int8-main-smooth/manifest.json": "ed36d5932454290691b1360db974e8954a5626f9b3ea25e5e2ab34c7ff148c85",
+    "/home/skysi/code/vla.cpp-quant/validation/quant/native-int8/full-int8-main-smooth/manifest.json": "230468c73b6d9c72f8031d80e126a564696b9dee3434a274f5eff0765e960c4e",
+    "/home/skysi/code/vla.cpp-quant/scripts/bench_pi05_precision.py": "887c7f9ebd57e72544be50c18c56bd32f3d9fc83af4821dcbc9a48b374e11713",
+    "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/pruned-main-native-policy.json": "203067e47928f8e629b083ef0a0d63f02b8ec7d7d7562edec9d575e837389a2b",
+    "/home/skysi/code/vla.cpp-quant/\u4f18\u5316\u8bb0\u5f55/2026-11-04_INT8\u6539\u5199\u4e0e\u91cf\u5316\u8865\u507f/full-main-native-policy.json": "16448020748bca470c6b5f22c7f2002a450010b557d405180e37135c2167ae50"
+  }
+}

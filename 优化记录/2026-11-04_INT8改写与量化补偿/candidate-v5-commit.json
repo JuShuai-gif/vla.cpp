@@ -1,0 +1,5 @@
+{
+  "commit": "b0c667b6d97fd4ce873b8303db6f0c9f00fbd567",
+  "artifacts": "candidate-v5-freeze.json",
+  "scope": "offline acceptance candidate; not deployment"
+}

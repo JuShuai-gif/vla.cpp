@@ -1,0 +1,14 @@
+[
+  {
+    "label": "native-v6-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-musa-official",
+      "-j",
+      "4"
+    ],
+    "returncode": 1,
+    "seconds": 0.06746792793273926
+  }
+]

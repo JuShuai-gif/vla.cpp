@@ -758,21 +758,6 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
     m->vis.declare(L);
     m->vis.vit.enc.cfg.fused_ops = m->fused_ops && !m->vision_keep;
 
-    m->pl.declare(L, "vlm", cfg.n_layers, false, fq.present ? &fq.llm : nullptr, cfg.rms_eps, fuse_proj, q8_vlm);
-    // fq_fast: the prefix q/k/v GEMM, RoPE and F16 packing as one node
-    // (gemma_attn). VLA_FQ_NO_ROPE_PACK=1 keeps them apart (A/B runs).
-    if (m->fq_fast && cfg.n_kv_heads == 1 && cfg.head_dim == 256 && !env_flag("VLA_FQ_SYCL_GEMM") &&
-        !env_flag("VLA_FQ_NO_ROPE_PACK"))
-        for (GemmaLayerW & w : m->pl.blk)
-            if (w.fq_qkv) {
-                w.rope_pack.magic     = FQ_ROPE_PACK_MAGIC;
-                w.rope_pack.gemm      = &w.fq_qkv.gemm;
-                w.rope_pack.hd        = (int) cfg.head_dim;
-                w.rope_pack.nq        = (int) cfg.n_q_heads;
-                w.rope_pack.freq_base = cfg.rope_freq_base;
-                w.rope_pack.scale     = 1.0f / std::sqrt((float) cfg.head_dim);
-            }
-
     const char * native_int8=std::getenv("VLA_PI05_INT8_PARAMETERS");
     if(native_int8){
 #ifdef GGML_USE_MUSA
@@ -787,6 +772,22 @@ std::unique_ptr<ModelArchBase> pi05_create(const std::string& mmproj_path,
         std::printf("vla(pi05): native W8A8 expert GateUp in %lld layers, calibrated parameters %s\n",
                     (long long)cfg.n_layers,native_int8);
     }
+    m->pl.declare(L, "vlm", cfg.n_layers, false, fq.present ? &fq.llm : nullptr, cfg.rms_eps, fuse_proj, q8_vlm,
+                  env_flag("VLA_PI05_INT8_PREFIX")?native_int8:nullptr);
+    // fq_fast: the prefix q/k/v GEMM, RoPE and F16 packing as one node
+    // (gemma_attn). VLA_FQ_NO_ROPE_PACK=1 keeps them apart (A/B runs).
+    if (m->fq_fast && cfg.n_kv_heads == 1 && cfg.head_dim == 256 && !env_flag("VLA_FQ_SYCL_GEMM") &&
+        !env_flag("VLA_FQ_NO_ROPE_PACK"))
+        for (GemmaLayerW & w : m->pl.blk)
+            if (w.fq_qkv) {
+                w.rope_pack.magic     = FQ_ROPE_PACK_MAGIC;
+                w.rope_pack.gemm      = &w.fq_qkv.gemm;
+                w.rope_pack.hd        = (int) cfg.head_dim;
+                w.rope_pack.nq        = (int) cfg.n_q_heads;
+                w.rope_pack.freq_base = cfg.rope_freq_base;
+                w.rope_pack.scale     = 1.0f / std::sqrt((float) cfg.head_dim);
+            }
+
     m->ex_layers.resize(cfg.n_layers);
     for (int64_t i=0; i<cfg.n_layers; ++i) {
         GemmaLayerW & w = m->ex_layers[i];
