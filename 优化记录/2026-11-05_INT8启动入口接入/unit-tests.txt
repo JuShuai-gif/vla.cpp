@@ -1,0 +1,8 @@
+...............................................................sss.ss......ss...ss.ss.........python
+..........[RealSense] 检测到 RealSense，正在为 /home/skysi/code/robot_runtime/.venv/bin/python 安装 pyrealsense2==2.58.1.10581
+.[RealSense] 检测到 RealSense，正在为 /home/skysi/code/robot_runtime/.venv/bin/python 安装 pyrealsense2==2.58.1.10581
+..............
+----------------------------------------------------------------------
+Ran 119 tests in 5.528s
+
+OK (skipped=11)

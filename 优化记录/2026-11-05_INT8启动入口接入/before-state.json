@@ -1,0 +1,81 @@
+{
+  "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431",
+  "files": {
+    "/home/skysi/code/robot_runtime/src/robot_runtime/setup/launcher.py": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/src/robot_runtime/setup/launcher.py",
+      "sha256": "e4deda9e484953c020b2e421091766dd9c7fb3160d5f957999dc803eec4ce74b"
+    },
+    "/home/skysi/code/robot_runtime/src/robot_runtime/vla_cpp_backend.py": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/src/robot_runtime/vla_cpp_backend.py",
+      "sha256": "d6d24841b22eed96c53c07971978c46409cd695beed9f8118c1c363d7f3cc54d"
+    },
+    "/home/skysi/code/robot_runtime/src/robot_runtime/replay.py": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/src/robot_runtime/replay.py",
+      "sha256": "ee7e71a3543b1d39e35ff6d0f95ab44856208abcbcbb63792986356e4a3d2a8b"
+    },
+    "/home/skysi/code/robot_runtime/src/robot_runtime/vla_cpp_vit_npu_backend.py": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/src/robot_runtime/vla_cpp_vit_npu_backend.py",
+      "sha256": "73c61cabc96769c5a73cd898fdce14ce6b836e87047a553a6b02e98d0cc53133"
+    },
+    "/home/skysi/code/robot_runtime/tests/python/test_vla_cpp_backend.py": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/tests/python/test_vla_cpp_backend.py",
+      "sha256": "301b2d434225cb07ec17e46e6ea501d5050dd51710b68761c2df4cea7f2d1311"
+    },
+    "/home/skysi/code/robot_runtime/docs/VLA_CPP.md": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/docs/VLA_CPP.md",
+      "sha256": "a94daa7ebc6550a1a76270f9d6e8b026b44daa2d6602a4f2f3ff7283d631d21b"
+    },
+    "/home/skysi/code/robot_runtime/configs/policies/vla_full.json": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/configs/policies/vla_full.json",
+      "sha256": "ff2923ae3ef7b5e3e4ffb7e7592f67c318215493f8fd858356bc95aa55b9b91b"
+    },
+    "/home/skysi/code/robot_runtime/configs/policies/vla_pruned.json": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/configs/policies/vla_pruned.json",
+      "sha256": "876a4beb271698e705eda37d54a579900ab0a0fb92d1ffe7d89c430ad77d5e65"
+    },
+    "/home/skysi/code/robot_runtime/configs/vla_piper_live.json": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/configs/vla_piper_live.json",
+      "sha256": "4e239709e6a5a1cae28c68391ef194548e6554ad4ea1bfee6da62d3614ac5d42"
+    },
+    "/home/skysi/code/robot_runtime/configs/vla_piper.json": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/files/configs/vla_piper.json",
+      "sha256": "18338608c3cc96210c40a962b2192ed130e5b587a4b6bffcf8cbecf41763c43f"
+    },
+    "/home/skysi/code/robot_runtime/.venv/lib/python3.12/site-packages/vla_cpp_source.pth": {
+      "backup": "/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/vla_cpp_source.pth",
+      "sha256": "786a58ceaaec80539b494aedb41ec9b70bddea7eaf21c744a9d5d29be489c541"
+    }
+  },
+  "existing_dirty_file_hashes": {
+    "native/vla_vit_npu/test_dual_workers.cpp": "75b9e34eaa0b986adf23de69c914dfb40ade6729d915fe8afc31aedbfdb471bf",
+    "tests/python/test_realsense_setup.py": "e745630bc56b885f179dff7ee58b1386d3b2a123154f37a26ca6030473df2dc2",
+    "src/robot_runtime/setup/runs.py": "7fb206cfde181a8138dc2072caf3b982234ea5d816aac659c0568ba9cdedd972",
+    "validation/vla_vit_npu_accuracy_report.md": "c966c7894e75a0f8f45ccb581168e7beada751ec27b24feff5623a0953f775b7",
+    "src/robot_runtime/inference.py": "44e37b15ce3701dea14fbe45d8c1a5e0c5ef243bef53f86ab92bdbdaa5c89cde",
+    "native/vla_vit_npu/CMakeLists.txt": "220d119c9a73cbfd00cf71aaa402d519c8a9f5a19147f02869887eb381b842ad",
+    "scripts/build_vla_vit_npu.sh": "737ed98fd9fad95f7898f3c5d16a84421ca0716e1ff9c0f8680b0a8e20f95d5b",
+    "docs/VLA_CPP.md": "a94daa7ebc6550a1a76270f9d6e8b026b44daa2d6602a4f2f3ff7283d631d21b",
+    "native/vla_vit_npu/dual_workers.h": "aff8b48734af04477cafe78790621048452bc5137b61d7983b9d6bc55952f041",
+    "native/vla_vit_npu/drm_shared_buffer.h": "0da8547fcd92cbf13919f61ad0e344e16bcce4840dd28f692a1d207f7e18c4ce",
+    "tests/python/test_vla_cpp_vit_npu_backend.py": "c95f1a3c14d4ca9d43e1c91825fdd922eb07cbe43e89bb0ab40ef0888c712a72",
+    "native/vla_vit_npu/vit_npu.cpp": "c744d1bb28c93182a9c48075ad5a98d58528fe7b15a6d12f2297dabf16c8aae8",
+    "src/robot_runtime/setup/devices.py": "2d8a3aea0adc24481c51609834c25975bbbcf90cd1ab10e9b5c067a7c7d1e0a1",
+    "tests/python/test_inference_console.py": "42f1229cf95919a88785d7b2cb6700fdf6863e47238915dd6d22ed16bb48f514",
+    "src/robot_runtime/vit_npu_pipeline.py": "bd20d7942ff67f949db27e0c2ba880d7400091a35a88488d9c8a8d2233bdb257",
+    "docs/VLA_VIT_NPU.md": "1497512c0953288b314a02fa2e08b65df40a90420b2bda68c484664632bf2c8e",
+    "configs/examples/vla_cpp_vit_npu.json": "69128475b8b64710948c335708f513e4410447ccbf4b6d8fd5d91d844ddbceda",
+    "pyproject.toml": "17ef302af2ab0b77b01b1bb4307ce346228724191bfe4a39801c2e99f2558bd1",
+    "tests/python/test_vit_npu_build_isolation.py": "8cb781188b8005709eb8cac8b933a8e25dc82eea275101412120b99351f07bdc",
+    "configs/examples/vla_policy_vit_npu.json": "1fbad9cfa1de7bf879f6b3717f9d581c23befabda53b888a79c999cc755a0d3a",
+    "tests/python/test_vit_npu_pipeline.py": "fc4ecc788cdac1bf3a33eeecf90b72062819aba49dd1f1f58535c93ffd4cdbde",
+    "tests/python/test_monitor_telemetry.py": "46df476698bb43f8836011b41783b47ca67ce1fd559424c4a69bbf24ef5f0379",
+    "tests/python/test_vit_npu_runtime.py": "677b6a926350c20f84ce253247c57787eaa2836a2f79f35622f4b8730a2207f7",
+    "tests/python/test_vla_cpp_backend.py": "301b2d434225cb07ec17e46e6ea501d5050dd51710b68761c2df4cea7f2d1311",
+    "src/robot_runtime/vla_cpp_vit_npu_backend.py": "73c61cabc96769c5a73cd898fdce14ce6b836e87047a553a6b02e98d0cc53133",
+    "native/vla_vit_npu/vit_npu.h": "e774fb8ceac1fe9f322d8e361bf371f29367b0812086c646a59ff1e7e08c2c4c",
+    "src/robot_runtime/vla_cpp_backend.py": "d6d24841b22eed96c53c07971978c46409cd695beed9f8118c1c363d7f3cc54d",
+    "native/vla_vit_npu/vla_device_features.patch": "01b772650cf11f764254bf776429fb392792f9d68aaa2c91756ed4b5e477f8fe"
+  },
+  "production_vla_head": "67f47a07c48c29ac276e0e74122733b94b127a84",
+  "production_library_sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1"
+}

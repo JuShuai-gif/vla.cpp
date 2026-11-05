@@ -1,0 +1,33 @@
+{
+  "unchanged_preexisting_files": [
+    "native/vla_vit_npu/test_dual_workers.cpp",
+    "tests/python/test_realsense_setup.py",
+    "src/robot_runtime/setup/runs.py",
+    "validation/vla_vit_npu_accuracy_report.md",
+    "src/robot_runtime/inference.py",
+    "native/vla_vit_npu/CMakeLists.txt",
+    "scripts/build_vla_vit_npu.sh",
+    "native/vla_vit_npu/dual_workers.h",
+    "native/vla_vit_npu/drm_shared_buffer.h",
+    "tests/python/test_vla_cpp_vit_npu_backend.py",
+    "native/vla_vit_npu/vit_npu.cpp",
+    "src/robot_runtime/setup/devices.py",
+    "tests/python/test_inference_console.py",
+    "src/robot_runtime/vit_npu_pipeline.py",
+    "docs/VLA_VIT_NPU.md",
+    "configs/examples/vla_cpp_vit_npu.json",
+    "pyproject.toml",
+    "tests/python/test_vit_npu_build_isolation.py",
+    "configs/examples/vla_policy_vit_npu.json",
+    "tests/python/test_vit_npu_pipeline.py",
+    "tests/python/test_monitor_telemetry.py",
+    "tests/python/test_vit_npu_runtime.py",
+    "native/vla_vit_npu/vit_npu.h",
+    "native/vla_vit_npu/vla_device_features.patch"
+  ],
+  "live_configs_unchanged": true,
+  "policy_baseline_fields_unchanged": true,
+  "production_library_sha256": "dfbf6f1439feeba1768ef5746e2c68317afab541e198cf6ea32332c82a0456a1",
+  "production_vla_head": "67f47a07c48c29ac276e0e74122733b94b127a84",
+  "integration_patch": "runtime-integration-only.patch"
+}

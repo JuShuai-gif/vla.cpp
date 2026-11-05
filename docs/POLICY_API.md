@@ -206,3 +206,16 @@ model acceptance. See the INT8 experiment archive for BF16 action comparisons,
 full-model measurements, failed experiments, and remaining validation.
 
 Native INT8 calibration manifests may also opt into expert_prefix_gateup: all expert GateUp projections plus prefix GateUp layers 0–16 (the last prefix layer only produces K/V). This remains mixed precision; attention, vision and Down projections remain floating point. Parameter manifests bind every selected layer and the original checkpoint by SHA256. It is experimental until end-to-end accuracy and timing validation passes.
+
+### Per-precision library selection
+
+A precision_profiles entry may override library and optimization_profile, in
+addition to model. Relative paths resolve against the policy JSON directory.
+These fields are applied only when that precision is selected; baseline retains
+the top-level floating library/profile. This permits a production floating
+library and an isolated native-INT8 library to coexist without replacement.
+An absent or invalid selected library/profile is an error, with no fallback.
+The Python bindings must support the selected route; older bindings cannot
+interpret these fields. The robot_runtime launcher can forward
+--precision int8-main-smooth for a single invocation without changing saved
+defaults. This option alone does not establish closed-loop robot acceptance.

@@ -50,6 +50,19 @@ class PolicyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'reserved'):
             policy._config(self.path)
 
+    def test_precision_library_override_keeps_original_baseline(self):
+        alt=self.path.parent/"int8.so";alt.touch()
+        optimization=self.path.parent/"int8-profiles.json";optimization.write_text("{}")
+        cfg=dict(self.config,device="0",precision_profiles={"int8-test":{"library":"int8.so","optimization_profile":"int8-profiles.json"}})
+        self.path.write_text(json.dumps(cfg))
+        selected=policy._config(self.path,"int8-test")
+        self.assertEqual(selected["library"],str(alt))
+        self.assertEqual(selected["optimization_profile"],str(optimization))
+        self.assertEqual(policy._config(self.path)["library"],str(self.path.parent/"libvla.so"))
+        alt.unlink()
+        with self.assertRaisesRegex(ValueError,"Missing library"):policy._config(self.path,"int8-test")
+        self.assertEqual(policy._config(self.path,"baseline")["library"],str(self.path.parent/"libvla.so"))
+
     def test_quant_route_is_explicit_and_validated(self):
         cfg=dict(self.config,precision_profiles={"q8-blas":{"quant_route":"blas"}})
         self.path.write_text(json.dumps(cfg))

@@ -1,0 +1,14 @@
+[
+  {
+    "variant": "pruned",
+    "baseline_p50_ms": 464.75951300089946,
+    "int8_p50_ms": 411.2713279973832,
+    "latency_reduction_percent": 11.508787557278632
+  },
+  {
+    "variant": "full",
+    "baseline_p50_ms": 757.4967670007027,
+    "int8_p50_ms": 684.0804940002272,
+    "latency_reduction_percent": 9.691958592927886
+  }
+]

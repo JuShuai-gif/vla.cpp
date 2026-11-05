@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "variant": "pruned",
+      "precision": "default",
+      "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+      "argv_precision_forwarded": true
+    },
+    {
+      "variant": "pruned",
+      "precision": "baseline",
+      "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+      "argv_precision_forwarded": true
+    },
+    {
+      "variant": "pruned",
+      "precision": "int8-main-smooth",
+      "library": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
+      "argv_precision_forwarded": true
+    },
+    {
+      "variant": "full",
+      "precision": "default",
+      "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+      "argv_precision_forwarded": true
+    },
+    {
+      "variant": "full",
+      "precision": "baseline",
+      "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+      "argv_precision_forwarded": true
+    },
+    {
+      "variant": "full",
+      "precision": "int8-main-smooth",
+      "library": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
+      "argv_precision_forwarded": true
+    }
+  ],
+  "live_config_unchanged": true,
+  "device_discovery_mocked": true
+}

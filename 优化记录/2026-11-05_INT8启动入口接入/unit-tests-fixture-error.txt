@@ -1,0 +1,17 @@
+......E.......................................................
+======================================================================
+ERROR: test_precision_library_override_keeps_original_baseline (test_policy_api.PolicyTests.test_precision_library_override_keeps_original_baseline)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp-quant/tests/py/test_policy_api.py", line 58, in test_precision_library_override_keeps_original_baseline
+    selected=policy._config(self.path,"int8-test")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/skysi/code/vla.cpp-quant/bindings/python/vla_cpp/policy.py", line 119, in _config
+    raise ValueError("MUSA optimization profile requires a GPU device")
+ValueError: MUSA optimization profile requires a GPU device
+
+----------------------------------------------------------------------
+Ran 62 tests in 4.427s
+
+FAILED (errors=1)
+python

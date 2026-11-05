@@ -1,0 +1,16 @@
+usage: launcher.py [-h] [--config CONFIG] [--profile PROFILE]
+                   [--precision PRECISION]
+                   [--check | --print-command | --warmup-only] [--dry-run]
+
+从网页配置启动推理框架；检查阶段不控制机械臂。
+
+options:
+  -h, --help            show this help message and exit
+  --config CONFIG
+  --profile PROFILE     所选后端的预设名称
+  --precision PRECISION
+                        覆盖本次启动的精度档位，不修改保存的默认配置
+  --check               只读检查，不激活 CAN、不使能、不推理
+  --print-command       解析设备并打印命令，不打开相机或控制 CAN
+  --warmup-only         读取真实观测并预热后退出；强制只读，不使能或发送动作
+  --dry-run             调用推理框架，但强制 execute_robot=false/dry_run=true

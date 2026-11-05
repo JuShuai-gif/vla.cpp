@@ -1,0 +1,308 @@
+--- a/src/robot_runtime/setup/launcher.py
++++ b/src/robot_runtime/setup/launcher.py
+@@ -269,6 +269,7 @@
+     parser = argparse.ArgumentParser(description="从网页配置启动推理框架；检查阶段不控制机械臂。")
+     parser.add_argument("--config", type=Path, default=config.default_config_path(root))
+     parser.add_argument("--profile", help="所选后端的预设名称")
++    parser.add_argument("--precision", help="覆盖本次启动的精度档位，不修改保存的默认配置")
+     mode = parser.add_mutually_exclusive_group()
+     mode.add_argument("--check", action="store_true", help="只读检查，不激活 CAN、不使能、不推理")
+     mode.add_argument("--print-command", action="store_true", help="解析设备并打印命令，不打开相机或控制 CAN")
+@@ -286,6 +287,12 @@
+         old_handlers[signum] = signal.signal(signum, interrupted)
+     try:
+         cfg = config.load_config(cfg_path)
++        if args.precision is not None:
++            name, _ = config.selected_profile(cfg, args.profile)
++            cfg["profiles"][name]["precision"] = args.precision
++        if args.dry_run:
++            name, _ = config.selected_profile(cfg, args.profile)
++            cfg["profiles"][name].update(execute_robot=False, dry_run=True)
+         if args.warmup_only and not getattr(load_robot_driver(cfg.get('robot_driver','piper')),'supports_warmup_only',False):
+             raise ValueError('该驱动尚未声明只读预热入口')
+         if not args.check and not args.print_command:
+--- a/src/robot_runtime/vla_cpp_backend.py
++++ b/src/robot_runtime/vla_cpp_backend.py
+@@ -1,4 +1,5 @@
+ """Thin bridge to vla_cpp's public policy API. Hardware stays in robot_runtime."""
++from copy import deepcopy
+ from dataclasses import asdict
+ from pathlib import Path
+ from types import SimpleNamespace
+@@ -11,7 +12,7 @@
+     name = "vla_cpp"
+     supported_layouts = ("single",)
+     profile_labels = {"pruned": "vla.cpp 剪枝 π0.5", "full": "vla.cpp 完整 π0.5"}
+-    capabilities = {"modes": ["sync", "rtc"], "precisions": ["fp16"],
++    capabilities = {"modes": ["sync", "rtc"], "precisions": ["baseline", "policy-defined"],
+                     "required": ["policy_config", "execution_horizon"],
+                     "cameras": "单臂 top/wrist RGB，按 GGUF 的相机顺序送入",
+                     "note": "MUSA π0.5；仅执行侧 RTC，无 trained RTC 或 warmstep。"}
+@@ -24,9 +25,12 @@
+ 
+     @staticmethod
+     def _validate(params):
+-        FlashRTBackend._validate(params)
+-        if params.get("precision") is not None or params.get("checkpoint") is not None:
+-            raise ValueError("vla.cpp: choose model and precision in policy_config")
++        FlashRTBackend._validate({**params, "precision": None})
++        precision = params.get("precision")
++        if precision is not None and (not isinstance(precision, str) or not precision.strip()):
++            raise ValueError("precision must name a policy precision profile")
++        if params.get("checkpoint") is not None:
++            raise ValueError("vla.cpp: choose the model in policy_config")
+         if params.get("rtc_mode", "execution") != "execution" or params.get("rtc_execution_horizon") is not None:
+             raise ValueError("vla.cpp supports execution RTC only")
+         if params.get("arm_mode", "single") != "single":
+@@ -51,7 +55,8 @@
+         if cfg.get("robot_layout", "single") != "single":
+             raise ValueError("vla.cpp currently supports single Piper only")
+         path = (Path(root) / params["policy_config"]).resolve()
+-        spec = inspect_policy(path)
++        options = {"precision": params["precision"]} if params.get("precision") is not None else {}
++        spec = inspect_policy(path, **options)
+         validate_policy_spec(spec, "single", params.get("camera_map", {}))
+         if params["execution_horizon"] > spec.chunk_size:
+             raise ValueError("execution_horizon exceeds GGUF chunk_size")
+@@ -62,13 +67,15 @@
+     def create_model(self, cfg):
+         from vla_cpp import inspect_policy
+         self.validate_inference(cfg)
+-        spec = inspect_policy(cfg.policy_config)
++        precision = getattr(cfg, "precision", None)
++        options = {"precision": precision} if precision is not None else {}
++        spec = inspect_policy(cfg.policy_config, **options)
+         roles = validate_policy_spec(spec, "single", cfg.camera_map)
+         if set(cfg.robot.cameras) != set(roles):
+             raise ValueError(f"Configure exactly these cameras: {roles}")
+         if cfg.execution_horizon > spec.chunk_size:
+             raise ValueError("execution_horizon exceeds GGUF chunk_size")
+-        return VlaCppModel(cfg.policy_config, task=cfg.task, camera_map=cfg.camera_map)
++        return VlaCppModel(cfg.policy_config, task=cfg.task, camera_map=cfg.camera_map, precision=precision)
+ 
+     def model_class(self, mode):
+         if mode != "standard":
+@@ -76,10 +83,12 @@
+         return VlaCppModel
+ 
+     def create_replay_model(self, root, cfg, profile):
++        cfg = deepcopy(cfg)
++        cfg["profiles"][profile].update(execute_robot=False, dry_run=True)
+         self.validate_assets(root, cfg, profile)
+         params = cfg["profiles"][profile]
+         return VlaCppModel(Path(root) / params["policy_config"], task=params.get("task"),
+-                           camera_map=params.get("camera_map"))
++                           camera_map=params.get("camera_map"), precision=params.get("precision"))
+ 
+ 
+ class VlaCppModel:
+@@ -87,11 +96,12 @@
+     quiet_camera_warmup = True
+     supports_trained_rtc = False
+ 
+-    def __init__(self, config_path, *, task=None, camera_map=None):
++    def __init__(self, config_path, *, task=None, camera_map=None, precision=None):
+         from vla_cpp import load_policy, inspect_policy
+-        spec = inspect_policy(config_path)
++        options = {"precision": precision} if precision is not None else {}
++        spec = inspect_policy(config_path, **options)
+         roles = validate_policy_spec(spec, "single", camera_map or {})
+-        self.policy = load_policy(config_path, task=task)
++        self.policy = load_policy(config_path, task=task, **options)
+         self.spec = self.policy.spec
+         self.chunk_size = self.spec.chunk_size
+         self.mapping = SimpleNamespace(camera_order=roles)
+--- a/src/robot_runtime/replay.py
++++ b/src/robot_runtime/replay.py
+@@ -56,7 +56,8 @@
+                     samples=samples,warmup=warmup,initialization_warmup_runs=initialization_runs,seconds=time.perf_counter()-started,cpu_seconds=time.process_time()-cpu,
+                     maxrss_native_units=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+                     predict_ms=distribution(timings),backend_timings_ms={key:distribution(values) for key,values in stages.items()},
+-                    action_shape=list(actions.shape),network_requests=0)
++                    action_shape=list(actions.shape),network_requests=0,
++                    resolved_parameters=getattr(model,'resolved_parameters',{}))
+     finally:
+         model.close()
+ 
+@@ -66,6 +67,7 @@
+     parser.add_argument('--config',type=Path,required=True)
+     parser.add_argument('--root',type=Path,default=Path.cwd())
+     parser.add_argument('--profile')
++    parser.add_argument('--precision',help='Override the selected policy precision for this replay')
+     parser.add_argument('--observation',type=Path,required=True)
+     parser.add_argument('--samples',type=int,default=100)
+     parser.add_argument('--warmup',type=int,default=3)
+@@ -75,6 +77,8 @@
+     from .setup import config
+     from .setup.runtime import HardwareLease
+     cfg=config.load_config(args.config);profile=args.profile or cfg['active_profile']
++    if args.precision is not None:cfg['profiles'][profile]['precision']=args.precision
++    cfg['profiles'][profile].update(execute_robot=False,dry_run=True)
+     plugin=load_backend(cfg['policy_backend']);factory=getattr(plugin,'create_replay_model',None)
+     if not callable(factory):raise ValueError('Backend does not declare create_replay_model; see docs/backend_api.md')
+     with HardwareLease(args.root,'model-replay'):
+--- a/src/robot_runtime/vla_cpp_vit_npu_backend.py
++++ b/src/robot_runtime/vla_cpp_vit_npu_backend.py
+@@ -32,7 +32,7 @@
+ class VlaCppVitNpuBackend(VlaCppBackend):
+     name = "vla_cpp_vit_npu"
+     profile_labels = {"pruned_vit_npu": "剪枝 π0.5：双核 NPU ViT + GPU LLM/action"}
+-    capabilities = {**VlaCppBackend.capabilities, "modes": ["sync", "rtc"],
++    capabilities = {**VlaCppBackend.capabilities, "modes": ["sync", "rtc"], "precisions": ["baseline"],
+                     "note": "双 NPU 核 + 三槽 DMA-BUF；GPU 连续读取最新完整帧。"}
+     parameter_fields = [*VlaCppBackend.parameter_fields,
+                         {"key": "vit_npu_model", "label": "ViT MTNN", "type": "text"},
+@@ -41,6 +41,8 @@
+     @staticmethod
+     def _validate(params):
+         VlaCppBackend._validate(params)
++        if params.get("precision") not in (None, "baseline"):
++            raise ValueError("NPU ViT precision override is unsupported; use vla_cpp for INT8")
+         for key in ("vit_npu_model", "vit_npu_library"):
+             if not isinstance(params.get(key), str) or not params[key].strip():
+                 raise ValueError(f"NPU pipeline requires {key}")
+--- a/tests/python/test_vla_cpp_backend.py
++++ b/tests/python/test_vla_cpp_backend.py
+@@ -101,6 +101,62 @@
+             with self.assertRaises(ValueError):model.predict({'top':images['top']},state=[0]*7,task='stack')
+             model.close()
+ 
++    def test_precision_override_reaches_inspection_and_replay(self):
++        self.params['precision']='q8-prefix-mlp'
++        plugin=VlaCppBackend()
++        plugin.validate_profiles(self.cfg['profiles'],'pruned')
++        model=plugin.create_replay_model(ROOT,self.cfg,'pruned')
++        self.assertEqual(self.api.inspect_policy.call_args.kwargs['precision'],'q8-prefix-mlp')
++        self.assertEqual(self.api.load_policy.call_args.kwargs['precision'],'q8-prefix-mlp')
++        model.close()
++
++
++    def test_replay_forces_read_only_without_mutating_live_config(self):
++        self.params.update(precision='q8-prefix-mlp',execute_robot=True,dry_run=False)
++        self.api.inspect_policy.return_value=Spec(contract_verified=False)
++        model=VlaCppBackend().create_replay_model(ROOT,self.cfg,'pruned')
++        self.assertTrue(self.params['execute_robot'])
++        self.assertFalse(self.params['dry_run'])
++        model.close()
++
++
++    def test_launcher_applies_precision_and_dry_run_before_preflight(self):
++        from copy import deepcopy
++        from robot_runtime.setup import launcher
++        self.params.update(execute_robot=True,dry_run=False)
++        captured={}
++        def argv(cfg,*args):
++            captured.update(cfg['profiles']['pruned'])
++            return ['python']
++        with patch.object(launcher.config,'load_config',return_value=deepcopy(self.cfg)), \
++             patch.object(launcher.config,'validate_config'), \
++             patch.object(launcher.config,'require_inference'), \
++             patch.object(launcher,'resolve_devices',return_value=({'single':{}},{})), \
++             patch.object(launcher.config,'build_argv',side_effect=argv):
++            code=launcher.main(['--config','unused.json','--profile','pruned','--precision','q8-prefix-mlp','--dry-run','--print-command'])
++        self.assertEqual(code,0)
++        self.assertEqual(captured['precision'],'q8-prefix-mlp')
++        self.assertFalse(captured['execute_robot'])
++        self.assertTrue(captured['dry_run'])
++        self.assertTrue(self.params['execute_robot'])
++
++
++    def test_explicit_precision_reaches_live_factory_without_loading_devices(self):
++        self.params.update(precision="int8-main-smooth",execute_robot=True,dry_run=False)
++        cfg=InferenceConfig(policy_backend="vla_cpp",**self.params)
++        cfg.robot=SimpleNamespace(cameras={"top":None,"wrist":None})
++        model=VlaCppBackend().create_model(cfg)
++        self.assertEqual(self.api.inspect_policy.call_args.kwargs["precision"],"int8-main-smooth")
++        self.assertEqual(self.api.load_policy.call_args.kwargs["precision"],"int8-main-smooth")
++        self.policy.predict.assert_not_called()
++        model.close()
++
++    def test_npu_rejects_unimplemented_precision_override(self):
++        from robot_runtime.vla_cpp_vit_npu_backend import VlaCppVitNpuBackend
++        params=dict(self.params,precision="int8-main-smooth",vit_npu_model="model",vit_npu_library="library")
++        with self.assertRaisesRegex(ValueError,"NPU ViT precision override"):
++            VlaCppVitNpuBackend._validate(params)
++
+     def test_rejects_unsupported_runtime_contracts(self):
+         for change in ({'warmstep':True},{'rtc_mode':'trained'}, {'rl_joint_offsets':[0,0,-450,0,0,0]},
+                        {'gripper_mapping':'legacy_cubic'}, {'seed':42}, {'execution_horizon':51}):
+--- a/docs/VLA_CPP.md
++++ b/docs/VLA_CPP.md
+@@ -146,3 +146,38 @@
+ 
+ 细节见 `validation/vla_cpp_integration_report.md`；原始模型对照记录位于相邻仓库
+ `vla.cpp/优化记录/2026-11-04_robot_runtime接入验证/`。
++
++## 可选 INT8 启动参数（2026-11-05 接入）
++
++生产启动器现支持本次运行覆盖精度，不会把选择写回真机配置：
++
++完整模型：
++```bash
++cd /home/skysi/code/robot_runtime
++bash scripts/run_robot.sh --config configs/vla_piper_live.json --profile full --precision int8-main-smooth
++```
++
++剪枝模型：
++```bash
++cd /home/skysi/code/robot_runtime
++bash scripts/run_robot.sh --config configs/vla_piper_live.json --profile pruned --precision int8-main-smooth
++```
++
++去掉 `--precision int8-main-smooth` 或改为 `--precision baseline` 即使用原浮点库。
++该 INT8 档位为 W8A8/INT32 混合精度（专家和前缀 GateUp），并非全模型 INT8。
++启动加载更慢；历史离线验收的稳定推理耗时下降约 10–12%。
++NPU ViT 后端暂不支持此精度覆盖，会明确报错。
++
++当前虚拟环境的 `vla_cpp_source.pth` 指向 `/home/skysi/code/vla.cpp-quant/bindings/python`，
++以提供兼容的精度选择接口。两个策略 JSON 默认仍使用
++`/home/skysi/code/vla.cpp/build-musa-official/libvla.so`；
++仅 INT8 档位选择 `vla.cpp-quant/build-musa-quant/libvla.so` 及其归档补偿参数。
++因此请保留 `vla.cpp-quant` 目录及编译产物。未替换生产浮点动态库。
++
++本次只用保存的观测回放，不启动相机、CAN 或机械臂，未做真机闭环验收；
++策略仍标记为 experimental。上述 live 命令沿用已有执行配置，实际运行会启动真机。
++
++接入前备份：`/home/skysi/backups/robot_runtime/int8_integration_20261105_083431/`。
++`manifest.json` 列出各文件快照及 SHA256；快照包含接入前已有的未提交修改。
++仅切回浮点无需恢复文件，去掉精度参数即可；如需撤销接入，应对照 manifest 按文件恢复，
++避免覆盖接入之后的新修改。完整旧备份也保持不变。
+--- a/configs/policies/vla_full.json
++++ b/configs/policies/vla_full.json
+@@ -26,5 +26,14 @@
+     "joint_unit": "degrees",
+     "gripper_unit": "mm",
+     "verified": false
++  },
++  "precision_profiles": {
++    "int8-main-smooth": {
++      "quant_route": "native_int8",
++      "library": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
++      "optimization_profile": "/home/skysi/code/vla.cpp-quant/scripts/pi05_musa_profiles.json",
++      "int8_parameters": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/parameters/full-int8-main-smooth/manifest.json",
++      "status": "experimental"
++    }
+   }
+ }
+--- a/configs/policies/vla_pruned.json
++++ b/configs/policies/vla_pruned.json
+@@ -26,5 +26,14 @@
+     "joint_unit": "degrees",
+     "gripper_unit": "mm",
+     "verified": false
++  },
++  "precision_profiles": {
++    "int8-main-smooth": {
++      "quant_route": "native_int8",
++      "library": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
++      "optimization_profile": "/home/skysi/code/vla.cpp-quant/scripts/pi05_musa_profiles.json",
++      "int8_parameters": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/parameters/pruned-int8-main-smooth/manifest.json",
++      "status": "experimental"
++    }
+   }
+ }
+--- a/.venv/lib/python3.12/site-packages/vla_cpp_source.pth
++++ b/.venv/lib/python3.12/site-packages/vla_cpp_source.pth
+@@ -1 +1 @@
+-/home/skysi/code/vla.cpp/bindings/python
++/home/skysi/code/vla.cpp-quant/bindings/python

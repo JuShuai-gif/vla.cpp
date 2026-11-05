@@ -54,7 +54,7 @@ def _config(path, precision=None):
         raise ValueError("precision_profiles must be an object; baseline is reserved")
     for name, entry in profiles.items():
         if (not isinstance(name, str) or not name.strip() or not isinstance(entry, dict)
-                or set(entry) - {"model", "runtime", "manifest", "status", "quant_route", "int8_parameters"}
+                or set(entry) - {"model", "runtime", "manifest", "status", "quant_route", "int8_parameters", "library", "optimization_profile"}
                 or entry.get("status", "experimental") not in ("experimental", "validated")):
             raise ValueError("Invalid precision profile")
         if "runtime" in entry and not isinstance(entry["runtime"], dict):
@@ -68,8 +68,9 @@ def _config(path, precision=None):
     cfg["precision"] = selected
     cfg["quant_route"] = entry.get("quant_route", "auto")
     cfg["precision_status"] = entry.get("status", "experimental") if selected != "baseline" else "baseline"
-    if "model" in entry:
-        cfg["model"] = entry["model"]
+    for key in ("model", "library", "optimization_profile"):
+        if key in entry:
+            cfg[key] = entry[key]
     if "runtime" in entry:
         cfg["runtime"] = {**cfg.get("runtime", {}), **entry["runtime"]}
     if "manifest" in entry:
