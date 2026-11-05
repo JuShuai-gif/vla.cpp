@@ -1,0 +1,42 @@
+{
+  "full": {
+    "old_plan_interval_p50_ms": 1151.6955359984422,
+    "new_plan_interval_p50_ms": 700.8979780002846,
+    "plan_interval_reduction_pct": 39.14207739004099,
+    "old_predict_p50_ms": 688.8191234975238,
+    "new_predict_p50_ms": 686.6651450000063,
+    "new_dispatch_interval_ms": {
+      "count": 585,
+      "p50": 50.42147100175498,
+      "p99": 51.83068939688383,
+      "max": 52.251236003939994
+    },
+    "native_min_overlap_steps": 22,
+    "budget_min_overlap_steps": 13,
+    "new_steady_plan_intervals": 39,
+    "queue_empty_after_start": 0
+  },
+  "pruned": {
+    "old_plan_interval_p50_ms": 835.1726210021297,
+    "new_plan_interval_p50_ms": 412.49989999778336,
+    "plan_interval_reduction_pct": 50.60902505366835,
+    "old_predict_p50_ms": 412.80679799820064,
+    "new_predict_p50_ms": 410.6989345018519,
+    "new_dispatch_interval_ms": {
+      "count": 885,
+      "p50": 34.88406600081362,
+      "p99": 35.67887355748098,
+      "max": 37.438951003423426
+    },
+    "native_min_overlap_steps": 25,
+    "budget_min_overlap_steps": 18,
+    "new_steady_plan_intervals": 69,
+    "queue_empty_after_start": 0
+  },
+  "deployment": {
+    "config": "/home/skysi/code/robot_runtime/configs/vla_piper_live_int8.json",
+    "sha256": "5977a58dbe20536b10a38277f1f2677b8024ebefd33f7c5c118119119b8c47aa",
+    "protected_files_unchanged": 37,
+    "physical_motion_verified": false
+  }
+}

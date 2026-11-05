@@ -1,0 +1,27 @@
+{
+  "runtime_head": {
+    "returncode": 0,
+    "stdout": "22e5223263ae6035bd533dbd3bd6f7162d64fec1\n",
+    "stderr": ""
+  },
+  "production_head": {
+    "returncode": 0,
+    "stdout": "67f47a07c48c29ac276e0e74122733b94b127a84\n",
+    "stderr": ""
+  },
+  "quant_head": {
+    "returncode": 0,
+    "stdout": "e86ef21b8d70611e856a2bd21d89018b2b4f6f89\n",
+    "stderr": ""
+  },
+  "system": {
+    "returncode": 0,
+    "stdout": "Linux aibox 6.6.10 #1 SMP PREEMPT Thu Jul  9 05:35:20 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux\n",
+    "stderr": ""
+  },
+  "gpu": {
+    "returncode": 0,
+    "stdout": "Thu Nov  5 11:49:04 2026\n-------------------------------------------------------------------------\n    mthreads-gmi:1.4.0                 Driver Version:5.1.1-M1000\n-------------------------------------------------------------------------\nID   Name                 |PCIe                |%GPU    Mem             \n     Device Type   Perf   |Pcie Lane Width     |Temp    MPC Capable     \n                                               |        ECC Mode        \n+-----------------------------------------------------------------------+\n0    M1000                |N/A                 |5.0     9428MiB(31878MiB)\n     Physical      N/A    |N/A                 |40.4C   N/A             \n                                               |        N/A             \n-------------------------------------------------------------------------\n\n",
+    "stderr": ""
+  }
+}

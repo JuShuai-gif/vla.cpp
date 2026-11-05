@@ -1,0 +1,3 @@
+Static check first attempt used rtc_replan_threshold instead of the actual config field replan_threshold and failed KeyError. Corrected test field, reran successfully. No deployment performed on failure.
+Budget tests completed before steady_plan_interval_ms reporting was added; raw merges contain all timestamps. Their diagnostic writer summaries were separately checked: no drops/errors/truncation and writer closed.
+Outer SSH connection reset at final native test completion. Reconnected: no remaining runner/test process, all four reports present. Deployment rechecked all acceptance assertions from saved reports, followed by post-deployment launcher/config validation.

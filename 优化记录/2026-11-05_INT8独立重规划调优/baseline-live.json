@@ -1,0 +1,738 @@
+{
+  "schema_version": 2,
+  "policy_backend": "vla_cpp",
+  "robot_layout": "single",
+  "devices": {
+    "arms": {
+      "single": {
+        "identity": {
+          "kind": "serial",
+          "device_type": "can",
+          "vendor": "1d50",
+          "product": "606f",
+          "serial": "0045002F4648571620303731",
+          "interface": "00",
+          "index": "0",
+          "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb9/9-4/9-4.3"
+        },
+        "bitrate": 1000000
+      }
+    },
+    "cameras": {
+      "top": {
+        "identity": {
+          "kind": "serial",
+          "device_type": "camera",
+          "vendor": "8086",
+          "product": "0b3a",
+          "serial": "262422073866",
+          "interface": "sdk",
+          "index": "color",
+          "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb10/10-4/10-4.1",
+          "camera_type": "intelrealsense"
+        },
+        "capture": {
+          "type": "intelrealsense",
+          "color_mode": "rgb",
+          "width": 640,
+          "height": 480,
+          "fps": 30,
+          "warmup_s": 3,
+          "fourcc": "RGB3"
+        }
+      },
+      "wrist": {
+        "identity": {
+          "kind": "serial",
+          "device_type": "camera",
+          "vendor": "2bc5",
+          "product": "0840",
+          "serial": "CV2F861000GM",
+          "interface": "sdk",
+          "index": "color",
+          "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb10/10-1",
+          "camera_type": "orbbec"
+        },
+        "capture": {
+          "type": "orbbec",
+          "color_mode": "rgb",
+          "width": 640,
+          "height": 480,
+          "fps": 30,
+          "warmup_s": 3
+        }
+      }
+    }
+  },
+  "active_profile": "pruned",
+  "profiles": {
+    "pruned": {
+      "policy_config": "configs/policies/vla_pruned.json",
+      "inference_backend": "standard",
+      "task": "pick up the cube",
+      "warmup_steps": 3,
+      "execution_horizon": 50,
+      "execution_period": 0.03333333333333333,
+      "replan_threshold": 25,
+      "rtc_blend_steps": 5,
+      "enable_filter_smooth": false,
+      "enable_rtc_smooth": true,
+      "warmstep": false,
+      "rl_joint_offsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "joint_unit": "degrees",
+      "gripper_mapping": "linear",
+      "camera_map": {
+        "observation.images.top": "top",
+        "observation.images.wrist": "wrist"
+      },
+      "execute_robot": true,
+      "dry_run": false
+    },
+    "full": {
+      "policy_config": "configs/policies/vla_full.json",
+      "inference_backend": "standard",
+      "task": "pick up the cube",
+      "warmup_steps": 3,
+      "execution_horizon": 50,
+      "execution_period": 0.05,
+      "replan_threshold": 27,
+      "rtc_blend_steps": 5,
+      "enable_filter_smooth": false,
+      "enable_rtc_smooth": true,
+      "warmstep": false,
+      "rl_joint_offsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "joint_unit": "degrees",
+      "gripper_mapping": "linear",
+      "camera_map": {
+        "observation.images.top": "top",
+        "observation.images.wrist": "wrist"
+      },
+      "execute_robot": true,
+      "dry_run": false
+    }
+  },
+  "last_checks": {
+    "startup": {
+      "checked_at": 1793849746.8156323,
+      "robot_layout": "single",
+      "device_only": false,
+      "arms": {
+        "single": {
+          "id": "can0",
+          "interface": "can0",
+          "device_type": "can",
+          "transport": "usb",
+          "driver": "gs_usb",
+          "name": "candleLight USB to CAN adapter",
+          "index": "0",
+          "bitrate": 1000000,
+          "up": true,
+          "state": "ERROR-ACTIVE",
+          "ctrlmode": [],
+          "vendor": "1d50",
+          "product": "606f",
+          "serial": "0045002F4648571620303731",
+          "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb9/9-4/9-4.3",
+          "usb_interface": "00",
+          "interface_name": "",
+          "usb_name": "candleLight USB to CAN adapter"
+        }
+      },
+      "cameras": {
+        "top": {
+          "vendor": "8086",
+          "product": "0b3a",
+          "serial": "262422073866",
+          "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb10/10-1",
+          "usb_interface": "03",
+          "interface_name": "Intel(R) RealSense(TM) Depth Camera 435i RGB",
+          "usb_name": "Intel(R) RealSense(TM) Depth Camera 435i",
+          "usb_serial": "262723060808",
+          "id": "realsense:262422073866",
+          "device": "realsense:262422073866",
+          "device_type": "camera",
+          "camera_type": "intelrealsense",
+          "name": "Intel RealSense D435I",
+          "interface": "sdk",
+          "index": "color",
+          "by_path": null,
+          "stable_path": "realsense:262422073866",
+          "aliases": [],
+          "formats": [
+            "RGB3"
+          ],
+          "modes": [
+            {
+              "fourcc": "RGB3",
+              "width": 320,
+              "height": 180,
+              "fps": 6
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 320,
+              "height": 180,
+              "fps": 30
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 320,
+              "height": 180,
+              "fps": 60
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 320,
+              "height": 240,
+              "fps": 6
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 320,
+              "height": 240,
+              "fps": 30
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 320,
+              "height": 240,
+              "fps": 60
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 424,
+              "height": 240,
+              "fps": 6
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 424,
+              "height": 240,
+              "fps": 15
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 424,
+              "height": 240,
+              "fps": 30
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 424,
+              "height": 240,
+              "fps": 60
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 640,
+              "height": 360,
+              "fps": 6
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 640,
+              "height": 360,
+              "fps": 15
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 640,
+              "height": 360,
+              "fps": 30
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 640,
+              "height": 360,
+              "fps": 60
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 640,
+              "height": 480,
+              "fps": 6
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 640,
+              "height": 480,
+              "fps": 15
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 640,
+              "height": 480,
+              "fps": 30
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 640,
+              "height": 480,
+              "fps": 60
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 848,
+              "height": 480,
+              "fps": 6
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 848,
+              "height": 480,
+              "fps": 15
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 848,
+              "height": 480,
+              "fps": 30
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 848,
+              "height": 480,
+              "fps": 60
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 960,
+              "height": 540,
+              "fps": 6
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 960,
+              "height": 540,
+              "fps": 15
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 960,
+              "height": 540,
+              "fps": 30
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 960,
+              "height": 540,
+              "fps": 60
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 1280,
+              "height": 720,
+              "fps": 6
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 1280,
+              "height": 720,
+              "fps": 15
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 1280,
+              "height": 720,
+              "fps": 30
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 1920,
+              "height": 1080,
+              "fps": 6
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 1920,
+              "height": 1080,
+              "fps": 15
+            },
+            {
+              "fourcc": "RGB3",
+              "width": 1920,
+              "height": 1080,
+              "fps": 30
+            }
+          ],
+          "sensor_type": "rgb",
+          "capture_usable": true,
+          "preview_unavailable_reason": null,
+          "query_error": null
+        },
+        "wrist": {
+          "vendor": "2bc5",
+          "product": "0840",
+          "serial": "CV2F861000GM",
+          "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb10/10-4/10-4.1",
+          "usb_interface": "00",
+          "interface_name": "Orbbec Gemini 305 Depth Camera",
+          "usb_name": "Orbbec Gemini 305",
+          "usb_serial": "CV2F861000GM",
+          "id": "orbbec:CV2F861000GM",
+          "device": "orbbec:CV2F861000GM",
+          "device_type": "camera",
+          "camera_type": "orbbec",
+          "name": "Orbbec Gemini 305",
+          "interface": "sdk",
+          "index": "color",
+          "by_path": null,
+          "stable_path": "orbbec:CV2F861000GM",
+          "aliases": [],
+          "formats": [
+            "YUYV",
+            "MJPG"
+          ],
+          "modes": [
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 530,
+              "fps": 30.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 800,
+              "fps": 60.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 800,
+              "fps": 30.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 800,
+              "fps": 20.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 800,
+              "fps": 15.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 800,
+              "fps": 10.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 800,
+              "fps": 5.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 720,
+              "fps": 60.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 720,
+              "fps": 30.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 720,
+              "fps": 20.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 720,
+              "fps": 15.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 720,
+              "fps": 10.0
+            },
+            {
+              "fourcc": "",
+              "width": 1280,
+              "height": 720,
+              "fps": 5.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 530,
+              "fps": 60.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 530,
+              "fps": 20.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 530,
+              "fps": 15.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 530,
+              "fps": 10.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 530,
+              "fps": 5.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 480,
+              "fps": 60.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 480,
+              "fps": 30.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 480,
+              "fps": 20.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 480,
+              "fps": 15.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 480,
+              "fps": 10.0
+            },
+            {
+              "fourcc": "",
+              "width": 848,
+              "height": 480,
+              "fps": 5.0
+            },
+            {
+              "fourcc": "",
+              "width": 640,
+              "height": 480,
+              "fps": 60.0
+            },
+            {
+              "fourcc": "",
+              "width": 640,
+              "height": 480,
+              "fps": 30.0
+            },
+            {
+              "fourcc": "",
+              "width": 640,
+              "height": 480,
+              "fps": 20.0
+            },
+            {
+              "fourcc": "",
+              "width": 640,
+              "height": 480,
+              "fps": 15.0
+            },
+            {
+              "fourcc": "",
+              "width": 640,
+              "height": 480,
+              "fps": 10.0
+            },
+            {
+              "fourcc": "",
+              "width": 640,
+              "height": 480,
+              "fps": 5.0
+            }
+          ],
+          "sensor_type": "rgb",
+          "capture_usable": true,
+          "preview_unavailable_reason": null,
+          "query_error": null
+        }
+      },
+      "feedback": {
+        "interface": "can0",
+        "joints_deg": [
+          -1.371,
+          0.753,
+          -26.463,
+          -0.999,
+          44.274,
+          2.026
+        ],
+        "gripper_mm": 69.7,
+        "gripper_enabled": true,
+        "gripper_fault": false,
+        "gripper_status_code": 64,
+        "controller_fresh": true,
+        "control_mode": 1,
+        "arm_status": 0,
+        "move_mode": 1,
+        "arm_error_code": 0,
+        "enabled": true,
+        "enabled_joints": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "motor_faults": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fresh": true,
+        "joints_fresh": true,
+        "gripper_fresh": true,
+        "motors_fresh": true,
+        "ages_s": {
+          "0x2a5": 0.0015185719967121258,
+          "0x2a6": 0.0014134509983705357,
+          "0x2a7": 0.0012855300010414794,
+          "0x2a8": 0.00116444900049828,
+          "0x2a1": 0.001990495999052655,
+          "0x261": 0.025916890997905284,
+          "0x262": 0.03578493099485058,
+          "0x263": 0.0456606509978883,
+          "0x264": 0.005515364995517302,
+          "0x265": 0.01544036500126822,
+          "0x266": 0.02519692500209203
+        },
+        "counts": {
+          "0x2a1": 200,
+          "0x2a5": 200,
+          "0x2a6": 200,
+          "0x2a7": 200,
+          "0x2a8": 200,
+          "0x263": 20,
+          "0x262": 20,
+          "0x261": 20,
+          "0x266": 20,
+          "0x265": 20,
+          "0x264": 20
+        },
+        "duration_s": 1.000352142000338,
+        "mode": "passive_receive_only"
+      },
+      "assets": {
+        "policy_config": "/home/skysi/code/robot_runtime/configs/policies/vla_pruned.json",
+        "spec": {
+          "checkpoint": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+          "camera_order": [
+            "observation.images.top",
+            "observation.images.wrist"
+          ],
+          "state_dim": 7,
+          "action_dim": 7,
+          "chunk_size": 50,
+          "action_names": [
+            "joint_1.pos",
+            "joint_2.pos",
+            "joint_3.pos",
+            "joint_4.pos",
+            "joint_5.pos",
+            "joint_6.pos",
+            "gripper.pos"
+          ],
+          "action_space": "absolute_joint",
+          "joint_unit": "degrees",
+          "gripper_unit": "mm",
+          "contract_verified": false,
+          "image_size": 224,
+          "num_steps": 3,
+          "variant": "pruned",
+          "rtc_training_max_delay": 0,
+          "precision": "int8-main-smooth",
+          "precision_status": "experimental",
+          "weight_types": [
+            "BF16",
+            "F32"
+          ],
+          "quant_route": "native_int8"
+        },
+        "note": "Declared action contract checked using the shared Piper validator; no hardware/model execution. source_contract.verified is provenance only."
+      },
+      "camera_checks": {
+        "top": {
+          "ok": true,
+          "frames": 3,
+          "type": "intelrealsense",
+          "fourcc": "RGB3",
+          "width": 640,
+          "height": 480,
+          "reported_fps": 30
+        },
+        "wrist": {
+          "ok": true,
+          "frames": 3,
+          "type": "orbbec",
+          "width": 640,
+          "height": 480,
+          "reported_fps": 30
+        }
+      },
+      "note": "设备检查通过；本阶段未使能或移动机械臂。",
+      "can": {
+        "id": "can0",
+        "interface": "can0",
+        "device_type": "can",
+        "transport": "usb",
+        "driver": "gs_usb",
+        "name": "candleLight USB to CAN adapter",
+        "index": "0",
+        "bitrate": 1000000,
+        "up": true,
+        "state": "ERROR-ACTIVE",
+        "ctrlmode": [],
+        "vendor": "1d50",
+        "product": "606f",
+        "serial": "0045002F4648571620303731",
+        "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb9/9-4/9-4.3",
+        "usb_interface": "00",
+        "interface_name": "",
+        "usb_name": "candleLight USB to CAN adapter"
+      }
+    }
+  },
+  "python_executable": "/home/skysi/code/robot_runtime/.venv/bin/python"
+}

@@ -1,0 +1,231 @@
+{
+  "profile": "full",
+  "schedule": "before",
+  "model": "native",
+  "scope": "Actual production inference/dispatch function and queue; saved static observations; memory SDK and thread-based fake I/O process; real GPU only in native mode. No real cameras/CAN/robot.",
+  "parameters": {
+    "policy_config": "configs/policies/vla_full.json",
+    "inference_backend": "standard",
+    "task": "pick up the cube",
+    "warmup_steps": 3,
+    "execution_horizon": 50,
+    "execution_period": 0.05,
+    "replan_threshold": 27,
+    "rtc_blend_steps": 5,
+    "enable_filter_smooth": false,
+    "enable_rtc_smooth": true,
+    "warmstep": false,
+    "rl_joint_offsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "joint_unit": "degrees",
+    "gripper_mapping": "linear",
+    "camera_map": {
+      "observation.images.top": "top",
+      "observation.images.wrist": "wrist"
+    },
+    "execute_robot": true,
+    "dry_run": false,
+    "duration": 30.0,
+    "precision": "int8-main-smooth",
+    "diagnostic_dir": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-before",
+    "camera_save_interval_s": 0,
+    "action_log_interval": 0
+  },
+  "dispatch_interval_ms": {
+    "count": 584,
+    "p50": 50.280183502763975,
+    "p99": 51.38456179891364,
+    "max": 54.16057199909119
+  },
+  "prediction_ms": {
+    "count": 26,
+    "p50": 688.8191234975238,
+    "p99": 700.961032496707,
+    "max": 703.3354679952026
+  },
+  "queue_empty_after_start": 0,
+  "merges": [
+    {
+      "at": 64132.804512034,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 64134.650553058,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64135.803474635,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64136.954353764,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64138.100970599,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64139.254349728,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64140.405091566,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64141.560567973,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64142.709930281,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64143.862258473,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64145.012362136,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64146.167812368,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64147.314411736,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64148.466107272,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64149.617715445,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64150.769146294,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64151.922253984,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64153.074123627,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64154.236865454,
+      "pending_before": 13,
+      "pending_after": 36,
+      "delay_steps": 14
+    },
+    {
+      "at": 64155.38040639,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64156.528569934,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64157.682403449,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64158.834644836,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64159.983489092,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64161.137496437,
+      "pending_before": 14,
+      "pending_after": 37,
+      "delay_steps": 13
+    }
+  ],
+  "plan_interval_ms": {
+    "count": 24,
+    "p50": 1151.7825894989073,
+    "p99": 1688.882208690338,
+    "max": 1846.0410240004421
+  },
+  "diagnostic_events": [
+    [
+      "action_diagnostics",
+      {
+        "enabled": false,
+        "run_id": null,
+        "path": null
+      }
+    ]
+  ],
+  "steady_plan_interval_ms": {
+    "count": 23,
+    "p50": 1151.6955359984422,
+    "p99": 1161.1434346005262,
+    "max": 1162.7418269999907
+  },
+  "gaps_over_two_periods": 0,
+  "gaps_over_100ms": 0,
+  "physical_motion_verified": false,
+  "sdk_calls_are_simulated": true
+}

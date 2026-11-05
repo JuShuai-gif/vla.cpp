@@ -1,0 +1,527 @@
+{
+  "profile": "pruned",
+  "schedule": "candidate",
+  "model": "native",
+  "scope": "Actual production inference/dispatch function and queue; saved static observations; memory SDK and thread-based fake I/O process; real GPU only in native mode. No real cameras/CAN/robot.",
+  "parameters": {
+    "policy_config": "configs/policies/vla_pruned.json",
+    "inference_backend": "standard",
+    "task": "pick up the cube",
+    "warmup_steps": 3,
+    "execution_horizon": 50,
+    "execution_period": 0.03333333333333333,
+    "replan_threshold": 38,
+    "rtc_blend_steps": 5,
+    "enable_filter_smooth": false,
+    "enable_rtc_smooth": true,
+    "warmstep": false,
+    "rl_joint_offsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "joint_unit": "degrees",
+    "gripper_mapping": "linear",
+    "camera_map": {
+      "observation.images.top": "top",
+      "observation.images.wrist": "wrist"
+    },
+    "execute_robot": true,
+    "dry_run": false,
+    "precision": "int8-main-smooth",
+    "diagnostics": true,
+    "duration": 30.0,
+    "diagnostic_dir": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/pruned-candidate",
+    "camera_save_interval_s": 0,
+    "action_log_interval": 0
+  },
+  "dispatch_interval_ms": {
+    "count": 885,
+    "p50": 34.88406600081362,
+    "p99": 35.67887355748098,
+    "max": 37.438951003423426
+  },
+  "prediction_ms": {
+    "count": 72,
+    "p50": 410.6989345018519,
+    "p99": 414.299155210756,
+    "max": 417.34736200305633
+  },
+  "queue_empty_after_start": 0,
+  "merges": [
+    {
+      "at": 64406.540501273,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 64407.344918937,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64407.764365543,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64408.175623412,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64408.587385442,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64409.000637634,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64409.414001227,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64409.827288899,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64410.240035809,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64410.652305639,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64411.063876027,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64411.476188936,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64411.888638125,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64412.300446033,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64412.714048344,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64413.126422612,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64413.545924254,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64413.95753604,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64414.370602108,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64414.782160574,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64415.194456601,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64415.605691185,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64416.018608213,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64416.430737318,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64416.844421787,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64417.257442133,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64417.670795481,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64418.087653274,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64418.500832301,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64418.912602364,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64419.326346991,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64419.737716213,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64420.150609038,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64420.562769661,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64420.974816923,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64421.395248922,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64421.809589868,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64422.222200851,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64422.633121591,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64423.045365852,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64423.457684114,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64423.869524454,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64424.282227196,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64424.693427055,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64425.105492755,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64425.516401533,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64425.928901433,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64426.341406613,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64426.754780075,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64427.171979663,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64427.586618487,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64427.999736427,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64428.412631727,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64428.824717304,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64429.237356803,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64429.64912198,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64430.061871758,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64430.473766615,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64430.885700111,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64431.298262168,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64431.709499343,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64432.121936559,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64432.535231497,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64432.952969203,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64433.365498059,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64433.778995956,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64434.191579732,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64434.603537666,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64435.01582192,
+      "pending_before": 26,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64435.427301493,
+      "pending_before": 25,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64435.839345306,
+      "pending_before": 25,
+      "pending_after": 38,
+      "delay_steps": 12
+    }
+  ],
+  "plan_interval_ms": {
+    "count": 70,
+    "p50": 412.50253999896813,
+    "p99": 539.4675551525152,
+    "max": 804.4176640032674
+  },
+  "diagnostic_events": [
+    [
+      "action_diagnostics",
+      {
+        "enabled": true,
+        "run_id": null,
+        "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/pruned-candidate/20261105_115407_891035_1037555/events.jsonl",
+        "max_bytes": 67108864
+      }
+    ],
+    [
+      "action_diagnostics",
+      {
+        "enabled": true,
+        "run_id": null,
+        "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/pruned-candidate/20261105_115407_891035_1037555/events.jsonl",
+        "max_bytes": 67108864,
+        "summary": {
+          "written": 4707,
+          "dropped": 0,
+          "error": null,
+          "writer_alive": false,
+          "truncated": false,
+          "max_bytes": 67108864,
+          "bytes_written": 3481554
+        }
+      }
+    ]
+  ],
+  "steady_plan_interval_ms": {
+    "count": 69,
+    "p50": 412.49989999778336,
+    "p99": 419.79935624432983,
+    "max": 420.43199900217587
+  },
+  "gaps_over_two_periods": 0,
+  "gaps_over_100ms": 0,
+  "physical_motion_verified": false,
+  "sdk_calls_are_simulated": true
+}

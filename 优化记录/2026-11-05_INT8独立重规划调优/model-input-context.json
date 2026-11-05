@@ -1,0 +1,90 @@
+{
+  "full": {
+    "policy": {
+      "schema_version": 1,
+      "model": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf",
+      "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+      "optimization_profile": "/home/skysi/code/vla.cpp/scripts/pi05_musa_profiles.json",
+      "device": "0",
+      "seed": 0,
+      "threads": 4,
+      "runtime": {
+        "weight_dtype": "f16",
+        "act_dtype": "f32",
+        "mm_prec": "f32",
+        "flash_attn": true
+      },
+      "source_contract": {
+        "action_names": [
+          "joint_1.pos",
+          "joint_2.pos",
+          "joint_3.pos",
+          "joint_4.pos",
+          "joint_5.pos",
+          "joint_6.pos",
+          "gripper.pos"
+        ],
+        "action_space": "absolute_joint",
+        "joint_unit": "degrees",
+        "gripper_unit": "mm",
+        "verified": false
+      },
+      "precision_profiles": {
+        "int8-main-smooth": {
+          "quant_route": "native_int8",
+          "library": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
+          "optimization_profile": "/home/skysi/code/vla.cpp-quant/scripts/pi05_musa_profiles.json",
+          "int8_parameters": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/parameters/full-int8-main-smooth/manifest.json",
+          "status": "experimental"
+        }
+      }
+    },
+    "policy_sha256": "3ce0a6ad0511cd8e46d5e3cffada8025b1e67060abb063f68912f19b812343d3",
+    "saved_observation": "/home/skysi/code/robot_runtime/validation/vla_cpp/full-observation.npz",
+    "observation_sha256": "f36b7ae613686bfa0066a191bfdf55e0479f13dd10fce4d9dc5629f631c1eab5"
+  },
+  "pruned": {
+    "policy": {
+      "schema_version": 1,
+      "model": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf",
+      "library": "/home/skysi/code/vla.cpp/build-musa-official/libvla.so",
+      "optimization_profile": "/home/skysi/code/vla.cpp/scripts/pi05_musa_profiles.json",
+      "device": "0",
+      "seed": 0,
+      "threads": 4,
+      "runtime": {
+        "weight_dtype": "f16",
+        "act_dtype": "f32",
+        "mm_prec": "f32",
+        "flash_attn": true
+      },
+      "source_contract": {
+        "action_names": [
+          "joint_1.pos",
+          "joint_2.pos",
+          "joint_3.pos",
+          "joint_4.pos",
+          "joint_5.pos",
+          "joint_6.pos",
+          "gripper.pos"
+        ],
+        "action_space": "absolute_joint",
+        "joint_unit": "degrees",
+        "gripper_unit": "mm",
+        "verified": false
+      },
+      "precision_profiles": {
+        "int8-main-smooth": {
+          "quant_route": "native_int8",
+          "library": "/home/skysi/code/vla.cpp-quant/build-musa-quant/libvla.so",
+          "optimization_profile": "/home/skysi/code/vla.cpp-quant/scripts/pi05_musa_profiles.json",
+          "int8_parameters": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/parameters/pruned-int8-main-smooth/manifest.json",
+          "status": "experimental"
+        }
+      }
+    },
+    "policy_sha256": "44cc0c07ca7c8fd5ee9c76b38dbf7cb9e414f2a61480d78d0615156aad00a581",
+    "saved_observation": "/home/skysi/code/robot_runtime/validation/vla_cpp/pruned-observation.npz",
+    "observation_sha256": "e50cbe913c47a37959d357384aea346e2c1cafb5d777db3a2ddb9e973cd3e421"
+  }
+}

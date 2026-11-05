@@ -1,0 +1,25 @@
+[runtime configuration] {"policy_backend": "vla_cpp", "inference_backend": "standard", "precision": "int8-main-smooth", "task": "pick up the cube", "checkpoint": null, "policy_config": "configs/policies/vla_full.json", "package_dir": "/home/skysi/code/robot_runtime/assets", "arm_mode": "single", "execution_period": 0.05, "execution_horizon": 50, "replan_threshold": 36, "rtc_mode": "execution", "rtc_blend_steps": 5, "diagnostics": true, "camera_save_interval_s": 0, "execution": "LIVE", "schedule": "rtc"}
+[diagnostics] file=/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-budget/20261105_114720_822109_1027511/events.jsonl
+[robot io] starting pid=1027511 port=MEMORY-SDK-NO-CAN
+[robot io] piper connected
+[loop] LIVE vla_cpp, horizon=50, execution_period=0.05, schedule=rtc, image_feature_multiplier=1.0, language_embedding_multiplier=1.0
+[vla_cpp predict #1] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.69 observation_to_prediction_ms=917.92
+[vla_cpp predict #2] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.65 observation_to_prediction_ms=917.26
+[vla_cpp predict #3] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.62 observation_to_prediction_ms=917.69
+[vla_cpp predict #4] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.64 observation_to_prediction_ms=916.91
+[vla_cpp predict #5] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.66 observation_to_prediction_ms=916.98
+[vla_cpp predict #6] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.63 observation_to_prediction_ms=916.89
+[vla_cpp predict #7] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.63 observation_to_prediction_ms=916.97
+[vla_cpp predict #8] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.63 observation_to_prediction_ms=916.93
+[vla_cpp predict #9] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.63 observation_to_prediction_ms=916.95
+[vla_cpp predict #10] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.63 observation_to_prediction_ms=916.94
+[vla_cpp predict #11] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.63 observation_to_prediction_ms=916.97
+[vla_cpp predict #12] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.69 observation_to_prediction_ms=916.98
+[vla_cpp predict #13] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.65 observation_to_prediction_ms=917.05
+[vla_cpp predict #14] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.65 observation_to_prediction_ms=917.05
+[vla_cpp predict #15] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.67 observation_to_prediction_ms=917.03
+[vla_cpp predict #16] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=915.77 observation_to_prediction_ms=917.12
+[diagnostics] file=/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-budget/20261105_114720_822109_1027511/events.jsonl summary={'written': 1661, 'dropped': 0, 'error': None, 'writer_alive': False, 'truncated': False, 'max_bytes': 67108864, 'bytes_written': 932891}
+[vla_cpp summary] reason=normal predictions=16 warmup_excluded=true
+[loop] system shut down
+{"profile": "full", "schedule": "candidate", "model": "budget", "dispatch_interval_ms": {"count": 280, "p50": 50.37484599961317, "p99": 51.26522941107396, "max": 52.24623200047063}, "prediction_ms": {"count": 17, "p50": 915.6091120021301, "p99": 915.6829040023149, "max": 915.6913120023091}, "queue_empty_after_start": 0, "plan_interval_ms": {"count": 14, "p50": 917.5174000047264, "p99": 1520.6108354010935, "max": 1609.9178610020317}, "diagnostic_events": [["action_diagnostics", {"enabled": true, "run_id": null, "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-budget/20261105_114720_822109_1027511/events.jsonl", "max_bytes": 67108864}], ["action_diagnostics", {"enabled": true, "run_id": null, "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-budget/20261105_114720_822109_1027511/events.jsonl", "max_bytes": 67108864, "summary": {"written": 1661, "dropped": 0, "error": null, "writer_alive": false, "truncated": false, "max_bytes": 67108864, "bytes_written": 932891}}]], "gaps_over_two_periods": 0, "gaps_over_100ms": 0, "physical_motion_verified": false, "sdk_calls_are_simulated": true}

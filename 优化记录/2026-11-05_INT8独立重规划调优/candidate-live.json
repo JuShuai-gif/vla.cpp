@@ -1,0 +1,134 @@
+{
+  "schema_version": 2,
+  "policy_backend": "vla_cpp",
+  "robot_layout": "single",
+  "devices": {
+    "arms": {
+      "single": {
+        "identity": {
+          "kind": "serial",
+          "device_type": "can",
+          "vendor": "1d50",
+          "product": "606f",
+          "serial": "0045002F4648571620303731",
+          "interface": "00",
+          "index": "0",
+          "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb9/9-4/9-4.3"
+        },
+        "bitrate": 1000000
+      }
+    },
+    "cameras": {
+      "top": {
+        "identity": {
+          "kind": "serial",
+          "device_type": "camera",
+          "vendor": "8086",
+          "product": "0b3a",
+          "serial": "262422073866",
+          "interface": "sdk",
+          "index": "color",
+          "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb10/10-4/10-4.1",
+          "camera_type": "intelrealsense"
+        },
+        "capture": {
+          "type": "intelrealsense",
+          "color_mode": "rgb",
+          "width": 640,
+          "height": 480,
+          "fps": 30,
+          "warmup_s": 3,
+          "fourcc": "RGB3"
+        }
+      },
+      "wrist": {
+        "identity": {
+          "kind": "serial",
+          "device_type": "camera",
+          "vendor": "2bc5",
+          "product": "0840",
+          "serial": "CV2F861000GM",
+          "interface": "sdk",
+          "index": "color",
+          "usb_path": "/sys/devices/platform/160000.pcie/pci0000:c0/0000:c0:00.0/0000:c1:00.0/usb10/10-1",
+          "camera_type": "orbbec"
+        },
+        "capture": {
+          "type": "orbbec",
+          "color_mode": "rgb",
+          "width": 640,
+          "height": 480,
+          "fps": 30,
+          "warmup_s": 3
+        }
+      }
+    }
+  },
+  "active_profile": "pruned",
+  "profiles": {
+    "pruned": {
+      "policy_config": "configs/policies/vla_pruned.json",
+      "inference_backend": "standard",
+      "task": "pick up the cube",
+      "warmup_steps": 3,
+      "execution_horizon": 50,
+      "execution_period": 0.03333333333333333,
+      "replan_threshold": 38,
+      "rtc_blend_steps": 5,
+      "enable_filter_smooth": false,
+      "enable_rtc_smooth": true,
+      "warmstep": false,
+      "rl_joint_offsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "joint_unit": "degrees",
+      "gripper_mapping": "linear",
+      "camera_map": {
+        "observation.images.top": "top",
+        "observation.images.wrist": "wrist"
+      },
+      "execute_robot": true,
+      "dry_run": false,
+      "precision": "int8-main-smooth",
+      "diagnostics": true
+    },
+    "full": {
+      "policy_config": "configs/policies/vla_full.json",
+      "inference_backend": "standard",
+      "task": "pick up the cube",
+      "warmup_steps": 3,
+      "execution_horizon": 50,
+      "execution_period": 0.05,
+      "replan_threshold": 36,
+      "rtc_blend_steps": 5,
+      "enable_filter_smooth": false,
+      "enable_rtc_smooth": true,
+      "warmstep": false,
+      "rl_joint_offsets": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "joint_unit": "degrees",
+      "gripper_mapping": "linear",
+      "camera_map": {
+        "observation.images.top": "top",
+        "observation.images.wrist": "wrist"
+      },
+      "execute_robot": true,
+      "dry_run": false,
+      "precision": "int8-main-smooth",
+      "diagnostics": true
+    }
+  },
+  "last_checks": {},
+  "python_executable": "/home/skysi/code/robot_runtime/.venv/bin/python"
+}

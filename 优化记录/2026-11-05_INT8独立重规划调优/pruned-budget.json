@@ -1,0 +1,257 @@
+{
+  "profile": "pruned",
+  "schedule": "candidate",
+  "model": "budget",
+  "scope": "Actual production inference/dispatch function and queue; saved static observations; memory SDK and thread-based fake I/O process; real GPU only in native mode. No real cameras/CAN/robot.",
+  "parameters": {
+    "policy_config": "configs/policies/vla_pruned.json",
+    "inference_backend": "standard",
+    "task": "pick up the cube",
+    "warmup_steps": 1,
+    "execution_horizon": 50,
+    "execution_period": 0.03333333333333333,
+    "replan_threshold": 38,
+    "rtc_blend_steps": 5,
+    "enable_filter_smooth": false,
+    "enable_rtc_smooth": true,
+    "warmstep": false,
+    "rl_joint_offsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "joint_unit": "degrees",
+    "gripper_mapping": "linear",
+    "camera_map": {
+      "observation.images.top": "top",
+      "observation.images.wrist": "wrist"
+    },
+    "execute_robot": true,
+    "dry_run": false,
+    "precision": "int8-main-smooth",
+    "diagnostics": true,
+    "duration": 15.0,
+    "diagnostic_dir": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/pruned-budget",
+    "camera_save_interval_s": 0,
+    "action_log_interval": 0
+  },
+  "dispatch_interval_ms": {
+    "count": 433,
+    "p50": 34.87185599806253,
+    "p99": 35.49281860177871,
+    "max": 37.552902998868376
+  },
+  "prediction_ms": {
+    "count": 29,
+    "p50": 527.1074470001622,
+    "p99": 527.1774990012636,
+    "max": 527.1815660016728
+  },
+  "queue_empty_after_start": 0,
+  "merges": [
+    {
+      "at": 64035.282023746,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 64036.19338571,
+      "pending_before": 22,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64036.731100718,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64037.265731836,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64037.798057548,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64038.33110022,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64038.868220143,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64039.400967292,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64039.933772521,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64040.462606698,
+      "pending_before": 19,
+      "pending_after": 35,
+      "delay_steps": 15
+    },
+    {
+      "at": 64040.991704435,
+      "pending_before": 19,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64041.520693011,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64042.049415185,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64042.578249238,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64043.111342302,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64043.643312043,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64044.175933984,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64044.705035115,
+      "pending_before": 19,
+      "pending_after": 35,
+      "delay_steps": 15
+    },
+    {
+      "at": 64045.234326845,
+      "pending_before": 19,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64045.763863655,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64046.292700462,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64046.821571029,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64047.350491794,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64047.879373479,
+      "pending_before": 19,
+      "pending_after": 35,
+      "delay_steps": 15
+    },
+    {
+      "at": 64048.408537724,
+      "pending_before": 19,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64048.937348326,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    },
+    {
+      "at": 64049.466281009,
+      "pending_before": 18,
+      "pending_after": 34,
+      "delay_steps": 16
+    }
+  ],
+  "plan_interval_ms": {
+    "count": 26,
+    "p50": 529.2279874956876,
+    "p99": 817.9502250040969,
+    "max": 911.3619640047546
+  },
+  "diagnostic_events": [
+    [
+      "action_diagnostics",
+      {
+        "enabled": true,
+        "run_id": null,
+        "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/pruned-budget/20261105_114806_626155_1028356/events.jsonl",
+        "max_bytes": 67108864
+      }
+    ],
+    [
+      "action_diagnostics",
+      {
+        "enabled": true,
+        "run_id": null,
+        "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/pruned-budget/20261105_114806_626155_1028356/events.jsonl",
+        "max_bytes": 67108864,
+        "summary": {
+          "written": 2080,
+          "dropped": 0,
+          "error": null,
+          "writer_alive": false,
+          "truncated": false,
+          "max_bytes": 67108864,
+          "bytes_written": 1403622
+        }
+      }
+    ]
+  ],
+  "gaps_over_two_periods": 0,
+  "gaps_over_100ms": 0,
+  "physical_motion_verified": false,
+  "sdk_calls_are_simulated": true
+}

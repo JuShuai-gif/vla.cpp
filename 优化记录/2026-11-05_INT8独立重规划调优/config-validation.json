@@ -1,0 +1,19 @@
+{
+  "profiles": [
+    {
+      "profile": "full",
+      "threshold": 36,
+      "baseline_command_unchanged": true,
+      "int8_default_and_explicit_match": true
+    },
+    {
+      "profile": "pruned",
+      "threshold": 38,
+      "baseline_command_unchanged": true,
+      "int8_default_and_explicit_match": true
+    }
+  ],
+  "protected_files_unchanged": 37,
+  "unrelated_configuration_preserved": true,
+  "hardware_discovery_mocked": true
+}

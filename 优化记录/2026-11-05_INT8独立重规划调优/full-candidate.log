@@ -1,0 +1,65 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+[runtime configuration] {"policy_backend": "vla_cpp", "inference_backend": "standard", "precision": "int8-main-smooth", "task": "pick up the cube", "checkpoint": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf", "policy_config": "configs/policies/vla_full.json", "package_dir": "/home/skysi/code/robot_runtime/assets", "arm_mode": "single", "execution_period": 0.05, "execution_horizon": 50, "replan_threshold": 36, "rtc_mode": "execution", "rtc_blend_steps": 5, "diagnostics": true, "camera_save_interval_s": 0, "execution": "LIVE", "schedule": "rtc"}
+[diagnostics] file=/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-candidate/20261105_115106_692297_1032182/events.jsonl
+[robot io] starting pid=1032182 port=MEMORY-SDK-NO-CAN
+[robot io] piper connected
+[robot io] passive feedback: waiting for warmstep preflight
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+[loop] LIVE vla_cpp, horizon=50, execution_period=0.05, schedule=rtc, image_feature_multiplier=1.0, language_embedding_multiplier=1.0
+[vla_cpp predict #1] native_call_ms=682.73 preprocess_ms=5.92 postprocess_ms=0.04 predict_ms=688.80 observation_to_prediction_ms=690.79
+[vla_cpp predict #2] native_call_ms=681.09 preprocess_ms=5.34 postprocess_ms=0.03 predict_ms=686.55 observation_to_prediction_ms=687.64
+[vla_cpp predict #3] native_call_ms=682.43 preprocess_ms=4.05 postprocess_ms=0.02 predict_ms=686.56 observation_to_prediction_ms=686.92
+[vla_cpp predict #4] native_call_ms=681.77 preprocess_ms=4.28 postprocess_ms=0.04 predict_ms=686.16 observation_to_prediction_ms=686.52
+[vla_cpp predict #5] native_call_ms=681.33 preprocess_ms=4.25 postprocess_ms=0.03 predict_ms=685.68 observation_to_prediction_ms=686.07
+[vla_cpp predict #6] native_call_ms=681.25 preprocess_ms=4.74 postprocess_ms=0.03 predict_ms=686.08 observation_to_prediction_ms=686.45
+[vla_cpp predict #7] native_call_ms=682.07 preprocess_ms=4.07 postprocess_ms=0.04 predict_ms=686.25 observation_to_prediction_ms=686.61
+[vla_cpp predict #8] native_call_ms=681.56 preprocess_ms=3.98 postprocess_ms=0.06 predict_ms=685.71 observation_to_prediction_ms=686.13
+[vla_cpp predict #9] native_call_ms=682.35 preprocess_ms=4.15 postprocess_ms=0.03 predict_ms=686.60 observation_to_prediction_ms=686.96
+[vla_cpp predict #10] native_call_ms=681.64 preprocess_ms=3.59 postprocess_ms=0.02 predict_ms=685.32 observation_to_prediction_ms=685.68
+[vla_cpp predict #11] native_call_ms=681.26 preprocess_ms=3.55 postprocess_ms=0.03 predict_ms=684.89 observation_to_prediction_ms=685.24
+[vla_cpp predict #12] native_call_ms=679.93 preprocess_ms=4.22 postprocess_ms=0.03 predict_ms=684.24 observation_to_prediction_ms=684.60
+[vla_cpp predict #13] native_call_ms=683.05 preprocess_ms=4.33 postprocess_ms=0.04 predict_ms=687.48 observation_to_prediction_ms=687.85
+[vla_cpp predict #14] native_call_ms=682.14 preprocess_ms=3.57 postprocess_ms=0.04 predict_ms=685.82 observation_to_prediction_ms=686.17
+[vla_cpp predict #15] native_call_ms=682.87 preprocess_ms=4.13 postprocess_ms=0.03 predict_ms=687.09 observation_to_prediction_ms=687.46
+[vla_cpp predict #16] native_call_ms=679.37 preprocess_ms=4.24 postprocess_ms=0.03 predict_ms=683.69 observation_to_prediction_ms=684.05
+[vla_cpp predict #17] native_call_ms=680.71 preprocess_ms=4.28 postprocess_ms=0.03 predict_ms=685.09 observation_to_prediction_ms=685.45
+[vla_cpp predict #18] native_call_ms=679.54 preprocess_ms=3.48 postprocess_ms=0.03 predict_ms=683.11 observation_to_prediction_ms=683.47
+[vla_cpp predict #19] native_call_ms=680.63 preprocess_ms=3.84 postprocess_ms=0.04 predict_ms=684.58 observation_to_prediction_ms=684.94
+[vla_cpp predict #20] native_call_ms=681.64 preprocess_ms=3.74 postprocess_ms=0.06 predict_ms=685.51 observation_to_prediction_ms=685.88
+[vla_cpp predict #21] native_call_ms=683.40 preprocess_ms=3.92 postprocess_ms=0.04 predict_ms=687.43 observation_to_prediction_ms=687.81
+[vla_cpp predict #22] native_call_ms=687.81 preprocess_ms=5.55 postprocess_ms=0.06 predict_ms=693.49 observation_to_prediction_ms=693.88
+[vla_cpp predict #23] native_call_ms=688.38 preprocess_ms=3.86 postprocess_ms=0.14 predict_ms=692.44 observation_to_prediction_ms=692.82
+[vla_cpp predict #24] native_call_ms=693.35 preprocess_ms=4.68 postprocess_ms=0.04 predict_ms=698.13 observation_to_prediction_ms=698.49
+[vla_cpp predict #25] native_call_ms=690.81 preprocess_ms=3.72 postprocess_ms=0.03 predict_ms=694.63 observation_to_prediction_ms=695.93
+[vla_cpp predict #26] native_call_ms=686.21 preprocess_ms=5.18 postprocess_ms=0.04 predict_ms=691.50 observation_to_prediction_ms=691.86
+[vla_cpp predict #27] native_call_ms=682.54 preprocess_ms=4.33 postprocess_ms=0.04 predict_ms=686.98 observation_to_prediction_ms=687.34
+[vla_cpp predict #28] native_call_ms=681.05 preprocess_ms=4.26 postprocess_ms=0.04 predict_ms=685.41 observation_to_prediction_ms=685.78
+[vla_cpp predict #29] native_call_ms=682.94 preprocess_ms=3.85 postprocess_ms=0.04 predict_ms=686.89 observation_to_prediction_ms=687.25
+[vla_cpp predict #30] native_call_ms=681.50 preprocess_ms=3.86 postprocess_ms=0.04 predict_ms=685.47 observation_to_prediction_ms=685.87
+[vla_cpp predict #31] native_call_ms=687.19 preprocess_ms=4.05 postprocess_ms=0.04 predict_ms=691.35 observation_to_prediction_ms=691.71
+[vla_cpp predict #32] native_call_ms=690.31 preprocess_ms=4.18 postprocess_ms=0.03 predict_ms=694.59 observation_to_prediction_ms=695.01
+[vla_cpp predict #33] native_call_ms=684.49 preprocess_ms=4.03 postprocess_ms=0.02 predict_ms=688.60 observation_to_prediction_ms=690.06
+[vla_cpp predict #34] native_call_ms=681.31 preprocess_ms=3.95 postprocess_ms=0.03 predict_ms=685.36 observation_to_prediction_ms=685.72
+[vla_cpp predict #35] native_call_ms=685.82 preprocess_ms=4.17 postprocess_ms=0.03 predict_ms=690.08 observation_to_prediction_ms=690.46
+[vla_cpp predict #36] native_call_ms=690.28 preprocess_ms=4.26 postprocess_ms=0.04 predict_ms=694.66 observation_to_prediction_ms=695.02
+[vla_cpp predict #37] native_call_ms=682.53 preprocess_ms=4.16 postprocess_ms=0.03 predict_ms=686.79 observation_to_prediction_ms=687.28
+[vla_cpp predict #38] native_call_ms=682.77 preprocess_ms=3.97 postprocess_ms=0.03 predict_ms=686.83 observation_to_prediction_ms=687.20
+[vla_cpp predict #39] native_call_ms=680.89 preprocess_ms=4.69 postprocess_ms=0.03 predict_ms=685.69 observation_to_prediction_ms=686.24
+[vla_cpp predict #40] native_call_ms=687.11 preprocess_ms=4.94 postprocess_ms=0.04 predict_ms=692.16 observation_to_prediction_ms=692.53
+[vla_cpp predict #41] native_call_ms=686.53 preprocess_ms=4.48 postprocess_ms=0.04 predict_ms=691.13 observation_to_prediction_ms=691.52
+[vla_cpp predict #42] native_call_ms=686.14 preprocess_ms=4.22 postprocess_ms=0.07 predict_ms=690.51 observation_to_prediction_ms=691.01
+[diagnostics] file=/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-candidate/20261105_115106_692297_1032182/events.jsonl summary={'written': 3846, 'dropped': 0, 'error': None, 'writer_alive': False, 'truncated': False, 'max_bytes': 67108864, 'bytes_written': 2347352}
+[vla_cpp summary] reason=normal predictions=42 warmup_excluded=true
+[loop] system shut down
+{"profile": "full", "schedule": "candidate", "model": "native", "dispatch_interval_ms": {"count": 585, "p50": 50.42147100175498, "p99": 51.83068939688383, "max": 52.251236003939994}, "prediction_ms": {"count": 42, "p50": 686.6651450000063, "p99": 696.6803702011384, "max": 698.1050300018978}, "queue_empty_after_start": 0, "plan_interval_ms": {"count": 40, "p50": 700.9304354978667, "p99": 1103.6896152424738, "max": 1354.6684540051501}, "diagnostic_events": [["action_diagnostics", {"enabled": true, "run_id": null, "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-candidate/20261105_115106_692297_1032182/events.jsonl", "max_bytes": 67108864}], ["action_diagnostics", {"enabled": true, "run_id": null, "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-candidate/20261105_115106_692297_1032182/events.jsonl", "max_bytes": 67108864, "summary": {"written": 3846, "dropped": 0, "error": null, "writer_alive": false, "truncated": false, "max_bytes": 67108864, "bytes_written": 2347352}}]], "steady_plan_interval_ms": {"count": 39, "p50": 700.8979780002846, "p99": 710.5211844394216, "max": 711.1329699982889}, "gaps_over_two_periods": 0, "gaps_over_100ms": 0, "physical_motion_verified": false, "sdk_calls_are_simulated": true}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): native W8A8 expert GateUp in 18 layers, calibrated parameters /home/skysi/code/vla.cpp-quant/优化记录/2026-11-04_INT8改写与量化补偿/parameters/full-int8-main-smooth
+vla(pi05): resident weights = 3.85 GiB
+vla(pi05): model loaded (n_threads=4)

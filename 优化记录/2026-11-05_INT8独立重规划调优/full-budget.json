@@ -1,0 +1,185 @@
+{
+  "profile": "full",
+  "schedule": "candidate",
+  "model": "budget",
+  "scope": "Actual production inference/dispatch function and queue; saved static observations; memory SDK and thread-based fake I/O process; real GPU only in native mode. No real cameras/CAN/robot.",
+  "parameters": {
+    "policy_config": "configs/policies/vla_full.json",
+    "inference_backend": "standard",
+    "task": "pick up the cube",
+    "warmup_steps": 1,
+    "execution_horizon": 50,
+    "execution_period": 0.05,
+    "replan_threshold": 36,
+    "rtc_blend_steps": 5,
+    "enable_filter_smooth": false,
+    "enable_rtc_smooth": true,
+    "warmstep": false,
+    "rl_joint_offsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "joint_unit": "degrees",
+    "gripper_mapping": "linear",
+    "camera_map": {
+      "observation.images.top": "top",
+      "observation.images.wrist": "wrist"
+    },
+    "execute_robot": true,
+    "dry_run": false,
+    "precision": "int8-main-smooth",
+    "diagnostics": true,
+    "duration": 15.0,
+    "diagnostic_dir": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-budget",
+    "camera_save_interval_s": 0,
+    "action_log_interval": 0
+  },
+  "dispatch_interval_ms": {
+    "count": 280,
+    "p50": 50.37484599961317,
+    "p99": 51.26522941107396,
+    "max": 52.24623200047063
+  },
+  "prediction_ms": {
+    "count": 17,
+    "p50": 915.6091120021301,
+    "p99": 915.6829040023149,
+    "max": 915.6913120023091
+  },
+  "queue_empty_after_start": 0,
+  "merges": [
+    {
+      "at": 63990.253056213,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 63991.862974074,
+      "pending_before": 18,
+      "pending_after": 32,
+      "delay_steps": 18
+    },
+    {
+      "at": 63992.78112707,
+      "pending_before": 14,
+      "pending_after": 32,
+      "delay_steps": 18
+    },
+    {
+      "at": 63993.698648782,
+      "pending_before": 13,
+      "pending_after": 31,
+      "delay_steps": 19
+    },
+    {
+      "at": 63994.616102891,
+      "pending_before": 13,
+      "pending_after": 32,
+      "delay_steps": 18
+    },
+    {
+      "at": 63995.533437796,
+      "pending_before": 14,
+      "pending_after": 32,
+      "delay_steps": 18
+    },
+    {
+      "at": 63996.45447743,
+      "pending_before": 13,
+      "pending_after": 31,
+      "delay_steps": 19
+    },
+    {
+      "at": 63997.371888449,
+      "pending_before": 13,
+      "pending_after": 32,
+      "delay_steps": 18
+    },
+    {
+      "at": 63998.289249986,
+      "pending_before": 14,
+      "pending_after": 32,
+      "delay_steps": 18
+    },
+    {
+      "at": 63999.208420965,
+      "pending_before": 13,
+      "pending_after": 31,
+      "delay_steps": 19
+    },
+    {
+      "at": 64000.125816096,
+      "pending_before": 13,
+      "pending_after": 32,
+      "delay_steps": 18
+    },
+    {
+      "at": 64001.043329184,
+      "pending_before": 14,
+      "pending_after": 32,
+      "delay_steps": 18
+    },
+    {
+      "at": 64001.966269925,
+      "pending_before": 13,
+      "pending_after": 31,
+      "delay_steps": 19
+    },
+    {
+      "at": 64002.883723128,
+      "pending_before": 13,
+      "pending_after": 32,
+      "delay_steps": 18
+    },
+    {
+      "at": 64003.801250367,
+      "pending_before": 14,
+      "pending_after": 32,
+      "delay_steps": 18
+    }
+  ],
+  "plan_interval_ms": {
+    "count": 14,
+    "p50": 917.5174000047264,
+    "p99": 1520.6108354010935,
+    "max": 1609.9178610020317
+  },
+  "diagnostic_events": [
+    [
+      "action_diagnostics",
+      {
+        "enabled": true,
+        "run_id": null,
+        "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-budget/20261105_114720_822109_1027511/events.jsonl",
+        "max_bytes": 67108864
+      }
+    ],
+    [
+      "action_diagnostics",
+      {
+        "enabled": true,
+        "run_id": null,
+        "path": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/full-budget/20261105_114720_822109_1027511/events.jsonl",
+        "max_bytes": 67108864,
+        "summary": {
+          "written": 1661,
+          "dropped": 0,
+          "error": null,
+          "writer_alive": false,
+          "truncated": false,
+          "max_bytes": 67108864,
+          "bytes_written": 932891
+        }
+      }
+    ]
+  ],
+  "gaps_over_two_periods": 0,
+  "gaps_over_100ms": 0,
+  "physical_motion_verified": false,
+  "sdk_calls_are_simulated": true
+}

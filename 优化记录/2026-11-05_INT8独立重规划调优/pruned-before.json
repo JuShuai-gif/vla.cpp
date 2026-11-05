@@ -1,0 +1,291 @@
+{
+  "profile": "pruned",
+  "schedule": "before",
+  "model": "native",
+  "scope": "Actual production inference/dispatch function and queue; saved static observations; memory SDK and thread-based fake I/O process; real GPU only in native mode. No real cameras/CAN/robot.",
+  "parameters": {
+    "policy_config": "configs/policies/vla_pruned.json",
+    "inference_backend": "standard",
+    "task": "pick up the cube",
+    "warmup_steps": 3,
+    "execution_horizon": 50,
+    "execution_period": 0.03333333333333333,
+    "replan_threshold": 25,
+    "rtc_blend_steps": 5,
+    "enable_filter_smooth": false,
+    "enable_rtc_smooth": true,
+    "warmstep": false,
+    "rl_joint_offsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "joint_unit": "degrees",
+    "gripper_mapping": "linear",
+    "camera_map": {
+      "observation.images.top": "top",
+      "observation.images.wrist": "wrist"
+    },
+    "execute_robot": true,
+    "dry_run": false,
+    "duration": 30.0,
+    "precision": "int8-main-smooth",
+    "diagnostic_dir": "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_INT8独立重规划调优/pruned-before",
+    "camera_save_interval_s": 0,
+    "action_log_interval": 0
+  },
+  "dispatch_interval_ms": {
+    "count": 886,
+    "p50": 34.810651501175016,
+    "p99": 35.72628300207725,
+    "max": 36.47175500373123
+  },
+  "prediction_ms": {
+    "count": 36,
+    "p50": 412.80679799820064,
+    "p99": 426.4697950980917,
+    "max": 429.8660319982446
+  },
+  "queue_empty_after_start": 0,
+  "merges": [
+    {
+      "at": 64319.782054101,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 64321.026601953,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64321.855143505,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64322.692605433,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64323.526536473,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64324.365176001,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64325.197910996,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64326.033256795,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64326.868550273,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64327.704996592,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64328.536320939,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64329.376512862,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64330.209698491,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64331.045447763,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64331.87953387,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64332.714794059,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64333.548505563,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64334.391753486,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64335.220123777,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64336.058598647,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64336.889894141,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64337.725066762,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64338.560082862,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64339.394392718,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64340.229934056,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64341.062383827,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64341.922827653,
+      "pending_before": 12,
+      "pending_after": 37,
+      "delay_steps": 13
+    },
+    {
+      "at": 64342.732666375,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64343.568069308,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64344.406388846,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64345.240847214,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64346.077247065,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64346.913633755,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64347.744211112,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    },
+    {
+      "at": 64348.579183517,
+      "pending_before": 13,
+      "pending_after": 38,
+      "delay_steps": 12
+    }
+  ],
+  "plan_interval_ms": {
+    "count": 34,
+    "p50": 835.2164050011197,
+    "p99": 1117.7935234217155,
+    "max": 1244.5478520021425
+  },
+  "diagnostic_events": [
+    [
+      "action_diagnostics",
+      {
+        "enabled": false,
+        "run_id": null,
+        "path": null
+      }
+    ]
+  ],
+  "steady_plan_interval_ms": {
+    "count": 33,
+    "p50": 835.1726210021297,
+    "p99": 854.9411370416055,
+    "max": 860.4438260008465
+  },
+  "gaps_over_two_periods": 0,
+  "gaps_over_100ms": 0,
+  "physical_motion_verified": false,
+  "sdk_calls_are_simulated": true
+}
