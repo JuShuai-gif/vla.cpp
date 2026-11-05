@@ -1,0 +1,38 @@
+{
+  "unchanged_existing_dirty_files": [
+    "configs/examples/vla_cpp_vit_npu.json",
+    "configs/examples/vla_policy_vit_npu.json",
+    "docs/VLA_VIT_NPU.md",
+    "native/vla_vit_npu/CMakeLists.txt",
+    "native/vla_vit_npu/drm_shared_buffer.h",
+    "native/vla_vit_npu/dual_workers.h",
+    "native/vla_vit_npu/test_dual_workers.cpp",
+    "native/vla_vit_npu/vit_npu.cpp",
+    "native/vla_vit_npu/vit_npu.h",
+    "native/vla_vit_npu/vla_device_features.patch",
+    "scripts/build_vla_vit_npu.sh",
+    "src/robot_runtime/vit_npu_pipeline.py",
+    "src/robot_runtime/vla_cpp_vit_npu_backend.py",
+    "tests/python/test_vit_npu_build_isolation.py",
+    "tests/python/test_vit_npu_pipeline.py",
+    "tests/python/test_vit_npu_runtime.py",
+    "tests/python/test_vla_cpp_vit_npu_backend.py",
+    "validation/vla_vit_npu_accuracy_report.md",
+    "pyproject.toml",
+    "src/robot_runtime/inference.py",
+    "src/robot_runtime/replay.py",
+    "src/robot_runtime/setup/devices.py",
+    "src/robot_runtime/setup/launcher.py",
+    "src/robot_runtime/setup/runs.py",
+    "src/robot_runtime/vla_cpp_backend.py",
+    "tests/python/test_inference_console.py",
+    "tests/python/test_monitor_telemetry.py",
+    "tests/python/test_realsense_setup.py",
+    "tests/python/test_vla_cpp_backend.py"
+  ],
+  "changed_runtime_files": [
+    "configs/vla_piper_live.json",
+    "docs/VLA_CPP.md"
+  ],
+  "applied_config_sha256": "20447e631a3d85d0c7d264cd81eba748969c640111f5e80e83f68373e4a6ef1a"
+}

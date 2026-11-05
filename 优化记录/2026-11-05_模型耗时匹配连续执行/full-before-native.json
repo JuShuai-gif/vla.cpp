@@ -1,0 +1,88 @@
+{
+  "profile": "full",
+  "schedule": "before",
+  "model": "native",
+  "scope": "Actual production inference/dispatch function and queue; saved static observations; memory SDK and thread-based fake I/O process; real GPU only in native mode. No real cameras/CAN/robot.",
+  "parameters": {
+    "policy_config": "configs/policies/vla_full.json",
+    "inference_backend": "standard",
+    "task": "pick up the cube",
+    "warmup_steps": 3,
+    "execution_horizon": 50,
+    "execution_period": 0.03333333333333333,
+    "replan_threshold": 0,
+    "rtc_blend_steps": 5,
+    "enable_filter_smooth": false,
+    "enable_rtc_smooth": false,
+    "warmstep": false,
+    "rl_joint_offsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "joint_unit": "degrees",
+    "gripper_mapping": "linear",
+    "camera_map": {
+      "observation.images.top": "top",
+      "observation.images.wrist": "wrist"
+    },
+    "execute_robot": true,
+    "dry_run": false,
+    "duration": 12.0,
+    "diagnostics": false,
+    "camera_save_interval_s": 0,
+    "action_log_interval": 0
+  },
+  "dispatch_interval_ms": {
+    "count": 245,
+    "p50": 34.7858509994694,
+    "p99": 792.7028905975749,
+    "max": 795.9940610016929
+  },
+  "prediction_ms": {
+    "count": 5,
+    "p50": 761.5753350037267,
+    "p99": 762.0423171983566,
+    "max": 762.0454479983891
+  },
+  "queue_empty_after_start": 0,
+  "merges": [
+    {
+      "at": 54757.474196365,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 54759.90690688,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 54762.340618458,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 54764.771642907,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 54767.203595178,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    }
+  ],
+  "gaps_over_two_periods": 4,
+  "gaps_over_100ms": 4,
+  "physical_motion_verified": false,
+  "sdk_calls_are_simulated": true
+}

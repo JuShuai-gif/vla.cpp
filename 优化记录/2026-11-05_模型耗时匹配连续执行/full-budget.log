@@ -1,0 +1,20 @@
+[runtime configuration] {"policy_backend": "vla_cpp", "inference_backend": "standard", "precision": "后端未提供", "task": "pick up the cube", "checkpoint": null, "policy_config": "configs/policies/vla_full.json", "package_dir": "/home/skysi/code/robot_runtime/assets", "arm_mode": "single", "execution_period": 0.05, "execution_horizon": 50, "replan_threshold": 27, "rtc_mode": "execution", "rtc_blend_steps": 5, "diagnostics": false, "camera_save_interval_s": 0, "execution": "LIVE", "schedule": "rtc"}
+[robot io] starting pid=824203 port=MEMORY-SDK-NO-CAN
+[robot io] piper connected
+[loop] LIVE vla_cpp, horizon=50, execution_period=0.05, schedule=rtc, image_feature_multiplier=1.0, language_embedding_multiplier=1.0
+[vla_cpp predict #1] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.13 observation_to_prediction_ms=1038.29
+[vla_cpp predict #2] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.03 observation_to_prediction_ms=1034.67
+[vla_cpp predict #3] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.04 observation_to_prediction_ms=1031.14
+[vla_cpp predict #4] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.04 observation_to_prediction_ms=1027.39
+[vla_cpp predict #5] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.04 observation_to_prediction_ms=1027.41
+[vla_cpp predict #6] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.04 observation_to_prediction_ms=1027.39
+[vla_cpp predict #7] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.03 observation_to_prediction_ms=1027.39
+[vla_cpp predict #8] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.03 observation_to_prediction_ms=1027.38
+[vla_cpp predict #9] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.05 observation_to_prediction_ms=1027.41
+[vla_cpp predict #10] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.03 observation_to_prediction_ms=1027.38
+[vla_cpp predict #11] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.05 observation_to_prediction_ms=1027.40
+[vla_cpp predict #12] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.06 observation_to_prediction_ms=1027.43
+[vla_cpp predict #13] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=1027.21 observation_to_prediction_ms=1027.57
+[vla_cpp summary] reason=normal predictions=13 warmup_excluded=true
+[loop] system shut down
+{"profile": "full", "schedule": "candidate", "model": "budget", "dispatch_interval_ms": {"count": 278, "p50": 50.246425500517944, "p99": 50.73219382829848, "max": 50.7970850012498}, "prediction_ms": {"count": 14, "p50": 1027.0084600015252, "p99": 1027.1077020790835, "max": 1027.119425998535}, "queue_empty_after_start": 0, "gaps_over_two_periods": 0, "gaps_over_100ms": 0, "physical_motion_verified": false, "sdk_calls_are_simulated": true}

@@ -1,0 +1,24 @@
+{
+  "profiles": [
+    {
+      "profile": "pruned",
+      "settings_forwarded": {
+        "enable_rtc_smooth": true,
+        "replan_threshold": 25,
+        "execution_period": 0.03333333333333333
+      },
+      "precision_unchanged": true
+    },
+    {
+      "profile": "full",
+      "settings_forwarded": {
+        "enable_rtc_smooth": true,
+        "replan_threshold": 27,
+        "execution_period": 0.05
+      },
+      "precision_unchanged": true
+    }
+  ],
+  "unrelated_configuration_preserved": true,
+  "no_hardware_discovery": true
+}

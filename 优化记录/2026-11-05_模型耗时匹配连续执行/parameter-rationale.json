@@ -1,0 +1,26 @@
+{
+  "pruned": {
+    "observed_max_observation_to_prediction_ms": 525.764722000531,
+    "budget_ms": 604.6294303006107,
+    "delay_steps": 19,
+    "settings": {
+      "enable_rtc_smooth": true,
+      "replan_threshold": 25,
+      "execution_period": 0.03333333333333333
+    },
+    "handover_overlap_at_budget": 6,
+    "remaining_new_chunk_at_budget": 31
+  },
+  "full": {
+    "observed_max_observation_to_prediction_ms": 892.9151400002411,
+    "budget_ms": 1026.8524110002772,
+    "delay_steps": 21,
+    "settings": {
+      "enable_rtc_smooth": true,
+      "replan_threshold": 27,
+      "execution_period": 0.05
+    },
+    "handover_overlap_at_budget": 6,
+    "remaining_new_chunk_at_budget": 29
+  }
+}

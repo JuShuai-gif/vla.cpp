@@ -1,0 +1,69 @@
+--- a/configs/vla_piper_live.json
++++ b/configs/vla_piper_live.json
+@@ -73,10 +73,10 @@
+       "warmup_steps": 3,
+       "execution_horizon": 50,
+       "execution_period": 0.03333333333333333,
+-      "replan_threshold": 0,
++      "replan_threshold": 25,
+       "rtc_blend_steps": 5,
+       "enable_filter_smooth": false,
+-      "enable_rtc_smooth": false,
++      "enable_rtc_smooth": true,
+       "warmstep": false,
+       "rl_joint_offsets": [
+         0,
+@@ -101,11 +101,11 @@
+       "task": "pick up the cube",
+       "warmup_steps": 3,
+       "execution_horizon": 50,
+-      "execution_period": 0.03333333333333333,
+-      "replan_threshold": 0,
++      "execution_period": 0.05,
++      "replan_threshold": 27,
+       "rtc_blend_steps": 5,
+       "enable_filter_smooth": false,
+-      "enable_rtc_smooth": false,
++      "enable_rtc_smooth": true,
+       "warmstep": false,
+       "rl_joint_offsets": [
+         0,
+--- a/docs/VLA_CPP.md
++++ b/docs/VLA_CPP.md
+@@ -181,3 +181,36 @@
+ `manifest.json` 列出各文件快照及 SHA256；快照包含接入前已有的未提交修改。
+ 仅切回浮点无需恢复文件，去掉精度参数即可；如需撤销接入，应对照 manifest 按文件恢复，
+ 避免覆盖接入之后的新修改。完整旧备份也保持不变。
++
++## 按模型耗时连续执行（2026-11-05）
++
++原有 full/pruned 命令现在使用执行侧 RTC：后台提前推理，执行线程继续发送旧计划，
++新计划丢弃推理期间已过去的步数，并使用现有 5 步交叉融合衔接。不是训练侧 RTC，
++不减少去噪步数，不改变模型精度或动态库。
++
++| 预设 | 动作周期 | 提前重规划阈值 | 执行窗口 | 融合步数 |
++| --- | --- | --- | --- | --- |
++| pruned | 1/30 秒（30 Hz） | 剩余25步开始 | 50步 | 5 |
++| full | 0.05秒（20 Hz） | 剩余27步开始 | 50步 | 5 |
++
++历史最慢观测至预测耗时约526/893 ms；分别按约605/1027 ms预算（+15%）设置。
++D=ceil(预算/周期)，阈值=D+5+1，并要求2D+5+1<=50，以覆盖相邻两轮推理、
++延迟裁剪和衔接余量。完整模型原30Hz下，仅历史893ms就需27步延迟，2×27>50，
++仅打开RTC或加大阈值不能保证长期不断档，因此按实际耗时降为20Hz。
++这会改变完整模型的轨迹时间尺度，单步动作更慢；任务成功率仍须真机检验。
++
++两条原命令无需追加参数。启动日志应出现 schedule=rtc。
++可选 --precision int8-main-smooth 仍有效，但此处按较慢的浮点路径留预算，
++不自动修改精度或随运行波动改变动作周期。设备绑定、使能方式、单位、
++50步模型输出和未提交代码不变；只改 vla_piper_live.json 中两预设的上述调度字段。
++其它启动配置（包括NPU配置及vla_piper.json）未改变。
++
++验证使用保存观测、真实GPU模型、真实调度/队列函数，SDK与相机全部为内存替身，
++I/O进程使用测试线程替身，所有Python socket被禁止。没有机械臂动作或物理连续性验收。
++网络、真实相机竞争、CAN确认和现场负载仍可能造成更长延迟；超过预算时不能保证不断档。
++
++备份 /home/skysi/backups/robot_runtime/continuous_execution_20261105_090847/。
++若要只撤销本次设置，在 vla_piper_live.json 的 full/pruned 中把
++enable_rtc_smooth 改回 false、replan_threshold 改回0、execution_period改回1/30秒。
++不要覆盖后来新增的设备配置或日志。详见量化仓库
++优化记录/2026-11-05_模型耗时匹配连续执行/README.md。

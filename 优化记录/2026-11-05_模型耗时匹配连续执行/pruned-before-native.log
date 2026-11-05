@@ -1,0 +1,27 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+[runtime configuration] {"policy_backend": "vla_cpp", "inference_backend": "standard", "precision": "baseline", "task": "pick up the cube", "checkpoint": "/home/skysi/VLA/models/pi05_cube_merge_cksize50_step3_0929/gguf/model.gguf", "policy_config": "configs/policies/vla_pruned.json", "package_dir": "/home/skysi/code/robot_runtime/assets", "arm_mode": "single", "execution_period": 0.03333333333333333, "execution_horizon": 50, "replan_threshold": 0, "rtc_mode": "execution", "rtc_blend_steps": 5, "diagnostics": false, "camera_save_interval_s": 0, "execution": "LIVE", "schedule": "sequential_batches"}
+[robot io] starting pid=824685 port=MEMORY-SDK-NO-CAN
+[robot io] piper connected
+[robot io] passive feedback: waiting for warmstep preflight
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+[loop] LIVE vla_cpp, horizon=50, execution_period=0.03333333333333333, schedule=sequential_batches, image_feature_multiplier=1.0, language_embedding_multiplier=1.0
+[vla_cpp predict #1] native_call_ms=460.93 preprocess_ms=6.30 postprocess_ms=0.04 predict_ms=467.37 observation_to_prediction_ms=469.46
+[vla_cpp predict #2] native_call_ms=461.62 preprocess_ms=6.19 postprocess_ms=0.04 predict_ms=467.93 observation_to_prediction_ms=468.29
+[vla_cpp predict #3] native_call_ms=460.78 preprocess_ms=3.68 postprocess_ms=0.04 predict_ms=464.57 observation_to_prediction_ms=464.94
+[vla_cpp predict #4] native_call_ms=462.09 preprocess_ms=3.69 postprocess_ms=0.04 predict_ms=465.89 observation_to_prediction_ms=466.25
+[vla_cpp predict #5] native_call_ms=460.10 preprocess_ms=4.24 postprocess_ms=0.04 predict_ms=464.44 observation_to_prediction_ms=464.80
+[vla_cpp predict #6] native_call_ms=461.23 preprocess_ms=3.93 postprocess_ms=0.04 predict_ms=465.27 observation_to_prediction_ms=465.65
+[vla_cpp summary] reason=normal predictions=6 warmup_excluded=true
+[loop] system shut down
+{"profile": "pruned", "schedule": "before", "model": "native", "dispatch_interval_ms": {"count": 275, "p50": 34.73253999982262, "p99": 498.2207452003786, "max": 500.8378200000152}, "prediction_ms": {"count": 6, "p50": 465.55731750049745, "p99": 467.87043514814286, "max": 467.8992429981008}, "queue_empty_after_start": 0, "gaps_over_two_periods": 5, "gaps_over_100ms": 5, "physical_motion_verified": false, "sdk_calls_are_simulated": true}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=3 real_state=7 real_action=7 max_len=64 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): visual token pruning 256 -> 136 per image (attention, spatial order)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 4.71 GiB
+vla(pi05): model loaded (n_threads=4)

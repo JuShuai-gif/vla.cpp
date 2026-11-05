@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_模型耗时匹配连续执行/check_continuity.py", line 124, in <module>
+    if __name__=="__main__":main()
+                            ^^^^^^
+  File "/home/skysi/code/vla.cpp-quant/优化记录/2026-11-05_模型耗时匹配连续执行/check_continuity.py", line 102, in main
+    ns["inference"](cfg)
+  File "/home/skysi/code/robot_runtime/src/robot_runtime/inference.py", line 757, in inference
+    plugin.validate_inference(cfg)
+  File "/home/skysi/code/robot_runtime/src/robot_runtime/vla_cpp_backend.py", line 49, in validate_inference
+    self._validate(vars(cfg))
+  File "/home/skysi/code/robot_runtime/src/robot_runtime/vla_cpp_backend.py", line 28, in _validate
+    FlashRTBackend._validate({**params, "precision": None})
+  File "/home/skysi/code/robot_runtime/src/robot_runtime/flashrt_backend.py", line 75, in _validate
+    raise ValueError("FlashRT requires warmup_steps in [1,1000]")
+ValueError: FlashRT requires warmup_steps in [1,1000]

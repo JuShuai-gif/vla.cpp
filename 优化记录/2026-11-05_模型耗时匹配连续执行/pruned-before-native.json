@@ -1,0 +1,94 @@
+{
+  "profile": "pruned",
+  "schedule": "before",
+  "model": "native",
+  "scope": "Actual production inference/dispatch function and queue; saved static observations; memory SDK and thread-based fake I/O process; real GPU only in native mode. No real cameras/CAN/robot.",
+  "parameters": {
+    "policy_config": "configs/policies/vla_pruned.json",
+    "inference_backend": "standard",
+    "task": "pick up the cube",
+    "warmup_steps": 3,
+    "execution_horizon": 50,
+    "execution_period": 0.03333333333333333,
+    "replan_threshold": 0,
+    "rtc_blend_steps": 5,
+    "enable_filter_smooth": false,
+    "enable_rtc_smooth": false,
+    "warmstep": false,
+    "rl_joint_offsets": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "joint_unit": "degrees",
+    "gripper_mapping": "linear",
+    "camera_map": {
+      "observation.images.top": "top",
+      "observation.images.wrist": "wrist"
+    },
+    "execute_robot": true,
+    "dry_run": false,
+    "duration": 12.0,
+    "diagnostics": false,
+    "camera_save_interval_s": 0,
+    "action_log_interval": 0
+  },
+  "dispatch_interval_ms": {
+    "count": 275,
+    "p50": 34.73253999982262,
+    "p99": 498.2207452003786,
+    "max": 500.8378200000152
+  },
+  "prediction_ms": {
+    "count": 6,
+    "p50": 465.55731750049745,
+    "p99": 467.87043514814286,
+    "max": 467.8992429981008
+  },
+  "queue_empty_after_start": 0,
+  "merges": [
+    {
+      "at": 54661.298542926,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 54663.437386966,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 54665.572843717,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 54667.709770731,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 54669.845510454,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    },
+    {
+      "at": 54671.982000921,
+      "pending_before": 0,
+      "pending_after": 50,
+      "delay_steps": 0
+    }
+  ],
+  "gaps_over_two_periods": 5,
+  "gaps_over_100ms": 5,
+  "physical_motion_verified": false,
+  "sdk_calls_are_simulated": true
+}

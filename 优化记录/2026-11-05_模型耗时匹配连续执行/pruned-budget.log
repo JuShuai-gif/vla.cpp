@@ -1,0 +1,25 @@
+[runtime configuration] {"policy_backend": "vla_cpp", "inference_backend": "standard", "precision": "后端未提供", "task": "pick up the cube", "checkpoint": null, "policy_config": "configs/policies/vla_pruned.json", "package_dir": "/home/skysi/code/robot_runtime/assets", "arm_mode": "single", "execution_period": 0.03333333333333333, "execution_horizon": 50, "replan_threshold": 25, "rtc_mode": "execution", "rtc_blend_steps": 5, "diagnostics": false, "camera_save_interval_s": 0, "execution": "LIVE", "schedule": "rtc"}
+[robot io] starting pid=823983 port=MEMORY-SDK-NO-CAN
+[robot io] piper connected
+[loop] LIVE vla_cpp, horizon=50, execution_period=0.03333333333333333, schedule=rtc, image_feature_multiplier=1.0, language_embedding_multiplier=1.0
+[vla_cpp predict #1] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.85 observation_to_prediction_ms=606.63
+[vla_cpp predict #2] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.86 observation_to_prediction_ms=606.18
+[vla_cpp predict #3] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.82 observation_to_prediction_ms=605.71
+[vla_cpp predict #4] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.80 observation_to_prediction_ms=605.16
+[vla_cpp predict #5] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.80 observation_to_prediction_ms=605.16
+[vla_cpp predict #6] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.80 observation_to_prediction_ms=605.16
+[vla_cpp predict #7] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.80 observation_to_prediction_ms=605.16
+[vla_cpp predict #8] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.82 observation_to_prediction_ms=605.18
+[vla_cpp predict #9] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.81 observation_to_prediction_ms=605.17
+[vla_cpp predict #10] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.81 observation_to_prediction_ms=605.17
+[vla_cpp predict #11] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.82 observation_to_prediction_ms=605.17
+[vla_cpp predict #12] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.82 observation_to_prediction_ms=605.18
+[vla_cpp predict #13] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.81 observation_to_prediction_ms=605.16
+[vla_cpp predict #14] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.81 observation_to_prediction_ms=605.17
+[vla_cpp predict #15] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.81 observation_to_prediction_ms=605.17
+[vla_cpp predict #16] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.81 observation_to_prediction_ms=605.18
+[vla_cpp predict #17] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.81 observation_to_prediction_ms=605.17
+[vla_cpp predict #18] native_call_ms=n/a preprocess_ms=n/a postprocess_ms=n/a predict_ms=604.96 observation_to_prediction_ms=605.31
+[vla_cpp summary] reason=normal predictions=18 warmup_excluded=true
+[loop] system shut down
+{"profile": "pruned", "schedule": "candidate", "model": "budget", "dispatch_interval_ms": {"count": 430, "p50": 34.823609501472674, "p99": 35.1858672923845, "max": 35.61870800331235}, "prediction_ms": {"count": 19, "p50": 604.7769200013136, "p99": 604.8653157203807, "max": 604.8769879998872}, "queue_empty_after_start": 0, "gaps_over_two_periods": 0, "gaps_over_100ms": 0, "physical_motion_verified": false, "sdk_calls_are_simulated": true}

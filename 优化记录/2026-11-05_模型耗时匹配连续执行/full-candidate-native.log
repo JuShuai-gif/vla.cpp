@@ -1,0 +1,50 @@
+ggml_cuda_init: found 1 MUSA devices (Total VRAM: 31878 MiB):
+  Device 0: M1000, compute capability 2.2, VMM: no, VRAM: 31878 MiB
+[runtime configuration] {"policy_backend": "vla_cpp", "inference_backend": "standard", "precision": "baseline", "task": "pick up the cube", "checkpoint": "/home/skysi/VLA/models/cup_cube_joint_061_a800_50k_20261022/gguf/model.gguf", "policy_config": "configs/policies/vla_full.json", "package_dir": "/home/skysi/code/robot_runtime/assets", "arm_mode": "single", "execution_period": 0.05, "execution_horizon": 50, "replan_threshold": 27, "rtc_mode": "execution", "rtc_blend_steps": 5, "diagnostics": false, "camera_save_interval_s": 0, "execution": "LIVE", "schedule": "rtc"}
+[robot io] starting pid=829037 port=MEMORY-SDK-NO-CAN
+[robot io] piper connected
+[robot io] passive feedback: waiting for warmstep preflight
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+ggml_backend_cuda_graph_compute: CUDA graph warmup complete
+[loop] LIVE vla_cpp, horizon=50, execution_period=0.05, schedule=rtc, image_feature_multiplier=1.0, language_embedding_multiplier=1.0
+[vla_cpp predict #1] native_call_ms=755.62 preprocess_ms=5.83 postprocess_ms=0.04 predict_ms=761.60 observation_to_prediction_ms=763.62
+[vla_cpp predict #2] native_call_ms=755.49 preprocess_ms=5.33 postprocess_ms=0.03 predict_ms=760.93 observation_to_prediction_ms=762.06
+[vla_cpp predict #3] native_call_ms=754.83 preprocess_ms=4.19 postprocess_ms=0.03 predict_ms=759.11 observation_to_prediction_ms=759.47
+[vla_cpp predict #4] native_call_ms=755.24 preprocess_ms=3.60 postprocess_ms=0.03 predict_ms=758.93 observation_to_prediction_ms=759.29
+[vla_cpp predict #5] native_call_ms=755.67 preprocess_ms=4.49 postprocess_ms=0.03 predict_ms=760.27 observation_to_prediction_ms=760.64
+[vla_cpp predict #6] native_call_ms=756.13 preprocess_ms=3.66 postprocess_ms=0.03 predict_ms=759.88 observation_to_prediction_ms=760.25
+[vla_cpp predict #7] native_call_ms=756.00 preprocess_ms=3.64 postprocess_ms=0.03 predict_ms=759.73 observation_to_prediction_ms=760.09
+[vla_cpp predict #8] native_call_ms=756.29 preprocess_ms=3.85 postprocess_ms=0.03 predict_ms=760.23 observation_to_prediction_ms=760.60
+[vla_cpp predict #9] native_call_ms=756.97 preprocess_ms=4.83 postprocess_ms=0.05 predict_ms=761.92 observation_to_prediction_ms=762.28
+[vla_cpp predict #10] native_call_ms=757.01 preprocess_ms=4.11 postprocess_ms=0.04 predict_ms=761.23 observation_to_prediction_ms=761.61
+[vla_cpp predict #11] native_call_ms=756.15 preprocess_ms=4.98 postprocess_ms=0.03 predict_ms=761.23 observation_to_prediction_ms=761.60
+[vla_cpp predict #12] native_call_ms=755.90 preprocess_ms=4.22 postprocess_ms=0.03 predict_ms=760.22 observation_to_prediction_ms=760.59
+[vla_cpp predict #13] native_call_ms=756.30 preprocess_ms=4.83 postprocess_ms=0.03 predict_ms=761.22 observation_to_prediction_ms=761.58
+[vla_cpp predict #14] native_call_ms=754.81 preprocess_ms=4.27 postprocess_ms=0.03 predict_ms=759.18 observation_to_prediction_ms=759.54
+[vla_cpp predict #15] native_call_ms=755.40 preprocess_ms=4.22 postprocess_ms=0.03 predict_ms=759.72 observation_to_prediction_ms=760.08
+[vla_cpp predict #16] native_call_ms=755.24 preprocess_ms=3.52 postprocess_ms=0.03 predict_ms=758.85 observation_to_prediction_ms=759.22
+[vla_cpp predict #17] native_call_ms=754.77 preprocess_ms=3.64 postprocess_ms=0.04 predict_ms=758.52 observation_to_prediction_ms=758.89
+[vla_cpp predict #18] native_call_ms=755.55 preprocess_ms=3.65 postprocess_ms=0.03 predict_ms=759.30 observation_to_prediction_ms=759.69
+[vla_cpp predict #19] native_call_ms=755.72 preprocess_ms=3.64 postprocess_ms=0.03 predict_ms=759.46 observation_to_prediction_ms=759.83
+[vla_cpp predict #20] native_call_ms=754.58 preprocess_ms=3.69 postprocess_ms=0.03 predict_ms=758.37 observation_to_prediction_ms=758.73
+[vla_cpp predict #21] native_call_ms=755.56 preprocess_ms=3.64 postprocess_ms=0.03 predict_ms=759.29 observation_to_prediction_ms=759.67
+[vla_cpp predict #22] native_call_ms=756.35 preprocess_ms=3.64 postprocess_ms=0.04 predict_ms=760.09 observation_to_prediction_ms=760.44
+[vla_cpp predict #23] native_call_ms=756.95 preprocess_ms=3.73 postprocess_ms=0.03 predict_ms=760.78 observation_to_prediction_ms=761.16
+[vla_cpp predict #24] native_call_ms=756.54 preprocess_ms=3.63 postprocess_ms=0.03 predict_ms=760.27 observation_to_prediction_ms=760.66
+[vla_cpp predict #25] native_call_ms=754.52 preprocess_ms=3.63 postprocess_ms=0.03 predict_ms=758.25 observation_to_prediction_ms=758.61
+[vla_cpp predict #26] native_call_ms=756.08 preprocess_ms=3.61 postprocess_ms=0.03 predict_ms=759.78 observation_to_prediction_ms=760.14
+[vla_cpp predict #27] native_call_ms=755.13 preprocess_ms=3.63 postprocess_ms=0.03 predict_ms=758.87 observation_to_prediction_ms=759.26
+[vla_cpp predict #28] native_call_ms=756.48 preprocess_ms=3.62 postprocess_ms=0.03 predict_ms=760.19 observation_to_prediction_ms=760.55
+[vla_cpp predict #29] native_call_ms=754.71 preprocess_ms=4.20 postprocess_ms=0.04 predict_ms=759.02 observation_to_prediction_ms=759.39
+[vla_cpp predict #30] native_call_ms=755.97 preprocess_ms=4.78 postprocess_ms=0.04 predict_ms=760.89 observation_to_prediction_ms=761.28
+[vla_cpp summary] reason=normal predictions=30 warmup_excluded=true
+[loop] system shut down
+{"profile": "full", "schedule": "candidate", "model": "native", "dispatch_interval_ms": {"count": 683, "p50": 50.3193749973434, "p99": 51.06585862347856, "max": 52.49173099582549}, "prediction_ms": {"count": 30, "p50": 759.8094979985035, "p99": 761.7911800232832, "max": 761.8912480029394}, "queue_empty_after_start": 0, "gaps_over_two_periods": 0, "gaps_over_100ms": 0, "physical_motion_verified": false, "sdk_calls_are_simulated": true}
+vla: arch = pi05
+vla(pi05): hidden=2048 inter=16384 heads=8q/1kv x256 n_layers=18 expert_h=1024 expert_inter=4096 chunk=50 steps=10 real_state=7 real_action=7 max_len=200 matmul_weights=f16
+vla(pi05): backend = MUSA (device 0: M1000)
+vla(pi05): MUSA fused adaRMS/gated residual on (VLA_PI05_NO_FUSE=1 to disable)
+vla(pi05): MUSA merged QKV/GateUp projections (VLA_PI05_NO_PROJ_FUSE=1 to disable)
+vla(pi05): resident weights = 5.05 GiB
+vla(pi05): model loaded (n_threads=4)
